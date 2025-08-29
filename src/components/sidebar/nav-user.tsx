@@ -15,6 +15,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/contexts/auth-contexts";
+import { Link } from "@tanstack/react-router";
 import {
   Bell,
   EllipsisVerticalIcon,
@@ -127,9 +128,11 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <UserCircle />
-                Conta
+              <DropdownMenuItem asChild>
+                <Link to="/account">
+                  <UserCircle />
+                  Conta
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem disabled>
                 <Bell />
