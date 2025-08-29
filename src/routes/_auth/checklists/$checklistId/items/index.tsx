@@ -12,16 +12,21 @@ export const Route = createFileRoute("/_auth/checklists/$checklistId/items/")({
 });
 
 function ChecklistContent() {
-  const { checklist, loading, error } = useChecklist();
+  const { checklist, error } = useChecklist();
 
   const [items, setItems] = useState<any[]>([]);
+
+  const [loading, setLoading] = useState(true);
 
   const { checklistId } = Route.useParams();
 
   useEffect(() => {
-    api.get(`api/v1/checklists/${checklistId}/items`).then(({ data }) => {
-      setItems(data);
-    });
+    api
+      .get(`api/v1/checklists/${checklistId}/items`)
+      .then(({ data }) => {
+        setItems(data);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) {

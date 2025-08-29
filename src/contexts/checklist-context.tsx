@@ -22,13 +22,15 @@ const ChecklistContext = createContext<ChecklistContextType | undefined>(
 interface ChecklistProviderProps {
   children: ReactNode;
   checklistId: string;
+  checklist: Checklist;
 }
 
 export function ChecklistProvider({
   children,
   checklistId,
+  checklist: Checklist,
 }: ChecklistProviderProps) {
-  const [checklist, setChecklist] = useState<Checklist | null>(null);
+  const [checklist, setChecklist] = useState<Checklist | null>(Checklist);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,11 +52,11 @@ export function ChecklistProvider({
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
-      await Promise.all([fetchChecklist()]);
+      await fetchChecklist();
       setLoading(false);
     };
 
-    if (checklistId) {
+    if (checklistId && !checklist) {
       loadData();
     }
   }, [checklistId]);

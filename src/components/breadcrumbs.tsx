@@ -24,6 +24,7 @@ export const Breadcrumbs = () => {
             <BreadcrumbItem key={index}>
               <Link
                 to={item.href}
+                preload={false}
                 className={cn(
                   "breadcrumb-link",
                   index === items.length - 1 && "font-bold"

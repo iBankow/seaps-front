@@ -1,11 +1,29 @@
 import { ChecklistProvider } from "@/contexts/checklist-context";
-import { createFileRoute, Outlet, useParams } from "@tanstack/react-router";
+import { api } from "@/lib/api";
+import {
+  createFileRoute,
+  Outlet,
+  redirect,
+  useLoaderData,
+  useParams,
+} from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_auth/checklists/$checklistId")({
   component: RouteComponent,
-  loader: () => {
+  loader: async ({ params }) => {
+    const { checklistId } = params;
+
+    const { data } = await api
+      .get(`/api/v1/checklists/${checklistId}`)
+      .catch(() => {
+        throw redirect({
+          to: "/checklists",
+        });
+      });
+
     return {
-      crumb: "Checklist",
+      crumb: data.property.name,
+      checklist: data,
     };
   },
 });
@@ -15,8 +33,12 @@ export function RouteComponent() {
     from: "/_auth/checklists/$checklistId",
   });
 
+  const { checklist } = useLoaderData({
+    from: "/_auth/checklists/$checklistId",
+  });
+
   return (
-    <ChecklistProvider checklistId={checklistId}>
+    <ChecklistProvider checklistId={checklistId} checklist={checklist}>
       <Outlet />
     </ChecklistProvider>
   );
