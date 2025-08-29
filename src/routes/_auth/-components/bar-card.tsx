@@ -1,6 +1,6 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -21,7 +21,7 @@ type Data = { status: string; total: number };
 
 export function BarComponent({ data }: { data: Data[] }) {
   return (
-    <Card className="border-none p-0 shadow-none">
+    <Card className="border-none shadow-none">
       <CardHeader>
         <CardTitle>Total de checklist por Status</CardTitle>
       </CardHeader>
@@ -32,7 +32,7 @@ export function BarComponent({ data }: { data: Data[] }) {
         >
           <BarChart accessibilityLayer data={data}>
             <CartesianGrid vertical={false} />
-            <YAxis domain={[0, "dataMax"]} />
+            <YAxis />
             <XAxis
               dataKey="status"
               tickLine={false}
@@ -43,7 +43,21 @@ export function BarComponent({ data }: { data: Data[] }) {
               cursor={false}
               content={<ChartTooltipContent indicator="dashed" />}
             />
-            <Bar dataKey="total" fill="var(--color-total)" radius={4} />
+            <Bar dataKey="total" fill="var(--color-total)">
+              {data
+                .map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={
+                      entry.status === "BOM"
+                        ? "var(--chart-2)"
+                        : entry.status === "REGULAR"
+                          ? "var(--chart-3)"
+                          : "var(--chart-5)"
+                    }
+                  />
+                ))}
+            </Bar>
           </BarChart>
         </ChartContainer>
       </CardContent>

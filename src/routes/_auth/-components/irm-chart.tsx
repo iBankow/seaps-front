@@ -46,7 +46,7 @@ type Data = {
 
 export function IRMBarComponent({ data }: { data: Data[] }) {
   return (
-    <Card className="col-span-1 border-none p-0 shadow-none sm:col-span-2">
+    <Card className="col-span-1 border-none shadow-none sm:col-span-3">
       <CardHeader>
         <CardTitle>Classificação geral dos órgãos e entidades</CardTitle>
       </CardHeader>
@@ -72,10 +72,10 @@ export function IRMBarComponent({ data }: { data: Data[] }) {
                   formatter={(value, _, item) => (
                     <>
                       <div
-                        className="h-2.5 w-2.5 shrink-0 rounded-[2px] bg-[--color-bg]"
+                        className="h-2.5 w-2.5 shrink-0 rounded-[2px]"
                         style={
                           {
-                            "--color-bg": `${status[item.payload.classificacao_igmi as STATU_TYPE].color}`,
+                            backgroundColor: `${status[item.payload.classificacao_igmi as STATU_TYPE].color}`,
                           } as React.CSSProperties
                         }
                       />
@@ -97,7 +97,6 @@ export function IRMBarComponent({ data }: { data: Data[] }) {
                 />
               }
               cursor={false}
-              defaultIndex={1}
             />
             <Bar dataKey="irm" fill="var(--color-total)" radius={4}>
               {data.map((entry, index) => (
