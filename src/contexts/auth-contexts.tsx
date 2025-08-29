@@ -1,6 +1,15 @@
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type FC,
+  type ReactNode,
+} from "react";
+import { redirect } from "@tanstack/react-router";
 import { api } from "@/lib/api";
 import { Loader2 } from "lucide-react";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { config } from "@/lib/mt-login";
 
 type User = { id: string; name: string; email: string; role: string };
 
@@ -14,37 +23,34 @@ export type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null | undefined>();
   const [loading, setLoading] = useState(true);
 
+  const getUserData = () =>
+    api
+      .get("/api/v1/auth/me")
+      .then(({ data }) => setUser(data))
+      .finally(() => setLoading(false));
+
   useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const { data } = await api.get("/api/v1/auth/me");
-        setUser(data);
-      } catch {
-        setUser(undefined);
-      } finally {
-        setLoading(false);
-      }
-    };
-    checkSession();
+    getUserData();
   }, []);
 
   const login = async (email: string, password: string) => {
     await api.post("/api/v1/sessions", { email, password });
-    const { data } = await api.get("/api/v1/auth/me");
-    setUser(data.user);
-    window.location.replace("/");
+
+    throw redirect({
+      to: "/",
+    });
   };
 
   const logout = async () => {
     await api.delete("/api/v1/sessions");
     setUser(null);
-    window.location.replace("/login");
+    throw redirect({
+      href: config.url_logout,
+    });
   };
 
   if (loading) {
