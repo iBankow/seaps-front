@@ -2,15 +2,13 @@ import axios from "axios";
 import { toast } from "sonner";
 
 export const api = axios.create({
-  baseURL: "http://172.24.155.34:3000",
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
   withCredentials: true,
 });
 
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.log(error.response);
-
     if (
       error.config.url === "/api/v1/auth/me" &&
       error.response?.status === 401 &&
