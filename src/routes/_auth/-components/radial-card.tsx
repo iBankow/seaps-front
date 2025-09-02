@@ -67,7 +67,7 @@ export function RadialComponent({ data }: { data: Data[] }) {
                           y={viewBox.cy}
                           className="fill-foreground text-4xl font-bold"
                         >
-                          {data[0]?.total?.toLocaleString()}
+                          {data?.[0]?.total?.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}

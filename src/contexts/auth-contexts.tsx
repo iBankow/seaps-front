@@ -6,7 +6,7 @@ import {
   type FC,
   type ReactNode,
 } from "react";
-import { redirect } from "@tanstack/react-router";
+// import { redirect } from "@tanstack/react-router";
 import { api } from "@/lib/api";
 import { Loader2 } from "lucide-react";
 import { config } from "@/lib/mt-login";
@@ -40,17 +40,13 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const login = async (email: string, password: string) => {
     await api.post("/api/v1/sessions", { email, password });
 
-    throw redirect({
-      to: "/",
-    });
+    window.location.reload()
   };
 
   const logout = async () => {
     await api.delete("/api/v1/sessions");
     setUser(null);
-    throw redirect({
-      href: config.url_logout,
-    });
+    window.location.reload()
   };
 
   if (loading) {

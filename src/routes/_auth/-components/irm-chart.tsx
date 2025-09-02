@@ -99,7 +99,7 @@ export function IRMBarComponent({ data }: { data: Data[] }) {
               cursor={false}
             />
             <Bar dataKey="irm" fill="var(--color-total)" radius={4}>
-              {data.map((entry, index) => (
+              {data?.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={status[entry.classificacao_igmi as STATU_TYPE].color}

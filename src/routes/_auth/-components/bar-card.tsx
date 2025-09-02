@@ -45,7 +45,7 @@ export function BarComponent({ data }: { data: Data[] }) {
             />
             <Bar dataKey="total" fill="var(--color-total)">
               {data
-                .map((entry, index) => (
+                ?.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={

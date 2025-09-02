@@ -26,7 +26,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
-import { useAuth } from "@/contexts/auth-contexts";
 
 export const Route = createFileRoute("/_auth/users/$userId/edit/")({
   component: EditUser,
@@ -35,18 +34,57 @@ export const Route = createFileRoute("/_auth/users/$userId/edit/")({
 const userSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório").max(255, "Nome muito longo"),
   email: z.email("Email inválido").min(1, "Email é obrigatório"),
+  permissions: z.array(z.string()).optional(),
   is_active: z.boolean(),
   role: z.string(),
 });
 
 type UserFormData = z.infer<typeof userSchema>;
 
-function EditUser() {
-  const { user } = useAuth();
+const features = [
+  {
+    name: "checklists:view_all",
+    label: "Visualizar todos Checklists",
+  },
+  {
+    name: "checklists:create",
+    label: "Criar Checklists",
+  },
+  {
+    name: "checklists:edit",
+    label: "Editar Checklists"
+  },
+  {
+    name: "checklists:delete",
+    label: "Deletar Checklists"
+  },
+  {
+    name: "checklist_items:edit_all",
+    label: "Editar Itens de todos os Checklist"
+  },
+  {
+    name: "properties:create",
+    label: "Criar Imóveis"
+  },
+  {
+    name: "properties:edit",
+    label: "Editar Imóveis"
+  },
+  {
+    name: "properties:delete",
+    label: "Deletar Imóveis"
+  },
+  {
+    name: "users:edit_configs",
+    label: "Editar Configurações de Usuários"
+  },
+];
 
+function EditUser() {
   const { userId } = Route.useParams();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<UserFormData | null>(null);
 
   const form = useForm<UserFormData>({
     resolver: zodResolver(userSchema),
@@ -62,14 +100,15 @@ function EditUser() {
     const loadData = async () => {
       try {
         const { data } = await api.get(`/api/v1/users/${userId}`);
-        const user = data;
-        if (user) {
+        if (data) {
           form.reset({
-            name: user.name,
-            email: user.email,
-            is_active: user.is_active,
-            role: user.role,
+            name: data.name,
+            email: data.email,
+            is_active: data.is_active,
+            role: data.role,
+            permissions: data.permissions || [],
           });
+          setUser(data)
         }
       } finally {
         setLoading(false);
@@ -80,9 +119,12 @@ function EditUser() {
   }, [userId, form]);
 
   const onSubmit = async (values: UserFormData) => {
-    setLoading(true);
     api
-      .put(`/api/v1/users/${userId}`, values)
+      .put(`/api/v1/users/${userId}`, {
+        permissions: values.permissions,
+        is_active: values.is_active,
+        role: values.role,
+      })
       .then(() => {
         toast.success("Usuário atualizado com sucesso!");
         router.navigate({ to: `/users/${userId}` });
@@ -183,6 +225,7 @@ function EditUser() {
                     </div>
                     <FormControl>
                       <Switch
+                        className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-red-500 dark:data-[state=unchecked]:bg-red-500"
                         checked={field.value}
                         onCheckedChange={field.onChange}
                         aria-readonly
@@ -216,7 +259,6 @@ function EditUser() {
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={user?.role}
-                        disabled={user?.role === "ADMIN"}
                       >
                         <FormControl>
                           <SelectTrigger className="w-1/2">
@@ -240,6 +282,87 @@ function EditUser() {
                 )}
               />
             </FormItem>
+          </FormItem>
+          <FormItem>
+            <FormLabel>Funcionalidades</FormLabel>
+            <FormField
+              control={form.control}
+              name="permissions"
+              render={({ field }) => {
+                const isAllSelected = field.value?.includes("*");
+                return (
+                  <div className="flex flex-col gap-2">
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                      <div className="space-y-0.5">
+                        <FormLabel className="mb-0">Acesso como administrador</FormLabel>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={isAllSelected}
+                          defaultChecked={field.value?.includes("*")}
+                          onCheckedChange={(checked) => {
+                            let newFeatures = field.value || [];
+                            if (checked) {
+                              newFeatures = [...newFeatures, '*'];
+                            } else {
+                              newFeatures = newFeatures.filter((f) => f !== '*');
+                            }
+                            field.onChange(newFeatures);
+                          }}
+                        />
+                      </FormControl>
+                    </FormItem>
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                      <div className="space-y-0.5">
+                        <FormLabel className="mb-0">Acesso como avaliador</FormLabel>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          defaultChecked={field.value?.includes("evaluator")}
+                          onCheckedChange={(checked) => {
+                            let newFeatures = field.value || [];
+                            if (checked) {
+                              newFeatures = [...newFeatures, 'evaluator'];
+                            } else {
+                              newFeatures = newFeatures.filter((f) => f !== 'evaluator');
+                            }
+                            field.onChange(newFeatures);
+                          }}
+                        />
+                      </FormControl>
+                    </FormItem>
+                    {features.map((feature) => {
+                      const isChecked = field.value?.includes(feature.name);
+                      return (
+                        <FormItem
+                          key={feature.name}
+                          className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm"
+                        >
+                          <div className="space-y-0.5">
+                            <FormLabel className="mb-0">{feature.label}</FormLabel>
+                          </div>
+                          <FormControl>
+                            <Switch
+                              checked={isChecked || isAllSelected}
+                              disabled={isAllSelected}
+                              onCheckedChange={(checked) => {
+                                let newFeatures = field.value?.filter((f) => f !== "*") || [];
+                                if (checked) {
+                                  newFeatures = [...newFeatures, feature.name];
+                                } else {
+                                  newFeatures = newFeatures.filter((f) => f !== feature.name);
+                                }
+                                field.onChange(newFeatures);
+                              }}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      );
+                    })}
+                  </div>
+                );
+              }}
+            />
           </FormItem>
           <div className="flex justify-end">
             <Button type="submit" className="self-end">

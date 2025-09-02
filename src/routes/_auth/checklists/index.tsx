@@ -76,7 +76,7 @@ export function RouteComponent() {
         </CardContent>
         <CardFooter className="w-full justify-center flex-col gap-4">
           {data?.meta?.total > 10 && <Pagination meta={data?.meta} />}
-          <p>Total de {data?.meta?.total} item(s)</p>
+          {data?.meta && <p>Total de {data?.meta?.total} item(s)</p>}
         </CardFooter>
       </Card>
     </div>

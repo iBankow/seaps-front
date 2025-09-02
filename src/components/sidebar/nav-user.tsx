@@ -26,13 +26,13 @@ export function NavUser({
   user,
 }: {
   user:
-    | {
-        name: string;
-        email: string;
-        // avatar: string;
-      }
-    | undefined
-    | null;
+  | {
+    name: string;
+    email: string;
+    // avatar: string;
+  }
+  | undefined
+  | null;
 }) {
   const { isMobile } = useSidebar();
 
@@ -42,7 +42,10 @@ export function NavUser({
     return null;
   }
 
-  const createAvatarFallback = (name: string) => {
+  const createAvatarFallback = (name?: string) => {
+    if (!name) {
+     return 'UK'
+    }
     const names = name.trim().toUpperCase().split(/\s+/); // Remove espaços extras e divide por espaços
     if (names.length === 1) return names[0][0];
 
@@ -60,7 +63,11 @@ export function NavUser({
     return `hsl(${hue}, 70%, 60%)`;
   };
 
-  const getFirstAndLastName = (name: string) => {
+  const getFirstAndLastName = (name?: string) => {
+    if (!name) {
+     return 'UK'
+    }
+
     const names = name.trim().split(/\s+/);
     if (names.length === 1) return names[0];
     return `${names[0]} ${names[names.length - 1]}`;

@@ -75,7 +75,7 @@ export function DataFilterForm() {
   useEffect(() => {
     try {
       api.get("/api/organizations").then(({ data }) => setOrganizations(data));
-      api.get("/api/v1/users").then(({ data }) =>
+      api.get("/api/v1/users?role=evaluator").then(({ data }) =>
         setUsers(
           data.data.map((user: any) => ({
             ...user,
