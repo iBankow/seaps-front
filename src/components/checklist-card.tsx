@@ -52,7 +52,7 @@ export const ChecklistCard = ({
   const handleChangeValue = async (value: string, id: string) => {
     try {
       await api.put(
-        `/api/v1/checklist-item/${id}`,
+        `/api/v1/checklist-items/${id}`,
         { score: value }
       );
     } catch (error) {
