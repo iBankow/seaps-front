@@ -1,4 +1,4 @@
-import { useRouter } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import { api } from "@/lib/api";
 import axios from "axios";
@@ -19,7 +19,7 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { Save } from "lucide-react";
+import { Plus, Save } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -114,15 +114,10 @@ export const PropertyForm = ({
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [orgsResponse, personsResponse] = await Promise.all([
-          api.get("/api/v1/organizations?per_page=1000"),
-          api.get("/api/v1/persons"),
-        ]);
+        const { data } = await api.get("/api/v1/organizations?per_page=100");
 
-        setOrganizations(orgsResponse.data.data);
-        setPersons(personsResponse.data.data || []);
+        setOrganizations(data.data || []);
       } catch (error) {
-        console.error("Error loading form data:", error);
         toast.error("Erro ao carregar dados do formulário");
       } finally {
         setDataLoading(false);
@@ -131,6 +126,27 @@ export const PropertyForm = ({
 
     loadData();
   }, []);
+
+  const organization_id = form.watch("organization_id");
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setDataLoading(true);
+        const { data } = await api.get(
+          `/api/v1/persons?organization_id=${organization_id}`
+        );
+
+        setPersons(data.data || []);
+      } finally {
+        setDataLoading(false);
+      }
+    };
+
+    if (organization_id) {
+      loadData();
+    }
+  }, [organization_id]);
 
   const onSubmit = async (values: PropertyFormData) => {
     setLoading(true);
@@ -217,18 +233,25 @@ export const PropertyForm = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Responsável</FormLabel>
-                    <RSSelect
-                      placeholder="Selecione o Responsável"
-                      options={persons}
-                      className={dataLoading ? "animate-pulse" : ""}
-                      onChange={(val) => {
-                        field.onChange(val ? val.id : null);
-                      }}
-                      value={
-                        persons.find((person) => person.id === field.value) ||
-                        null
-                      }
-                    />
+                    <div className="flex gap-1">
+                      <RSSelect
+                        placeholder="Selecione o Responsável"
+                        options={persons}
+                        className={dataLoading ? "animate-pulse" : ""}
+                        onChange={(val) => {
+                          field.onChange(val ? val.id : null);
+                        }}
+                        value={
+                          persons.find((person) => person.id === field.value) ||
+                          null
+                        }
+                      />
+                      <Button size={"icon"} type="button" asChild>
+                        <Link to="/persons/create" search={{ organization_id }}>
+                          <Plus />
+                        </Link>
+                      </Button>
+                    </div>
                   </FormItem>
                 )}
               />
