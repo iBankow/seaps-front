@@ -66,6 +66,7 @@ export function Pagination({ className, meta }: IPaginationComponent) {
         <PaginationItem className="hidden sm:block">
           <Button variant="ghost" disabled={meta?.prev_page === null} asChild>
             <Link
+              replace={true}
               to="."
               search={getParams(
                 meta?.current_page ? meta?.current_page - 1 : 0
@@ -82,6 +83,7 @@ export function Pagination({ className, meta }: IPaginationComponent) {
               <PaginationItem key={index}>
                 <Button variant="ghost" disabled asChild size="icon">
                   <Link
+                    replace={true}
                     to="."
                     search={getParams(meta?.current_page + Number(item))}
                   >
@@ -98,7 +100,8 @@ export function Pagination({ className, meta }: IPaginationComponent) {
                 variant={meta.current_page === item ? "secondary" : "ghost"}
                 size="icon"
               >
-                <Link to="." search={getParams(item)}>
+                <Link
+                  replace={true} to="." search={getParams(item)}>
                   {item}
                 </Link>
               </Button>
@@ -108,6 +111,7 @@ export function Pagination({ className, meta }: IPaginationComponent) {
         <PaginationItem className="hidden sm:block">
           <Button variant="ghost" disabled={meta?.next_page === null} asChild>
             <Link
+              replace={true}
               to="."
               search={getParams(
                 meta?.current_page ? meta?.current_page + 1 : 0
