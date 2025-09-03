@@ -47,7 +47,7 @@ export function RouteComponent() {
   }, [search]);
 
   return (
-    <div className="flex flex-col gap-y-4 w-full">
+    <div className="flex flex-col gap-y-4 flex-1">
       <Card>
         <CardContent>
           <div className="flex justify-between">
@@ -76,9 +76,15 @@ export function RouteComponent() {
             <DataTable columns={columns} data={data?.data} />
           )}
         </CardContent>
-        <CardFooter className="w-full justify-center flex-col gap-4">
-          {data?.meta?.total > 10 && <Pagination meta={data?.meta} />}
-          <p>Total de {data?.meta?.total} item(s)</p>
+        <CardFooter className="w-full grid grid-cols-3 gap-4">
+          {data?.meta?.total > 10 && (
+            <Pagination className="col-start-2" meta={data?.meta} />
+          )}
+          {data?.meta && (
+            <p className="justify-self-end">
+              Total de {data?.meta?.total} item(s)
+            </p>
+          )}
         </CardFooter>
       </Card>
     </div>

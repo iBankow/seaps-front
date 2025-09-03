@@ -3,10 +3,11 @@ import { Pagination } from "@/components/pagination";
 import { useEffect, useState } from "react";
 import { DataTableSkeleton } from "@/components/skeletons/data-table";
 
-import { createFileRoute, useSearch } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { api } from "@/lib/api";
 import { columns } from "./-components/columns";
 import { DataFilterForm } from "./-components/filter-form";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 export const Route = createFileRoute("/_auth/users/")({
   component: RouteComponent,
@@ -23,53 +24,51 @@ export const Route = createFileRoute("/_auth/users/")({
 });
 
 export function RouteComponent() {
-  const searchParams = useSearch({ from: "/_auth/users/" });
+  const search = Route.useSearch();
 
-  const page = searchParams.page;
-  const perPage = searchParams.per_page;
-
-  const organization = searchParams.organization;
-  const role = searchParams.role;
-  const name = searchParams.name;
-  const email = searchParams.email;
-
-  const [users, setUsers] = useState<any[]>([]);
+  const [data, setData] = useState<any>();
   const [loading, setLoading] = useState(true);
-  const [meta, setMeta] = useState<any>([]);
 
   useEffect(() => {
     api
       .get("/api/v1/users", {
-        params: {
-          page: page,
-          per_page: perPage,
-          organization,
-          role,
-          name,
-          email,
-        },
+        params: { ...search },
       })
-      .then(({ data }) => {
-        setUsers(data.data);
-        setMeta(data.meta);
-      })
+      .then(({ data }) => setData(data))
       .finally(() => setLoading(false));
-  }, [organization, role, name, email, page, perPage]);
+  }, [search]);
 
   return (
     <div className="flex flex-col gap-y-4">
-      <div className="flex justify-between">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Usuários</h2>
-        </div>
-      </div>
-      <DataFilterForm />
-      {loading ? (
-        <DataTableSkeleton columns={columns} />
-      ) : (
-        <DataTable columns={columns} data={users} />
-      )}
-      {meta.total > 10 && <Pagination meta={meta} />}
+      <Card>
+        <CardContent>
+          <div className="flex justify-between">
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight">Usuários</h2>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardContent className="space-y-4">
+          <DataFilterForm />
+          {loading ? (
+            <DataTableSkeleton columns={columns} />
+          ) : (
+            <DataTable columns={columns} data={data?.data} />
+          )}
+        </CardContent>
+        <CardFooter className="w-full grid grid-cols-3 gap-4">
+          {data?.meta?.total > 10 && (
+            <Pagination className="col-start-2" meta={data?.meta} />
+          )}
+          {data?.meta && (
+            <p className="justify-self-end">
+              Total de {data?.meta?.total} item(s)
+            </p>
+          )}
+        </CardFooter>
+      </Card>
     </div>
   );
 }
