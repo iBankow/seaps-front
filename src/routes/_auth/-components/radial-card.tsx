@@ -20,6 +20,14 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+/*
+
+  80-x
+  600 - 360
+  80*360/600
+
+*/
+
 export function RadialComponent({ data }: { data: Data[] }) {
   return (
     <Card className="border-none shadow-none">
@@ -32,9 +40,9 @@ export function RadialComponent({ data }: { data: Data[] }) {
           className="aspect-auto h-[350px] w-full"
         >
           <RadialBarChart
-            data={data}
+            data={[{ total: 10 }]}
             startAngle={0}
-            endAngle={250}
+            endAngle={(data?.[0]?.total * 360) / 664}
             innerRadius={80}
             outerRadius={110}
           >

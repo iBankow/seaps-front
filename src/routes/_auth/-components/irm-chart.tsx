@@ -106,7 +106,7 @@ export function IRMBarComponent({ data }: { data: Data[] }) {
                 />
               ))}
             </Bar>
-            <ChartTooltip label="classificacao_igmi" key="var(--color-total)" />
+            {/* <ChartTooltip label="classificacao_igmi" key="var(--color-total)" /> */}
           </BarChart>
         </ChartContainer>
       </CardContent>
