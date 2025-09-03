@@ -1,9 +1,4 @@
-import {
-  createFileRoute,
-  useParams,
-  Link,
-  useRouter,
-} from "@tanstack/react-router";
+import { createFileRoute, useParams, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
@@ -25,8 +20,6 @@ export const Route = createFileRoute(
 });
 
 function ChecklistItem() {
-  const router = useRouter();
-
   const { checklistId, itemId } = useParams({
     from: "/_auth/checklists/$checklistId/items/$itemId",
   });
@@ -35,6 +28,7 @@ function ChecklistItem() {
   const [uploading, setUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [item, setItem] = useState<ChecklistItem | null>(null);
+  const [load, setLoad] = useState(false);
 
   const observationDialog = useModal();
   const imageDialog = useModal();
@@ -46,6 +40,7 @@ function ChecklistItem() {
     if (!files || files.length === 0) return;
 
     setUploading(true);
+    setIsLoading(true);
     try {
       const { data } = await api.get(
         `/api/v1/checklists/${checklistId}/items/${itemId}`
@@ -88,11 +83,11 @@ function ChecklistItem() {
         toast.success("Imagens enviadas com sucesso!");
       }
 
-      router.navigate({ to: "." });
     } catch (error) {
       console.error("Error uploading images:", error);
       toast.error("Erro ao enviar imagens");
     } finally {
+      setLoad(!load);
       setUploading(false);
     }
   };
@@ -117,7 +112,7 @@ function ChecklistItem() {
       .get(`/api/v1/checklists/${checklistId}/items/${itemId}`)
       .then(({ data }) => setItem(data))
       .finally(() => setIsLoading(false));
-  }, [itemId, checklistId]);
+  }, [itemId, checklistId, load]);
 
   if (isLoading || !item) {
     return <Loading />;
