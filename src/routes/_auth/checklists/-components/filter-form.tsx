@@ -68,13 +68,12 @@ export function DataFilterForm() {
         page: 1,
         per_page: searchParams.per_page || 10,
       },
-      replace: true,
     });
   };
 
   useEffect(() => {
     try {
-      api.get("/api/organizations").then(({ data }) => setOrganizations(data));
+      api.get("/api/v1/organizations?per_page=100").then(({ data }) => setOrganizations(data.data));
       api.get("/api/v1/users?role=evaluator").then(({ data }) =>
         setUsers(
           data.data.map((user: any) => ({
@@ -83,14 +82,11 @@ export function DataFilterForm() {
           }))
         )
       );
-    } catch (err) {
-      console.error("Error fetching filter data:", err);
     } finally {
       setLoading(false);
     }
   }, []);
 
-  // Reset form when search params change
   useEffect(() => {
     form.reset({
       organization: searchParams.organization || "",
@@ -106,7 +102,6 @@ export function DataFilterForm() {
       per_page: searchParams.per_page || 10,
     };
 
-    // Add filter values to search params
     Object.entries(values).forEach(([key, value]) => {
       if (value && value !== "") {
         newSearchParams[key] = value;
@@ -116,7 +111,6 @@ export function DataFilterForm() {
     router.navigate({
       to: "/checklists",
       search: newSearchParams,
-      replace: true,
     });
   }
 
