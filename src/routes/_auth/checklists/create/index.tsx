@@ -28,11 +28,7 @@ function RouteComponent() {
           </div>
         </CardContent>
       </Card>
-      <Card>
-        <CardContent>
-          <CreateCheckListForm />
-        </CardContent>
-      </Card>
+      <CreateCheckListForm />
     </div>
   );
 }

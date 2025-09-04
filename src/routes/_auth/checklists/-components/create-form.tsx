@@ -19,11 +19,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus } from "lucide-react";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
+import { Plus, Save } from "lucide-react";
 import { useRouter } from "@tanstack/react-router";
 import { api } from "@/lib/api";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
   model_id: z.string({
@@ -38,13 +38,11 @@ const formSchema = z.object({
   user_id: z.string({
     message: "Selecione o Responsável pelo Checklist",
   }),
+  is_returned: z.boolean({
+    message: "Selecione se o checklist é de retorno",
+  }),
+  return: z.number().optional(),
 });
-
-type ModelResponse = {
-  items: {
-    name: string;
-  }[];
-};
 
 export function CreateCheckListForm() {
   const router = useRouter();
@@ -53,7 +51,6 @@ export function CreateCheckListForm() {
   const [models, setModels] = useState<any[]>([]);
   const [properties, setProperties] = useState<any[]>([]);
   const [users, setUsers] = useState<any[]>([]);
-  const [model, setModel] = useState<ModelResponse>();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,10 +58,7 @@ export function CreateCheckListForm() {
       organization_id: undefined as unknown as string,
     },
   });
-  const [organization_id, model_id] = form.watch([
-    "organization_id",
-    "model_id",
-  ]);
+  const [organization_id] = form.watch(["organization_id"]);
 
   useEffect(() => {
     api
@@ -72,7 +66,7 @@ export function CreateCheckListForm() {
       .then(({ data }) => setModels(data.data));
     api.get("/api/organizations").then(({ data }) => setOrganizations(data));
     api
-      .get("/api/v1/users?per_page=1000&role=EVALUATOR")
+      .get("/api/v1/users?per_page=1000&role=evaluator")
       .then(({ data }) => setUsers(data.data));
   }, []);
 
@@ -88,14 +82,6 @@ export function CreateCheckListForm() {
     }
   }, [organization_id]);
 
-  useEffect(() => {
-    if (model_id) {
-      fetch("/api/v1/models/" + model_id)
-        .then((response) => response.json())
-        .then((data) => setModel(data));
-    }
-  }, [model_id]);
-
   async function onSubmit(values: z.infer<typeof formSchema>) {
     return api
       .post("/api/v1/checklists/", values)
@@ -107,161 +93,206 @@ export function CreateCheckListForm() {
 
   return (
     <Form {...form}>
-      <div className="flex flex-col gap-8 sm:flex-row">
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex w-full flex-col gap-4"
-        >
-          <FormField
-            control={form.control}
-            name="model_id"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Modelo</FormLabel>
-                <Select onValueChange={field.onChange}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o Modelo do checklist" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {models?.map((item) => (
-                      <SelectItem key={item.id} value={String(item.id)}>
-                        {item.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="organization_id"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Orgão</FormLabel>
-                <Select onValueChange={field.onChange}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o Orgão" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {organizations.map((item) => (
-                      <SelectItem key={item.id} value={String(item.id)}>
-                        {item.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="property_id"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Imóvel</FormLabel>
-                <div className="flex w-full items-center gap-2">
-                  <Select
-                    onValueChange={field.onChange}
-                    disabled={!form.getValues("organization_id")}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione o imóvel do Orgão" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {properties.map((item) => (
-                        <SelectItem key={item.id} value={String(item.id)}>
-                          {item.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Button
-                    type="button"
-                    disabled={!form.getValues("organization_id")}
-                    variant={"default"}
-                    onClick={() => {
-                      router.navigate({
-                        to: `/properties/create?organization_id=${form.getValues("organization_id")}`,
-                      });
-                    }}
-                    size="icon"
-                  >
-                    <Plus />
-                  </Button>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="user_id"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Responsável pelo Checklist</FormLabel>
-                <Select onValueChange={field.onChange}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o Responsável pelo checklis" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {users.map((item) => (
-                      <SelectItem key={item.id} value={String(item.id)}>
-                        {item.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" className="self-end">
-            Criar
-          </Button>
-        </form>
-        <FormItem className="w-full">
-          <FormLabel className="h-fit">Preview do modelo</FormLabel>
-          {model &&
-            model.items?.map((field, index) => {
-              return (
-                <div
-                  key={index}
-                  className="w-full rounded border border-dashed p-2"
-                >
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <Card>
+          <CardHeader>
+            <CardTitle>Informações do Checklist</CardTitle>
+          </CardHeader>
+
+          <CardContent>
+            <div className="grid grid-cols-1 gap-4">
+              <FormField
+                control={form.control}
+                name="model_id"
+                render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel className="h-fit">{field.name}</FormLabel>
-                    <RadioGroup className="flex w-full" disabled>
-                      <div className="flex w-full flex-row items-center justify-center gap-2 rounded bg-red-300 px-1 py-2 dark:bg-red-800">
-                        <RadioGroupItem value="0" id={"0"} />
-                        <Label htmlFor={"0"}>Ruim</Label>
-                      </div>
-                      <div className="flex w-full flex-row items-center justify-center gap-2 rounded bg-yellow-300 px-1 py-2 dark:bg-yellow-800">
-                        <RadioGroupItem value="1" id={"1"} />
-                        <Label htmlFor={"1"}>Regular</Label>
-                      </div>
-                      <div className="flex w-full flex-row items-center justify-center gap-2 rounded bg-green-300 px-1 py-2 dark:bg-green-800">
-                        <RadioGroupItem value="2" id={"2"} />
-                        <Label htmlFor={"2"}>Bom</Label>
-                      </div>
-                    </RadioGroup>
+                    <FormLabel>Modelo</FormLabel>
+                    <Select onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione o Modelo do checklist" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {models?.map((item) => (
+                          <SelectItem key={item.id} value={String(item.id)}>
+                            {item.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
-                </div>
-              );
-            })}
-        </FormItem>
-      </div>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="organization_id"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Orgão</FormLabel>
+                    <Select onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione o Orgão" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {organizations.map((item) => (
+                          <SelectItem key={item.id} value={String(item.id)}>
+                            {item.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="property_id"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Imóvel</FormLabel>
+                    <div className="flex w-full items-center gap-2">
+                      <Select
+                        onValueChange={field.onChange}
+                        disabled={!form.getValues("organization_id")}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione o imóvel do Orgão" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {properties.map((item) => (
+                            <SelectItem key={item.id} value={String(item.id)}>
+                              {item.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Button
+                        type="button"
+                        disabled={!form.getValues("organization_id")}
+                        variant={"default"}
+                        onClick={() => {
+                          router.navigate({
+                            to: `/properties/create?organization_id=${form.getValues("organization_id")}`,
+                          });
+                        }}
+                        size="icon"
+                      >
+                        <Plus />
+                      </Button>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="user_id"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Responsável pelo Checklist</FormLabel>
+                    <Select onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione o Responsável pelo checklis" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {users.map((item) => (
+                          <SelectItem key={item.id} value={String(item.id)}>
+                            {item.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="is_returned"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-2">
+                    <FormLabel>Checklist de Retorno?</FormLabel>
+                    <div className="flex gap-4">
+                      <Button
+                        type="button"
+                        variant={field.value ? "default" : "outline"}
+                        onClick={() => field.onChange(true)}
+                      >
+                        Sim
+                      </Button>
+                      <Button
+                        type="button"
+                        variant={field.value === false ? "default" : "outline"}
+                        onClick={() => field.onChange(false)}
+                      >
+                        Não
+                      </Button>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="return"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Qual retorno?</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min={1}
+                        disabled={!form.watch("is_returned")}
+                        placeholder="Informe o número do checklist de retorno"
+                        className="input input-bordered w-full"
+                        {...field}
+                        value={field.value ?? ""}
+                        onChange={(e) =>
+                          field.onChange(
+                            e.target.value ? Number(e.target.value) : undefined
+                          )
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="mt-6 flex justify-end gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => router.navigate({ to: "/properties" })}
+              >
+                Cancelar
+              </Button>
+              <Button type="submit">
+                <Save className="mr-2 h-4 w-4" />
+                {false
+                  ? "Criando..."
+                  : false
+                    ? "Salvar Imóvel"
+                    : "Criar Imóvel"}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </form>
     </Form>
   );
 }

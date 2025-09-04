@@ -9,7 +9,6 @@ import {
 // import { redirect } from "@tanstack/react-router";
 import { api } from "@/lib/api";
 import { Loader2 } from "lucide-react";
-import { config } from "@/lib/mt-login";
 
 type User = { id: string; name: string; email: string; role: string };
 
