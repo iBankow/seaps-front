@@ -89,21 +89,17 @@ export const columns: ColumnDef<Column>[] = [
     },
   },
   {
+    accessorKey: "is_returned",
+    header: "Retorno",
+    accessorFn(row) {
+      return row.is_returned ? `${row.return}º Retorno` : "Não";
+    },
+  },
+  {
     accessorKey: "user",
     header: "Responsável",
     accessorFn(row) {
       return row.user?.name ? getFirstAndLastName(row.user?.name) : "--";
-    },
-    meta: {
-      headerClassName: "hidden md:table-cell",
-      cellClassName: "truncate hidden md:table-cell",
-    },
-  },
-  {
-    accessorKey: "created_at",
-    header: "Criado em",
-    accessorFn(row) {
-      return format(new Date(row.created_at || ""), "dd/MM/yyyy");
     },
     meta: {
       headerClassName: "hidden md:table-cell",

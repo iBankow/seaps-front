@@ -86,7 +86,12 @@ export function CreateCheckListForm() {
     return api
       .post("/api/v1/checklists/", values)
       .then(() =>
-        router.navigate({ to: "..", reloadDocument: true, replace: true })
+        router.navigate({
+          to: "..",
+          search: {
+            refresh: Date.now(),
+          },
+        })
       )
       .catch((e) => console.log(e));
   }

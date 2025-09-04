@@ -13,6 +13,7 @@ import { Route as PublicRouteImport } from './routes/public'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as AuthIndexRouteImport } from './routes/_auth/index'
+import { Route as AuthUsersRouteRouteImport } from './routes/_auth/users/route'
 import { Route as AuthPropertiesRouteRouteImport } from './routes/_auth/properties/route'
 import { Route as AuthPersonsRouteRouteImport } from './routes/_auth/persons/route'
 import { Route as AuthChecklistsRouteRouteImport } from './routes/_auth/checklists/route'
@@ -54,6 +55,11 @@ const AuthIndexRoute = AuthIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthUsersRouteRoute = AuthUsersRouteRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AuthPropertiesRouteRoute = AuthPropertiesRouteRouteImport.update({
   id: '/properties',
   path: '/properties',
@@ -70,9 +76,9 @@ const AuthChecklistsRouteRoute = AuthChecklistsRouteRouteImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 const AuthUsersIndexRoute = AuthUsersIndexRouteImport.update({
-  id: '/users/',
-  path: '/users/',
-  getParentRoute: () => AuthRoute,
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthUsersRouteRoute,
 } as any)
 const AuthPropertiesIndexRoute = AuthPropertiesIndexRouteImport.update({
   id: '/',
@@ -107,9 +113,9 @@ const AuthChecklistsChecklistIdRouteRoute =
     getParentRoute: () => AuthChecklistsRouteRoute,
   } as any)
 const AuthUsersUserIdIndexRoute = AuthUsersUserIdIndexRouteImport.update({
-  id: '/users/$userId/',
-  path: '/users/$userId/',
-  getParentRoute: () => AuthRoute,
+  id: '/$userId/',
+  path: '/$userId/',
+  getParentRoute: () => AuthUsersRouteRoute,
 } as any)
 const AuthPropertiesCreateIndexRoute =
   AuthPropertiesCreateIndexRouteImport.update({
@@ -137,9 +143,9 @@ const AuthChecklistsChecklistIdItemsRouteRoute =
   } as any)
 const AuthUsersUserIdEditIndexRoute =
   AuthUsersUserIdEditIndexRouteImport.update({
-    id: '/users/$userId/edit/',
-    path: '/users/$userId/edit/',
-    getParentRoute: () => AuthRoute,
+    id: '/$userId/edit/',
+    path: '/$userId/edit/',
+    getParentRoute: () => AuthUsersRouteRoute,
   } as any)
 const AuthPropertiesPropertyIdEditIndexRoute =
   AuthPropertiesPropertyIdEditIndexRouteImport.update({
@@ -178,6 +184,7 @@ export interface FileRoutesByFullPath {
   '/checklists': typeof AuthChecklistsRouteRouteWithChildren
   '/persons': typeof AuthPersonsRouteRouteWithChildren
   '/properties': typeof AuthPropertiesRouteRouteWithChildren
+  '/users': typeof AuthUsersRouteRouteWithChildren
   '/': typeof AuthIndexRoute
   '/checklists/$checklistId': typeof AuthChecklistsChecklistIdRouteRouteWithChildren
   '/properties/$propertyId': typeof AuthPropertiesPropertyIdRouteRouteWithChildren
@@ -185,7 +192,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof AuthAccountIndexRoute
   '/checklists/': typeof AuthChecklistsIndexRoute
   '/properties/': typeof AuthPropertiesIndexRoute
-  '/users': typeof AuthUsersIndexRoute
+  '/users/': typeof AuthUsersIndexRoute
   '/checklists/$checklistId/items': typeof AuthChecklistsChecklistIdItemsRouteRouteWithChildren
   '/checklists/create': typeof AuthChecklistsCreateIndexRoute
   '/properties/$propertyId/': typeof AuthPropertiesPropertyIdIndexRoute
@@ -227,6 +234,7 @@ export interface FileRoutesById {
   '/_auth/checklists': typeof AuthChecklistsRouteRouteWithChildren
   '/_auth/persons': typeof AuthPersonsRouteRouteWithChildren
   '/_auth/properties': typeof AuthPropertiesRouteRouteWithChildren
+  '/_auth/users': typeof AuthUsersRouteRouteWithChildren
   '/_auth/': typeof AuthIndexRoute
   '/_auth/checklists/$checklistId': typeof AuthChecklistsChecklistIdRouteRouteWithChildren
   '/_auth/properties/$propertyId': typeof AuthPropertiesPropertyIdRouteRouteWithChildren
@@ -255,6 +263,7 @@ export interface FileRouteTypes {
     | '/checklists'
     | '/persons'
     | '/properties'
+    | '/users'
     | '/'
     | '/checklists/$checklistId'
     | '/properties/$propertyId'
@@ -262,7 +271,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/checklists/'
     | '/properties/'
-    | '/users'
+    | '/users/'
     | '/checklists/$checklistId/items'
     | '/checklists/create'
     | '/properties/$propertyId/'
@@ -303,6 +312,7 @@ export interface FileRouteTypes {
     | '/_auth/checklists'
     | '/_auth/persons'
     | '/_auth/properties'
+    | '/_auth/users'
     | '/_auth/'
     | '/_auth/checklists/$checklistId'
     | '/_auth/properties/$propertyId'
@@ -360,6 +370,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthIndexRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/users': {
+      id: '/_auth/users'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof AuthUsersRouteRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_auth/properties': {
       id: '/_auth/properties'
       path: '/properties'
@@ -383,10 +400,10 @@ declare module '@tanstack/react-router' {
     }
     '/_auth/users/': {
       id: '/_auth/users/'
-      path: '/users'
-      fullPath: '/users'
+      path: '/'
+      fullPath: '/users/'
       preLoaderRoute: typeof AuthUsersIndexRouteImport
-      parentRoute: typeof AuthRoute
+      parentRoute: typeof AuthUsersRouteRoute
     }
     '/_auth/properties/': {
       id: '/_auth/properties/'
@@ -432,10 +449,10 @@ declare module '@tanstack/react-router' {
     }
     '/_auth/users/$userId/': {
       id: '/_auth/users/$userId/'
-      path: '/users/$userId'
+      path: '/$userId'
       fullPath: '/users/$userId'
       preLoaderRoute: typeof AuthUsersUserIdIndexRouteImport
-      parentRoute: typeof AuthRoute
+      parentRoute: typeof AuthUsersRouteRoute
     }
     '/_auth/properties/create/': {
       id: '/_auth/properties/create/'
@@ -467,10 +484,10 @@ declare module '@tanstack/react-router' {
     }
     '/_auth/users/$userId/edit/': {
       id: '/_auth/users/$userId/edit/'
-      path: '/users/$userId/edit'
+      path: '/$userId/edit'
       fullPath: '/users/$userId/edit'
       preLoaderRoute: typeof AuthUsersUserIdEditIndexRouteImport
-      parentRoute: typeof AuthRoute
+      parentRoute: typeof AuthUsersRouteRoute
     }
     '/_auth/properties/$propertyId/edit/': {
       id: '/_auth/properties/$propertyId/edit/'
@@ -621,26 +638,38 @@ const AuthPropertiesRouteRouteChildren: AuthPropertiesRouteRouteChildren = {
 const AuthPropertiesRouteRouteWithChildren =
   AuthPropertiesRouteRoute._addFileChildren(AuthPropertiesRouteRouteChildren)
 
+interface AuthUsersRouteRouteChildren {
+  AuthUsersIndexRoute: typeof AuthUsersIndexRoute
+  AuthUsersUserIdIndexRoute: typeof AuthUsersUserIdIndexRoute
+  AuthUsersUserIdEditIndexRoute: typeof AuthUsersUserIdEditIndexRoute
+}
+
+const AuthUsersRouteRouteChildren: AuthUsersRouteRouteChildren = {
+  AuthUsersIndexRoute: AuthUsersIndexRoute,
+  AuthUsersUserIdIndexRoute: AuthUsersUserIdIndexRoute,
+  AuthUsersUserIdEditIndexRoute: AuthUsersUserIdEditIndexRoute,
+}
+
+const AuthUsersRouteRouteWithChildren = AuthUsersRouteRoute._addFileChildren(
+  AuthUsersRouteRouteChildren,
+)
+
 interface AuthRouteChildren {
   AuthChecklistsRouteRoute: typeof AuthChecklistsRouteRouteWithChildren
   AuthPersonsRouteRoute: typeof AuthPersonsRouteRouteWithChildren
   AuthPropertiesRouteRoute: typeof AuthPropertiesRouteRouteWithChildren
+  AuthUsersRouteRoute: typeof AuthUsersRouteRouteWithChildren
   AuthIndexRoute: typeof AuthIndexRoute
   AuthAccountIndexRoute: typeof AuthAccountIndexRoute
-  AuthUsersIndexRoute: typeof AuthUsersIndexRoute
-  AuthUsersUserIdIndexRoute: typeof AuthUsersUserIdIndexRoute
-  AuthUsersUserIdEditIndexRoute: typeof AuthUsersUserIdEditIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthChecklistsRouteRoute: AuthChecklistsRouteRouteWithChildren,
   AuthPersonsRouteRoute: AuthPersonsRouteRouteWithChildren,
   AuthPropertiesRouteRoute: AuthPropertiesRouteRouteWithChildren,
+  AuthUsersRouteRoute: AuthUsersRouteRouteWithChildren,
   AuthIndexRoute: AuthIndexRoute,
   AuthAccountIndexRoute: AuthAccountIndexRoute,
-  AuthUsersIndexRoute: AuthUsersIndexRoute,
-  AuthUsersUserIdIndexRoute: AuthUsersUserIdIndexRoute,
-  AuthUsersUserIdEditIndexRoute: AuthUsersUserIdEditIndexRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)

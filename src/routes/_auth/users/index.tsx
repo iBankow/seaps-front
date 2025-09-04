@@ -8,6 +8,8 @@ import { api } from "@/lib/api";
 import { columns } from "./-components/columns";
 import { DataFilterForm } from "./-components/filter-form";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 export const Route = createFileRoute("/_auth/users/")({
   component: RouteComponent,
@@ -45,6 +47,12 @@ export function RouteComponent() {
           <div className="flex justify-between">
             <div>
               <h2 className="text-2xl font-bold tracking-tight">Usuários</h2>
+            </div>
+            <div className="self-end">
+              <Button disabled className="opacity-0!">
+                <Plus />
+                Criar Usuario
+              </Button>
             </div>
           </div>
         </CardContent>

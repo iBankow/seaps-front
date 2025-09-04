@@ -10,6 +10,9 @@ import { useAuth } from "@/contexts/auth-contexts";
 
 export const Route = createFileRoute("/_auth/users/$userId/")({
   component: UserDetail,
+  loader: () => ({
+    crumb: "Usuário"
+  })
 });
 
 const ROLE_ENUM = {
