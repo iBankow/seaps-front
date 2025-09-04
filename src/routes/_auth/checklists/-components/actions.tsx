@@ -78,7 +78,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
     setLoading(true);
     toast.promise(api.delete("/api/v1/checklists/" + row.original.id), {
       loading: "Excluindo checklist...",
-      success: `Checklist ${row.original?.property?.name} excluído com sucesso!`,
+      success: `Checklist ${row.original?.sid} - ${row.original?.property?.name} excluído com sucesso!`,
       finally: () => {
         setLoading(false);
         router.navigate({
@@ -95,15 +95,25 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
 
   const handleReopenChecklist = () => {
     setLoading(true);
-    api
-      .post("/api/checklists/" + row.original.id + "/re-open")
-      .then(() => {
-        toast.success(`Checklist ${row.original.id} reaberto!`);
-        // router.refresh();
-        reopenDialog.hide();
-      })
-      .catch(() => toast.error("Erro ao reabrir o checjlist"))
-      .finally(() => setLoading(false));
+    toast.promise(
+      api.post("/api/v1/checklists/" + row.original.id + "/re-open"),
+      {
+        loading: "Reabrindo checklist...",
+        success: `Checklist ${row.original?.sid} - ${row.original?.property?.name} reaberto!`,
+        error: "Erro ao reabrir o checklist",
+        finally: () => {
+          setLoading(false);
+          router.navigate({
+            to: ".",
+            replace: true,
+            search: {
+              ...router.latestLocation.search,
+              refresh: Date.now(),
+            },
+          });
+        },
+      }
+    );
   };
 
   return (
@@ -122,8 +132,11 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
           <AlertDialogHeader>
             <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
             <AlertDialogDescription>
-              Tem certeza que deseja excluir o checklist "{row.original?.sid} -{" "}
-              {row.original?.property?.name}"? Esta ação não pode ser desfeita.
+              Tem certeza que deseja excluir o checklist{" "}
+              <span className="font-bold underline">
+                {row.original?.sid} - {row.original?.property?.name}
+              </span>
+              ? Esta ação não pode ser desfeita.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

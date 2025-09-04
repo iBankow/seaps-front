@@ -65,8 +65,8 @@ function buildClassNames(size: RSSelectSize, invalid: boolean) {
   return {
     control: ({ isDisabled }) =>
       cn(controlBase, isDisabled && "opacity-50 cursor-not-allowed bg-muted"),
-    valueContainer: () => cn("gap-1", valuePaddings[size]),
-    placeholder: () => "text-muted-foreground text-nowrap",
+    valueContainer: () => cn("gap-1", valuePaddings[size], 'pr-0'),
+    placeholder: () => "text-muted-foreground text-nowrap truncate",
     input: () => "text-foreground",
     singleValue: () => "text-foreground",
     indicatorsContainer: () => "gap-1 pr-2",

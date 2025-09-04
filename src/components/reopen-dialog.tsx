@@ -36,9 +36,11 @@ export function ReOpenDialog({
               Cancelar
             </Button>
           </DialogClose>
-          <Button type="submit" onClick={onSubmit} disabled={loading}>
-            Confimar
-          </Button>
+          <DialogClose asChild>
+            <Button type="submit" onClick={onSubmit} disabled={loading}>
+              Confimar
+            </Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
