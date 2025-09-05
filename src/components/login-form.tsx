@@ -18,6 +18,7 @@ import { Eye, EyeClosed } from "lucide-react";
 import { useRouter } from "@tanstack/react-router";
 import { useAuth } from "@/contexts/auth-contexts";
 import { config } from "@/lib/mt-login";
+import { api } from "@/lib/api";
 
 const formSchema = z.object({
   email: z
@@ -45,13 +46,11 @@ export function LoginForm() {
     const code = params.get("code");
 
     if (code) {
-      //obtem o token
-      fetch("/api/v1/sessions/mt-login?code=" + code, {
-        method: "POST",
-        body: new URLSearchParams({ code: code }),
-      })
-        .then((data) => data.json())
-        .then(() => router.navigate({ to: "/", replace: true }));
+      api
+        .post("/api/v1/sessions/mt-login?code=" + code, { code })
+        .then(() =>
+          router.navigate({ to: "/", replace: true, reloadDocument: true })
+        );
     }
   }, [router]);
 
@@ -141,7 +140,7 @@ export function LoginForm() {
                   </Form>
                 </div>
                 <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-                  <span className="relative z-10 bg-background px-2 text-muted-foreground">
+                  <span className="relative z-10 bg-card px-2 text-muted-foreground">
                     OU
                   </span>
                 </div>
