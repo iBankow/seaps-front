@@ -7,7 +7,7 @@ import type { Row } from "@tanstack/react-table";
 import {
   ChevronRight,
   Ellipsis,
-  Pen,
+  Flag,
   Printer,
   Trash2,
   Undo,
@@ -15,7 +15,9 @@ import {
 import { useState } from "react";
 
 import { toast } from "sonner";
-// import { ReOpenDialog } from "@/components/reopen-dialog";
+import { ReOpenDialog } from "./dialogs/reopen-dialog";
+import { DeleteDialog } from "./dialogs/delete-dialog";
+import { FinishDialog } from "./dialogs/finish-dialog";
 import { useModal } from "@/hooks/use-modal";
 import {
   DropdownMenu,
@@ -29,24 +31,12 @@ import {
 import { Link, useRouter } from "@tanstack/react-router";
 
 import type { Column } from "./columns";
-import { useAuth } from "@/contexts/auth-contexts";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { ReOpenDialog } from "@/components/reopen-dialog";
 
 export const Actions = ({ row }: { row: Row<Column> }) => {
   const router = useRouter();
-  const { user } = useAuth();
   const reopenDialog = useModal();
   const deleteDialog = useModal();
+  const finishDialog = useModal();
 
   const [loading, setLoading] = useState(false);
 
@@ -72,25 +62,6 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
         error: "Erro ao gerar relatório",
       }
     );
-  };
-
-  const handleDelete = () => {
-    setLoading(true);
-    toast.promise(api.delete("/api/v1/checklists/" + row.original.id), {
-      loading: "Excluindo checklist...",
-      success: `Checklist ${row.original?.sid} - ${row.original?.property?.name} excluído com sucesso!`,
-      finally: () => {
-        setLoading(false);
-        router.navigate({
-          to: ".",
-          replace: true,
-          search: {
-            ...router.latestLocation.search,
-            refresh: Date.now(),
-          },
-        });
-      },
-    });
   };
 
   const handleReopenChecklist = () => {
@@ -124,33 +95,18 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
         open={reopenDialog.visible}
         loading={loading}
       />
-      <AlertDialog
+
+      <DeleteDialog
+        row={row}
         open={deleteDialog.visible}
         onOpenChange={deleteDialog.toggle}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
-            <AlertDialogDescription>
-              Tem certeza que deseja excluir o checklist{" "}
-              <span className="font-bold underline">
-                {row.original?.sid} - {row.original?.property?.name}
-              </span>
-              ? Esta ação não pode ser desfeita.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-              disabled={loading}
-              className="bg-red-600 hover:bg-red-700"
-            >
-              {loading ? "Excluindo..." : "Excluir"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      />
+
+      <FinishDialog
+        row={row}
+        onOpenChange={finishDialog.toggle}
+        open={finishDialog.visible}
+      />
 
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
@@ -171,26 +127,31 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
                 Visualizar
               </Link>
             </DropdownMenuItem>
-            {user?.role !== "EVALUATOR" && (
-              <>
-                <DropdownMenuItem
-                  disabled={row.original.status === "CLOSED"}
-                  asChild
-                >
-                  <Link to={"/checklists/" + row.original.id + "/edit"}>
-                    <Pen size={16} />
-                    Editar
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  disabled={loading || row.original.status === "OPEN"}
-                  onClick={() => reopenDialog.show()}
-                >
-                  <Undo size={16} />
-                  Reabrir
-                </DropdownMenuItem>
-              </>
-            )}
+            {/* <DropdownMenuItem
+              disabled={row.original.status === "CLOSED"}
+              asChild
+            >
+              <Link to={"/checklists/" + row.original.id + "/edit"}>
+                <Pen size={16} />
+                Editar
+              </Link>
+            </DropdownMenuItem> */}
+
+            <DropdownMenuItem
+              disabled={row.original.status === "CLOSED"}
+              onClick={() => finishDialog.show()}
+            >
+              <Flag size={16} />
+              Finalizar
+            </DropdownMenuItem>
+
+            <DropdownMenuItem
+              disabled={loading || row.original.status === "OPEN"}
+              onClick={() => reopenDialog.show()}
+            >
+              <Undo size={16} />
+              Reabrir
+            </DropdownMenuItem>
             <DropdownMenuItem
               disabled={row.original.status === "OPEN" || loading}
               onClick={handleGetReport}
