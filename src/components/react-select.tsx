@@ -3,10 +3,10 @@
 import * as React from "react";
 import Select, {
   components,
+  createFilter,
   type GroupBase,
   type Props as ReactSelectProps,
   type DropdownIndicatorProps,
-  createFilter,
   type ClearIndicatorProps,
 } from "react-select";
 import CreatableSelect from "react-select/creatable";
@@ -33,6 +33,7 @@ export interface RSSelectBaseProps<
   error?: string;
   size?: RSSelectSize;
   className?: string;
+  onCreateOption?: (inputValue: string) => void;
 }
 
 const sizeHeights: Record<RSSelectSize, string> = {
@@ -59,13 +60,13 @@ function buildClassNames(size: RSSelectSize, invalid: boolean) {
     "border-input focus-within:ring-1 focus-within:ring-ring",
     "transition-colors",
     sizeHeights[size],
-    invalid && "border-destructive focus-within:ring-destructive",
+    invalid && "border-destructive focus-within:ring-destructive"
   );
 
   return {
     control: ({ isDisabled }) =>
       cn(controlBase, isDisabled && "opacity-50 cursor-not-allowed bg-muted"),
-    valueContainer: () => cn("gap-1", valuePaddings[size], 'pr-0'),
+    valueContainer: () => cn("gap-1", valuePaddings[size], "pr-0"),
     placeholder: () => "text-muted-foreground text-nowrap truncate",
     input: () => "text-foreground",
     singleValue: () => "text-foreground",
@@ -74,27 +75,27 @@ function buildClassNames(size: RSSelectSize, invalid: boolean) {
     clearIndicator: () =>
       cn(
         "rounded-md p-1 hover:bg-destructive hover:text-accent-foreground",
-        "active:scale-95",
+        "active:scale-95"
       ),
     dropdownIndicator: () =>
       cn(
         "rounded-md p-1 hover:bg-accent hover:text-accent-foreground",
-        "active:scale-95",
+        "active:scale-95"
       ),
     multiValue: () =>
       cn(
         "rounded-md bg-secondary text-secondary-foreground border border-transparent",
-        "hover:border-border",
+        "hover:border-border"
       ),
     multiValueLabel: () => "px-2",
     multiValueRemove: () =>
       cn(
-        "rounded-r-md px-1 hover:bg-destructive hover:text-destructive-foreground",
+        "rounded-r-md px-1 hover:bg-destructive hover:text-destructive-foreground"
       ),
     menu: () =>
       cn(
         "mt-1 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md",
-        "animate-in fade-in-0 zoom-in-95",
+        "animate-in fade-in-0 zoom-in-95"
       ),
     menuList: () => "max-h-64 overflow-y-auto p-1",
     option: ({ isFocused, isSelected }) =>
@@ -102,7 +103,7 @@ function buildClassNames(size: RSSelectSize, invalid: boolean) {
         "cursor-default select-none rounded-sm text-xs",
         optionPaddings["md"],
         isSelected && "bg-accent text-accent-foreground",
-        !isSelected && isFocused && "bg-muted",
+        !isSelected && isFocused && "bg-muted"
       ),
     noOptionsMessage: () => "text-muted-foreground p-2",
     loadingMessage: () => "text-muted-foreground p-2",
@@ -128,7 +129,7 @@ function BaseWrapper<
 >(
   props: RSSelectBaseProps<Option, IsMulti, Group> & {
     selectKind: "default" | "creatable" | "async";
-  },
+  }
 ) {
   const {
     label,
@@ -143,7 +144,7 @@ function BaseWrapper<
 
   const classNames = React.useMemo(
     () => buildClassNames(size, Boolean(error)),
-    [size, error],
+    [size, error]
   );
 
   const [portalTarget, setPortalTarget] = React.useState<
@@ -166,7 +167,6 @@ function BaseWrapper<
       control: (base) => ({ ...base, cursor: "pointer" }),
     },
     filterOption: createFilter({ matchFrom: "start" }),
-    isClearable: true,
     classNames,
     getOptionValue: (option: { id: string }) => option["id"],
     getOptionLabel: (option: { name: string }) => option["name"],
@@ -174,7 +174,14 @@ function BaseWrapper<
 
   const Control =
     selectKind === "creatable" ? (
-      <CreatableSelect {...selectProps} {...commonProps} />
+      <CreatableSelect
+        {...commonProps}
+        {...selectProps}
+        isClearable
+        getOptionLabel={(option: any) => option.label ?? option.name}
+        getOptionValue={(option: any) => option.id}
+        formatCreateLabel={(inputValue) => `Criar "${inputValue}"`}
+      />
     ) : selectKind === "async" ? (
       <AsyncSelect {...selectProps} {...commonProps} />
     ) : (
