@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import {
+  Boxes,
   Brain,
   Camera,
   ChartColumnIncreasing,
@@ -56,12 +57,12 @@ const data = {
     //   icon: Building2,
     //   role: ["SUPERVISOR", "ADMIN"],
     // },
-    // {
-    //   title: "Modelos",
-    //   url: "/models",
-    //   icon: Boxes,
-    //   role: ["ADMIN"],
-    // },
+    {
+      title: "Modelos",
+      url: "/models",
+      icon: Boxes,
+      role: ["ADMIN"],
+    },
     {
       title: "Usuários",
       url: "/users",
@@ -172,7 +173,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 />
                 <div className="grid flex-1 text-left text-lg leading-tight">
                   <span className="text-nowrap font-semibold">SEAPS</span>
-                  <span className="text-sm text-nowrap">Sistema de Manutenção Predial</span>
+                  <span className="text-sm text-nowrap">
+                    Sistema de Manutenção Predial
+                  </span>
                 </div>
               </Link>
             </SidebarMenuButton>
