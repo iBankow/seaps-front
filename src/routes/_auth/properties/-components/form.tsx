@@ -31,7 +31,7 @@ import { NameForm } from "./name-form";
 const propertySchema = z.object({
   organization_id: z.string().min(1, "Orgão é obrigatório"),
   person_id: z.string().optional().nullable(),
-  type: z.enum(["OWN", "RENTED", "LEASED"]),
+  type: z.enum(["OWN", "RENTED", "GRANT"]),
   name: z.string().min(1, "Nome é obrigatório").max(255, "Nome muito longo"),
   address: z.string().optional(),
   cep: z.string().optional(),
@@ -216,9 +216,9 @@ export const PropertyForm = ({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="OWN">PRÓPRIO</SelectItem>
-                        <SelectItem value="RENTED">ALUGADO</SelectItem>
-                        <SelectItem value="LEASED">CEDIDO</SelectItem>
+                        <SelectItem value={"OWN"}>PRÓPRIO</SelectItem>
+                        <SelectItem value={"RENTED"}>ALUGADO</SelectItem>
+                        <SelectItem value={"GRANT"}>CONCESSÃO</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormItem>
@@ -391,6 +391,7 @@ export const PropertyForm = ({
               <FormField
                 control={form.control}
                 name="coordinates"
+                defaultValue=""
                 render={({ field }) => (
                   <FormItem className="md:col-span-2">
                     <FormLabel>Coordenadas</FormLabel>
