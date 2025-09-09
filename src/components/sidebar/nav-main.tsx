@@ -29,7 +29,7 @@ export function NavMain({
               <SidebarMenuButton tooltip={item.title} asChild>
                 <Link
                   to={item.url}
-                  className="w-full hover:underline data-[status='active']:font-semibold"
+                  className="w-full hover:underline data-[status='active']:font-bold"
                 >
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>

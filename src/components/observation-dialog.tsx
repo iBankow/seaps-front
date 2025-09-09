@@ -34,7 +34,7 @@ export const ObservationDialog = ({
     try {
       await api.put(
         `/api/v1/checklists/${item.checklist_id}/items/${item.id}`,
-        { observation },
+        { observation }
       );
       onOpenChange(false);
     } catch (error) {

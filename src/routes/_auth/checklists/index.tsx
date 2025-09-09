@@ -16,8 +16,8 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 const SearchSchema = z.object({
   page: z.number().default(1),
   per_page: z.number().default(10),
-  organization: z.string().optional(),
-  user: z.string().optional(),
+  organization_id: z.string().optional(),
+  user_id: z.string().optional(),
   status: z.string().optional(),
   property_name: z.string().optional(),
 });

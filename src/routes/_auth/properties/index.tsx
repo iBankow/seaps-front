@@ -1,5 +1,4 @@
 import { DataTable } from "@/components/data-table";
-import { Pagination } from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -12,6 +11,7 @@ import { columns } from "./-components/columns";
 import { DataFilterForm } from "./-components/filter-form";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import z from "zod";
+import { MetaPagination } from "@/components/meta-pagination";
 
 const SearchSchema = z.object({
   page: z.number().default(1),
@@ -76,15 +76,8 @@ export function RouteComponent() {
             <DataTable columns={columns} data={data?.data} />
           )}
         </CardContent>
-        <CardFooter className="w-full grid grid-cols-3 gap-4">
-          {data?.meta?.total > 10 && (
-            <Pagination className="col-start-2" meta={data?.meta} />
-          )}
-          {data?.meta && (
-            <p className="justify-self-end">
-              Total de {data?.meta?.total} item(s)
-            </p>
-          )}
+        <CardFooter>
+          <MetaPagination meta={data?.meta} />
         </CardFooter>
       </Card>
     </div>

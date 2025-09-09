@@ -28,6 +28,7 @@ export const columns: ColumnDef<Column>[] = [
           to="/checklists/$checklistId/items"
           params={{ checklistId: row.original.id }}
           className="font-mono text-sky-400 hover:text-sky-700"
+          preload={false}
         >
           {row.original.sid}
         </Link>

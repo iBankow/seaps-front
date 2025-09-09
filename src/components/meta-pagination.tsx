@@ -8,7 +8,7 @@ export const MetaPagination = ({ meta }: any) => {
   return (
     <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
       <Pagination className="col-start-1 md:col-start-2" meta={meta} />
-      <p className="justify-self-end">Total de {meta?.total} item(s)</p>
+      <p className="justify-self-end md:col-start-3">Total de {meta?.total} item(s)</p>
     </div>
   );
 };

@@ -49,7 +49,13 @@ export function DataFilterForm() {
   const [loading, setLoading] = useState(true);
 
   const handleClearSearch = () => {
-    form.reset();
+    form.reset({
+      city: undefined,
+      name: "",
+      organization_id: "",
+      type: "",
+      state: "",
+    });
 
     navigate({
       search: {
@@ -62,7 +68,9 @@ export function DataFilterForm() {
 
   useEffect(() => {
     try {
-      api.get("/api/v1/organizations?per_page=100").then(({ data }) => setOrganizations(data.data));
+      api
+        .get("/api/v1/organizations?per_page=100")
+        .then(({ data }) => setOrganizations(data.data));
       axios
         .get(
           `https://brasilapi.com.br/api/ibge/municipios/v1/MT?providers=dados-abertos-br,gov,wikipedia`
@@ -96,7 +104,12 @@ export function DataFilterForm() {
 
   function onSubmit(values: z.infer<typeof filterSchema>) {
     navigate({
-      search: values,
+      search: {
+        name: values.name || undefined,
+        organization_id: values.organization_id || undefined,
+        type: values.type || undefined,
+        city: values.city || undefined,
+      },
     });
   }
 
@@ -192,7 +205,7 @@ export function DataFilterForm() {
                     field.onChange(val ? val.id : undefined);
                   }}
                   value={
-                    cities.find((user) => user.id === field.value) || undefined
+                    cities.find((city) => city.id === field.value) || undefined
                   }
                 />
               </FormControl>

@@ -39,7 +39,7 @@ const propertySchema = z.object({
   city: z.string().optional(),
   neighborhood: z.string().optional(),
   street: z.string().optional(),
-  coordinates: z.string().optional(),
+  // coordinates: z.string().optional(),
 });
 
 type PropertyFormData = z.infer<typeof propertySchema>;
@@ -388,7 +388,7 @@ export const PropertyForm = ({
                 )}
               />
 
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="coordinates"
                 defaultValue=""
@@ -400,7 +400,7 @@ export const PropertyForm = ({
                     </FormControl>
                   </FormItem>
                 )}
-              />
+              /> */}
             </div>
 
             <div className="mt-6 flex justify-end gap-2">

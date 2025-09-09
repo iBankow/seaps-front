@@ -30,8 +30,8 @@ import { api } from "@/lib/api";
 import { useRouter, useSearch } from "@tanstack/react-router";
 
 const filterSchema = z.object({
-  organization: z.string().optional(),
-  user: z.string().optional().nullable(),
+  organization_id: z.string().optional(),
+  user_id: z.string().optional().nullable(),
   status: z.string().optional(),
   property_name: z.string().optional(),
 });
@@ -43,9 +43,9 @@ export function DataFilterForm() {
   const form = useForm<z.infer<typeof filterSchema>>({
     resolver: zodResolver(filterSchema),
     defaultValues: {
-      organization: searchParams.organization || "",
+      organization_id: searchParams.organization_id || "",
       property_name: searchParams.property_name || "",
-      user: searchParams.user || "",
+      user_id: searchParams.user_id || "",
       status: searchParams.status || "",
     },
   });
@@ -56,8 +56,8 @@ export function DataFilterForm() {
 
   const handleClearSearch = () => {
     form.reset({
-      organization: "",
-      user: "",
+      organization_id: "",
+      user_id: "",
       status: "",
       property_name: "",
     });
@@ -73,7 +73,9 @@ export function DataFilterForm() {
 
   useEffect(() => {
     try {
-      api.get("/api/v1/organizations?per_page=100").then(({ data }) => setOrganizations(data.data));
+      api
+        .get("/api/v1/organizations?per_page=100")
+        .then(({ data }) => setOrganizations(data.data));
       api.get("/api/v1/users?role=evaluator").then(({ data }) =>
         setUsers(
           data.data.map((user: any) => ({
@@ -89,9 +91,9 @@ export function DataFilterForm() {
 
   useEffect(() => {
     form.reset({
-      organization: searchParams.organization || "",
+      organization_id: searchParams.organization_id || "",
       property_name: searchParams.property_name || "",
-      user: searchParams.user || "",
+      user_id: searchParams.user_id || "",
       status: searchParams.status || "",
     });
   }, [searchParams, form]);
@@ -126,7 +128,7 @@ export function DataFilterForm() {
       >
         <FormField
           control={form.control}
-          name="organization"
+          name="organization_id"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Orgão</FormLabel>
@@ -168,7 +170,7 @@ export function DataFilterForm() {
         />
         <FormField
           control={form.control}
-          name="user"
+          name="user_id"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Responsável</FormLabel>
@@ -179,9 +181,7 @@ export function DataFilterForm() {
                 onChange={(val) => {
                   field.onChange(val ? val.id : null);
                 }}
-                value={
-                  users.find((user) => user.id === field.value) || null
-                }
+                value={users.find((user) => user.id === field.value) || null}
               />
               <FormMessage />
             </FormItem>
