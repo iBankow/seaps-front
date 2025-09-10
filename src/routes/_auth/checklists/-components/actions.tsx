@@ -8,6 +8,7 @@ import {
   ChevronRight,
   Ellipsis,
   Flag,
+  Pen,
   Printer,
   Trash2,
   Undo,
@@ -127,7 +128,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
                 Visualizar
               </Link>
             </DropdownMenuItem>
-            {/* <DropdownMenuItem
+            <DropdownMenuItem
               disabled={row.original.status === "CLOSED"}
               asChild
             >
@@ -135,7 +136,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
                 <Pen size={16} />
                 Editar
               </Link>
-            </DropdownMenuItem> */}
+            </DropdownMenuItem>
 
             <DropdownMenuItem
               disabled={row.original.status === "CLOSED"}

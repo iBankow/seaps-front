@@ -44,7 +44,7 @@ const formSchema = z.object({
   return: z.number().optional(),
 });
 
-export function CreateCheckListForm() {
+export function CreateCheckListForm({ checklist }: { checklist?: any }) {
   const router = useRouter();
 
   const [organizations, setOrganizations] = useState<any[]>([]);
@@ -61,13 +61,22 @@ export function CreateCheckListForm() {
   const [organization_id] = form.watch(["organization_id"]);
 
   useEffect(() => {
-    api
-      .get("/api/v1/models?per_page=1000")
-      .then(({ data }) => setModels(data.data));
-    api.get("/api/organizations").then(({ data }) => setOrganizations(data));
-    api
-      .get("/api/v1/users?per_page=1000&role=evaluator")
-      .then(({ data }) => setUsers(data.data));
+    const getData = async () => {
+      const [models, organizations, users] = await Promise.all([
+        api.get("/api/v1/models?per_page=100"),
+        api.get("/api/organizations"),
+        api.get("/api/v1/users?per_page=100&role=evaluator"),
+      ]);
+
+      setModels(models.data.data);
+      setOrganizations(organizations.data);
+      setUsers(users.data.data);
+
+      if (checklist) {
+        form.reset(checklist);
+      }
+    };
+    getData();
   }, []);
 
   useEffect(() => {
@@ -83,6 +92,22 @@ export function CreateCheckListForm() {
   }, [organization_id]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (checklist) {
+      return api
+        .put("/api/v1/checklists/" + checklist.id, {
+          user_id: values.user_id,
+        })
+        .then(() =>
+          router.navigate({
+            to: "..",
+            search: {
+              refresh: Date.now(),
+            },
+          })
+        )
+        .catch((e) => console.log(e));
+    }
+
     return api
       .post("/api/v1/checklists/", values)
       .then(() =>
@@ -112,7 +137,7 @@ export function CreateCheckListForm() {
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Modelo</FormLabel>
-                    <Select onValueChange={field.onChange}>
+                    <Select onValueChange={field.onChange} {...field}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Selecione o Modelo do checklist" />
@@ -137,7 +162,7 @@ export function CreateCheckListForm() {
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Orgão</FormLabel>
-                    <Select onValueChange={field.onChange}>
+                    <Select onValueChange={field.onChange} {...field}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Selecione o Orgão" />
@@ -164,8 +189,8 @@ export function CreateCheckListForm() {
                     <FormLabel>Imóvel</FormLabel>
                     <div className="flex w-full items-center gap-2">
                       <Select
-                        onValueChange={field.onChange}
                         disabled={!form.getValues("organization_id")}
+                        {...field}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -205,7 +230,7 @@ export function CreateCheckListForm() {
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Responsável pelo Checklist</FormLabel>
-                    <Select onValueChange={field.onChange}>
+                    <Select onValueChange={field.onChange} {...field}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Selecione o Responsável pelo checklis" />
@@ -290,9 +315,9 @@ export function CreateCheckListForm() {
                 <Save className="mr-2 h-4 w-4" />
                 {false
                   ? "Criando..."
-                  : false
-                    ? "Salvar Imóvel"
-                    : "Criar Imóvel"}
+                  : checklist
+                    ? "Salvar Checklist"
+                    : "Criar Checklist"}
               </Button>
             </div>
           </CardContent>
