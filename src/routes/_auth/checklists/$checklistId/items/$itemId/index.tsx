@@ -2,7 +2,7 @@ import { createFileRoute, useParams, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Camera, Upload, Trash2 } from "lucide-react";
+import { ArrowLeft, Camera, Upload } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useModal } from "@/hooks/use-modal";
@@ -12,6 +12,7 @@ import { useChecklist } from "@/contexts/checklist-context";
 import { toast } from "sonner";
 import type { ChecklistItem } from "types/types";
 import { Loading } from "@/components/loading";
+import { DeleteDialog } from "./-components/delete-dialog";
 
 export const Route = createFileRoute(
   "/_auth/checklists/$checklistId/items/$itemId/"
@@ -82,28 +83,12 @@ function ChecklistItem() {
       } else {
         toast.success("Imagens enviadas com sucesso!");
       }
-
     } catch (error) {
       console.error("Error uploading images:", error);
       toast.error("Erro ao enviar imagens");
     } finally {
       setLoad(!load);
       setUploading(false);
-    }
-  };
-
-  const handleDeleteImage = async () => {
-    try {
-      await api.delete(
-        `/api/v1/checklists/${checklistId}/items/${itemId}/images`
-      );
-
-      // Refresh items after deletion
-      window.location.reload();
-      toast.success("Imagem removida com sucesso!");
-    } catch (error) {
-      console.error("Error deleting image:", error);
-      toast.error("Erro ao remover imagem");
     }
   };
 
@@ -188,15 +173,7 @@ function ChecklistItem() {
                     <Camera className="mr-2 h-4 w-4" />
                     Visualizar
                   </Button>
-                  <Button
-                    variant="outline"
-                    className="flex-1"
-                    onClick={handleDeleteImage}
-                    disabled={IS_CLOSE}
-                  >
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Remover
-                  </Button>
+                  <DeleteDialog setLoad={setLoad} image={image} />
                 </div>
               </div>
             </CardContent>
