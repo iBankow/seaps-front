@@ -99,10 +99,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
         })
         .then(() =>
           router.navigate({
-            to: "..",
-            search: {
-              refresh: Date.now(),
-            },
+            to: "/checklists",
           })
         )
         .catch((e) => console.log(e));
@@ -133,6 +130,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
             <div className="grid grid-cols-1 gap-4">
               <FormField
                 control={form.control}
+                disabled={!!checklist}
                 name="model_id"
                 render={({ field }) => (
                   <FormItem className="w-full">
@@ -158,6 +156,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
 
               <FormField
                 control={form.control}
+                disabled={!!checklist}
                 name="organization_id"
                 render={({ field }) => (
                   <FormItem className="w-full">
@@ -183,6 +182,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
 
               <FormField
                 control={form.control}
+                disabled={!!checklist}
                 name="property_id"
                 render={({ field }) => (
                   <FormItem>
@@ -251,6 +251,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
 
               <FormField
                 control={form.control}
+                disabled={!!checklist}
                 name="is_returned"
                 render={({ field }) => (
                   <FormItem className="flex flex-col gap-2">
@@ -258,6 +259,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
                     <div className="flex gap-4">
                       <Button
                         type="button"
+                        disabled={!!checklist}
                         variant={field.value ? "default" : "outline"}
                         onClick={() => field.onChange(true)}
                       >
@@ -265,6 +267,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
                       </Button>
                       <Button
                         type="button"
+                        disabled={!!checklist}
                         variant={field.value === false ? "default" : "outline"}
                         onClick={() => field.onChange(false)}
                       >
@@ -278,6 +281,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
 
               <FormField
                 control={form.control}
+                disabled={!!checklist}
                 name="return"
                 render={({ field }) => (
                   <FormItem className="w-full">
