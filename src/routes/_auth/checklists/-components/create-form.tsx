@@ -189,6 +189,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
                     <FormLabel>Imóvel</FormLabel>
                     <div className="flex w-full items-center gap-2">
                       <Select
+                        onValueChange={field.onChange}
                         disabled={!form.getValues("organization_id")}
                         {...field}
                       >

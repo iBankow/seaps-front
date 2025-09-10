@@ -121,6 +121,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
           <DropdownMenuGroup>
             <DropdownMenuItem asChild>
               <Link
+                preload={false}
                 to="/checklists/$checklistId/items"
                 params={{ checklistId: row.original.id }}
               >
@@ -132,7 +133,10 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
               disabled={row.original.status === "CLOSED"}
               asChild
             >
-              <Link to={"/checklists/" + row.original.id + "/edit"}>
+              <Link
+                preload={false}
+                to={"/checklists/" + row.original.id + "/edit"}
+              >
                 <Pen size={16} />
                 Editar
               </Link>
