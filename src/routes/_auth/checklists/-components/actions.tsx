@@ -10,6 +10,7 @@ import {
   Flag,
   Pen,
   Printer,
+  Scale,
   Trash2,
   Undo,
 } from "lucide-react";
@@ -32,12 +33,14 @@ import {
 import { Link, useRouter } from "@tanstack/react-router";
 
 import type { Column } from "./columns";
+import { NotificationDialog } from "./dialogs/notification-dialog";
 
 export const Actions = ({ row }: { row: Row<Column> }) => {
   const router = useRouter();
   const reopenDialog = useModal();
   const deleteDialog = useModal();
   const finishDialog = useModal();
+  const notificationDialog = useModal();
 
   const [loading, setLoading] = useState(false);
 
@@ -109,6 +112,12 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
         open={finishDialog.visible}
       />
 
+      <NotificationDialog
+        row={row}
+        open={notificationDialog.visible}
+        onOpenChange={notificationDialog.toggle}
+      />
+
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size={"icon"} className="h-7 flex-1">
@@ -163,6 +172,13 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
             >
               <Printer size={16} />
               Relatório
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={loading || row.original.status === "OPEN"}
+              onClick={() => notificationDialog.show()}
+            >
+              <Scale size={16} />
+              Notificação
             </DropdownMenuItem>
             <DropdownMenuItem
               disabled={loading}
