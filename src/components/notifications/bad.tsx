@@ -15,7 +15,7 @@ export const BadNotification = ({ ref }: any) => {
             providências”, que definiu que a SEPLAG, enquanto órgão central de
             patrimônio, é responsável pela orientação e fiscalização da execução
             de ações preventivas, de manutenção e conservação de bens imóveis
-            públicos do Estado de Mato Grosso, sirvo-me do presente para
+            públicos do Estado de Mato Grosso, sirvo-me do presente para{" "}
             <strong>NOTIFICAR</strong> o responsável pela guarda, manutenção e
             conservação do bem imóvel objeto do{" "}
             <strong>Relatório de Vistoria</strong> anexado ao final deste
@@ -48,8 +48,9 @@ export const BadNotification = ({ ref }: any) => {
           <p>
             O relatório classificou o imóvel localizado na Rua Comandante Costa,
             nº 190, centro, Cuiabá -MT, onde funciona a Fundação de Amparo à
-            Pesquisa do Estado de Mato Grosso em situação “ruim”, nos termos do
-            § 3º do art. 5º do Decreto nº 1.387/2025.
+            Pesquisa do Estado de Mato Grosso em situação{" "}
+            <strong>"RUIM"</strong>, nos termos do § 3º do art. 5º do Decreto nº
+            1.387/2025.
           </p>
 
           <p>

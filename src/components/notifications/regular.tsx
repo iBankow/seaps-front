@@ -1,4 +1,4 @@
-export const RegularNotification = ({ ref, checklist }: any) => {
+export const RegularNotification = ({ ref }: any) => {
   return (
     <div
       className="relative bg-white text-black font-serif p-[20mm]"
@@ -6,34 +6,6 @@ export const RegularNotification = ({ ref, checklist }: any) => {
       ref={ref}
     >
       <div>
-        <div className="mb-6">
-          <p className="uppercase tracking-wide">
-            Ao (À) GABINETE DA DIRETORIA DE ADMINISTRAÇÃO SISTÊMICA
-          </p>
-          <h3 className="font-semibold mt-4">
-            Assunto: Notificação do órgão/entidade para adoção de medidas
-            corretivas
-          </h3>
-          <p className="mt-2">{checklist.property?.name}</p>
-        </div>
-
-        <section className="mb-6 space-y-2">
-          <p>
-            À Senhor(a)
-            <br />
-            <strong>{checklist.property?.person?.name}</strong>
-            <br />
-            {checklist.property?.person?.role}
-            <br />
-            {checklist.organization?.name} -{checklist.organization?.acronym}
-          </p>
-          <p>
-            Nesta.
-            <br />
-            Senhora Diretora,
-          </p>
-        </section>
-
         <section className="max-w-none text-justify mb-6 space-y-4">
           <p>
             Em atenção ao Decreto Estadual nº. 1.387, de 25 de março de 2025,
