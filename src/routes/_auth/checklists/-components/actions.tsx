@@ -10,6 +10,7 @@ import {
   Flag,
   Pen,
   Printer,
+  Scale,
   Trash2,
   Undo,
 } from "lucide-react";
@@ -176,7 +177,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
               disabled={loading || row.original.status === "OPEN"}
               onClick={() => notificationDialog.show()}
             >
-              <Printer size={16} />
+              <Scale size={16} />
               Notificação
             </DropdownMenuItem>
             <DropdownMenuItem
