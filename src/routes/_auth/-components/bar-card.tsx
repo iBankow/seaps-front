@@ -1,11 +1,13 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
+import { Pie, PieChart } from "recharts";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   type ChartConfig,
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -13,52 +15,54 @@ import {
 const chartConfig = {
   total: {
     label: "Total",
-    color: "#60a5fa",
+    color: "var(--chart-1)",
+  },
+  BOM: {
+    label: "BOM",
+    color: "var(--chart-2)",
+  },
+  REGULAR: {
+    label: "REGULAR",
+    color: "var(--chart-3)",
+  },
+  RUIM: {
+    label: "RUIM",
+    color: "var(--chart-5)",
   },
 } satisfies ChartConfig;
 
 type Data = { status: string; total: number };
 
 export function BarComponent({ data }: { data: Data[] }) {
+  const _data = data.map((value) => {
+    return {
+      ...value,
+      total: Number(value.total),
+      fill: chartConfig[value.status as keyof typeof chartConfig]?.color,
+    };
+  });
+
   return (
     <Card className="border-none shadow-none">
       <CardHeader>
         <CardTitle>Total de checklist por Status</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-0">
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-[350px] w-full"
         >
-          <BarChart accessibilityLayer data={data}>
-            <CartesianGrid vertical={false} />
-            <YAxis />
-            <XAxis
-              dataKey="status"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-            />
+          <PieChart>
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent indicator="dashed" />}
+              content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="total" fill="var(--color-total)">
-              {data
-                ?.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={
-                      entry.status === "BOM"
-                        ? "var(--chart-2)"
-                        : entry.status === "REGULAR"
-                          ? "var(--chart-3)"
-                          : "var(--chart-5)"
-                    }
-                  />
-                ))}
-            </Bar>
-          </BarChart>
+            <ChartLegend
+              content={<ChartLegendContent nameKey="status" />}
+              className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
+            />
+            <Pie data={_data} dataKey="total" nameKey="status" stroke="0" />
+          </PieChart>
         </ChartContainer>
       </CardContent>
     </Card>
