@@ -43,7 +43,7 @@ export function BarComponent({ data }: { data: Data[] }) {
   });
 
   return (
-    <Card className="border-none shadow-none">
+    <Card>
       <CardHeader>
         <CardTitle>Total de checklist por Status</CardTitle>
       </CardHeader>
