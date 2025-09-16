@@ -1,4 +1,4 @@
-export const RegularNotification = ({ ref, checklist }: any) => {
+export const GoodNotification = ({ ref }: any) => {
   return (
     <div
       className="relative bg-white text-black font-serif p-[20mm]"
@@ -6,34 +6,6 @@ export const RegularNotification = ({ ref, checklist }: any) => {
       ref={ref}
     >
       <div>
-        <div className="mb-6">
-          <p className="uppercase tracking-wide">
-            Ao (À) GABINETE DA DIRETORIA DE ADMINISTRAÇÃO SISTÊMICA
-          </p>
-          <h3 className="font-semibold mt-4">
-            Assunto: Notificação do órgão/entidade para adoção de medidas
-            corretivas
-          </h3>
-          <p className="mt-2">{checklist.property?.name}</p>
-        </div>
-
-        <section className="mb-6 space-y-2">
-          <p>
-            À Senhor(a)
-            <br />
-            <strong>{checklist.property?.person?.name}</strong>
-            <br />
-            {checklist.property?.person?.role}
-            <br />
-            {checklist.organization?.name} -{checklist.organization?.acronym}
-          </p>
-          <p>
-            Nesta.
-            <br />
-            Senhora Diretora,
-          </p>
-        </section>
-
         <section className="max-w-none text-justify mb-6 space-y-4">
           <p>
             Em atenção ao Decreto Estadual nº. 1.387, de 25 de março de 2025,
@@ -43,9 +15,10 @@ export const RegularNotification = ({ ref, checklist }: any) => {
             providências”, que definiu que a SEPLAG, enquanto órgão central de
             patrimônio, é responsável pela orientação e fiscalização da execução
             de ações preventivas, de manutenção e conservação de bens imóveis
-            públicos do Estado de Mato Grosso, sirvo-me do presente para
-            NOTIFICAR o responsável pela guarda, manutenção e conservação do bem
-            imóvel objeto do Relatório de Vistoria anexado ao final deste
+            públicos do Estado de Mato Grosso, sirvo-me do presente para{" "}
+            <strong>NOTIFICAR</strong> o responsável pela guarda, manutenção e
+            conservação do bem imóvel objeto do{" "}
+            <strong>Relatório de Vistoria</strong> anexado ao final deste
             ofício.
           </p>
 
@@ -71,6 +44,17 @@ export const RegularNotification = ({ ref, checklist }: any) => {
           </p>
 
           <p>
+            Após análise criteriosa, o imóvel em questão foi classificado com o
+            indicador <strong>“BOM”</strong>, ainda que alguns itens específicos
+            tenham apresentado classificação “REGULAR”, o que{" "}
+            <strong>
+              evidencia a existência de aspectos que demandam atenção ou
+              manutenção pontual, embora ainda não caracterizem situação
+              crítica.
+            </strong>
+          </p>
+
+          <p>
             Ressaltamos que, nos termos do art. 3º do referido Decreto, compete
             a esse órgão/entidade a adoção de medidas voltadas à conservação e
             manutenção preventiva e corretiva do bem imóvel, garantindo sua
@@ -81,19 +65,22 @@ export const RegularNotification = ({ ref, checklist }: any) => {
           <p>
             Esta notificação tem caráter meramente informativo, para ciência e
             controle interno da unidade responsável, não implicando neste
-            momento a fixação de prazos ou penalidades. Entretanto, recomendamos
+            momento a fixação de prazos ou penalidades. Entretanto,{" "}
+            <strong>
+              <i>recomendamos</i>
+            </strong>{" "}
             que as medidas necessárias para o aperfeiçoamento das condições do
             imóvel sejam avaliadas e programadas, especialmente em observância
             ao art. 4º do Decreto nº 1.387/2025:
           </p>
 
           <blockquote className="border-l-2 pl-4 italic">
-            “Art. 4º O agente público responsável pela unidade administrativa
-            deverá planejar e executar as atividades de conservação do imóvel,
-            solicitando ao órgão ou entidade ao qual está vinculado os recursos
-            financeiros necessários para a realização da manutenção, limpeza e
-            conservação do imóvel, e após a execução, prestar contas e reportar
-            as ocorrências que exijam a sua atuação.”
+            “<strong>Art. 4º</strong> O agente público responsável pela unidade
+            administrativa deverá planejar e executar as atividades de
+            conservação do imóvel, solicitando ao órgão ou entidade ao qual está
+            vinculado os recursos financeiros necessários para a realização da
+            manutenção, limpeza e conservação do imóvel, e após a execução,
+            prestar contas e reportar as ocorrências que exijam a sua atuação.”
           </blockquote>
 
           <p>
