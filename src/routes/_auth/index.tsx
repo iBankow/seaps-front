@@ -53,7 +53,7 @@ function App() {
           className="bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-foreground"
         />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-4">
         <BarComponent data={ranges} />
         <Card className="col-span-2">
           <CardHeader>

@@ -65,9 +65,9 @@ export function CreatePersonForm() {
   });
 
   useEffect(() => {
-    fetch("/api/organizations")
-      .then((response) => response.json())
-      .then((data) => setOrganizations(data));
+    api
+      .get("/api/v1/organizations?per_page=1000")
+      .then(({ data }) => setOrganizations(data.data));
   }, []);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {

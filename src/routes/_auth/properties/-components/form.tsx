@@ -134,7 +134,7 @@ export const PropertyForm = ({
       try {
         setDataLoading(true);
         const { data } = await api.get(
-          `/api/v1/persons?organization_id=${organization_id}`
+          `/api/v1/persons?per_page=1000&organization_id=${organization_id}`
         );
 
         setPersons(data.data || []);
