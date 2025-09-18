@@ -53,9 +53,9 @@ function App() {
           className="bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-foreground"
         />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <BarComponent data={ranges} />
-        <Card className="col-span-2">
+        <Card className="col-span-1 sm:col-span-2">
           <CardHeader>
             <CardTitle>Últimos Checklists Fechados</CardTitle>
           </CardHeader>
