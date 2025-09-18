@@ -39,7 +39,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
       setSelectedIndex(index);
       onSelect();
     },
-    [emblaMainApi, emblaThumbsApi, onSelect],
+    [emblaMainApi, emblaThumbsApi, onSelect]
   );
 
   useEffect(() => {
@@ -64,6 +64,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
           {slides.map((item) => (
             <div className="embla__slide" key={item.id}>
               <img
+                loading="lazy"
                 src={import.meta.env.VITE_BUCKET_URL + item.image}
                 className="h-96 w-full rounded object-contain"
                 width={512}
@@ -77,7 +78,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
           variant={"outline"}
           size={"icon"}
           className={cn(
-            "absolute -right-12 top-[40%] hidden h-8 w-8 -translate-y-1/2 rounded-full disabled:pointer-events-auto sm:flex",
+            "absolute -right-12 top-[40%] hidden h-8 w-8 -translate-y-1/2 rounded-full disabled:pointer-events-auto sm:flex"
           )}
           disabled={!canScrollNext}
           onClick={scrollNext}
@@ -89,7 +90,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
           variant={"outline"}
           size={"icon"}
           className={cn(
-            "absolute -left-12 top-[40%] hidden h-8 w-8 -translate-y-1/2 rounded-full disabled:pointer-events-auto sm:flex",
+            "absolute -left-12 top-[40%] hidden h-8 w-8 -translate-y-1/2 rounded-full disabled:pointer-events-auto sm:flex"
           )}
           disabled={!canScrollPrev}
           onClick={scrollPrev}

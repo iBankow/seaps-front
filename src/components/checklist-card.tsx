@@ -115,6 +115,7 @@ export const ChecklistCard = ({
               src={import.meta.env.VITE_BUCKET_URL + item.image}
               alt="checklist-image"
               className="pointer-events-none h-full w-full object-cover"
+              loading="lazy"
             />
           </Button>
         )}

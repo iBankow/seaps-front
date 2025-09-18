@@ -27,6 +27,7 @@ export const CarouselButton: React.FC<PropType> = (props) => {
           width={100}
           height={100}
           className="aspect-square h-full w-full object-cover"
+          loading="lazy"
         />
       </button>
     </div>
