@@ -2,38 +2,64 @@ import * as React from "react";
 
 import {
   SidebarGroup,
-  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../ui/collapsible";
+import { ChevronRight, Settings } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 export function NavSecondary({
   items,
-  ...props
 }: {
   items: {
     title: string;
     url: string;
-    icon: React.ElementType;
+    icon?: React.ElementType;
   }[];
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
   return (
-    <SidebarGroup {...props}>
-      <SidebarGroupContent>
-        <SidebarMenu>
-          {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild>
-                <a href={item.url}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </a>
+    <SidebarGroup>
+      <SidebarGroupLabel>Sistema</SidebarGroupLabel>
+      <SidebarMenu>
+        <Collapsible asChild className="group/collapsible">
+          <SidebarMenuItem>
+            <CollapsibleTrigger asChild>
+              <SidebarMenuButton tooltip="Configurações">
+                <Settings />
+                <span>Configurações</span>
+                <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
               </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarGroupContent>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <SidebarMenuSub>
+                {items?.map((subItem) => (
+                  <SidebarMenuSubItem key={subItem.title}>
+                    <SidebarMenuSubButton asChild>
+                      <Link
+                        to={subItem.url}
+                        className="w-full hover:underline data-[status='active']:font-bold"
+                      >
+                        {subItem.icon && <subItem.icon />}
+                        <span>{subItem.title}</span>
+                      </Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                ))}
+              </SidebarMenuSub>
+            </CollapsibleContent>
+          </SidebarMenuItem>
+        </Collapsible>
+      </SidebarMenu>
     </SidebarGroup>
   );
 }

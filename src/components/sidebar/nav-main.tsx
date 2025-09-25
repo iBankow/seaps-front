@@ -2,6 +2,7 @@ import type React from "react";
 import {
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -9,19 +10,18 @@ import {
 import { Link } from "@tanstack/react-router";
 import type { LucideProps } from "lucide-react";
 
-export function NavMain({
-  items,
-}: {
-  items: {
-    title: string;
-    url: string;
-    icon?: React.ForwardRefExoticComponent<
-      Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
-    >;
-  }[];
-}) {
+interface MenuItem {
+  title: string;
+  url: string;
+  icon?: React.ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
+  >;
+}
+
+export function NavMain({ items }: { items: MenuItem[] }) {
   return (
     <SidebarGroup>
+      <SidebarGroupLabel>Menu</SidebarGroupLabel>
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
           {items.map((item) => (
