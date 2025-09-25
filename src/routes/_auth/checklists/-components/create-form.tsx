@@ -24,6 +24,7 @@ import { useRouter } from "@tanstack/react-router";
 import { api } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { RSSelect } from "@/components/react-select";
 
 const formSchema = z.object({
   model_id: z.string({
@@ -64,12 +65,12 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
     const getData = async () => {
       const [models, organizations, users] = await Promise.all([
         api.get("/api/v1/models?per_page=100"),
-        api.get("/api/organizations"),
+        api.get("/api/v1/organizations?per_page=100"),
         api.get("/api/v1/users?per_page=100&role=evaluator"),
       ]);
 
       setModels(models.data.data);
-      setOrganizations(organizations.data);
+      setOrganizations(organizations.data.data);
       setUsers(users.data.data);
 
       if (checklist) {
@@ -188,24 +189,19 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
                   <FormItem>
                     <FormLabel>Imóvel</FormLabel>
                     <div className="flex w-full items-center gap-2">
-                      <Select
-                        onValueChange={field.onChange}
-                        disabled={!form.getValues("organization_id")}
-                        {...field}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione o imóvel do Orgão" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {properties.map((item) => (
-                            <SelectItem key={item.id} value={String(item.id)}>
-                              {item.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <RSSelect
+                        placeholder="Selecione o imóvel do Orgão"
+                        options={properties}
+                        onChange={(val) => {
+                          field.onChange(val ? val.id : null);
+                        }}
+                        isDisabled={!form.getValues("organization_id")}
+                        value={
+                          properties.find(
+                            (propertie) => propertie.id === field.value
+                          ) || null
+                        }
+                      />
                       <Button
                         type="button"
                         disabled={!form.getValues("organization_id")}
@@ -252,15 +248,13 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
 
               <FormField
                 control={form.control}
-                disabled={!!checklist}
                 name="is_returned"
                 render={({ field }) => (
                   <FormItem className="flex flex-col gap-2">
-                    <FormLabel>Checklist de Retorno?</FormLabel>
+                    <FormLabel>É um Checklist de Retorno?</FormLabel>
                     <div className="flex gap-4">
                       <Button
                         type="button"
-                        disabled={!!checklist}
                         variant={field.value ? "default" : "outline"}
                         onClick={() => field.onChange(true)}
                       >
@@ -268,7 +262,6 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
                       </Button>
                       <Button
                         type="button"
-                        disabled={!!checklist}
                         variant={field.value === false ? "default" : "outline"}
                         onClick={() => field.onChange(false)}
                       >
@@ -280,33 +273,36 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                disabled={!!checklist}
-                name="return"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Qual retorno?</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        min={1}
-                        disabled={!form.watch("is_returned")}
-                        placeholder="Informe o número do checklist de retorno"
-                        className="input input-bordered w-full"
-                        {...field}
-                        value={field.value ?? ""}
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.value ? Number(e.target.value) : undefined
-                          )
-                        }
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {form.watch("is_returned") && (
+                <FormField
+                  control={form.control}
+                  name="return"
+                  defaultValue={1}
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Qual retorno?</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min="1"
+                          placeholder="Informe o número do checklist de retorno"
+                          className="input input-bordered w-full"
+                          {...field}
+                          value={field.value ?? ""}
+                          onChange={(e) =>
+                            field.onChange(
+                              e.target.value
+                                ? Number(e.target.value)
+                                : undefined
+                            )
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
             </div>
             <div className="mt-6 flex justify-end gap-2">
               <Button
