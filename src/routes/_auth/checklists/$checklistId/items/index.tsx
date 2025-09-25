@@ -1,11 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ChecklistCard } from "@/components/checklist-card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useChecklist } from "@/contexts/checklist-context";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
+import { DialogProvider } from "@/contexts/dialog-context";
+import { GlobalDialogs } from "@/components/global-dialogs";
+import { VirtualizedChecklistGrid } from "@/components/virtualized-checklist-grid";
 
 export const Route = createFileRoute("/_auth/checklists/$checklistId/items/")({
   component: ChecklistContent,
@@ -62,40 +64,40 @@ function ChecklistContent() {
   }
 
   return (
-    <div className="flex flex-col gap-y-4">
-      <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" asChild>
-          <Link to="/checklists">
-            <ArrowLeft className="h-4 w-4" />
-          </Link>
-        </Button>
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">
-            Checklist - {checklist?.property?.name || "Carregando..."}
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            Status: {checklist?.status || "N/A"}
-          </p>
+    <DialogProvider>
+      <div className="flex flex-col gap-y-4">
+        <div className="flex items-center gap-4">
+          <Button variant="outline" size="icon" asChild>
+            <Link to="/checklists">
+              <ArrowLeft className="h-4 w-4" />
+            </Link>
+          </Button>
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight">
+              {checklist?.property?.name}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Status: {checklist?.status}
+            </p>
+          </div>
         </div>
+
+        <VirtualizedChecklistGrid
+          items={items}
+          status={checklist?.status || "OPEN"}
+        />
+
+        {items.length === 0 && !loading && (
+          <div className="flex flex-col items-center justify-center py-12">
+            <p className="text-lg text-muted-foreground">
+              Nenhum item encontrado para este checklist.
+            </p>
+          </div>
+        )}
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {items.map((item) => (
-          <ChecklistCard
-            key={item.id}
-            checklistItem={item}
-            status={checklist?.status || "OPEN"}
-          />
-        ))}
-      </div>
-
-      {items.length === 0 && !loading && (
-        <div className="flex flex-col items-center justify-center py-12">
-          <p className="text-lg text-muted-foreground">
-            Nenhum item encontrado para este checklist.
-          </p>
-        </div>
-      )}
-    </div>
+      {/* Dialogs Centralizados */}
+      <GlobalDialogs />
+    </DialogProvider>
   );
 }

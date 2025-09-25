@@ -11,9 +11,7 @@ import {
 } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { useModal } from "@/hooks/use-modal";
-import { ObservationDialog } from "./observation-dialog";
-import { ImageDialog } from "./image-dialog";
+import { useDialogContext } from "@/contexts/dialog-context";
 import {
   Camera,
   CameraIcon,
@@ -23,7 +21,8 @@ import {
 import { Link } from "@tanstack/react-router";
 import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useCallback, memo } from "react";
+import { useDebounce } from "@/hooks/use-debounce";
 
 interface ChecklistItem {
   id: string;
@@ -43,16 +42,15 @@ interface ChecklistCardProps {
   propertyId?: string;
 }
 
-export const ChecklistCard = ({
+const ChecklistCardComponent = ({
   checklistItem,
   status,
 }: ChecklistCardProps) => {
   const [item, setChecklistItem] = useState<ChecklistItem>(checklistItem);
+  const { observationDialog, imageDialog } = useDialogContext();
 
-  const observationDialog = useModal();
-  const imageDialog = useModal();
-
-  const handleChangeValue = async (value: string, id: string) => {
+  // API call sem debounce, mas otimizada
+  const updateScore = useCallback(async (value: string, id: string) => {
     try {
       const { data } = await api.put(`/api/v1/checklist-items/${id}`, {
         score: value,
@@ -61,7 +59,18 @@ export const ChecklistCard = ({
     } catch (error) {
       console.error("Error updating checklist item:", error);
     }
-  };
+  }, []);
+
+  // Usa debounce para evitar múltiplas chamadas consecutivas
+  const { debouncedCallback: handleChangeValue } = useDebounce(updateScore, 300);
+
+  const handleObservationClick = useCallback(() => {
+    observationDialog.open(item, status);
+  }, [item, status, observationDialog]);
+
+  const handleImageClick = useCallback(() => {
+    imageDialog.open(item);
+  }, [item, imageDialog]);
 
   const IS_CLOSE = ["APPROVED", "CLOSED"].includes(status);
   const IS_VALIDED = item.is_valid !== null;
@@ -108,7 +117,7 @@ export const ChecklistCard = ({
         ) : (
           <Button
             variant="ghost"
-            onClick={imageDialog.show}
+            onClick={handleImageClick}
             className="w-full flex-grow overflow-hidden border bg-muted-foreground/10 object-cover p-0"
           >
             <img
@@ -147,7 +156,7 @@ export const ChecklistCard = ({
         <Button
           variant="outline"
           className="flex-1"
-          onClick={observationDialog.show}
+          onClick={handleObservationClick}
         >
           Observação
           <MessageSquareText />
@@ -167,17 +176,18 @@ export const ChecklistCard = ({
           </Link>
         </Button>
       </CardFooter>
-      <ImageDialog
-        item={item}
-        onOpenChange={imageDialog.toggle}
-        open={imageDialog.visible}
-      />
-      <ObservationDialog
-        status={status}
-        item={item}
-        onOpenChange={observationDialog.toggle}
-        open={observationDialog.visible}
-      />
     </Card>
   );
 };
+
+// Memo para evitar re-renderizações desnecessárias
+export const ChecklistCard = memo(ChecklistCardComponent, (prevProps, nextProps) => {
+  // Re-renderiza apenas se o item ou status mudou
+  return (
+    prevProps.checklistItem.id === nextProps.checklistItem.id &&
+    prevProps.status === nextProps.status &&
+    prevProps.checklistItem.score === nextProps.checklistItem.score &&
+    prevProps.checklistItem.image === nextProps.checklistItem.image &&
+    prevProps.checklistItem.is_valid === nextProps.checklistItem.is_valid
+  );
+});
