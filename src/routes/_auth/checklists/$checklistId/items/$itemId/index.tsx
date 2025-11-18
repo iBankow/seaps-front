@@ -43,9 +43,7 @@ function ChecklistItem() {
     setUploading(true);
     setIsLoading(true);
     try {
-      const { data } = await api.get(
-        `/api/v1/checklists/${checklistId}/items/${itemId}`
-      );
+      const { data } = await api.get(`/api/v1/checklist-items/${itemId}`);
       const existingImages = Array.isArray(data.images)
         ? data.images.length
         : 0;
@@ -66,15 +64,11 @@ function ChecklistItem() {
         formData.append("file", img);
       });
 
-      await api.post(
-        `/api/v1/checklists/${checklistId}/items/${itemId}/images`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await api.post(`/api/v1/checklist-items/${itemId}/upload`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (filesToUpload.length < files.length) {
         toast.warning(
@@ -94,7 +88,7 @@ function ChecklistItem() {
 
   useEffect(() => {
     api
-      .get(`/api/v1/checklists/${checklistId}/items/${itemId}`)
+      .get(`/api/v1/checklist-items/${itemId}`)
       .then(({ data }) => setItem(data))
       .finally(() => setIsLoading(false));
   }, [itemId, checklistId, load]);

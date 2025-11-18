@@ -17,7 +17,7 @@ export function ImageDialog({ item, ...props }: any) {
   useEffect(() => {
     if (props.open && images.length === 0 && item) {
       api
-        .get("/api/v1/checklists/" + item.checklist_id + "/items/" + item.id)
+        .get("/api/v1/checklist-items/" + item.id)
         .then(({ data }) => setImages(data.images))
         .finally(() => setLoading(false));
     }

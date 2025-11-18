@@ -25,9 +25,7 @@ function ChecklistContent() {
   useEffect(() => {
     api
       .get(`api/v1/checklists/${checklistId}/items`)
-      .then(({ data }) => {
-        setItems(data);
-      })
+      .then(({ data }) => setItems(data))
       .finally(() => setLoading(false));
   }, []);
 
