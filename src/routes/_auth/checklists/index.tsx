@@ -20,6 +20,7 @@ const SearchSchema = z.object({
   user_id: z.string().optional(),
   status: z.string().optional(),
   property_name: z.string().optional(),
+  city: z.string().optional(),
 });
 
 export const Route = createFileRoute("/_auth/checklists/")({

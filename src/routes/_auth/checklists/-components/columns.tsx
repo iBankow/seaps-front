@@ -65,10 +65,31 @@ export const columns: ColumnDef<Column>[] = [
     },
   },
   {
+    accessorKey: "city",
+    header: "Cidade",
+    meta: {
+      size: 300,
+    },
+    cell({ row }) {
+      return (
+        <p className="truncate" title={row.original.property.name}>
+          {row.original.property.city ?? "--"}
+        </p>
+      );
+    },
+  },
+  {
     accessorKey: "status",
     header: "Status",
     cell({ row }) {
       return <StatusBadge status={row.original.status!} />;
+    },
+  },
+  {
+    accessorKey: "score",
+    header: "Pontuação",
+    accessorFn(row) {
+      return row.score !== null ? `${Number(row.score).toFixed(2)}` : "--";
     },
   },
   {
