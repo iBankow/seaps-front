@@ -76,13 +76,14 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
       is_returned: false,
     },
   });
-  const [organization_id] = form.watch(["organization_id"]);
+  const [organization_id, model_id, user_id, property_id] = form.watch([
+    "organization_id",
+    "model_id",
+    "user_id",
+    "property_id",
+  ]);
 
-  const steps = [
-    "Modelo e Orgão",
-    "Propriedade",
-    "Responsável e Configurações",
-  ];
+  const steps = ["Configuração do Checklist", "Seleção do Imóvel", "Revisão"];
 
   useEffect(() => {
     if (checklist) {
@@ -154,37 +155,39 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
     return () => clearTimeout(timeoutId);
   }, [organization_id, propertyFilter, fetchProperties]);
 
-  const validateStep = (step: number): boolean => {
-    switch (step) {
-      case 1:
-        return !!(
-          form.getValues("model_id") && form.getValues("organization_id")
-        );
-      case 2:
-        return !!form.getValues("property_id");
-      case 3:
-        return !!form.getValues("user_id");
-      default:
-        return false;
-    }
-  };
+  const validateStep = useCallback(
+    (step: number): boolean => {
+      switch (step) {
+        case 1:
+          return !!(model_id && user_id && organization_id);
+        case 2:
+          return !!property_id;
+        case 3:
+          return true; // Step de revisão sempre é válido se chegou até aqui
+        default:
+          return false;
+      }
+    },
+    [model_id, user_id, property_id, organization_id]
+  );
 
   const nextStep = async () => {
     let fieldsToValidate: (keyof z.infer<typeof formSchema>)[] = [];
 
     switch (currentStep) {
       case 1:
-        fieldsToValidate = ["model_id", "organization_id"];
+        fieldsToValidate = ["model_id", "organization_id", "user_id"];
         break;
       case 2:
         fieldsToValidate = ["property_id"];
         break;
       case 3:
-        fieldsToValidate = ["user_id"];
+        // Revisão - não precisa validar nada específico
         break;
     }
 
     const isValid = await form.trigger(fieldsToValidate);
+
     if (isValid && validateStep(currentStep)) {
       setCurrentStep((prev) => Math.min(prev + 1, steps.length));
     }
@@ -233,7 +236,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>Modelo</FormLabel>
-                  <Select onValueChange={field.onChange} {...field}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione o Modelo do checklist" />
@@ -241,7 +244,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
                     </FormControl>
                     <SelectContent>
                       {models?.map((item) => (
-                        <SelectItem key={item.id} value={String(item.id)}>
+                        <SelectItem key={item.id} value={item.id}>
                           {item.name}
                         </SelectItem>
                       ))}
@@ -259,7 +262,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>Orgão</FormLabel>
-                  <Select onValueChange={field.onChange} {...field}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione o Orgão" />
@@ -277,6 +280,100 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="user_id"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Responsável pelo Checklist</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o Responsável pelo checklist" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {users.map((item) => (
+                        <SelectItem key={item.id} value={String(item.id)}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="is_returned"
+              render={({ field }) => (
+                <FormItem className="flex flex-col gap-2">
+                  <FormLabel>É um Checklist de Retorno?</FormLabel>
+
+                  <div className="flex gap-4">
+                    <Button
+                      type="button"
+                      variant={
+                        field.value === undefined
+                          ? "outline"
+                          : field.value === true
+                            ? "default"
+                            : "outline"
+                      }
+                      onClick={() => field.onChange(true)}
+                    >
+                      Sim
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={
+                        field.value === undefined
+                          ? "outline"
+                          : field.value === false
+                            ? "default"
+                            : "outline"
+                      }
+                      onClick={() => field.onChange(false)}
+                    >
+                      Não
+                    </Button>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {form.watch("is_returned") && (
+              <FormField
+                control={form.control}
+                name="return"
+                defaultValue={1}
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Qual retorno?</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min="1"
+                        placeholder="Informe o número do checklist de retorno"
+                        className="input input-bordered w-full"
+                        {...field}
+                        value={field.value ?? ""}
+                        onChange={(e) =>
+                          field.onChange(
+                            e.target.value ? Number(e.target.value) : undefined
+                          )
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
           </div>
         );
 
@@ -368,93 +465,92 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
                       )}
                     </div>
                   ) : (
-                      <RadioGroup
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        className="space-y-3 grid grid-cols-2"
-                      >
-                        {properties.map((property) => (
-                          <div key={property.id} className="relative">
-                            <RadioGroupItem
-                              value={String(property.id)}
-                              id={`property-${property.id}`}
-                              className="peer sr-only"
-                            />
-                            <Label
-                              htmlFor={`property-${property.id}`}
-                              className="flex cursor-pointer"
-                            >
-                              <Card className="w-full peer-checked:ring-2 peer-checked:ring-primary peer-checked:border-primary transition-all hover:bg-muted/50">
-                                <CardContent className="p-4">
-                                  <div className="flex items-start justify-between">
-                                    <div className="flex-1 space-y-2 min-w-0">
-                                      <div className="flex items-center gap-2">
-                                        <Building className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                                        <h4 className="font-medium truncate">
-                                          {property.name}
-                                        </h4>
-                                      </div>
-
-                                      {property.address && (
-                                        <p className="text-sm text-muted-foreground line-clamp-2">
-                                          📍 {property.address}
-                                          {property.city &&
-                                            property.state &&
-                                            `, ${property.city} - ${property.state}`}
-                                        </p>
-                                      )}
-
-                                      {property.responsible?.name && (
-                                        <p className="text-sm text-muted-foreground truncate">
-                                          👤 Responsável:{" "}
-                                          {property.responsible.name}
-                                        </p>
-                                      )}
-
-                                      <div className="flex flex-wrap gap-2">
-                                        {property.type && (
-                                          <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded-md">
-                                            {property.type}
-                                          </span>
-                                        )}
-
-                                        {property.status && (
-                                          <span
-                                            className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-md ${
-                                              property.status === "active"
-                                                ? "bg-green-100 text-green-800"
-                                                : "bg-gray-100 text-gray-800"
-                                            }`}
-                                          >
-                                            {property.status === "active"
-                                              ? "Ativo"
-                                              : property.status}
-                                          </span>
-                                        )}
-                                      </div>
+                    <RadioGroup
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      className="space-y-3 grid grid-cols-2"
+                    >
+                      {properties.map((property) => (
+                        <div key={property.id} className="relative">
+                          <RadioGroupItem
+                            value={String(property.id)}
+                            id={`property-${property.id}`}
+                            className="peer sr-only"
+                          />
+                          <Label
+                            htmlFor={`property-${property.id}`}
+                            className="flex cursor-pointer"
+                          >
+                            <Card className="w-full peer-checked:ring-2 peer-checked:ring-primary peer-checked:border-primary transition-all hover:bg-muted/50">
+                              <CardContent className="p-4">
+                                <div className="flex items-start justify-between">
+                                  <div className="flex-1 space-y-2 min-w-0">
+                                    <div className="flex items-center gap-2">
+                                      <Building className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                                      <h4 className="font-medium truncate">
+                                        {property.name}
+                                      </h4>
                                     </div>
 
-                                    <div className="ml-4 flex-shrink-0">
-                                      <div
-                                        className={`w-4 h-4 border rounded-full flex items-center justify-center transition-colors ${
-                                          field.value === String(property.id)
-                                            ? "bg-primary border-primary"
-                                            : "border-muted-foreground"
-                                        }`}
-                                      >
-                                        {field.value ===
-                                          String(property.id) && (
-                                          <div className="w-2 h-2 bg-white rounded-full" />
-                                        )}
-                                      </div>
+                                    {property.address && (
+                                      <p className="text-sm text-muted-foreground line-clamp-2">
+                                        📍 {property.address}
+                                        {property.city &&
+                                          property.state &&
+                                          `, ${property.city} - ${property.state}`}
+                                      </p>
+                                    )}
+
+                                    {property.responsible?.name && (
+                                      <p className="text-sm text-muted-foreground truncate">
+                                        👤 Responsável:{" "}
+                                        {property.responsible.name}
+                                      </p>
+                                    )}
+
+                                    <div className="flex flex-wrap gap-2">
+                                      {property.type && (
+                                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded-md">
+                                          {property.type}
+                                        </span>
+                                      )}
+
+                                      {property.status && (
+                                        <span
+                                          className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-md ${
+                                            property.status === "active"
+                                              ? "bg-green-100 text-green-800"
+                                              : "bg-gray-100 text-gray-800"
+                                          }`}
+                                        >
+                                          {property.status === "active"
+                                            ? "Ativo"
+                                            : property.status}
+                                        </span>
+                                      )}
                                     </div>
                                   </div>
-                                </CardContent>
-                              </Card>
-                            </Label>
-                          </div>
-                        ))}
-                      </RadioGroup>
+
+                                  <div className="ml-4 flex-shrink-0">
+                                    <div
+                                      className={`w-4 h-4 border rounded-full flex items-center justify-center transition-colors ${
+                                        field.value === String(property.id)
+                                          ? "bg-primary border-primary"
+                                          : "border-muted-foreground"
+                                      }`}
+                                    >
+                                      {field.value === String(property.id) && (
+                                        <div className="w-2 h-2 bg-white rounded-full" />
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          </Label>
+                        </div>
+                      ))}
+                    </RadioGroup>
                   )}
 
                   <FormMessage />
@@ -465,88 +561,118 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
         );
 
       case 3:
+        const selectedModel = models.find(
+          (m) => m.id === form.getValues("model_id")
+        );
+        const selectedOrganization = organizations.find(
+          (o) => o.id === form.getValues("organization_id")
+        );
+        const selectedProperty = properties.find(
+          (p) => p.id === form.getValues("property_id")
+        );
+        const selectedUser = users.find(
+          (u) => u.id === form.getValues("user_id")
+        );
+
         return (
-          <div className="grid grid-cols-1 gap-4">
-            <FormField
-              control={form.control}
-              name="user_id"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Responsável pelo Checklist</FormLabel>
-                  <Select onValueChange={field.onChange} {...field}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione o Responsável pelo checklist" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {users.map((item) => (
-                        <SelectItem key={item.id} value={String(item.id)}>
-                          {item.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <div className="space-y-6">
+            <div className="text-center">
+              <h3 className="text-lg font-medium mb-2">Revisão do Checklist</h3>
+              <p className="text-muted-foreground">
+                Revise as informações antes de criar o checklist
+              </p>
+            </div>
 
-            <FormField
-              control={form.control}
-              name="is_returned"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-2">
-                  <FormLabel>É um Checklist de Retorno?</FormLabel>
-                  <div className="flex gap-4">
-                    <Button
-                      type="button"
-                      variant={field.value ? "default" : "outline"}
-                      onClick={() => field.onChange(true)}
-                    >
-                      Sim
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={field.value === false ? "default" : "outline"}
-                      onClick={() => field.onChange(false)}
-                    >
-                      Não
-                    </Button>
+            <div className="grid gap-4">
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base">Configurações</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-sm font-medium">Modelo:</span>
+                    <span className="text-sm">
+                      {selectedModel?.name || "-"}
+                    </span>
                   </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                  <div className="flex justify-between">
+                    <span className="text-sm font-medium">Órgão:</span>
+                    <span className="text-sm">
+                      {selectedOrganization?.name || "-"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm font-medium">Responsável:</span>
+                    <span className="text-sm">{selectedUser?.name || "-"}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm font-medium">Tipo:</span>
+                    <span className="text-sm">
+                      {form.getValues("is_returned")
+                        ? `Checklist de Retorno (${form.getValues("return") || 1}°)`
+                        : "Checklist Inicial"}
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
 
-            {form.watch("is_returned") && (
-              <FormField
-                control={form.control}
-                name="return"
-                defaultValue={1}
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Qual retorno?</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        min="1"
-                        placeholder="Informe o número do checklist de retorno"
-                        className="input input-bordered w-full"
-                        {...field}
-                        value={field.value ?? ""}
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.value ? Number(e.target.value) : undefined
-                          )
-                        }
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base">
+                    Propriedade Selecionada
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {selectedProperty ? (
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2">
+                        <Building className="h-4 w-4 text-muted-foreground" />
+                        <span className="font-medium">
+                          {selectedProperty.name}
+                        </span>
+                      </div>
+                      {selectedProperty.address && (
+                        <p className="text-sm text-muted-foreground">
+                          📍 {selectedProperty.address}
+                          {selectedProperty.city &&
+                            selectedProperty.state &&
+                            `, ${selectedProperty.city} - ${selectedProperty.state}`}
+                        </p>
+                      )}
+                      {selectedProperty.responsible?.name && (
+                        <p className="text-sm text-muted-foreground">
+                          👤 Responsável: {selectedProperty.responsible.name}
+                        </p>
+                      )}
+                      <div className="flex gap-2">
+                        {selectedProperty.type && (
+                          <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded-md">
+                            {selectedProperty.type}
+                          </span>
+                        )}
+                        {selectedProperty.status && (
+                          <span
+                            className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-md ${
+                              selectedProperty.status === "active"
+                                ? "bg-green-100 text-green-800"
+                                : "bg-gray-100 text-gray-800"
+                            }`}
+                          >
+                            {selectedProperty.status === "active"
+                              ? "Ativo"
+                              : selectedProperty.status}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-muted-foreground">
+                      Nenhuma propriedade selecionada
+                    </p>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
           </div>
         );
 
