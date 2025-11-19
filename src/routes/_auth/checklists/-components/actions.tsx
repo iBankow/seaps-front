@@ -71,7 +71,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
   const handleReopenChecklist = () => {
     setLoading(true);
     toast.promise(
-      api.post("/api/v1/checklists/" + row.original.id + "/re-open"),
+      api.put("/api/v1/checklists/" + row.original.id + "/re-open"),
       {
         loading: "Reabrindo checklist...",
         success: `Checklist ${row.original?.sid} - ${row.original?.property?.name} reaberto!`,
