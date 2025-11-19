@@ -152,11 +152,19 @@ export const PropertyForm = ({
     setLoading(true);
     try {
       if (property?.id) {
-        await api.put(`/api/v1/properties/${property?.id}`, values);
+        await api.put(`/api/v1/properties/${property?.id}`, {
+          ...values,
+          address:
+            `${values.street} - ${values.neighborhood}, ${values.city} - ${values.state}, ${values.cep}`.toUpperCase(),
+        });
         toast.success("Imóvel atualizado com sucesso!");
         router.navigate({ to: `..`, reloadDocument: true });
       } else {
-        const { data } = await api.post("/api/v1/properties", values);
+        const { data } = await api.post("/api/v1/properties", {
+          ...values,
+          address:
+            `${values.street} - ${values.neighborhood}, ${values.city} - ${values.state}, ${values.cep}`.toUpperCase(),
+        });
         toast.success("Imóvel criado com sucesso!");
         router.navigate({
           to: "/properties/$propertyId/edit",

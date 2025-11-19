@@ -1,5 +1,3 @@
-"use client";
-
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { toUpperCase } from "@/lib/utils";
+import { formatPhone, toUpperCase } from "@/lib/utils";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
 import { useRouter, useSearch } from "@tanstack/react-router";
@@ -80,17 +78,6 @@ export function CreatePersonForm() {
       })
       .finally(() => setLoading(false));
   }
-
-  const formatPhone = (value: string) => {
-    const str = value.replace(/\D/g, ""); // remove caracteres não numéricos
-
-    return str.length <= 10
-      ? str.replace(/(\d{2})(\d)/, "\($1\) $2").replace(/(\d{4})(\d)/, "$1-$2")
-      : str
-          .replace(/(\d{2})(\d)/, "\($1\) $2")
-          .replace(/(\d{1})(\d{4})(\d)/, "$1 $2-$3")
-          .slice(0, 16);
-  };
 
   return (
     <Form {...form}>
