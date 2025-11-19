@@ -3,36 +3,16 @@ import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, User, Calendar, Mail, Shield } from "lucide-react";
+import { ArrowLeft, User, Calendar, Mail } from "lucide-react";
 import { format } from "date-fns";
 import { useAuth } from "@/contexts/auth-contexts";
 
 export const Route = createFileRoute("/_auth/users/$userId/")({
   component: UserDetail,
   loader: () => ({
-    crumb: "Usuário"
-  })
+    crumb: "Usuário",
+  }),
 });
-
-const ROLE_ENUM = {
-  ADMIN: {
-    label: "ADMINISTRADOR",
-    style: "border-red-800 bg-red-200 text-red-900 hover:bg-red-200/80",
-  },
-  MANAGER: {
-    label: "GERENTE",
-    style: "border-blue-800 bg-blue-200 text-blue-900 hover:bg-blue-200/80",
-  },
-  EVALUATOR: {
-    label: "AVALIADOR",
-    style: "border-green-800 bg-green-200 text-green-900 hover:bg-green-200/80",
-  },
-  USER: {
-    label: "USUÁRIO",
-    style: "border-gray-800 bg-gray-200 text-gray-900 hover:bg-gray-200/80",
-  },
-};
 
 type ROLE_TYPE = "ADMIN" | "MANAGER" | "EVALUATOR" | "USER";
 
@@ -158,17 +138,17 @@ function UserDetail() {
               <p className="text-lg">{userData.email}</p>
             </div>
 
-            <div>
+            {/* <div>
               <label className="text-sm font-medium text-gray-500 flex items-center gap-1">
                 <Shield className="h-4 w-4" />
                 Função
               </label>
               <div className="mt-1">
-                <Badge className={ROLE_ENUM[userData.role as "ADMIN"].style}>
-                  {ROLE_ENUM[userData.role as "ADMIN"].label}
+                <Badge className={ROLE_ENUM[userData.role as "ADMIN"]?.style}>
+                  {ROLE_ENUM[userData.role as "ADMIN"]?.label}
                 </Badge>
               </div>
-            </div>
+            </div> */}
           </CardContent>
         </Card>
 
@@ -197,7 +177,10 @@ function UserDetail() {
                 Criado em
               </label>
               <p className="text-lg">
-                {format(new Date(userData.created_at), "dd/MM/yyyy 'às' HH:mm")}
+                {format(
+                  new Date(userData.created_at || new Date()),
+                  "dd/MM/yyyy 'às' HH:mm"
+                )}
               </p>
             </div>
 
