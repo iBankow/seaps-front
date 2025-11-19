@@ -1,5 +1,13 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { useChecklist } from "@/contexts/checklist-context";
 import { api } from "@/lib/api";
 import { createFileRoute } from "@tanstack/react-router";
@@ -18,13 +26,92 @@ interface ChecklistHistory {
   checklist_id: string;
   checklist_item_id?: string;
   user_id: string;
+  user?: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  item?: {
+    name: string;
+  };
   status: string;
   action: string;
   observation: string | null;
-  old_value: string | null;
-  new_value: string | null;
+  value: Record<string, any> | null;
   created_at: string;
 }
+
+// Helper function to format JSON values
+const formatJsonValue = (value: Record<string, any> | null): string => {
+  if (!value || Object.keys(value).length === 0) return "-";
+
+  // Try to extract meaningful information from common JSON structures
+  if (typeof value === "object") {
+    // If it's a simple object with a few key-value pairs
+    const entries = Object.entries(value);
+
+    if (entries.length <= 2) {
+      // Show simple key-value pairs directly
+      return entries
+        .map(
+          ([key, val]) =>
+            `${key}: ${String(val).substring(0, 20)}${String(val).length > 20 ? "..." : ""}`
+        )
+        .join(", ");
+    } else {
+      // Show number of properties for complex objects
+      return `{${entries.length} propriedades}`;
+    }
+  }
+
+  // Fallback for other types
+  const stringified = String(value);
+  return stringified.length > 30
+    ? `${stringified.substring(0, 30)}...`
+    : stringified;
+};
+
+// Helper function to get full JSON for tooltip/modal
+const getFullJsonString = (value: Record<string, any> | null): string => {
+  if (!value) return "Nenhum valor";
+  return JSON.stringify(value, null, 2);
+};
+
+// Action translations
+const getActionTranslation = (action: string): string => {
+  const translations: { [key: string]: string } = {
+    "checklist:reopen": "Checklist Reaberto",
+    "checklist_item:updated": "Item Atualizado",
+    "checklist_item:update": "Item Atualizado",
+    "checklist:create": "Checklist Criado",
+    "checklist:finish": "Checklist Finalizado",
+    "checklist:updated": "Checklist Atualizado",
+    "checklist:deleted": "Checklist Removido",
+    "checklist:re_open": "Checklist Reaberto",
+    "checklist_item:upload_images": "Imagens Enviadas",
+  };
+
+  return translations[action] || action;
+};
+
+// Status badge variant helper
+const getStatusVariant = (status: string) => {
+  switch (status) {
+    case "BOM":
+    case "APPROVED":
+      return "default";
+    case "REGULAR":
+    case "OPEN":
+      return "secondary";
+    case "RUIM":
+    case "REJECTED":
+      return "destructive";
+    case "CLOSED":
+      return "outline";
+    default:
+      return "outline";
+  }
+};
 
 function RouteComponent() {
   const { checklist } = useChecklist();
@@ -85,12 +172,12 @@ function RouteComponent() {
         </CardContent>
       </Card>
 
-      {/* History Timeline */}
+      {/* History Table */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <User className="h-5 w-5" />
-            Timeline de Atividades
+            Histórico de Atividades
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -101,78 +188,95 @@ function RouteComponent() {
               </p>
             </div>
           ) : (
-            <div className="space-y-6">
-              {history.map((item, index) => (
-                <div key={item.id} className="relative">
-                  {index !== history.length - 1 && (
-                    <div className="absolute left-4 top-8 w-0.5 h-16 bg-border" />
-                  )}
-
-                  <div className="flex gap-4">
-                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-sm font-medium">
-                      {index + 1}
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-2">
-                        <div>
-                          <h4 className="text-sm font-medium">{item.action}</h4>
-                          <p className="text-sm text-muted-foreground">
-                            {format(
-                              new Date(item.created_at),
-                              "dd/MM/yyyy 'às' HH:mm"
-                            )}
-                          </p>
+            <div className="overflow-hidden rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Ação</TableHead>
+                    <TableHead className="hidden md:table-cell">
+                      Usuário
+                    </TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="hidden md:table-cell">
+                      Data/Hora
+                    </TableHead>
+                    <TableHead className="hidden lg:table-cell">
+                      Observação
+                    </TableHead>
+                    <TableHead className="hidden lg:table-cell">
+                      Valores
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {history.map((item) => (
+                    <TableRow key={item.id}>
+                      <TableCell>
+                        <div className="font-medium">
+                          {getActionTranslation(item.action)}
                         </div>
-                        <Badge
-                          variant={
-                            item.status === "BOM"
-                              ? "default"
-                              : item.status === "REGULAR"
-                                ? "secondary"
-                                : item.status === "RUIM"
-                                  ? "destructive"
-                                  : "outline"
-                          }
-                        >
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        <div className="text-sm">
+                          <div className="font-medium">
+                            {item.user?.name || "Sistema"}
+                          </div>
+                          {item.user?.email && (
+                            <div className="text-muted-foreground text-xs">
+                              {item.user.email}
+                            </div>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={getStatusVariant(item.status)}>
                           {item.status || "Sistema"}
                         </Badge>
-                      </div>
-
-                      {item.observation && (
-                        <div className="bg-muted p-3 rounded-lg">
-                          <p className="text-sm">{item.observation}</p>
-                        </div>
-                      )}
-
-                      {(item.old_value || item.new_value) && (
-                        <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {item.old_value && (
-                            <div className="text-sm">
-                              <span className="text-muted-foreground">
-                                Valor anterior:
-                              </span>
-                              <span className="ml-2 font-mono bg-red-50 dark:bg-red-950 text-red-800 dark:text-red-200 px-2 py-1 rounded">
-                                {item.old_value}
-                              </span>
-                            </div>
-                          )}
-                          {item.new_value && (
-                            <div className="text-sm">
-                              <span className="text-muted-foreground">
-                                Novo valor:
-                              </span>
-                              <span className="ml-2 font-mono bg-green-50 dark:bg-green-950 text-green-800 dark:text-green-200 px-2 py-1 rounded">
-                                {item.new_value}
-                              </span>
-                            </div>
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        <div className="text-sm text-muted-foreground">
+                          {format(
+                            new Date(item.created_at),
+                            "dd/MM/yyyy 'às' HH:mm"
                           )}
                         </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
+                      </TableCell>
+                      <TableCell className="hidden lg:table-cell">
+                        {item.observation ? (
+                          <div className="max-w-xs truncate text-sm">
+                            {item.observation}
+                          </div>
+                        ) : (
+                          <span className="text-muted-foreground">-</span>
+                        )}
+                      </TableCell>
+                      <TableCell className="hidden lg:table-cell">
+                        {item.value ? (
+                          <div className="space-y-1">
+                            <div className="text-xs">
+                              {item.checklist_item_id && item.item?.name && (
+                                <div className="text-muted-foreground mb-1">
+                                  {item.item.name}
+                                </div>
+                              )}
+                              <div
+                                className="inline-block cursor-help max-w-[200px]"
+                                title={getFullJsonString(item.value)}
+                              >
+                                <span className="font-mono bg-blue-50 dark:bg-blue-950 text-blue-800 dark:text-blue-200 px-2 py-1 rounded text-xs border">
+                                  {formatJsonValue(item.value)}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <span className="text-muted-foreground">-</span>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
           )}
         </CardContent>
