@@ -83,7 +83,23 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
     "property_id",
   ]);
 
-  const steps = ["Configuração do Checklist", "Seleção do Imóvel", "Revisão"];
+  const steps = [
+    {
+      id: 1,
+      name: "Configuração do Checklist",
+      description: "Modelo, órgão e responsável",
+    },
+    {
+      id: 2,
+      name: "Seleção do Imóvel",
+      description: "Escolha a propriedade",
+    },
+    {
+      id: 3,
+      name: "Revisão",
+      description: "Confirme as informações",
+    },
+  ];
 
   useEffect(() => {
     if (checklist) {
@@ -134,7 +150,6 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
     []
   );
 
-  // Debounce para filtro
   useEffect(() => {
     if (!organization_id) {
       setProperties([]);
@@ -686,13 +701,11 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card>
           <CardHeader>
-            <CardTitle>Criar Novo Checklist</CardTitle>
             <Steps currentStep={currentStep} steps={steps} />
           </CardHeader>
 
           <CardContent>
             <StepContent>{renderStepContent()}</StepContent>
-
             <StepActions>
               <div className="flex gap-2">
                 <Button

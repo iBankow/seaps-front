@@ -4,62 +4,51 @@ import { Check } from "lucide-react";
 
 interface StepsProps {
   currentStep: number;
-  steps: string[];
+  steps: { id: number; name: string; description?: string }[];
   className?: string;
 }
 
 function Steps({ currentStep, steps, className }: StepsProps) {
   return (
     <div className={cn("w-full", className)}>
-      <div className="flex items-center justify-between">
-        {steps.map((step, index) => {
-          const stepNumber = index + 1;
-          const isActive = stepNumber === currentStep;
-          const isCompleted = stepNumber < currentStep;
-          const isUpcoming = stepNumber > currentStep;
-
-          return (
-            <React.Fragment key={index}>
-              <div className="flex flex-col items-center">
-                <div
-                  className={cn(
-                    "flex h-10 w-10 items-center justify-center rounded-full border-2 text-sm font-medium transition-colors",
-                    {
-                      "border-primary bg-primary text-primary-foreground":
-                        isActive || isCompleted,
-                      "border-muted-foreground/30 bg-muted text-muted-foreground":
-                        isUpcoming,
-                    }
-                  )}
-                >
-                  {isCompleted ? (
-                    <Check className="h-5 w-5" />
-                  ) : (
-                    <span>{stepNumber}</span>
-                  )}
-                </div>
-                <div className="mt-2 text-center max-w-20">
-                  <div
-                    className={cn("text-xs md:text-sm font-medium", {
-                      "text-primary": isActive || isCompleted,
-                      "text-muted-foreground": isUpcoming,
-                    })}
-                  >
-                    {step}
-                  </div>
-                </div>
-              </div>
-              {index < steps.length - 1 && (
-                <div
-                  className={cn("h-px flex-1 mx-2 md:mx-4 mt-5", {
-                    "bg-primary": stepNumber < currentStep,
-                    "bg-muted-foreground/30": stepNumber >= currentStep,
-                  })}
-                />
+      <div className="mb-4 flex items-center justify-between">
+        {steps.map((step) => (
+          <div key={step.id} className="flex items-center">
+            <div
+              className={`flex h-10 w-10 items-center justify-center rounded-full border-2 ${
+                currentStep > step.id
+                  ? "bg-primary border-primary text-primary-foreground"
+                  : currentStep === step.id
+                    ? "border-primary text-primary"
+                    : "border-muted-foreground text-muted-foreground"
+              }`}
+            >
+              {currentStep > step.id ? (
+                <Check className="h-5 w-5" />
+              ) : (
+                <span>{step.id}</span>
               )}
-            </React.Fragment>
-          );
-        })}
+            </div>
+            <div className="ml-3">
+              <div className="text-sm font-medium">{step.name}</div>
+              {step.description && (
+                <div className="text-muted-foreground text-xs">
+                  {step.description}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Progress Bar */}
+      <div className="bg-muted h-2 w-full rounded-full">
+        <div
+          className="h-2 rounded-full bg-gradient-to-r from-blue-600 to-green-600 transition-all duration-500 ease-in-out"
+          style={{
+            width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
+          }}
+        />
       </div>
     </div>
   );
