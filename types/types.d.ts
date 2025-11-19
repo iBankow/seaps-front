@@ -79,6 +79,8 @@ interface Checklist {
   id: string;
   sid: string;
   status: string;
+  score: number;
+  classification?: number;
   property: {
     id: string;
     address: string;

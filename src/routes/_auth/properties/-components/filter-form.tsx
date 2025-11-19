@@ -34,9 +34,10 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Filter, Search, Sheet, X } from "lucide-react";
+import { Filter, Search, X } from "lucide-react";
 import axios from "axios";
+import { ExportModal } from "./export-modal";
+import { Badge } from "@/components/ui/badge";
 
 const filterSchema = z.object({
   organization_id: z.string().optional(),
@@ -46,7 +47,13 @@ const filterSchema = z.object({
   name: z.string().optional(),
 });
 
-export function DataFilterForm() {
+export function DataFilterForm({
+  data,
+  totalRecords,
+}: {
+  data?: any[];
+  totalRecords?: number;
+}) {
   const search = useSearch({ from: "/_auth/properties/" });
   const navigate = useNavigate({ from: "/properties" });
 
@@ -220,10 +227,7 @@ export function DataFilterForm() {
         </div>
 
         <div className="space-x-2">
-          <Button variant="outline" className="gap-2">
-            <Sheet className="h-4 w-4" />
-            Exportar Datos
-          </Button>
+          <ExportModal data={data || []} totalRecords={totalRecords} />
           <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DialogTrigger asChild>
               <Button variant="outline" className="gap-2">

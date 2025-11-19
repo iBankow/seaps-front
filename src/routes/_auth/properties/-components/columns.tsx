@@ -88,14 +88,14 @@ export const columns: ColumnDef<Column>[] = [
       size: 200,
     },
   },
-  {
-    accessorKey: "address",
-    header: "Endereço",
-    meta: {
-      headerClassName: "hidden lg:table-cell",
-      cellClassName: "truncate hidden lg:table-cell max-w-xs",
-    },
-  },
+  // {
+  //   accessorKey: "address",
+  //   header: "Endereço",
+  //   meta: {
+  //     headerClassName: "hidden lg:table-cell",
+  //     cellClassName: "truncate hidden lg:table-cell max-w-xs",
+  //   },
+  // },
   {
     accessorKey: "person",
     header: "Responsável",
