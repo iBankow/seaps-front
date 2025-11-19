@@ -39,6 +39,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Filter, Search, X } from "lucide-react";
 import axios from "axios";
+import { ExportModal } from "./export-modal";
 
 const filterSchema = z.object({
   organization_id: z.string().optional(),
@@ -48,7 +49,7 @@ const filterSchema = z.object({
   city: z.string().optional(),
 });
 
-export function DataFilterForm() {
+export function DataFilterForm({ data, totalRecords }: { data?: any[], totalRecords?: number }) {
   const searchParams = useSearch({ from: "/_auth/checklists/" });
   const router = useRouter();
 
@@ -253,18 +254,20 @@ export function DataFilterForm() {
             `${activeFilters.length} filtro${activeFilters.length !== 1 ? "s" : ""} aplicado${activeFilters.length !== 1 ? "s" : ""}`}
         </div>
 
-        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <DialogTrigger asChild>
-            <Button variant="outline" className="gap-2">
-              <Filter className="h-4 w-4" />
-              Filtros Avançados
-              {activeFilters.length > 0 && (
-                <Badge variant="secondary" className="ml-1">
-                  {activeFilters.length}
-                </Badge>
-              )}
-            </Button>
-          </DialogTrigger>
+        <div className="space-x-2">
+          <ExportModal data={data || []} totalRecords={totalRecords} />
+          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="gap-2">
+                <Filter className="h-4 w-4" />
+                Filtros Avançados
+                {activeFilters.length > 0 && (
+                  <Badge variant="secondary" className="ml-1">
+                    {activeFilters.length}
+                  </Badge>
+                )}
+              </Button>
+            </DialogTrigger>
 
           <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
             <DialogHeader>
@@ -437,6 +440,7 @@ export function DataFilterForm() {
             </div>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
     </div>
   );

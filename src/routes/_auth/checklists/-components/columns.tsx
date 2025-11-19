@@ -25,7 +25,7 @@ export const columns: ColumnDef<Column>[] = [
     cell({ row }) {
       return (
         <Link
-          to="/checklists/$checklistId/items"
+          to="/checklists/$checklistId"
           params={{ checklistId: row.original.id }}
           className="font-mono text-sky-400 hover:text-sky-700"
           preload={false}

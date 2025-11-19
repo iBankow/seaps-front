@@ -131,7 +131,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
             <DropdownMenuItem asChild>
               <Link
                 preload={false}
-                to="/checklists/$checklistId/items"
+                to="/checklists/$checklistId"
                 params={{ checklistId: row.original.id }}
               >
                 <ChevronRight size={16} />
