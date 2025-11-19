@@ -89,7 +89,7 @@ export const columns: ColumnDef<Column>[] = [
     accessorKey: "score",
     header: "Pontuação",
     accessorFn(row) {
-      return row.score !== null ? `${Number(row.score).toFixed(2)}` : "--";
+      return row.status === "CLOSED" ? `${Number(row.score).toFixed(2)}` : "--";
     },
   },
   {
