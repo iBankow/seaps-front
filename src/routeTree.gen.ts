@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RequestRouteImport } from './routes/request'
 import { Route as PublicRouteImport } from './routes/public'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthRouteImport } from './routes/_auth'
@@ -43,6 +44,11 @@ import { Route as AuthChecklistsChecklistIdEditIndexRouteImport } from './routes
 import { Route as AuthChecklistsChecklistIdItemsItemIdRouteRouteImport } from './routes/_auth/checklists/$checklistId/items/$itemId/route'
 import { Route as AuthChecklistsChecklistIdItemsItemIdIndexRouteImport } from './routes/_auth/checklists/$checklistId/items/$itemId/index'
 
+const RequestRoute = RequestRouteImport.update({
+  id: '/request',
+  path: '/request',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PublicRoute = PublicRouteImport.update({
   id: '/public',
   path: '/public',
@@ -226,6 +232,7 @@ const AuthChecklistsChecklistIdItemsItemIdIndexRoute =
 export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/public': typeof PublicRoute
+  '/request': typeof RequestRoute
   '/checklists': typeof AuthChecklistsRouteRouteWithChildren
   '/models': typeof AuthModelsRouteRouteWithChildren
   '/persons': typeof AuthPersonsRouteRouteWithChildren
@@ -260,6 +267,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/public': typeof PublicRoute
+  '/request': typeof RequestRoute
   '/persons': typeof AuthPersonsRouteRouteWithChildren
   '/': typeof AuthIndexRoute
   '/persons/create': typeof AuthPersonsCreateRoute
@@ -287,6 +295,7 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
   '/public': typeof PublicRoute
+  '/request': typeof RequestRoute
   '/_auth/checklists': typeof AuthChecklistsRouteRouteWithChildren
   '/_auth/models': typeof AuthModelsRouteRouteWithChildren
   '/_auth/persons': typeof AuthPersonsRouteRouteWithChildren
@@ -323,6 +332,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/login'
     | '/public'
+    | '/request'
     | '/checklists'
     | '/models'
     | '/persons'
@@ -357,6 +367,7 @@ export interface FileRouteTypes {
   to:
     | '/login'
     | '/public'
+    | '/request'
     | '/persons'
     | '/'
     | '/persons/create'
@@ -383,6 +394,7 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/login'
     | '/public'
+    | '/request'
     | '/_auth/checklists'
     | '/_auth/models'
     | '/_auth/persons'
@@ -419,10 +431,18 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   LoginRoute: typeof LoginRoute
   PublicRoute: typeof PublicRoute
+  RequestRoute: typeof RequestRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/request': {
+      id: '/request'
+      path: '/request'
+      fullPath: '/request'
+      preLoaderRoute: typeof RequestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/public': {
       id: '/public'
       path: '/public'
@@ -845,6 +865,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   LoginRoute: LoginRoute,
   PublicRoute: PublicRoute,
+  RequestRoute: RequestRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
