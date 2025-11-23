@@ -16,7 +16,7 @@ type User = {
   name: string;
   email: string;
   role: string;
-  isActive: boolean;
+  is_active: boolean;
   is: boolean;
 };
 

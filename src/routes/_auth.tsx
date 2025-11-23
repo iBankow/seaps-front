@@ -19,7 +19,7 @@ export const Route = createFileRoute("/_auth")({
       });
     }
 
-    if (!context.auth.user?.isActive) {
+    if (!context.auth.user?.is_active) {
       throw redirect({
         to: "/request",
         search: {
