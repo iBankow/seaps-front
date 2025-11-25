@@ -15,7 +15,7 @@ type User = {
   id: string;
   name: string;
   email: string;
-  role: string;
+  permissions: string[];
   is_active: boolean;
   is: boolean;
 };
