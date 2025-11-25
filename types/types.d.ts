@@ -85,6 +85,11 @@ interface Checklist {
     id: string;
     address: string;
     name: string;
+    person?: {
+      id: string;
+      name: string;
+      role: string;
+    };
   };
   organization: {
     id: string;

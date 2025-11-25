@@ -40,11 +40,6 @@ interface ChecklistStats {
 
 export const Route = createFileRoute("/_auth/checklists/$checklistId/")({
   component: ChecklistDashboard,
-  loader: () => {
-    return {
-      crumb: "Dashboard",
-    };
-  },
 });
 
 function ChecklistDashboard() {
@@ -207,6 +202,12 @@ function ChecklistDashboard() {
                   Endereço
                 </p>
                 <p>{checklist.property?.address}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Responsável pelo Imóvel
+                </p>
+                <p>{checklist.property?.person?.name}</p>
               </div>
             </div>
           </CardContent>
