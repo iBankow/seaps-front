@@ -61,7 +61,16 @@ export function BarComponent({ data }: { data: Data[] }) {
               content={<ChartLegendContent nameKey="status" />}
               className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
             />
-            <Pie data={_data} dataKey="total" nameKey="status" stroke="0" />
+            <Pie
+              data={_data}
+              dataKey="total"
+              nameKey="status"
+              stroke="0"
+              label={({ status, total, percent }) =>
+                `${status}: ${total} (${(percent * 100).toFixed(1)}%)`
+              }
+              labelLine={true}
+            />
           </PieChart>
         </ChartContainer>
       </CardContent>

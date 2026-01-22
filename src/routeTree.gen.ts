@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RequestRouteImport } from './routes/request'
 import { Route as PublicRouteImport } from './routes/public'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthRouteImport } from './routes/_auth'
@@ -32,6 +33,7 @@ import { Route as AuthPropertiesCreateIndexRouteImport } from './routes/_auth/pr
 import { Route as AuthPropertiesPropertyIdIndexRouteImport } from './routes/_auth/properties/$propertyId/index'
 import { Route as AuthModelsModelIdIndexRouteImport } from './routes/_auth/models/$modelId/index'
 import { Route as AuthChecklistsCreateIndexRouteImport } from './routes/_auth/checklists/create/index'
+import { Route as AuthChecklistsChecklistIdIndexRouteImport } from './routes/_auth/checklists/$checklistId/index'
 import { Route as AuthChecklistsChecklistIdItemsRouteRouteImport } from './routes/_auth/checklists/$checklistId/items/route'
 import { Route as AuthUsersUserIdEditIndexRouteImport } from './routes/_auth/users/$userId/edit/index'
 import { Route as AuthPropertiesPropertyIdEditIndexRouteImport } from './routes/_auth/properties/$propertyId/edit/index'
@@ -42,6 +44,11 @@ import { Route as AuthChecklistsChecklistIdEditIndexRouteImport } from './routes
 import { Route as AuthChecklistsChecklistIdItemsItemIdRouteRouteImport } from './routes/_auth/checklists/$checklistId/items/$itemId/route'
 import { Route as AuthChecklistsChecklistIdItemsItemIdIndexRouteImport } from './routes/_auth/checklists/$checklistId/items/$itemId/index'
 
+const RequestRoute = RequestRouteImport.update({
+  id: '/request',
+  path: '/request',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PublicRoute = PublicRouteImport.update({
   id: '/public',
   path: '/public',
@@ -161,6 +168,12 @@ const AuthChecklistsCreateIndexRoute =
     path: '/create/',
     getParentRoute: () => AuthChecklistsRouteRoute,
   } as any)
+const AuthChecklistsChecklistIdIndexRoute =
+  AuthChecklistsChecklistIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthChecklistsChecklistIdRouteRoute,
+  } as any)
 const AuthChecklistsChecklistIdItemsRouteRoute =
   AuthChecklistsChecklistIdItemsRouteRouteImport.update({
     id: '/items',
@@ -219,6 +232,7 @@ const AuthChecklistsChecklistIdItemsItemIdIndexRoute =
 export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/public': typeof PublicRoute
+  '/request': typeof RequestRoute
   '/checklists': typeof AuthChecklistsRouteRouteWithChildren
   '/models': typeof AuthModelsRouteRouteWithChildren
   '/persons': typeof AuthPersonsRouteRouteWithChildren
@@ -235,6 +249,7 @@ export interface FileRoutesByFullPath {
   '/properties/': typeof AuthPropertiesIndexRoute
   '/users/': typeof AuthUsersIndexRoute
   '/checklists/$checklistId/items': typeof AuthChecklistsChecklistIdItemsRouteRouteWithChildren
+  '/checklists/$checklistId/': typeof AuthChecklistsChecklistIdIndexRoute
   '/checklists/create': typeof AuthChecklistsCreateIndexRoute
   '/models/$modelId/': typeof AuthModelsModelIdIndexRoute
   '/properties/$propertyId/': typeof AuthPropertiesPropertyIdIndexRoute
@@ -252,15 +267,16 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/public': typeof PublicRoute
+  '/request': typeof RequestRoute
   '/persons': typeof AuthPersonsRouteRouteWithChildren
   '/': typeof AuthIndexRoute
-  '/checklists/$checklistId': typeof AuthChecklistsChecklistIdRouteRouteWithChildren
   '/persons/create': typeof AuthPersonsCreateRoute
   '/account': typeof AuthAccountIndexRoute
   '/checklists': typeof AuthChecklistsIndexRoute
   '/models': typeof AuthModelsIndexRoute
   '/properties': typeof AuthPropertiesIndexRoute
   '/users': typeof AuthUsersIndexRoute
+  '/checklists/$checklistId': typeof AuthChecklistsChecklistIdIndexRoute
   '/checklists/create': typeof AuthChecklistsCreateIndexRoute
   '/models/$modelId': typeof AuthModelsModelIdIndexRoute
   '/properties/$propertyId': typeof AuthPropertiesPropertyIdIndexRoute
@@ -279,6 +295,7 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
   '/public': typeof PublicRoute
+  '/request': typeof RequestRoute
   '/_auth/checklists': typeof AuthChecklistsRouteRouteWithChildren
   '/_auth/models': typeof AuthModelsRouteRouteWithChildren
   '/_auth/persons': typeof AuthPersonsRouteRouteWithChildren
@@ -295,6 +312,7 @@ export interface FileRoutesById {
   '/_auth/properties/': typeof AuthPropertiesIndexRoute
   '/_auth/users/': typeof AuthUsersIndexRoute
   '/_auth/checklists/$checklistId/items': typeof AuthChecklistsChecklistIdItemsRouteRouteWithChildren
+  '/_auth/checklists/$checklistId/': typeof AuthChecklistsChecklistIdIndexRoute
   '/_auth/checklists/create/': typeof AuthChecklistsCreateIndexRoute
   '/_auth/models/$modelId/': typeof AuthModelsModelIdIndexRoute
   '/_auth/properties/$propertyId/': typeof AuthPropertiesPropertyIdIndexRoute
@@ -314,6 +332,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/login'
     | '/public'
+    | '/request'
     | '/checklists'
     | '/models'
     | '/persons'
@@ -330,6 +349,7 @@ export interface FileRouteTypes {
     | '/properties/'
     | '/users/'
     | '/checklists/$checklistId/items'
+    | '/checklists/$checklistId/'
     | '/checklists/create'
     | '/models/$modelId/'
     | '/properties/$propertyId/'
@@ -347,15 +367,16 @@ export interface FileRouteTypes {
   to:
     | '/login'
     | '/public'
+    | '/request'
     | '/persons'
     | '/'
-    | '/checklists/$checklistId'
     | '/persons/create'
     | '/account'
     | '/checklists'
     | '/models'
     | '/properties'
     | '/users'
+    | '/checklists/$checklistId'
     | '/checklists/create'
     | '/models/$modelId'
     | '/properties/$propertyId'
@@ -373,6 +394,7 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/login'
     | '/public'
+    | '/request'
     | '/_auth/checklists'
     | '/_auth/models'
     | '/_auth/persons'
@@ -389,6 +411,7 @@ export interface FileRouteTypes {
     | '/_auth/properties/'
     | '/_auth/users/'
     | '/_auth/checklists/$checklistId/items'
+    | '/_auth/checklists/$checklistId/'
     | '/_auth/checklists/create/'
     | '/_auth/models/$modelId/'
     | '/_auth/properties/$propertyId/'
@@ -408,10 +431,18 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   LoginRoute: typeof LoginRoute
   PublicRoute: typeof PublicRoute
+  RequestRoute: typeof RequestRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/request': {
+      id: '/request'
+      path: '/request'
+      fullPath: '/request'
+      preLoaderRoute: typeof RequestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/public': {
       id: '/public'
       path: '/public'
@@ -573,6 +604,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthChecklistsCreateIndexRouteImport
       parentRoute: typeof AuthChecklistsRouteRoute
     }
+    '/_auth/checklists/$checklistId/': {
+      id: '/_auth/checklists/$checklistId/'
+      path: '/'
+      fullPath: '/checklists/$checklistId/'
+      preLoaderRoute: typeof AuthChecklistsChecklistIdIndexRouteImport
+      parentRoute: typeof AuthChecklistsChecklistIdRouteRoute
+    }
     '/_auth/checklists/$checklistId/items': {
       id: '/_auth/checklists/$checklistId/items'
       path: '/items'
@@ -674,6 +712,7 @@ const AuthChecklistsChecklistIdItemsRouteRouteWithChildren =
 
 interface AuthChecklistsChecklistIdRouteRouteChildren {
   AuthChecklistsChecklistIdItemsRouteRoute: typeof AuthChecklistsChecklistIdItemsRouteRouteWithChildren
+  AuthChecklistsChecklistIdIndexRoute: typeof AuthChecklistsChecklistIdIndexRoute
   AuthChecklistsChecklistIdEditIndexRoute: typeof AuthChecklistsChecklistIdEditIndexRoute
   AuthChecklistsChecklistIdHistoryIndexRoute: typeof AuthChecklistsChecklistIdHistoryIndexRoute
 }
@@ -682,6 +721,7 @@ const AuthChecklistsChecklistIdRouteRouteChildren: AuthChecklistsChecklistIdRout
   {
     AuthChecklistsChecklistIdItemsRouteRoute:
       AuthChecklistsChecklistIdItemsRouteRouteWithChildren,
+    AuthChecklistsChecklistIdIndexRoute: AuthChecklistsChecklistIdIndexRoute,
     AuthChecklistsChecklistIdEditIndexRoute:
       AuthChecklistsChecklistIdEditIndexRoute,
     AuthChecklistsChecklistIdHistoryIndexRoute:
@@ -825,6 +865,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   LoginRoute: LoginRoute,
   PublicRoute: PublicRoute,
+  RequestRoute: RequestRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

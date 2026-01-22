@@ -7,6 +7,7 @@ import {
   useLoaderData,
   useParams,
 } from "@tanstack/react-router";
+import { ChecklistHeader } from "../-components/header";
 
 export const Route = createFileRoute("/_auth/checklists/$checklistId")({
   component: RouteComponent,
@@ -39,6 +40,7 @@ export function RouteComponent() {
 
   return (
     <ChecklistProvider checklistId={checklistId} checklist={checklist}>
+      <ChecklistHeader />
       <Outlet />
     </ChecklistProvider>
   );

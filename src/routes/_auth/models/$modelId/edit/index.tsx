@@ -1,10 +1,9 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
 import { EditModelForm } from "../../-components/form";
 import { api } from "@/lib/api";
 import { useEffect, useState } from "react";
+import { BackButton } from "@/components/back-button";
 
 export const Route = createFileRoute("/_auth/models/$modelId/edit/")({
   component: RouteComponent,
@@ -41,11 +40,7 @@ function RouteComponent() {
       <Card>
         <CardContent>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/models">
-                <ArrowLeft className="h-4 w-4" />
-              </Link>
-            </Button>
+            <BackButton />
             <h1 className="text-2xl font-bold">Criar Checklist</h1>
           </div>
         </CardContent>

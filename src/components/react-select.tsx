@@ -147,13 +147,6 @@ function BaseWrapper<
     [size, error]
   );
 
-  const [portalTarget, setPortalTarget] = React.useState<
-    HTMLElement | undefined
-  >(undefined);
-  React.useEffect(() => {
-    setPortalTarget(document.body);
-  }, []);
-
   const commonProps = {
     unstyled: true,
     components: {
@@ -161,9 +154,9 @@ function BaseWrapper<
       ClearIndicator,
     },
     noOptionsMessage: () => "Nenhuma opção encontrada",
-    menuPortalTarget: portalTarget,
+    menuPortalTarget: document.body,
     styles: {
-      menuPortal: (base) => ({ ...base, zIndex: 50 }),
+      menuPortal: (base) => ({ ...base, zIndex: 50, pointerEvents: "auto" }),
       control: (base) => ({ ...base, cursor: "pointer" }),
     },
     filterOption: createFilter({ matchFrom: "start" }),

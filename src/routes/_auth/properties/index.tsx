@@ -69,7 +69,7 @@ export function RouteComponent() {
       </Card>
       <Card>
         <CardContent className="space-y-4">
-          <DataFilterForm />
+          <DataFilterForm data={data?.data} totalRecords={data?.meta?.total} />
           {loading ? (
             <DataTableSkeleton columns={columns} />
           ) : (

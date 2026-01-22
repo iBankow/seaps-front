@@ -18,6 +18,15 @@ export const Route = createFileRoute("/_auth")({
         },
       });
     }
+
+    if (!context.auth.user?.is_active) {
+      throw redirect({
+        to: "/request",
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
   },
   component: AuthLayout,
 });

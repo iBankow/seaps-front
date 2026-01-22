@@ -54,7 +54,7 @@ export const columns: ColumnDef<Column>[] = [
       headerClassName: "hidden md:table-cell",
       cellClassName:
         "truncate hidden md:table-cell text-sky-400 hover:text-sky-700",
-      size: 90,
+      size: 80,
     },
   },
   {
@@ -76,15 +76,26 @@ export const columns: ColumnDef<Column>[] = [
       cellClassName: "truncate max-w-xs",
     },
   },
-
   {
-    accessorKey: "address",
-    header: "Endereço",
+    accessorKey: "city",
+    header: "Cidade",
+    accessorFn(row) {
+      return row.city || "--";
+    },
     meta: {
-      headerClassName: "hidden lg:table-cell",
-      cellClassName: "truncate hidden lg:table-cell max-w-xs",
+      headerClassName: "hidden md:table-cell",
+      cellClassName: "truncate hidden md:table-cell",
+      size: 200,
     },
   },
+  // {
+  //   accessorKey: "address",
+  //   header: "Endereço",
+  //   meta: {
+  //     headerClassName: "hidden lg:table-cell",
+  //     cellClassName: "truncate hidden lg:table-cell max-w-xs",
+  //   },
+  // },
   {
     accessorKey: "person",
     header: "Responsável",

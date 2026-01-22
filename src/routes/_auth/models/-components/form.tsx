@@ -71,7 +71,7 @@ export function EditModelForm({
     defaultValues: {
       name: model.name,
       description: model.description || "",
-      items: model.items.map((item: any) => ({
+      items: model.items?.map((item: any) => ({
         name: item?.name,
       })),
     },

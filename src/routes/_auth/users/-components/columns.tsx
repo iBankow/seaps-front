@@ -42,18 +42,10 @@ export const columns: ColumnDef<Column>[] = [
     header: "Nome",
   },
   {
-    accessorKey: "role",
-    header: "Perfil",
-    cell({ row }) {
-      return (
-        <Badge>
-          {row.original.role === "EVALUATOR"
-            ? "AVALIADOR"
-            : row.original.role === "SUPERVISOR"
-              ? "SUPERVISOR"
-              : "ADMINISTRADOR"}
-        </Badge>
-      );
+    accessorKey: "organization",
+    header: "Organização",
+    accessorFn(row) {
+      return row.organization?.acronym;
     },
   },
   {

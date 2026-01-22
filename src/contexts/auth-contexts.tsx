@@ -9,8 +9,16 @@ import {
 // import { redirect } from "@tanstack/react-router";
 import { api } from "@/lib/api";
 import { Loader2 } from "lucide-react";
+import { config } from "@/lib/mt-login";
 
-type User = { id: string; name: string; email: string; role: string };
+type User = {
+  id: string;
+  name: string;
+  email: string;
+  permissions: string[];
+  is_active: boolean;
+  is: boolean;
+};
 
 export type AuthContextType = {
   isAuthenticated: boolean;
@@ -39,13 +47,14 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const login = async (email: string, password: string) => {
     await api.post("/api/v1/sessions", { email, password });
 
-    window.location.reload()
+    window.location.reload();
   };
 
   const logout = async () => {
-    await api.delete("/api/v1/sessions");
-    setUser(null);
-    window.location.reload()
+    api.delete("/api/v1/sessions").then(() => {
+      setUser(null);
+      window.location.replace(config.url_logout);
+    });
   };
 
   if (loading) {

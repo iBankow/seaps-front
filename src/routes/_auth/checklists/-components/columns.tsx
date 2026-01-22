@@ -25,7 +25,7 @@ export const columns: ColumnDef<Column>[] = [
     cell({ row }) {
       return (
         <Link
-          to="/checklists/$checklistId/items"
+          to="/checklists/$checklistId"
           params={{ checklistId: row.original.id }}
           className="font-mono text-sky-400 hover:text-sky-700"
           preload={false}
@@ -65,10 +65,31 @@ export const columns: ColumnDef<Column>[] = [
     },
   },
   {
+    accessorKey: "city",
+    header: "Cidade",
+    meta: {
+      size: 300,
+    },
+    cell({ row }) {
+      return (
+        <p className="truncate" title={row.original.property.name}>
+          {row.original.property.city ?? "--"}
+        </p>
+      );
+    },
+  },
+  {
     accessorKey: "status",
     header: "Status",
     cell({ row }) {
       return <StatusBadge status={row.original.status!} />;
+    },
+  },
+  {
+    accessorKey: "score",
+    header: "Pontuação",
+    accessorFn(row) {
+      return row.status === "CLOSED" ? `${Number(row.score).toFixed(2)}` : "--";
     },
   },
   {

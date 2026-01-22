@@ -2,15 +2,16 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import {
   Form,
   FormControl,
@@ -20,7 +21,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { ArrowLeft } from "lucide-react";
+import {
+  ArrowLeft,
+  Shield,
+  Building2,
+  CheckCircle2,
+  ListChecks,
+  Home,
+  Users,
+} from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -29,6 +38,9 @@ import { Switch } from "@/components/ui/switch";
 
 export const Route = createFileRoute("/_auth/users/$userId/edit/")({
   component: EditUser,
+  loader: () => ({
+    crumb: "Editar",
+  }),
 });
 
 const userSchema = z.object({
@@ -36,47 +48,67 @@ const userSchema = z.object({
   email: z.email("Email inválido").min(1, "Email é obrigatório"),
   permissions: z.array(z.string()).optional(),
   is_active: z.boolean(),
-  role: z.string(),
 });
 
 type UserFormData = z.infer<typeof userSchema>;
 
-const features = [
+const permissionGroups = [
   {
-    name: "checklists:view_all",
-    label: "Visualizar todos Checklists",
+    title: "Checklists",
+    icon: ListChecks,
+    description: "Gerenciamento de checklists",
+    permissions: [
+      {
+        name: "checklists:view_all",
+        label: "Visualizar todos Checklists",
+      },
+      {
+        name: "checklists:create",
+        label: "Criar Checklists",
+      },
+      {
+        name: "checklists:edit",
+        label: "Editar Checklists",
+      },
+      {
+        name: "checklists:delete",
+        label: "Deletar Checklists",
+      },
+      {
+        name: "checklist_items:edit_all",
+        label: "Editar Itens de todos os Checklist",
+      },
+    ],
   },
   {
-    name: "checklists:create",
-    label: "Criar Checklists",
+    title: "Imóveis",
+    icon: Home,
+    description: "Gerenciamento de propriedades",
+    permissions: [
+      {
+        name: "properties:create",
+        label: "Criar Imóveis",
+      },
+      {
+        name: "properties:edit",
+        label: "Editar Imóveis",
+      },
+      {
+        name: "properties:delete",
+        label: "Deletar Imóveis",
+      },
+    ],
   },
   {
-    name: "checklists:edit",
-    label: "Editar Checklists"
-  },
-  {
-    name: "checklists:delete",
-    label: "Deletar Checklists"
-  },
-  {
-    name: "checklist_items:edit_all",
-    label: "Editar Itens de todos os Checklist"
-  },
-  {
-    name: "properties:create",
-    label: "Criar Imóveis"
-  },
-  {
-    name: "properties:edit",
-    label: "Editar Imóveis"
-  },
-  {
-    name: "properties:delete",
-    label: "Deletar Imóveis"
-  },
-  {
-    name: "users:edit_configs",
-    label: "Editar Configurações de Usuários"
+    title: "Usuários",
+    icon: Users,
+    description: "Gerenciamento de usuários",
+    permissions: [
+      {
+        name: "users:edit_configs",
+        label: "Editar Configurações de Usuários",
+      },
+    ],
   },
 ];
 
@@ -84,14 +116,12 @@ function EditUser() {
   const { userId } = Route.useParams();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<UserFormData | null>(null);
 
   const form = useForm<UserFormData>({
     resolver: zodResolver(userSchema),
     defaultValues: {
       name: "",
       email: "",
-      role: "USER",
       is_active: false,
     },
   });
@@ -105,10 +135,8 @@ function EditUser() {
             name: data.name,
             email: data.email,
             is_active: data.is_active,
-            role: data.role,
             permissions: data.permissions || [],
           });
-          setUser(data)
         }
       } finally {
         setLoading(false);
@@ -123,7 +151,6 @@ function EditUser() {
       .put(`/api/v1/users/${userId}`, {
         permissions: values.permissions,
         is_active: values.is_active,
-        role: values.role,
       })
       .then(() => {
         toast.success("Usuário atualizado com sucesso!");
@@ -136,237 +163,398 @@ function EditUser() {
 
   if (loading) {
     return (
-      <div className="flex flex-col gap-y-4">
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" asChild>
+      <div className="container mx-auto py-6 space-y-6">
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="icon" asChild>
             <Link to={`..`}>
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="h-5 w-5" />
             </Link>
           </Button>
-          <div className="h-6 w-48 animate-pulse rounded bg-gray-200"></div>
+          <div className="space-y-2 flex-1">
+            <div className="h-8 w-64 animate-pulse rounded bg-muted"></div>
+            <div className="h-4 w-48 animate-pulse rounded bg-muted"></div>
+          </div>
         </div>
-        <Card>
-          <CardHeader>
-            <div className="h-6 w-32 animate-pulse rounded bg-gray-200"></div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="space-y-2">
-                    <div className="h-4 w-24 animate-pulse rounded bg-gray-200"></div>
-                    <div className="h-10 w-full animate-pulse rounded bg-gray-200"></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+
+        <div className="grid gap-6">
+          {[1, 2, 3].map((i) => (
+            <Card key={i} className="overflow-hidden">
+              <CardHeader className="bg-muted/50">
+                <div className="h-6 w-48 animate-pulse rounded bg-muted"></div>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <div className="space-y-4">
+                  {Array.from({ length: 3 }).map((_, j) => (
+                    <div
+                      key={j}
+                      className="h-16 w-full animate-pulse rounded bg-muted"
+                    ></div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-y-4">
-      <div className="flex items-center gap-2">
-        <Button variant="ghost" size="sm" asChild>
+    <div className="container mx-auto py-6 space-y-6">
+      {/* Header */}
+      <div className="flex items-center gap-3">
+        <Button variant="ghost" size="icon" asChild>
           <Link to={`..`}>
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-5 w-5" />
           </Link>
         </Button>
-        <h1 className="text-2xl font-bold">Editar Usuário</h1>
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Editar Usuário</h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            Configure as permissões e o status do usuário
+          </p>
+        </div>
       </div>
 
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="mx-auto w-full max-w-3xl space-y-3"
-        >
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nome</FormLabel>
-                <FormControl>
-                  <Input disabled {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input disabled {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/* Informações Básicas */}
+          <Card className="overflow-hidden">
+            <CardHeader className="border-b">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <Users className="h-5 w-5 text-primary" />
+                Informações Básicas
+              </CardTitle>
+              <CardDescription>
+                Dados cadastrais do usuário (não editáveis)
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nome Completo</FormLabel>
+                    <FormControl>
+                      <Input disabled {...field} className="bg-muted/50" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>E-mail</FormLabel>
+                    <FormControl>
+                      <Input disabled {...field} className="bg-muted/50" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
 
-          <FormItem>
-            <FormLabel>Configurações</FormLabel>
-            <FormItem>
+          {/* Status do Usuário */}
+          <Card className="overflow-hidden">
+            <CardHeader className="border-b">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <CheckCircle2 className="h-5 w-5 text-primary" />
+                Status da Conta
+              </CardTitle>
+              <CardDescription>
+                Controle o acesso do usuário ao sistema
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6">
               <FormField
                 control={form.control}
                 name="is_active"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm">
                     <div className="space-y-0.5">
-                      <FormLabel>Ativação do usuário</FormLabel>
+                      <FormLabel className="text-base font-semibold">
+                        Ativação do usuário
+                      </FormLabel>
                       <FormDescription>
-                        Quando ativo, o usuário terá acesso básico ao sistema.
+                        Quando ativo, o usuário terá acesso básico ao sistema
+                        conforme suas permissões.
                       </FormDescription>
                     </div>
                     <FormControl>
                       <Switch
-                        className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-red-500 dark:data-[state=unchecked]:bg-red-500"
+                        className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-red-500"
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        aria-readonly
                       />
                     </FormControl>
                   </FormItem>
                 )}
               />
-            </FormItem>
+            </CardContent>
+          </Card>
 
-            <FormItem>
+          {/* Níveis de Acesso */}
+          <Card className="overflow-hidden">
+            <CardHeader className="border-b">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <Shield className="h-5 w-5 text-primary" />
+                Níveis de Acesso
+              </CardTitle>
+              <CardDescription>
+                Defina o nível de acesso do usuário no sistema
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6">
               <FormField
                 control={form.control}
-                name="role"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between gap-4 rounded-lg border p-3 shadow-sm">
-                    <div className="w-1/2 space-y-0.5">
-                      <FormLabel>Perfil de Acesso</FormLabel>
-                      <FormDescription>
-                        ADMINISTRADOR: Responsável pela gestão geral do sistema.
-                      </FormDescription>
-                      <FormDescription>
-                        SUPERVISOR: Responsável por gerenciar os dados
-                        principais.
-                      </FormDescription>
-                      <FormDescription>
-                        AVALIADOR: Responsável por executar os checklists.
-                      </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={user?.role}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="w-1/2">
-                            <SelectValue placeholder="Selecione o Perfil de acesso" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {[
-                            { id: "ADMIN", name: "ADMINISTRADOR" },
-                            { id: "EVALUATOR", name: "AVALIADOR" },
-                            { id: "SUPERVISOR", name: "SUPERVISOR" },
-                          ].map((item) => (
-                            <SelectItem key={item.id} value={item.id}>
-                              {item.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </FormItem>
-          </FormItem>
-          <FormItem>
-            <FormLabel>Funcionalidades</FormLabel>
-            <FormField
-              control={form.control}
-              name="permissions"
-              render={({ field }) => {
-                const isAllSelected = field.value?.includes("*");
-                return (
-                  <div className="flex flex-col gap-2">
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                      <div className="space-y-0.5">
-                        <FormLabel className="mb-0">Acesso como administrador</FormLabel>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={isAllSelected}
-                          defaultChecked={field.value?.includes("*")}
-                          onCheckedChange={(checked) => {
-                            let newFeatures = field.value || [];
-                            if (checked) {
-                              newFeatures = [...newFeatures, '*'];
-                            } else {
-                              newFeatures = newFeatures.filter((f) => f !== '*');
-                            }
-                            field.onChange(newFeatures);
-                          }}
-                        />
-                      </FormControl>
-                    </FormItem>
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                      <div className="space-y-0.5">
-                        <FormLabel className="mb-0">Acesso como avaliador</FormLabel>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          defaultChecked={field.value?.includes("evaluator")}
-                          onCheckedChange={(checked) => {
-                            let newFeatures = field.value || [];
-                            if (checked) {
-                              newFeatures = [...newFeatures, 'evaluator'];
-                            } else {
-                              newFeatures = newFeatures.filter((f) => f !== 'evaluator');
-                            }
-                            field.onChange(newFeatures);
-                          }}
-                        />
-                      </FormControl>
-                    </FormItem>
-                    {features.map((feature) => {
-                      const isChecked = field.value?.includes(feature.name);
-                      return (
-                        <FormItem
-                          key={feature.name}
-                          className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm"
-                        >
-                          <div className="space-y-0.5">
-                            <FormLabel className="mb-0">{feature.label}</FormLabel>
+                name="permissions"
+                render={({ field }) => {
+                  const isAdmin = field.value?.includes("*");
+                  const isOrgAdmin = field.value?.includes("organization:*");
+                  const isEvaluator = field.value?.includes("evaluator");
+                  const hasFullAccess = isAdmin || isOrgAdmin;
+
+                  return (
+                    <div className="space-y-3">
+                      {/* Administrador Total */}
+                      <div className="flex flex-row items-center justify-between rounded-lg border-2 border-primary/20 bg-primary/5 p-4 shadow-sm">
+                        <div className="space-y-0.5 flex-1">
+                          <div className="flex items-center gap-2">
+                            <Shield className="h-4 w-4 text-primary" />
+                            <FormLabel className="mb-0 text-base font-bold">
+                              Administrador Total
+                            </FormLabel>
+                            <Badge variant="default" className="ml-2">
+                              Acesso Completo
+                            </Badge>
                           </div>
-                          <FormControl>
-                            <Switch
-                              checked={isChecked || isAllSelected}
-                              disabled={isAllSelected}
-                              onCheckedChange={(checked) => {
-                                let newFeatures = field.value?.filter((f) => f !== "*") || [];
-                                if (checked) {
-                                  newFeatures = [...newFeatures, feature.name];
-                                } else {
-                                  newFeatures = newFeatures.filter((f) => f !== feature.name);
-                                }
-                                field.onChange(newFeatures);
-                              }}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      );
-                    })}
-                  </div>
-                );
-              }}
-            />
-          </FormItem>
-          <div className="flex justify-end">
-            <Button type="submit" className="self-end">
-              Salvar
+                          <FormDescription className="text-xs">
+                            Acesso total ao sistema incluindo todas as
+                            organizações e configurações avançadas.
+                          </FormDescription>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={isAdmin}
+                            onCheckedChange={(checked) => {
+                              let newPermissions = field.value || [];
+                              if (checked) {
+                                newPermissions = [...newPermissions, "*"];
+                              } else {
+                                newPermissions = newPermissions.filter(
+                                  (f) => f !== "*"
+                                );
+                              }
+                              field.onChange(newPermissions);
+                            }}
+                            className="data-[state=checked]:bg-primary"
+                          />
+                        </FormControl>
+                      </div>
+
+                      <Separator className="my-4" />
+
+                      {/* Administrador da Organização */}
+                      <div className="flex flex-row items-center justify-between rounded-lg border-2 border-blue-500/20 bg-blue-50/50 dark:bg-blue-950/20 p-4 shadow-sm">
+                        <div className="space-y-0.5 flex-1">
+                          <div className="flex items-center gap-2">
+                            <Building2 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                            <FormLabel className="mb-0 text-base font-bold">
+                              Administrador da Organização
+                            </FormLabel>
+                            <Badge variant="secondary" className="ml-2 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                              Acesso Completo
+                            </Badge>
+                          </div>
+                          <FormDescription className="text-xs">
+                            Acesso total aos recursos da própria organização do usuário, incluindo todas as permissões específicas.
+                          </FormDescription>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={isOrgAdmin || isAdmin}
+                            disabled={isAdmin}
+                            onCheckedChange={(checked) => {
+                              let newPermissions =
+                                field.value?.filter((f) => f !== "*") || [];
+                              if (checked) {
+                                newPermissions = [
+                                  ...newPermissions,
+                                  "organization:*",
+                                ];
+                              } else {
+                                newPermissions = newPermissions.filter(
+                                  (f) => f !== "organization:*"
+                                );
+                              }
+                              field.onChange(newPermissions);
+                            }}
+                            className="data-[state=checked]:bg-blue-600"
+                          />
+                        </FormControl>
+                      </div>
+
+                      <Separator className="my-4" />
+
+                      {/* Avaliador */}
+                      <div className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm">
+                        <div className="space-y-0.5">
+                          <FormLabel className="mb-0 text-base font-semibold">
+                            Acesso como Avaliador
+                          </FormLabel>
+                          <FormDescription className="text-xs">
+                            Permissão para avaliar e validar itens.
+                          </FormDescription>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={isEvaluator || hasFullAccess}
+                            disabled={hasFullAccess}
+                            onCheckedChange={(checked) => {
+                              let newPermissions =
+                                field.value?.filter((f) => f !== "*" && f !== "organization:*") || [];
+                              if (checked) {
+                                newPermissions = [
+                                  ...newPermissions,
+                                  "evaluator",
+                                ];
+                              } else {
+                                newPermissions = newPermissions.filter(
+                                  (f) => f !== "evaluator"
+                                );
+                              }
+                              field.onChange(newPermissions);
+                            }}
+                          />
+                        </FormControl>
+                      </div>
+                    </div>
+                  );
+                }}
+              />
+            </CardContent>
+          </Card>
+
+          {/* Permissões Específicas */}
+          <Card className="overflow-hidden">
+            <CardHeader className="border-b">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <ListChecks className="h-5 w-5 text-primary" />
+                Permissões Específicas
+              </CardTitle>
+              <CardDescription>
+                Configure permissões granulares por funcionalidade
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6">
+              <FormField
+                control={form.control}
+                name="permissions"
+                render={({ field }) => {
+                  const isAdmin = field.value?.includes("*");
+                  const isOrgAdmin = field.value?.includes("organization:*");
+                  const hasFullAccess = isAdmin || isOrgAdmin;
+
+                  return (
+                    <div className="space-y-6">
+                      {hasFullAccess && (
+                        <div className="rounded-lg bg-primary/10 border-2 border-primary/30 p-4 text-center">
+                          <Shield className="h-8 w-8 mx-auto mb-2 text-primary" />
+                          <p className="font-semibold text-sm">
+                            Todas as permissões estão habilitadas
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {isAdmin 
+                              ? "O usuário possui acesso total como Administrador" 
+                              : "O usuário possui acesso total à sua organização"
+                            }
+                          </p>
+                        </div>
+                      )}
+
+                      {permissionGroups.map((group) => {
+                        const GroupIcon = group.icon;
+                        return (
+                          <div key={group.title} className="space-y-3">
+                            <div className="flex items-center gap-2 pb-2">
+                              <GroupIcon className="h-5 w-5 text-primary" />
+                              <div>
+                                <h3 className="font-semibold text-base">
+                                  {group.title}
+                                </h3>
+                                <p className="text-xs text-muted-foreground">
+                                  {group.description}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="space-y-2 pl-7">
+                              {group.permissions.map((permission) => {
+                                const isChecked = field.value?.includes(
+                                  permission.name
+                                );
+                                return (
+                                  <div
+                                    key={permission.name}
+                                    className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm hover:bg-muted/50 transition-colors"
+                                  >
+                                    <FormLabel className="mb-0 text-sm font-normal cursor-pointer flex-1">
+                                      {permission.label}
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Switch
+                                        checked={isChecked || hasFullAccess}
+                                        disabled={hasFullAccess}
+                                        onCheckedChange={(checked) => {
+                                          let newPermissions =
+                                            field.value?.filter(
+                                              (f) => f !== "*" && f !== "organization:*"
+                                            ) || [];
+                                          if (checked) {
+                                            newPermissions = [
+                                              ...newPermissions,
+                                              permission.name,
+                                            ];
+                                          } else {
+                                            newPermissions =
+                                              newPermissions.filter(
+                                                (f) => f !== permission.name
+                                              );
+                                          }
+                                          field.onChange(newPermissions);
+                                        }}
+                                      />
+                                    </FormControl>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                            {group !==
+                              permissionGroups[permissionGroups.length - 1] && (
+                              <Separator className="mt-4" />
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                }}
+              />
+            </CardContent>
+          </Card>
+
+          {/* Ações */}
+          <div className="flex justify-end gap-3">
+            <Button type="button" variant="outline" asChild>
+              <Link to={`..`}>Cancelar</Link>
+            </Button>
+            <Button type="submit" size="lg" className="min-w-32">
+              Salvar Alterações
             </Button>
           </div>
         </form>

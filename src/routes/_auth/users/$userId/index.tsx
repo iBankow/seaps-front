@@ -4,54 +4,35 @@ import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, User, Calendar, Mail, Shield } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import {
+  ArrowLeft,
+  User,
+  Calendar,
+  Mail,
+  Shield,
+  CheckCircle2,
+  XCircle,
+} from "lucide-react";
 import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { useAuth } from "@/contexts/auth-contexts";
 
 export const Route = createFileRoute("/_auth/users/$userId/")({
   component: UserDetail,
   loader: () => ({
-    crumb: "Usuário"
-  })
+    crumb: "Usuário",
+  }),
 });
-
-const ROLE_ENUM = {
-  ADMIN: {
-    label: "ADMINISTRADOR",
-    style: "border-red-800 bg-red-200 text-red-900 hover:bg-red-200/80",
-  },
-  MANAGER: {
-    label: "GERENTE",
-    style: "border-blue-800 bg-blue-200 text-blue-900 hover:bg-blue-200/80",
-  },
-  EVALUATOR: {
-    label: "AVALIADOR",
-    style: "border-green-800 bg-green-200 text-green-900 hover:bg-green-200/80",
-  },
-  USER: {
-    label: "USUÁRIO",
-    style: "border-gray-800 bg-gray-200 text-gray-900 hover:bg-gray-200/80",
-  },
-};
-
-type ROLE_TYPE = "ADMIN" | "MANAGER" | "EVALUATOR" | "USER";
 
 interface IUser {
   id: string;
   name: string;
   email: string;
-  role: ROLE_TYPE;
+  permissions: string[];
   is_active: boolean;
   created_at: string;
   updated_at?: string;
-  organization: {
-    id: string;
-    name: string;
-  };
-  person?: {
-    id: string;
-    name: string;
-  };
 }
 
 function UserDetail() {
@@ -74,28 +55,34 @@ function UserDetail() {
 
   if (loading) {
     return (
-      <div className="flex flex-col gap-y-4">
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" asChild>
+      <div className="container mx-auto py-6 space-y-6">
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="icon" asChild>
             <Link to="/users">
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="h-5 w-5" />
             </Link>
           </Button>
-          <div className="h-6 w-48 animate-pulse rounded bg-gray-200"></div>
+          <div className="space-y-2 flex-1">
+            <div className="h-8 w-64 animate-pulse rounded bg-muted"></div>
+            <div className="h-4 w-32 animate-pulse rounded bg-muted"></div>
+          </div>
         </div>
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <div className="h-6 w-32 animate-pulse rounded bg-gray-200"></div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="h-4 w-full animate-pulse rounded bg-gray-200"></div>
-                <div className="h-4 w-3/4 animate-pulse rounded bg-gray-200"></div>
-                <div className="h-4 w-1/2 animate-pulse rounded bg-gray-200"></div>
-              </div>
-            </CardContent>
-          </Card>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          {[1, 2].map((i) => (
+            <Card key={i} className="overflow-hidden">
+              <CardHeader className="bg-muted/50">
+                <div className="h-6 w-48 animate-pulse rounded bg-muted"></div>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <div className="space-y-4">
+                  <div className="h-4 w-full animate-pulse rounded bg-muted"></div>
+                  <div className="h-4 w-3/4 animate-pulse rounded bg-muted"></div>
+                  <div className="h-4 w-1/2 animate-pulse rounded bg-muted"></div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
     );
@@ -103,32 +90,48 @@ function UserDetail() {
 
   if (!userData) {
     return (
-      <div className="flex flex-col gap-y-4">
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" asChild>
+      <div className="container mx-auto py-6 space-y-6">
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="icon" asChild>
             <Link to="/users">
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="h-5 w-5" />
             </Link>
           </Button>
-          <h1 className="text-2xl font-bold">Usuário não encontrado</h1>
+          <h1 className="text-3xl font-bold text-destructive">
+            Usuário não encontrado
+          </h1>
         </div>
+        <Card>
+          <CardContent className="py-10 text-center text-muted-foreground">
+            <User className="h-12 w-12 mx-auto mb-4 opacity-50" />
+            <p>O usuário solicitado não foi encontrado ou foi removido.</p>
+          </CardContent>
+        </Card>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" asChild>
+    <div className="container mx-auto py-6 space-y-6">
+      {/* Header */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="icon" asChild>
             <Link to="/users">
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="h-5 w-5" />
             </Link>
           </Button>
-          <h1 className="text-2xl font-bold">{userData.name}</h1>
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">
+              {userData.name}
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Detalhes e informações do usuário
+            </p>
+          </div>
         </div>
-        {user?.role !== "EVALUATOR" && (
-          <Button asChild>
+        {user?.permissions.some((perm) => perm === "*:*") && (
+          <Button asChild size="lg">
             <Link to={`/users/$userId/edit`} params={{ userId }}>
               Editar Usuário
             </Link>
@@ -136,85 +139,157 @@ function UserDetail() {
         )}
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <User className="h-5 w-5" />
+      {/* Status Badge */}
+      <div className="flex items-center gap-2">
+        {userData.is_active ? (
+          <Badge
+            variant="default"
+            className="bg-green-500 hover:bg-green-600 gap-1"
+          >
+            <CheckCircle2 className="h-3 w-3" />
+            Ativo
+          </Badge>
+        ) : (
+          <Badge variant="destructive" className="gap-1">
+            <XCircle className="h-3 w-3" />
+            Inativo
+          </Badge>
+        )}
+      </div>
+
+      {/* Cards Grid */}
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* Informações do Usuário */}
+        <Card className="overflow-hidden">
+          <CardHeader className="border-b">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <User className="w-5 text-primary" />
               Informações do Usuário
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <label className="text-sm font-medium text-gray-500">Nome</label>
-              <p className="text-lg font-semibold">{userData.name}</p>
+          <CardContent className="space-y-5">
+            <div className="space-y-2">
+              <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Nome Completo
+              </label>
+              <p className="text-base font-medium">{userData.name}</p>
             </div>
 
-            <div>
-              <label className="text-sm font-medium text-gray-500 flex items-center gap-1">
-                <Mail className="h-4 w-4" />
-                Email
+            <Separator />
+
+            <div className="space-y-2">
+              <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground flex items-center gap-1.5">
+                <Mail className="h-3.5 w-3.5" />
+                E-mail
               </label>
-              <p className="text-lg">{userData.email}</p>
+              <p className="text-base font-medium break-all">
+                {userData.email}
+              </p>
             </div>
 
-            <div>
-              <label className="text-sm font-medium text-gray-500 flex items-center gap-1">
-                <Shield className="h-4 w-4" />
-                Função
+            <Separator />
+
+            <div className="space-y-2">
+              <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground flex items-center gap-1.5">
+                <Shield className="h-3.5 w-3.5" />
+                Permissões
               </label>
-              <div className="mt-1">
-                <Badge className={ROLE_ENUM[userData.role as "ADMIN"].style}>
-                  {ROLE_ENUM[userData.role as "ADMIN"].label}
-                </Badge>
+              <div className="flex flex-wrap gap-2">
+                {userData.permissions && userData.permissions.length > 0 ? (
+                  userData.permissions.map((permission) => (
+                    <Badge
+                      key={permission}
+                      variant="secondary"
+                      className="text-xs"
+                    >
+                      {permission.replace(/_/g, " ")}
+                    </Badge>
+                  ))
+                ) : (
+                  <p className="text-sm text-muted-foreground italic">
+                    Nenhuma permissão atribuída
+                  </p>
+                )}
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <User className="h-5 w-5" />
-              Informações Adicionais
+        {/* Informações Adicionais */}
+        <Card className="overflow-hidden">
+          <CardHeader className="border-b">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Calendar className="w-5 text-primary" />
+              Informações do Sistema
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <label className="text-sm font-medium text-gray-500 flex items-center gap-1">
-                Status
+          <CardContent className="space-y-5">
+            <div className="space-y-2">
+              <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Status da Conta
               </label>
-              <p
-                className={`text-lg font-semibold ${userData.is_active ? "text-green-700" : "text-red-700"}`}
-              >
-                {userData.is_active ? "ATIVO" : "INATIVO"}
-              </p>
+              <div className="flex items-center gap-2">
+                {userData.is_active ? (
+                  <>
+                    <CheckCircle2 className="h-5 w-5 text-green-600" />
+                    <span className="text-base font-semibold text-green-700">
+                      Conta Ativa
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <XCircle className="h-5 w-5 text-red-600" />
+                    <span className="text-base font-semibold text-red-700">
+                      Conta Inativa
+                    </span>
+                  </>
+                )}
+              </div>
             </div>
 
-            <div>
-              <label className="text-sm font-medium text-gray-500 flex items-center gap-1">
-                <Calendar className="h-4 w-4" />
+            <Separator />
+
+            <div className="space-y-2">
+              <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 Criado em
               </label>
-              <p className="text-lg">
-                {format(new Date(userData.created_at), "dd/MM/yyyy 'às' HH:mm")}
+              <p className="text-base font-medium">
+                {format(
+                  new Date(userData.created_at || new Date()),
+                  "dd 'de' MMMM 'de' yyyy 'às' HH:mm",
+                  { locale: ptBR }
+                )}
               </p>
             </div>
 
             {userData.updated_at && (
-              <div>
-                <label className="text-sm font-medium text-gray-500 flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  Atualizado em
-                </label>
-                <p className="text-lg">
-                  {format(
-                    new Date(userData.updated_at),
-                    "dd/MM/yyyy 'às' HH:mm"
-                  )}
-                </p>
-              </div>
+              <>
+                <Separator />
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Última Atualização
+                  </label>
+                  <p className="text-base font-medium">
+                    {format(
+                      new Date(userData.updated_at),
+                      "dd 'de' MMMM 'de' yyyy 'às' HH:mm",
+                      { locale: ptBR }
+                    )}
+                  </p>
+                </div>
+              </>
             )}
+
+            <Separator />
+
+            <div className="space-y-2">
+              <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                ID do Usuário
+              </label>
+              <p className="text-xs font-mono bg-muted px-2 py-1 rounded border">
+                {userData.id}
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>

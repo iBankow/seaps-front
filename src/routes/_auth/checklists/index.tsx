@@ -20,6 +20,7 @@ const SearchSchema = z.object({
   user_id: z.string().optional(),
   status: z.string().optional(),
   property_name: z.string().optional(),
+  city: z.string().optional(),
 });
 
 export const Route = createFileRoute("/_auth/checklists/")({
@@ -67,7 +68,10 @@ export function RouteComponent() {
       </Card>
       <Card>
         <CardContent className="space-y-4">
-          <DataFilterForm />
+          <DataFilterForm
+            data={data?.data || []}
+            totalRecords={data?.meta?.total || 0}
+          />
           {loading ? (
             <DataTableSkeleton columns={columns} />
           ) : (

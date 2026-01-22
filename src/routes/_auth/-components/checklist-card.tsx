@@ -12,6 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Actions } from "../checklists/-components/actions";
+import { ClassificationBadge } from "@/components/classification-badge";
 
 export function ChecklistsCard() {
   const [loading, setLoading] = useState(true);
@@ -35,8 +36,10 @@ export function ChecklistsCard() {
           <TableRow>
             <TableHead className="w-[100px]">ID</TableHead>
             <TableHead>Orgão</TableHead>
-            <TableHead>Status</TableHead>
             <TableHead>Imóvel</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Classificação</TableHead>
+            <TableHead>Pontuação</TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>
@@ -56,11 +59,19 @@ export function ChecklistsCard() {
               <TableCell className="text-left">
                 {checklist.organization?.acronym}
               </TableCell>
+              <TableCell className="text-left truncate w-[100px]">
+                {checklist.property.name}
+              </TableCell>
               <TableCell className="text-left">
                 <StatusBadge status={checklist.status} />
               </TableCell>
-              <TableCell className="text-left truncate w-[100px]">
-                {checklist.property.name}
+              <TableCell className="text-left">
+                <ClassificationBadge
+                  classification={checklist.classification}
+                />
+              </TableCell>
+              <TableCell className="text-left">
+                {checklist.score ? Number(checklist.score).toFixed(2) : "--"}
               </TableCell>
               <TableCell className="text-right">
                 <Actions row={{ original: checklist } as any} />
@@ -69,7 +80,9 @@ export function ChecklistsCard() {
           ))}
         </TableBody>
         <TableCaption>
-          <Link to="/checklists" className="underline text-sky-400">Visualizar todos os checklists</Link>
+          <Link to="/checklists" className="underline text-sky-400">
+            Visualizar todos os checklists
+          </Link>
         </TableCaption>
       </Table>
     </div>
