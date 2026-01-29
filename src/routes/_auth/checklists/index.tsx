@@ -54,7 +54,9 @@ export function RouteComponent() {
               <h2 className="text-2xl font-bold tracking-tight">Checklists</h2>
             </div>
             <div className="self-end">
-              {user?.role !== "EVALUATOR" && (
+              {user?.permissions.some(
+                (permission) => permission === "checklists:create",
+              ) && (
                 <Button asChild>
                   <Link to="/checklists/create">
                     <Plus />

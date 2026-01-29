@@ -145,13 +145,13 @@ function PropertyDetail() {
 
         const total_checklists = checklists.length;
         const open_checklists = checklists.filter(
-          (c: any) => c.status === "OPEN"
+          (c: any) => c.status === "OPEN",
         ).length;
         const closed_checklists = checklists.filter(
-          (c: any) => c.status === "CLOSED"
+          (c: any) => c.status === "CLOSED",
         ).length;
         const canceled_checklists = checklists.filter(
-          (c: any) => c.status === "CANCELED"
+          (c: any) => c.status === "CANCELED",
         ).length;
 
         // Calcular estatísticas dos checklists mais recentes
@@ -159,25 +159,25 @@ function PropertyDetail() {
           checklists.slice(0, 5).map(async (checklist: any) => {
             try {
               const itemsResponse = await api.get(
-                `/api/v1/checklists/${checklist.id}/items`
+                `/api/v1/checklists/${checklist.id}/items`,
               );
               const items = itemsResponse.data || [];
 
               const total_items = items.length;
               const good_items = items.filter(
-                (item: any) => item.score === 3
+                (item: any) => item.score === 3,
               ).length;
               const regular_items = items.filter(
-                (item: any) => item.score === 1
+                (item: any) => item.score === 1,
               ).length;
               const bad_items = items.filter(
-                (item: any) => item.score === -2
+                (item: any) => item.score === -2,
               ).length;
               const na_items = items.filter(
-                (item: any) => item.score === 0
+                (item: any) => item.score === 0,
               ).length;
               const completed_items = items.filter(
-                (item: any) => item.score !== null
+                (item: any) => item.score !== null,
               ).length;
               const completion_percentage =
                 total_items > 0 ? (completed_items / total_items) * 100 : 0;
@@ -208,14 +208,14 @@ function PropertyDetail() {
                 na_items: 0,
               };
             }
-          })
+          }),
         );
 
         const avg_completion =
           recent_checklists.length > 0
             ? recent_checklists.reduce(
                 (acc, c) => acc + c.completion_percentage,
-                0
+                0,
               ) / recent_checklists.length
             : 0;
 
@@ -335,7 +335,9 @@ function PropertyDetail() {
               <Badge className={PROPERTY_TYPE_ENUM[property.type].style}>
                 {PROPERTY_TYPE_ENUM[property.type].label}
               </Badge>
-              {user?.role !== "EVALUATOR" && (
+              {user?.permissions.some(
+                (permission) => permission === "properties:edit",
+              ) && (
                 <Button asChild>
                   <Link
                     to={`/properties/$propertyId/edit`}
@@ -494,7 +496,9 @@ function PropertyDetail() {
                         {property.person.name}
                       </p>
                     </div>
-                    {user?.role !== "EVALUATOR" && (
+                    {user?.permissions.some(
+                      (permission) => permission === "properties:edit",
+                    ) && (
                       <Button
                         variant="outline"
                         size="sm"
@@ -552,7 +556,7 @@ function PropertyDetail() {
                   {format(
                     new Date(property.created_at),
                     "dd 'de' MMMM 'de' yyyy",
-                    { locale: ptBR }
+                    { locale: ptBR },
                   )}
                 </p>
               </div>
@@ -566,7 +570,7 @@ function PropertyDetail() {
                   <p>
                     {format(
                       new Date(property.updated_at),
-                      "dd/MM/yyyy 'às' HH:mm"
+                      "dd/MM/yyyy 'às' HH:mm",
                     )}
                   </p>
                 </div>
@@ -643,7 +647,7 @@ function PropertyDetail() {
                           <p className="text-sm text-muted-foreground">
                             {format(
                               new Date(checklist.created_at),
-                              "dd/MM/yyyy 'às' HH:mm"
+                              "dd/MM/yyyy 'às' HH:mm",
                             )}
                           </p>
                         </div>

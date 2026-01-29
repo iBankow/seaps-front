@@ -98,7 +98,9 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
                 Visualizar
               </Link>
             </DropdownMenuItem>
-            {user?.role !== "EVALUATOR" && (
+            {user?.permissions.some(
+              (permission) => permission === "properties:edit",
+            ) && (
               <>
                 <DropdownMenuItem asChild>
                   <Link to={"/properties/" + row.original.id + "/edit"}>

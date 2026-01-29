@@ -92,15 +92,14 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem asChild>
-              <Link
-                to="/users/$userId"
-                params={{ userId: row.original.id }}
-              >
+              <Link to="/users/$userId" params={{ userId: row.original.id }}>
                 <ChevronRight size={16} />
                 Visualizar
               </Link>
             </DropdownMenuItem>
-            {user?.role !== "EVALUATOR" && (
+            {user?.permissions.some(
+              (permission) => permission === "users:edit",
+            ) && (
               <>
                 <DropdownMenuItem asChild>
                   <Link to={"/users/" + row.original.id + "/edit"}>
