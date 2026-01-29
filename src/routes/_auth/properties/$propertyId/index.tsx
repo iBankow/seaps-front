@@ -42,6 +42,7 @@ import { useAuth } from "@/contexts/auth-contexts";
 import { api } from "@/lib/api";
 import { formatPhone } from "@/lib/utils";
 import { BackButton } from "@/components/back-button";
+import { can } from "@/lib/permissions";
 
 export const Route = createFileRoute("/_auth/properties/$propertyId/")({
   component: PropertyDetail,
@@ -335,9 +336,7 @@ function PropertyDetail() {
               <Badge className={PROPERTY_TYPE_ENUM[property.type].style}>
                 {PROPERTY_TYPE_ENUM[property.type].label}
               </Badge>
-              {user?.permissions.some(
-                (permission) => permission === "properties:edit",
-              ) && (
+              {can(["properties:edit"], user?.permissions) && (
                 <Button asChild>
                   <Link
                     to={`/properties/$propertyId/edit`}
@@ -496,9 +495,7 @@ function PropertyDetail() {
                         {property.person.name}
                       </p>
                     </div>
-                    {user?.permissions.some(
-                      (permission) => permission === "properties:edit",
-                    ) && (
+                    {can(["properties:edit"], user?.permissions) && (
                       <Button
                         variant="outline"
                         size="sm"

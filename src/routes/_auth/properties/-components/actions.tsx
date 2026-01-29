@@ -32,6 +32,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { can } from "@/lib/permissions";
 
 export const Actions = ({ row }: { row: Row<Column> }) => {
   const { user } = useAuth();
@@ -98,9 +99,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
                 Visualizar
               </Link>
             </DropdownMenuItem>
-            {user?.permissions.some(
-              (permission) => permission === "properties:edit",
-            ) && (
+            {can(["properties:edit"], user?.permissions) && (
               <>
                 <DropdownMenuItem asChild>
                   <Link to={"/properties/" + row.original.id + "/edit"}>

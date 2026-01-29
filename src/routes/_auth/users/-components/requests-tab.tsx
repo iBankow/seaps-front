@@ -23,7 +23,7 @@ export function RequestsTab({ search }: RequestsTabProps) {
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [selectedRequest, setSelectedRequest] = useState<RequestColumn | null>(
-    null
+    null,
   );
   const [modalOpen, setModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -49,14 +49,14 @@ export function RequestsTab({ search }: RequestsTabProps) {
       await api.patch(`/api/v1/user-requests/${requestId}/status`, {
         status: "APPROVED",
       });
-      
+
       toast.success("Solicitação aprovada com sucesso!");
       setModalOpen(false);
       loadRequests(); // Recarrega a lista
     } catch (error: any) {
       console.error("Erro ao aprovar solicitação:", error);
       toast.error(
-        error.response?.data?.message || "Erro ao aprovar solicitação"
+        error.response?.data?.message || "Erro ao aprovar solicitação",
       );
     } finally {
       setSubmitting(false);
@@ -70,14 +70,14 @@ export function RequestsTab({ search }: RequestsTabProps) {
         status: "REJECTED",
         rejection_reason: reason,
       });
-      
+
       toast.success("Solicitação rejeitada com sucesso!");
       setModalOpen(false);
       loadRequests(); // Recarrega a lista
     } catch (error: any) {
       console.error("Erro ao rejeitar solicitação:", error);
       toast.error(
-        error.response?.data?.message || "Erro ao rejeitar solicitação"
+        error.response?.data?.message || "Erro ao rejeitar solicitação",
       );
     } finally {
       setSubmitting(false);
@@ -104,8 +104,8 @@ export function RequestsTab({ search }: RequestsTabProps) {
           )}
         </div>
       </CardContent>
-      <CardFooter className="flex items-center justify-between border-t pt-6">
-        <div className="text-sm text-muted-foreground">
+      <CardFooter className="flex items-center justify-between border-t mt-6 pt-6">
+        {/* <div className="text-sm text-muted-foreground">
           {data?.meta && (
             <span>
               Mostrando{" "}
@@ -114,7 +114,7 @@ export function RequestsTab({ search }: RequestsTabProps) {
               solicitação(ões)
             </span>
           )}
-        </div>
+        </div> */}
         {data?.meta?.total > 10 && <Pagination meta={data?.meta} />}
       </CardFooter>
 
