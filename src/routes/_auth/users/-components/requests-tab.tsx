@@ -43,11 +43,16 @@ export function RequestsTab({ search }: RequestsTabProps) {
     setModalOpen(true);
   };
 
-  const handleApprove = async (requestId: string, _observation?: string) => {
+  const handleApprove = async (
+    requestId: string,
+    _observation?: string,
+    permissions?: string[],
+  ) => {
     try {
       setSubmitting(true);
       await api.patch(`/api/v1/user-requests/${requestId}/status`, {
         status: "APPROVED",
+        permissions,
       });
 
       toast.success("Solicitação aprovada com sucesso!");

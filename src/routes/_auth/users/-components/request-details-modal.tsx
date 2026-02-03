@@ -30,7 +30,7 @@ interface RequestDetailsModalProps {
   request: RequestColumn | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onApprove?: (requestId: string, observation?: string) => void;
+  onApprove?: (requestId: string, observation?: string, permissions?: string[]) => void;
   onReject?: (requestId: string, reason: string) => void;
   submitting?: boolean;
 }
@@ -62,10 +62,11 @@ export function RequestDetailsModal({
 
   const handleActionConfirm = (
     action: "approve" | "reject",
-    reasonOrObservation?: string
+    reasonOrObservation?: string,
+    permissions?: string[],
   ) => {
     if (action === "approve") {
-      onApprove?.(request.id, reasonOrObservation);
+      onApprove?.(request.id, reasonOrObservation, permissions);
     } else {
       if (reasonOrObservation) {
         onReject?.(request.id, reasonOrObservation);
