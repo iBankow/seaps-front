@@ -26,6 +26,8 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { getFirstAndLastName } from "@/lib/utils";
+import { StatusBadge } from "@/components/status-badge";
 
 interface ChecklistStats {
   total_items: number;
@@ -53,19 +55,19 @@ function ChecklistDashboard() {
     const fetchStats = async () => {
       try {
         const response = await api.get(
-          `/api/v1/checklists/${checklistId}/items`
+          `/api/v1/checklists/${checklistId}/items`,
         );
         const items = response.data;
 
         const total_items = items.length;
         const good_items = items.filter((item: any) => item.score === 3).length;
         const regular_items = items.filter(
-          (item: any) => item.score === 1
+          (item: any) => item.score === 1,
         ).length;
         const bad_items = items.filter((item: any) => item.score === -2).length;
         const na_items = items.filter((item: any) => item.score === 0).length;
         const completed_items = items.filter(
-          (item: any) => item.score !== null
+          (item: any) => item.score !== null,
         ).length;
 
         const total_score = checklist?.score || 0;
@@ -111,6 +113,24 @@ function ChecklistDashboard() {
 
   return (
     <div className="space-y-6">
+      {/* Mostrar mensagem se o checklist estiver aprovado e quem aprovou */}
+      {checklist.status === "APPROVED" && (
+        <Card className="dark:bg-purple-900 dark:border-purple-700 bg-purple-50 border-purple-200">
+          <CardContent>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+              <p className="text-purple-800 dark:text-purple-300">
+                Este checklist foi aprovado por{" "}
+                <span className="font-medium">
+                  {getFirstAndLastName(checklist.validator?.name)}
+                </span>
+                .
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
@@ -239,7 +259,7 @@ function ChecklistDashboard() {
                 <p className="text-sm font-medium text-muted-foreground">
                   Status
                 </p>
-                <p>{checklist.status}</p>
+                <p>{StatusBadge({ status: checklist.status })}</p>
               </div>
               <div>
                 <p className="text-sm font-medium text-muted-foreground">
@@ -250,7 +270,7 @@ function ChecklistDashboard() {
                   {format(
                     new Date(checklist.created_at),
                     "dd 'de' MMMM 'de' yyyy",
-                    { locale: ptBR }
+                    { locale: ptBR },
                   )}
                 </p>
               </div>

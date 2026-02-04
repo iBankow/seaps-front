@@ -5,12 +5,12 @@ import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import type { Row } from "@tanstack/react-table";
 import {
+  Check,
   ChevronRight,
   Ellipsis,
   Flag,
   Pen,
   Printer,
-  Scale,
   Trash2,
   Undo,
 } from "lucide-react";
@@ -33,14 +33,14 @@ import {
 import { Link, useRouter } from "@tanstack/react-router";
 
 import type { Column } from "./columns";
-import { NotificationDialog } from "./dialogs/notification-dialog";
+import { ValidateDialog } from "./dialogs/validate-dialog";
 
 export const Actions = ({ row }: { row: Row<Column> }) => {
   const router = useRouter();
   const reopenDialog = useModal();
   const deleteDialog = useModal();
   const finishDialog = useModal();
-  const notificationDialog = useModal();
+  const validateDialog = useModal();
 
   const [loading, setLoading] = useState(false);
 
@@ -64,7 +64,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
           return `Relatório gerado com sucesso`;
         },
         error: "Erro ao gerar relatório",
-      }
+      },
     );
   };
 
@@ -87,7 +87,30 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
             },
           });
         },
-      }
+      },
+    );
+  };
+
+  const handleValidateChecklist = () => {
+    setLoading(true);
+    toast.promise(
+      api.put("/api/v1/checklists/" + row.original.id + "/validate"),
+      {
+        loading: "Validando checklist...",
+        success: `Checklist ${row.original?.sid} - ${row.original?.property?.name} validado!`,
+        error: "Erro ao validar o checklist",
+        finally: () => {
+          setLoading(false);
+          router.navigate({
+            to: ".",
+            replace: true,
+            search: {
+              ...router.latestLocation.search,
+              refresh: Date.now(),
+            },
+          });
+        },
+      },
     );
   };
 
@@ -112,11 +135,18 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
         open={finishDialog.visible}
       />
 
-      <NotificationDialog
+      <ValidateDialog
+        row={row}
+        onValidate={handleValidateChecklist}
+        onOpenChange={validateDialog.toggle}
+        open={validateDialog.visible}
+      />
+
+      {/* <NotificationDialog
         row={row}
         open={notificationDialog.visible}
         onOpenChange={notificationDialog.toggle}
-      />
+      /> */}
 
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
@@ -174,11 +204,11 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
               Relatório
             </DropdownMenuItem>
             <DropdownMenuItem
-              disabled={loading || row.original.status === "OPEN"}
-              onClick={() => notificationDialog.show()}
+              disabled={loading || row.original.status !== "CLOSED"}
+              onClick={() => validateDialog.show()}
             >
-              <Scale size={16} />
-              Notificação
+              <Check size={16} />
+              Validar
             </DropdownMenuItem>
             <DropdownMenuItem
               disabled={loading}
