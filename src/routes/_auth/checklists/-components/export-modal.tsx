@@ -27,6 +27,7 @@ import { api } from "@/lib/api";
 import { useSearch } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { getFirstAndLastName } from "@/lib/utils";
+import qs from "qs";
 
 interface ExportModalProps {
   data: any[];
@@ -43,6 +44,7 @@ const AVAILABLE_COLUMNS = [
   { id: "classification", label: "Classificação", essential: false },
   { id: "is_returned", label: "Retorno", essential: false },
   { id: "user", label: "Responsável", essential: false },
+  { id: "validator", label: "Aprovado por", essential: false },
   { id: "finished_at", label: "Finalizado em", essential: false },
   { id: "created_at", label: "Criado em", essential: false },
 ];
@@ -50,7 +52,7 @@ const AVAILABLE_COLUMNS = [
 export function ExportModal({ data, totalRecords }: ExportModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumns, setSelectedColumns] = useState<string[]>(
-    AVAILABLE_COLUMNS.filter((col) => col.essential).map((col) => col.id)
+    AVAILABLE_COLUMNS.filter((col) => col.essential).map((col) => col.id),
   );
   const [useFilters, setUseFilters] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
@@ -73,7 +75,7 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
     setSelectedColumns((prev) =>
       prev.includes(columnId)
         ? prev.filter((id) => id !== columnId)
-        : [...prev, columnId]
+        : [...prev, columnId],
     );
   };
 
@@ -81,7 +83,7 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
     if (selectedColumns.length === AVAILABLE_COLUMNS.length) {
       // Manter apenas as essenciais
       setSelectedColumns(
-        AVAILABLE_COLUMNS.filter((col) => col.essential).map((col) => col.id)
+        AVAILABLE_COLUMNS.filter((col) => col.essential).map((col) => col.id),
       );
     } else {
       // Selecionar todas
@@ -150,6 +152,8 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
       const response = await api.get("/api/v1/checklists/export", {
         params: exportParams,
         responseType: "blob",
+        paramsSerializer: (params) =>
+          qs.stringify(params, { arrayFormat: "repeat", skipNulls: true }),
       });
 
       // Criar link de download
@@ -184,7 +188,7 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
   };
 
   const selectedColumnsData = AVAILABLE_COLUMNS.filter((col) =>
-    selectedColumns.includes(col.id)
+    selectedColumns.includes(col.id),
   );
 
   const recordsToExport = useFilters
@@ -309,8 +313,7 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
                 <Eye className="h-5 w-5" />
                 <h3 className="text-lg font-medium">Prévia dos Dados</h3>
                 <Badge variant="secondary">
-                  Mostrando {previewData.length} do{" "}
-                  total
+                  Mostrando {previewData.length} do total
                 </Badge>
               </div>
 
