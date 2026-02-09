@@ -1,12 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-import { ArrowLeft } from "lucide-react";
-
 import { PropertyForm } from "../../-components/form";
+import { BackButton } from "@/components/back-button";
 
 export const Route = createFileRoute("/_auth/properties/$propertyId/edit/")({
   component: EditProperty,
@@ -40,9 +39,7 @@ function EditProperty() {
       <div className="flex flex-col gap-y-4">
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" asChild>
-            <Link to={`..`}>
-              <ArrowLeft className="h-4 w-4" />
-            </Link>
+            <BackButton variant={"ghost"} />
           </Button>
           <div className="h-6 w-48 animate-pulse rounded bg-gray-200"></div>
         </div>
@@ -73,9 +70,7 @@ function EditProperty() {
         <CardContent>
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" asChild>
-              <Link to={`..`}>
-                <ArrowLeft className="h-4 w-4" />
-              </Link>
+              <BackButton variant={"ghost"} />
             </Button>
             <h1 className="text-2xl font-bold">Editar Imóvel</h1>
           </div>
