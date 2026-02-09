@@ -9,12 +9,22 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: "id",
     header: "ID",
     cell({ row }) {
-      return <span title={row.original.id}>{row.original.id}</span>;
+      return (
+        <Link
+          title={row.original.id}
+          to="/models/$modelId"
+          params={{ modelId: row.original.id }}
+          className="font-mono truncate"
+        >
+          {row.original.id}
+        </Link>
+      );
     },
     meta: {
       headerClassName: "hidden md:table-cell",
-      cellClassName: "truncate hidden md:table-cell font-mono",
-      size: 90,
+      cellClassName:
+        "truncate hidden md:table-cell text-sky-400 hover:text-sky-700",
+      size: 80,
     },
   },
   {
@@ -37,6 +47,17 @@ export const columns: ColumnDef<any>[] = [
     header: "Criado em",
     accessorFn(row) {
       return format(new Date(row.created_at), "dd/MM/yyyy");
+    },
+    meta: {
+      headerClassName: "hidden md:table-cell",
+      cellClassName: "truncate hidden md:table-cell",
+    },
+  },
+  {
+    accessorKey: "updated_at",
+    header: "Atualizado em",
+    accessorFn(row) {
+      return format(new Date(row.updated_at), "dd/MM/yyyy");
     },
     meta: {
       headerClassName: "hidden md:table-cell",

@@ -275,11 +275,7 @@ export function EditModelForm({
           name: item.name.toUpperCase(),
         })),
       })
-      .then(() =>
-        router.navigate({
-          to: "/models",
-        }),
-      )
+      .then(() => router.history.back())
       .catch((e) => console.log(e));
   }
 
