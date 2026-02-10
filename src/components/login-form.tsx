@@ -83,7 +83,7 @@ export function LoginForm() {
                 </p>
               </div>
               <div className="flex flex-col gap-6">
-                <div className="flex flex-col gap-4">
+                {/* <div className="flex flex-col gap-4">
                   <Form {...form}>
                     <form
                       onSubmit={form.handleSubmit(onSubmit)}
@@ -143,7 +143,7 @@ export function LoginForm() {
                   <span className="relative z-10 bg-card px-2 text-muted-foreground">
                     OU
                   </span>
-                </div>
+                </div> */}
                 <div className="flex flex-col gap-3">
                   <Button
                     type="button"
