@@ -35,6 +35,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
+import { RSSelect } from "@/components/react-select";
 
 export const Route = createFileRoute("/_auth/users/$userId/edit/")({
   component: EditUser,
@@ -46,6 +47,7 @@ export const Route = createFileRoute("/_auth/users/$userId/edit/")({
 const userSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório").max(255, "Nome muito longo"),
   email: z.email("Email inválido").min(1, "Email é obrigatório"),
+  organization_id: z.string().optional(),
   permissions: z.array(z.string()).optional(),
   is_active: z.boolean(),
 });
@@ -117,6 +119,10 @@ function EditUser() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
+  const [organizations, setOrganizations] = useState<
+    { id: string; name: string }[]
+  >([]);
+
   const form = useForm<UserFormData>({
     resolver: zodResolver(userSchema),
     defaultValues: {
@@ -130,12 +136,15 @@ function EditUser() {
     const loadData = async () => {
       try {
         const { data } = await api.get(`/api/v1/users/${userId}`);
+        const orgsResponse = await api.get(`/api/v1/organizations?per_page=100`);
+        setOrganizations(orgsResponse.data.data);
         if (data) {
           form.reset({
             name: data.name,
             email: data.email,
             is_active: data.is_active,
             permissions: data.permissions || [],
+            organization_id: data.organization.id || null,
           });
         }
       } finally {
@@ -151,6 +160,7 @@ function EditUser() {
       .put(`/api/v1/users/${userId}`, {
         permissions: values.permissions,
         is_active: values.is_active,
+        organization_id: values.organization_id,
       })
       .then(() => {
         toast.success("Usuário atualizado com sucesso!");
@@ -182,7 +192,7 @@ function EditUser() {
               <CardHeader className="bg-muted/50">
                 <div className="h-6 w-48 animate-pulse rounded bg-muted"></div>
               </CardHeader>
-              <CardContent className="pt-6">
+              <CardContent>
                 <div className="space-y-4">
                   {Array.from({ length: 3 }).map((_, j) => (
                     <div
@@ -229,7 +239,7 @@ function EditUser() {
                 Dados cadastrais do usuário (não editáveis)
               </CardDescription>
             </CardHeader>
-            <CardContent className="pt-6 space-y-4">
+            <CardContent className="space-y-4">
               <FormField
                 control={form.control}
                 name="name"
@@ -270,31 +280,64 @@ function EditUser() {
                 Controle o acesso do usuário ao sistema
               </CardDescription>
             </CardHeader>
-            <CardContent className="pt-6">
-              <FormField
-                control={form.control}
-                name="is_active"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm">
-                    <div className="space-y-0.5">
-                      <FormLabel className="text-base font-semibold">
-                        Ativação do usuário
-                      </FormLabel>
-                      <FormDescription>
-                        Quando ativo, o usuário terá acesso básico ao sistema
-                        conforme suas permissões.
-                      </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-red-500"
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+            <CardContent>
+              <div className="space-y-3">
+                <FormField
+                  control={form.control}
+                  name="is_active"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm">
+                      <div className="space-y-0.5">
+                        <FormLabel className="text-base font-semibold">
+                          Ativação do usuário
+                        </FormLabel>
+                        <FormDescription>
+                          Quando ativo, o usuário terá acesso básico ao sistema
+                          conforme suas permissões.
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-red-500"
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="organization_id"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm">
+                      <div className="space-y-0.5">
+                        <FormLabel className="text-base font-semibold">
+                          Orgão do usuário
+                        </FormLabel>
+                        <FormDescription>
+                          Selecione o órgão ao qual o usuário pertence.
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <RSSelect
+                          placeholder="Selecione o Orgão"
+                          className="min-w-60"
+                          options={organizations}
+                          onChange={(val) => {
+                            field.onChange(val ? val.id : null);
+                          }}
+                          value={
+                            organizations.find(
+                              (organization) => organization.id === field.value,
+                            ) || null
+                          }
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
             </CardContent>
           </Card>
 
@@ -309,7 +352,7 @@ function EditUser() {
                 Defina o nível de acesso do usuário no sistema
               </CardDescription>
             </CardHeader>
-            <CardContent className="pt-6">
+            <CardContent>
               <FormField
                 control={form.control}
                 name="permissions"
@@ -347,7 +390,7 @@ function EditUser() {
                                 newPermissions = [...newPermissions, "*"];
                               } else {
                                 newPermissions = newPermissions.filter(
-                                  (f) => f !== "*"
+                                  (f) => f !== "*",
                                 );
                               }
                               field.onChange(newPermissions);
@@ -367,12 +410,16 @@ function EditUser() {
                             <FormLabel className="mb-0 text-base font-bold">
                               Administrador da Organização
                             </FormLabel>
-                            <Badge variant="secondary" className="ml-2 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                            <Badge
+                              variant="secondary"
+                              className="ml-2 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                            >
                               Acesso Completo
                             </Badge>
                           </div>
                           <FormDescription className="text-xs">
-                            Acesso total aos recursos da própria organização do usuário, incluindo todas as permissões específicas.
+                            Acesso total aos recursos da própria organização do
+                            usuário, incluindo todas as permissões específicas.
                           </FormDescription>
                         </div>
                         <FormControl>
@@ -389,7 +436,7 @@ function EditUser() {
                                 ];
                               } else {
                                 newPermissions = newPermissions.filter(
-                                  (f) => f !== "organization:*"
+                                  (f) => f !== "organization:*",
                                 );
                               }
                               field.onChange(newPermissions);
@@ -400,6 +447,44 @@ function EditUser() {
                       </div>
 
                       <Separator className="my-4" />
+
+                      {/* Validador */}
+                      <div className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm">
+                        <div className="space-y-0.5">
+                          <FormLabel className="mb-0 text-base font-semibold">
+                            Validador
+                          </FormLabel>
+                          <FormDescription className="text-xs">
+                            Permissão para validar checklists concluídos.
+                          </FormDescription>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={
+                              field.value?.includes("checklist:validate") ||
+                              hasFullAccess
+                            }
+                            disabled={hasFullAccess}
+                            onCheckedChange={(checked) => {
+                              let newPermissions =
+                                field.value?.filter(
+                                  (f) => f !== "*" && f !== "organization:*",
+                                ) || [];
+                              if (checked) {
+                                newPermissions = [
+                                  ...newPermissions,
+                                  "checklist:validate",
+                                ];
+                              } else {
+                                newPermissions = newPermissions.filter(
+                                  (f) => f !== "checklist:validate",
+                                );
+                              }
+                              field.onChange(newPermissions);
+                            }}
+                          />
+                        </FormControl>
+                      </div>
 
                       {/* Avaliador */}
                       <div className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm">
@@ -417,7 +502,9 @@ function EditUser() {
                             disabled={hasFullAccess}
                             onCheckedChange={(checked) => {
                               let newPermissions =
-                                field.value?.filter((f) => f !== "*" && f !== "organization:*") || [];
+                                field.value?.filter(
+                                  (f) => f !== "*" && f !== "organization:*",
+                                ) || [];
                               if (checked) {
                                 newPermissions = [
                                   ...newPermissions,
@@ -425,7 +512,7 @@ function EditUser() {
                                 ];
                               } else {
                                 newPermissions = newPermissions.filter(
-                                  (f) => f !== "evaluator"
+                                  (f) => f !== "evaluator",
                                 );
                               }
                               field.onChange(newPermissions);
@@ -451,7 +538,7 @@ function EditUser() {
                 Configure permissões granulares por funcionalidade
               </CardDescription>
             </CardHeader>
-            <CardContent className="pt-6">
+            <CardContent>
               <FormField
                 control={form.control}
                 name="permissions"
@@ -469,10 +556,9 @@ function EditUser() {
                             Todas as permissões estão habilitadas
                           </p>
                           <p className="text-xs text-muted-foreground mt-1">
-                            {isAdmin 
-                              ? "O usuário possui acesso total como Administrador" 
-                              : "O usuário possui acesso total à sua organização"
-                            }
+                            {isAdmin
+                              ? "O usuário possui acesso total como Administrador"
+                              : "O usuário possui acesso total à sua organização"}
                           </p>
                         </div>
                       )}
@@ -496,7 +582,7 @@ function EditUser() {
                             <div className="space-y-2 pl-7">
                               {group.permissions.map((permission) => {
                                 const isChecked = field.value?.includes(
-                                  permission.name
+                                  permission.name,
                                 );
                                 return (
                                   <div
@@ -513,7 +599,9 @@ function EditUser() {
                                         onCheckedChange={(checked) => {
                                           let newPermissions =
                                             field.value?.filter(
-                                              (f) => f !== "*" && f !== "organization:*"
+                                              (f) =>
+                                                f !== "*" &&
+                                                f !== "organization:*",
                                             ) || [];
                                           if (checked) {
                                             newPermissions = [
@@ -523,7 +611,7 @@ function EditUser() {
                                           } else {
                                             newPermissions =
                                               newPermissions.filter(
-                                                (f) => f !== permission.name
+                                                (f) => f !== permission.name,
                                               );
                                           }
                                           field.onChange(newPermissions);

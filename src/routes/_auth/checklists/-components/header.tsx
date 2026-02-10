@@ -1,27 +1,13 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { useChecklist } from "@/contexts/checklist-context";
 import { MapPin } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { BackButton } from "@/components/back-button";
+import { StatusBadge } from "@/components/status-badge";
 
 export const ChecklistHeader = () => {
   const { checklist } = useChecklist();
-
-  const getStatusBadge = (status: string) => {
-    const variants = {
-      OPEN: { variant: "default" as const, label: "Aberto" },
-      CLOSED: { variant: "secondary" as const, label: "Finalizado" },
-      CANCELED: { variant: "destructive" as const, label: "Cancelado" },
-    };
-
-    const config = variants[status as keyof typeof variants] || {
-      variant: "default" as const,
-      label: status,
-    };
-    return <Badge variant={config.variant}>{config.label}</Badge>;
-  };
 
   if (!checklist) {
     return (
@@ -49,7 +35,7 @@ export const ChecklistHeader = () => {
             </div>
           </div>
           <div className="text-right">
-            {getStatusBadge(checklist.status)}
+            <StatusBadge status={checklist.status} />
             <p className="text-sm text-muted-foreground mt-1">
               Criado em{" "}
               {format(new Date(checklist.created_at), "dd/MM/yyyy", {

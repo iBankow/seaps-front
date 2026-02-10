@@ -32,6 +32,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { can } from "@/lib/permissions";
 
 export const Actions = ({ row }: { row: Row<Column> }) => {
   const { user } = useAuth();
@@ -92,15 +93,12 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem asChild>
-              <Link
-                to="/users/$userId"
-                params={{ userId: row.original.id }}
-              >
+              <Link to="/users/$userId" params={{ userId: row.original.id }}>
                 <ChevronRight size={16} />
                 Visualizar
               </Link>
             </DropdownMenuItem>
-            {user?.role !== "EVALUATOR" && (
+            {can(["users:edit"], user?.permissions) && (
               <>
                 <DropdownMenuItem asChild>
                   <Link to={"/users/" + row.original.id + "/edit"}>

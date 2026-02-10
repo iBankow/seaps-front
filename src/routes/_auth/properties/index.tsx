@@ -12,6 +12,7 @@ import { DataFilterForm } from "./-components/filter-form";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import z from "zod";
 import { MetaPagination } from "@/components/meta-pagination";
+import { can } from "@/lib/permissions";
 
 const SearchSchema = z.object({
   page: z.number().default(1),
@@ -55,7 +56,7 @@ export function RouteComponent() {
               <h2 className="text-2xl font-bold tracking-tight">Imóveis</h2>
             </div>
             <div className="self-end">
-              {user?.role !== "EVALUATOR" && (
+              {can(["properties:create"], user?.permissions) && (
                 <Button asChild>
                   <Link to="/properties/create">
                     <Plus />

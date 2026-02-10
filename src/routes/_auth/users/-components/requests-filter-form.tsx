@@ -153,10 +153,8 @@ export function RequestsFilterForm() {
             )}
           />
 
-          <div className="flex items-end gap-2">
-            <Button type="submit" className="flex-1">
-              Filtrar
-            </Button>
+          <div className="flex items-end gap-2 self-end justify-self-end">
+            <Button type="submit">Filtrar</Button>
             <Button type="button" variant="outline" onClick={handleClearSearch}>
               Limpar
             </Button>

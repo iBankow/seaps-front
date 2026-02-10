@@ -99,6 +99,10 @@ interface Checklist {
     id: string;
     name: string;
   };
+  validator?: {
+    id: string;
+    name: string;
+  }
   created_at: string;
   finished_at?: string;
 }

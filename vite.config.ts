@@ -20,5 +20,9 @@ export default defineConfig({
   },
   server: {
     host: true,
+    allowedHosts: ["smp.seplag.mt.gov.br", "brasilapi.com.br"],
+  },
+  build: {
+    outDir: "build",
   },
 });

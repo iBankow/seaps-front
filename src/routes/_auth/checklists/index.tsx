@@ -12,6 +12,7 @@ import { columns } from "./-components/columns";
 import { DataFilterForm } from "./-components/filter-form";
 import z from "zod";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { can } from "@/lib/permissions";
 
 const SearchSchema = z.object({
   page: z.number().default(1),
@@ -54,7 +55,7 @@ export function RouteComponent() {
               <h2 className="text-2xl font-bold tracking-tight">Checklists</h2>
             </div>
             <div className="self-end">
-              {user?.role !== "EVALUATOR" && (
+              {can(["checklists:create"], user?.permissions) && (
                 <Button asChild>
                   <Link to="/checklists/create">
                     <Plus />

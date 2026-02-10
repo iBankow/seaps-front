@@ -1,10 +1,8 @@
 import { Link, useRouter } from "@tanstack/react-router";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
-import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -25,8 +23,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { RSSelect } from "@/components/react-select";
-import { debounce, states, toUpperCase } from "@/lib/utils";
 import { NameForm } from "./name-form";
+import { AddressForm } from "./address-form";
+import { Separator } from "@/components/ui/separator";
 
 const propertySchema = z.object({
   organization_id: z.string().min(1, "Orgão é obrigatório"),
@@ -39,6 +38,7 @@ const propertySchema = z.object({
   city: z.string().optional(),
   neighborhood: z.string().optional(),
   street: z.string().optional(),
+  number: z.string().optional(),
   // coordinates: z.string().optional(),
 });
 
@@ -52,7 +52,6 @@ export const PropertyForm = ({
   const router = useRouter();
   const [organizations, setOrganizations] = useState<any[]>([]);
   const [persons, setPersons] = useState<any[]>([]);
-  const [cities, setCities] = useState<{ id: string; name: string }[]>([]);
   const [loading, setLoading] = useState(false);
   const [dataLoading, setDataLoading] = useState(true);
 
@@ -64,52 +63,6 @@ export const PropertyForm = ({
       ...property,
     },
   });
-
-  const state = form.watch("state");
-
-  async function findAddressByCEP(cep: string) {
-    await axios
-      .get(`https://viacep.com.br/ws/${cep}/json/`)
-      .then((response) => {
-        if (response.data.erro) {
-          toast.error("CEP inválido ou não encontrado.");
-          return;
-        }
-        const { data } = response;
-        form.setValue("state", data.uf?.toUpperCase());
-        form.setValue("city", data.localidade?.toUpperCase());
-        form.setValue("neighborhood", data.bairro?.toUpperCase());
-        form.setValue("street", data.logradouro?.toUpperCase());
-        form.setValue(
-          "address",
-          `${data.logradouro} - ${data.bairro}, ${data.localidade} - ${data.uf}, ${data.cep}`.toUpperCase()
-        );
-      })
-      .catch(() => toast.error("CEP inválido ou não encontrado."));
-  }
-
-  useEffect(() => {
-    if (state) {
-      axios
-        .get(
-          `https://brasilapi.com.br/api/ibge/municipios/v1/${state}?providers=dados-abertos-br,gov,wikipedia`
-        )
-        .then(({ data }) => {
-          setCities(
-            data.map((city: { nome: string; codigo_ibge: string }) => ({
-              id: city.nome.replace(/\s*\(.*?\)/g, ""),
-              name: city.nome.replace(/\s*\(.*?\)/g, ""),
-            }))
-          );
-        })
-        .catch(() => toast.error("Erro ao buscar as cidades"));
-    }
-  }, [state]);
-
-  const debouncedfindAddressByCEP = useCallback(
-    debounce(findAddressByCEP, 300),
-    []
-  );
 
   useEffect(() => {
     const loadData = async () => {
@@ -134,7 +87,7 @@ export const PropertyForm = ({
       try {
         setDataLoading(true);
         const { data } = await api.get(
-          `/api/v1/persons?per_page=1000&organization_id=${organization_id}`
+          `/api/v1/persons?per_page=1000&organization_id=${organization_id}`,
         );
 
         setPersons(data.data || []);
@@ -183,7 +136,7 @@ export const PropertyForm = ({
           <CardHeader>
             <CardTitle>Informações do Imóvel</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <FormField
                 control={form.control}
@@ -210,7 +163,6 @@ export const PropertyForm = ({
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="type"
@@ -232,183 +184,40 @@ export const PropertyForm = ({
                   </FormItem>
                 )}
               />
-
               <NameForm form={form} propertyId={property?.id} />
-
-              <FormField
-                control={form.control}
-                name="person_id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Responsável</FormLabel>
-                    <div className="flex gap-1">
-                      <RSSelect
-                        placeholder="Selecione o Responsável"
-                        options={persons}
-                        className={dataLoading ? "animate-pulse" : ""}
-                        onChange={(val) => {
-                          field.onChange(val ? val.id : null);
-                        }}
-                        value={
-                          persons.find((person) => person.id === field.value) ||
-                          null
-                        }
-                      />
-                      <Button size={"icon"} type="button" asChild>
-                        <Link to="/persons/create" search={{ organization_id }}>
-                          <Plus />
-                        </Link>
-                      </Button>
-                    </div>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="cep"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>CEP</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="00000-000"
-                        maxLength={9}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/\D/g, "");
-                          const maskedValue = value.replace(
-                            /^(\d{5})(\d)/,
-                            "$1-$2"
-                          );
-                          field.onChange(maskedValue);
-
-                          if (maskedValue.length === 9) {
-                            debouncedfindAddressByCEP(maskedValue);
-                          }
-                        }}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="state"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Estado</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value || undefined}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione o Estado" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {states.map((state) => (
-                          <SelectItem key={state.acronym} value={state.acronym}>
-                            {state.name.toUpperCase()}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="city"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Cidade</FormLabel>
-                    <FormControl>
-                      <RSSelect
-                        {...field}
-                        placeholder="Selecione a Cidade Imóvel"
-                        options={cities}
-                        onChange={(val) => {
-                          field.onChange(val ? val.id : null);
-                        }}
-                        value={
-                          cities.find((user) => user.id === field.value) ||
-                          undefined
-                        }
-                        isDisabled={!form.getValues("state")}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="neighborhood"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Bairro</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Digite o bairro"
-                        onBlur={(e) => field.onChange(toUpperCase(e))}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="street"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Rua</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Digite a rua"
-                        onBlur={(e) => field.onChange(toUpperCase(e))}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="address"
-                render={({ field }) => (
-                  <FormItem className="md:col-span-2">
-                    <FormLabel>Endereço Completo</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Digite o endereço completo"
-                        onBlur={(e) => field.onChange(toUpperCase(e))}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              {/* <FormField
-                control={form.control}
-                name="coordinates"
-                defaultValue=""
-                render={({ field }) => (
-                  <FormItem className="md:col-span-2">
-                    <FormLabel>Coordenadas</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Ex: -23.5505,-46.6333" />
-                    </FormControl>
-                  </FormItem>
-                )}
-              /> */}
+            </div>
+            <Separator />
+            <FormField
+              control={form.control}
+              name="person_id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Responsável</FormLabel>
+                  <div className="flex gap-1">
+                    <RSSelect
+                      placeholder="Selecione o Responsável"
+                      options={persons}
+                      className={dataLoading ? "animate-pulse" : ""}
+                      onChange={(val) => {
+                        field.onChange(val ? val.id : null);
+                      }}
+                      value={
+                        persons.find((person) => person.id === field.value) ||
+                        null
+                      }
+                    />
+                    <Button size={"icon"} type="button" asChild>
+                      <Link to="/persons/create" search={{ organization_id }}>
+                        <Plus />
+                      </Link>
+                    </Button>
+                  </div>
+                </FormItem>
+              )}
+            />
+            <Separator />
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-5">
+              <AddressForm form={form} />
             </div>
 
             <div className="mt-6 flex justify-end gap-2">

@@ -60,7 +60,7 @@ function buildClassNames(size: RSSelectSize, invalid: boolean) {
     "border-input focus-within:ring-1 focus-within:ring-ring",
     "transition-colors",
     sizeHeights[size],
-    invalid && "border-destructive focus-within:ring-destructive"
+    invalid && "border-destructive focus-within:ring-destructive",
   );
 
   return {
@@ -75,27 +75,27 @@ function buildClassNames(size: RSSelectSize, invalid: boolean) {
     clearIndicator: () =>
       cn(
         "rounded-md p-1 hover:bg-destructive hover:text-accent-foreground",
-        "active:scale-95"
+        "active:scale-95",
       ),
     dropdownIndicator: () =>
       cn(
         "rounded-md p-1 hover:bg-accent hover:text-accent-foreground",
-        "active:scale-95"
+        "active:scale-95",
       ),
     multiValue: () =>
       cn(
         "rounded-md bg-secondary text-secondary-foreground border border-transparent",
-        "hover:border-border"
+        "hover:border-border",
       ),
     multiValueLabel: () => "px-2",
     multiValueRemove: () =>
       cn(
-        "rounded-r-md px-1 hover:bg-destructive hover:text-destructive-foreground"
+        "rounded-r-md px-1 hover:bg-destructive hover:text-destructive-foreground",
       ),
     menu: () =>
       cn(
         "mt-1 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md",
-        "animate-in fade-in-0 zoom-in-95"
+        "animate-in fade-in-0 zoom-in-95",
       ),
     menuList: () => "max-h-64 overflow-y-auto p-1",
     option: ({ isFocused, isSelected }) =>
@@ -103,7 +103,7 @@ function buildClassNames(size: RSSelectSize, invalid: boolean) {
         "cursor-default select-none rounded-sm text-xs",
         optionPaddings["md"],
         isSelected && "bg-accent text-accent-foreground",
-        !isSelected && isFocused && "bg-muted"
+        !isSelected && isFocused && "bg-muted",
       ),
     noOptionsMessage: () => "text-muted-foreground p-2",
     loadingMessage: () => "text-muted-foreground p-2",
@@ -129,7 +129,7 @@ function BaseWrapper<
 >(
   props: RSSelectBaseProps<Option, IsMulti, Group> & {
     selectKind: "default" | "creatable" | "async";
-  }
+  },
 ) {
   const {
     label,
@@ -144,7 +144,7 @@ function BaseWrapper<
 
   const classNames = React.useMemo(
     () => buildClassNames(size, Boolean(error)),
-    [size, error]
+    [size, error],
   );
 
   const commonProps = {
@@ -182,7 +182,7 @@ function BaseWrapper<
     );
 
   return (
-    <div className={cn("w-full", className)}>
+    <div className={cn(className ? className : "w-full")}>
       {label ? (
         <label className="mb-1 block text-sm font-medium text-foreground">
           {label}

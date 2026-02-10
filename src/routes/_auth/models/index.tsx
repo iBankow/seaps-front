@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DataTableSkeleton } from "@/components/skeletons/data-table";
 
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { api } from "@/lib/api";
 import { columns } from "./-components/columns";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -45,9 +45,11 @@ function RouteComponent() {
               <h2 className="text-2xl font-bold tracking-tight">Checklists</h2>
             </div>
             <div className="self-end">
-              <Button disabled>
-                <Plus />
-                Criar Modelo
+              <Button asChild>
+                <Link to="/models/create">
+                  <Plus />
+                  Criar Modelo
+                </Link>
               </Button>
             </div>
           </div>

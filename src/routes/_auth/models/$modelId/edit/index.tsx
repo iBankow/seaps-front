@@ -41,7 +41,7 @@ function RouteComponent() {
         <CardContent>
           <div className="flex items-center gap-2">
             <BackButton />
-            <h1 className="text-2xl font-bold">Criar Checklist</h1>
+            <h1 className="text-2xl font-bold">Editar Modelo</h1>
           </div>
         </CardContent>
       </Card>

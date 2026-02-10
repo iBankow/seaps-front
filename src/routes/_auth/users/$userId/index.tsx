@@ -17,6 +17,7 @@ import {
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useAuth } from "@/contexts/auth-contexts";
+import { can } from "@/lib/permissions";
 
 export const Route = createFileRoute("/_auth/users/$userId/")({
   component: UserDetail,
@@ -130,7 +131,7 @@ function UserDetail() {
             </p>
           </div>
         </div>
-        {user?.permissions.some((perm) => perm === "*:*") && (
+        {can(["users:edit"], user?.permissions) && (
           <Button asChild size="lg">
             <Link to={`/users/$userId/edit`} params={{ userId }}>
               Editar Usuário
@@ -257,7 +258,7 @@ function UserDetail() {
                 {format(
                   new Date(userData.created_at || new Date()),
                   "dd 'de' MMMM 'de' yyyy 'às' HH:mm",
-                  { locale: ptBR }
+                  { locale: ptBR },
                 )}
               </p>
             </div>
@@ -273,7 +274,7 @@ function UserDetail() {
                     {format(
                       new Date(userData.updated_at),
                       "dd 'de' MMMM 'de' yyyy 'às' HH:mm",
-                      { locale: ptBR }
+                      { locale: ptBR },
                     )}
                   </p>
                 </div>

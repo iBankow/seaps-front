@@ -5,8 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Plus, Users, UserCheck } from "lucide-react";
+import { Users, UserCheck } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UsersTab } from "./-components/users-tab";
 import { RequestsTab } from "./-components/requests-tab";
@@ -58,10 +57,6 @@ export function RouteComponent() {
                 Gerencie usuários do sistema e solicitações de ativação
               </CardDescription>
             </div>
-            <Button disabled className="opacity-0 pointer-events-none">
-              <Plus className="mr-2 h-4 w-4" />
-              Criar Usuário
-            </Button>
           </div>
         </CardHeader>
       </Card>
@@ -72,13 +67,13 @@ export function RouteComponent() {
           onValueChange={handleTabChange}
           className="w-full"
         >
-          <CardHeader className="pb-3">
-            <TabsList className="grid w-full max-w-2xl grid-cols-2 h-11">
-              <TabsTrigger value="users" className="gap-2">
+          <CardHeader className="pb-3 w-full">
+            <TabsList className="grid w-full grid-cols-2 h-11">
+              <TabsTrigger value="users" className="gap-2 w-full">
                 <Users className="h-4 w-4" />
                 Usuários
               </TabsTrigger>
-              <TabsTrigger value="requests" className="gap-2">
+              <TabsTrigger value="requests" className="gap-2 w-full">
                 <UserCheck className="h-4 w-4" />
                 Solicitações de Ativação
               </TabsTrigger>
