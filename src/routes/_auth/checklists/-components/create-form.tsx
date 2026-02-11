@@ -34,6 +34,8 @@ import { api } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Steps, StepContent, StepActions } from "@/components/ui/steps";
+import { PropertyBadge } from "@/components/property-badge";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   model_id: z.string({
@@ -136,7 +138,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
         }
 
         const response = await api.get(
-          `/api/v1/properties?${params.toString()}`
+          `/api/v1/properties?${params.toString()}`,
         );
         setProperties(response.data.data);
         setPropertiesMeta(response.data.meta);
@@ -147,7 +149,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
         setLoadingProperties(false);
       }
     },
-    []
+    [],
   );
 
   useEffect(() => {
@@ -183,7 +185,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
           return false;
       }
     },
-    [model_id, user_id, property_id, organization_id]
+    [model_id, user_id, property_id, organization_id],
   );
 
   const nextStep = async () => {
@@ -221,7 +223,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
         .then(() =>
           router.navigate({
             to: "/checklists",
-          })
+          }),
         )
         .catch((e) => console.log(e));
     }
@@ -234,7 +236,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
           search: {
             refresh: Date.now(),
           },
-        })
+        }),
       )
       .catch((e) => console.log(e));
   }
@@ -379,7 +381,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
                         value={field.value ?? ""}
                         onChange={(e) =>
                           field.onChange(
-                            e.target.value ? Number(e.target.value) : undefined
+                            e.target.value ? Number(e.target.value) : undefined,
                           )
                         }
                       />
@@ -494,9 +496,16 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
                           />
                           <Label
                             htmlFor={`property-${property.id}`}
-                            className="flex cursor-pointer"
+                            className={cn("flex cursor-pointer")}
                           >
-                            <Card className="w-full peer-checked:ring-2 peer-checked:ring-primary peer-checked:border-primary transition-all hover:bg-muted/50">
+                            <Card
+                              className={cn(
+                                "w-full transition-all hover:bg-muted/50",
+                                field.value === String(property.id)
+                                  ? "ring-primary ring-2"
+                                  : "",
+                              )}
+                            >
                               <CardContent className="p-4">
                                 <div className="flex items-start justify-between">
                                   <div className="flex-1 space-y-2 min-w-0">
@@ -516,37 +525,18 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
                                       </p>
                                     )}
 
-                                    {property.responsible?.name && (
+                                    {property.person?.name && (
                                       <p className="text-sm text-muted-foreground truncate">
-                                        👤 Responsável:{" "}
-                                        {property.responsible.name}
+                                        👤 Responsável: {property.person.name}
                                       </p>
                                     )}
 
                                     <div className="flex flex-wrap gap-2">
-                                      {property.type && (
-                                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded-md">
-                                          {property.type}
-                                        </span>
-                                      )}
-
-                                      {property.status && (
-                                        <span
-                                          className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-md ${
-                                            property.status === "active"
-                                              ? "bg-green-100 text-green-800"
-                                              : "bg-gray-100 text-gray-800"
-                                          }`}
-                                        >
-                                          {property.status === "active"
-                                            ? "Ativo"
-                                            : property.status}
-                                        </span>
-                                      )}
+                                      <PropertyBadge type={property.type} />
                                     </div>
                                   </div>
 
-                                  <div className="ml-4 flex-shrink-0">
+                                  <div className="ml-4 flex-shrink-0 self-center min-w-8">
                                     <div
                                       className={`w-4 h-4 border rounded-full flex items-center justify-center transition-colors ${
                                         field.value === String(property.id)
@@ -577,16 +567,16 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
 
       case 3:
         const selectedModel = models.find(
-          (m) => m.id === form.getValues("model_id")
+          (m) => m.id === form.getValues("model_id"),
         );
         const selectedOrganization = organizations.find(
-          (o) => o.id === form.getValues("organization_id")
+          (o) => o.id === form.getValues("organization_id"),
         );
         const selectedProperty = properties.find(
-          (p) => p.id === form.getValues("property_id")
+          (p) => p.id === form.getValues("property_id"),
         );
         const selectedUser = users.find(
-          (u) => u.id === form.getValues("user_id")
+          (u) => u.id === form.getValues("user_id"),
         );
 
         return (
@@ -654,30 +644,13 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
                             `, ${selectedProperty.city} - ${selectedProperty.state}`}
                         </p>
                       )}
-                      {selectedProperty.responsible?.name && (
+                      {selectedProperty.person?.name && (
                         <p className="text-sm text-muted-foreground">
-                          👤 Responsável: {selectedProperty.responsible.name}
+                          👤 Responsável: {selectedProperty.person.name}
                         </p>
                       )}
                       <div className="flex gap-2">
-                        {selectedProperty.type && (
-                          <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded-md">
-                            {selectedProperty.type}
-                          </span>
-                        )}
-                        {selectedProperty.status && (
-                          <span
-                            className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-md ${
-                              selectedProperty.status === "active"
-                                ? "bg-green-100 text-green-800"
-                                : "bg-gray-100 text-gray-800"
-                            }`}
-                          >
-                            {selectedProperty.status === "active"
-                              ? "Ativo"
-                              : selectedProperty.status}
-                          </span>
-                        )}
+                        <PropertyBadge type={selectedProperty.type} />
                       </div>
                     </div>
                   ) : (
