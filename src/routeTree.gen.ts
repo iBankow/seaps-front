@@ -10,7 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RequestRouteImport } from './routes/request'
-import { Route as PublicRouteImport } from './routes/public'
+import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as AuthIndexRouteImport } from './routes/_auth/index'
@@ -50,9 +50,9 @@ const RequestRoute = RequestRouteImport.update({
   path: '/request',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PublicRoute = PublicRouteImport.update({
-  id: '/public',
-  path: '/public',
+const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -237,7 +237,7 @@ const AuthChecklistsChecklistIdItemsItemIdIndexRoute =
 
 export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
-  '/public': typeof PublicRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/request': typeof RequestRoute
   '/checklists': typeof AuthChecklistsRouteRouteWithChildren
   '/models': typeof AuthModelsRouteRouteWithChildren
@@ -273,7 +273,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
-  '/public': typeof PublicRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/request': typeof RequestRoute
   '/persons': typeof AuthPersonsRouteRouteWithChildren
   '/': typeof AuthIndexRoute
@@ -302,7 +302,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
-  '/public': typeof PublicRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/request': typeof RequestRoute
   '/_auth/checklists': typeof AuthChecklistsRouteRouteWithChildren
   '/_auth/models': typeof AuthModelsRouteRouteWithChildren
@@ -340,7 +340,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/login'
-    | '/public'
+    | '/privacy-policy'
     | '/request'
     | '/checklists'
     | '/models'
@@ -376,7 +376,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
-    | '/public'
+    | '/privacy-policy'
     | '/request'
     | '/persons'
     | '/'
@@ -404,7 +404,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_auth'
     | '/login'
-    | '/public'
+    | '/privacy-policy'
     | '/request'
     | '/_auth/checklists'
     | '/_auth/models'
@@ -442,7 +442,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   LoginRoute: typeof LoginRoute
-  PublicRoute: typeof PublicRoute
+  PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   RequestRoute: typeof RequestRoute
 }
 
@@ -455,11 +455,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RequestRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/public': {
-      id: '/public'
-      path: '/public'
-      fullPath: '/public'
-      preLoaderRoute: typeof PublicRouteImport
+    '/privacy-policy': {
+      id: '/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof PrivacyPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -885,7 +885,7 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   LoginRoute: LoginRoute,
-  PublicRoute: PublicRoute,
+  PrivacyPolicyRoute: PrivacyPolicyRoute,
   RequestRoute: RequestRoute,
 }
 export const routeTree = rootRouteImport

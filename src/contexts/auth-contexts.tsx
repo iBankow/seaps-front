@@ -26,6 +26,7 @@ export type AuthContextType = {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  loginWithMTLogin: (code: string) => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -57,6 +58,14 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     });
   };
 
+  const loginWithMTLogin = (code: string) => {
+    setLoading(true);
+
+    api
+      .post("/api/v1/sessions/mt-login?code=" + code, { code })
+      .then(() => window.location.replace("/"));
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -69,7 +78,14 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, user, loading, login, logout }}
+      value={{
+        isAuthenticated,
+        user,
+        loading,
+        login,
+        logout,
+        loginWithMTLogin,
+      }}
     >
       {children}
     </AuthContext.Provider>

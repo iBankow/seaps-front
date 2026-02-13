@@ -1,7 +1,7 @@
 import axios from "axios";
 import { toast } from "sonner";
 
-export const api = axios.create({
+const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
   withCredentials: true,
 });
@@ -11,15 +11,12 @@ api.interceptors.response.use(
   (error) => {
     if (
       error.config.url === "/api/v1/auth/me" &&
-      error.response?.status === 401 &&
-      window.location.pathname === "/login"
+      error.response?.status === 401
     ) {
       return Promise.reject(error);
     }
 
-    if (error.response?.data?.messages?.length > 0) {
-      error.response.data.messages.map((msg: string) => toast.error(msg));
-    } else if (error.response?.data?.message) {
+    if (error.response.data?.message) {
       toast.error(error.response.data.message, {
         description: error.response.data.action,
       });
@@ -28,7 +25,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 api.interceptors.request.use(
@@ -37,5 +34,7 @@ api.interceptors.request.use(
     console.log(error);
 
     return Promise.reject(error);
-  }
+  },
 );
+
+export { api };
