@@ -55,8 +55,6 @@ export function Pagination({ className, meta }: IPaginationComponent) {
     params.per_page = meta?.per_page || 10;
     params.page = page;
 
-    delete params.refresh;
-
     return params;
   }
 
@@ -69,7 +67,7 @@ export function Pagination({ className, meta }: IPaginationComponent) {
               replace={true}
               to="."
               search={getParams(
-                meta?.current_page ? meta?.current_page - 1 : 0
+                meta?.current_page ? meta?.current_page - 1 : 0,
               )}
             >
               <ChevronLeft />
@@ -100,8 +98,7 @@ export function Pagination({ className, meta }: IPaginationComponent) {
                 variant={meta.current_page === item ? "secondary" : "ghost"}
                 size="icon"
               >
-                <Link
-                  replace={true} to="." search={getParams(item)}>
+                <Link replace={true} to="." search={getParams(item)}>
                   {item}
                 </Link>
               </Button>
@@ -114,7 +111,7 @@ export function Pagination({ className, meta }: IPaginationComponent) {
               replace={true}
               to="."
               search={getParams(
-                meta?.current_page ? meta?.current_page + 1 : 0
+                meta?.current_page ? meta?.current_page + 1 : 0,
               )}
             >
               Proximo

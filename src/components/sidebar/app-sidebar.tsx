@@ -1,7 +1,8 @@
 import * as React from "react";
 
-import { NavMain } from "@/components/sidebar/nav-main";
-import { NavUser } from "@/components/sidebar/nav-user";
+import { NavMain } from "#/components/sidebar/nav-main";
+import { NavSecondary } from "#/components/sidebar/nav-secondary";
+import { NavUser } from "#/components/sidebar/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -11,70 +12,60 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-
 import {
-  // Boxes,
+  Boxes,
   ChartColumnIncreasing,
   ClipboardList,
   Landmark,
-  // Users,
+  Users,
 } from "lucide-react";
-import { useAuth } from "@/contexts/auth-contexts";
 import { Link } from "@tanstack/react-router";
-import { NavSecondary } from "./nav-secondary";
 
 const data = {
   navMain: [
     {
       title: "Dashboard",
       url: "/",
-      icon: ChartColumnIncreasing,
+      icon: <ChartColumnIncreasing />,
     },
     {
       title: "Checklists",
       url: "/checklists",
-      icon: ClipboardList,
+      icon: <ClipboardList />,
     },
     {
       title: "Imóveis",
       url: "/properties",
-      icon: Landmark,
+      icon: <Landmark />,
     },
   ],
   navSecondary: [
     {
       title: "Modelos",
       url: "/models",
-      // icon: Boxes,
+      icon: <Boxes />,
     },
     {
       title: "Usuários",
       url: "/users",
-      // icon: Users,
+      icon: <Users />,
     },
   ],
 };
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user } = useAuth();
-
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              className="data-[slot=sidebar-menu-button]:!px-0 !py-3 h-full"
-              asChild
-            >
+            <SidebarMenuButton size="lg" asChild>
               <Link to="/">
-                <img
-                  src={"/logo.png"}
-                  alt="logo"
-                  className="flex aspect-square size-10 items-center object-contain justify-center rounded-lg"
-                />
-                <div className="grid flex-1 text-left text-lg leading-tight">
-                  <span className="text-nowrap font-semibold">SEAPS</span>
-                  <span className="text-sm text-nowrap">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-sidebar-primary-foreground">
+                  <img src={"/logo.png"} alt="logo" className="rounded-lg" />
+                </div>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-medium">SEAPS</span>
+                  <span className="truncate text-xs">
                     Sistema de Manutenção Predial
                   </span>
                 </div>
@@ -88,7 +79,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={user} />
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   );

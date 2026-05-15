@@ -25,9 +25,9 @@ export interface RSSelectBaseProps<
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>,
 > extends Omit<
-    ReactSelectProps<Option, IsMulti, Group>,
-    "styles" | "classNames"
-  > {
+  ReactSelectProps<Option, IsMulti, Group>,
+  "styles" | "classNames"
+> {
   label?: string;
   description?: string;
   error?: string;

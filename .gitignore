@@ -2,10 +2,12 @@ node_modules
 .DS_Store
 dist
 dist-ssr
-build
 *.local
-count.txt
 .env
 .nitro
 .tanstack
-coverage
+.wrangler
+.output
+.vinxi
+__unconfig*
+todos.json

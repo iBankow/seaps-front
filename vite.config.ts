@@ -1,28 +1,19 @@
-import { defineConfig } from "vite";
-import viteReact from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from 'vite'
+import { devtools } from '@tanstack/devtools-vite'
 
-import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
-import { resolve } from "node:path";
+import { tanstackRouter } from '@tanstack/router-plugin/vite'
 
-// https://vitejs.dev/config/
-export default defineConfig({
+import viteReact from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+
+const config = defineConfig({
+  resolve: { tsconfigPaths: true },
   plugins: [
-    TanStackRouterVite({ autoCodeSplitting: true }),
-    viteReact(),
+    devtools(),
     tailwindcss(),
+    tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+    viteReact(),
   ],
-  // test configuration removed; move this to vitest.config.ts if needed
-  resolve: {
-    alias: {
-      "@": resolve(__dirname, "./src"),
-    },
-  },
-  server: {
-    host: true,
-    allowedHosts: ["smp.seplag.mt.gov.br", "brasilapi.com.br"],
-  },
-  build: {
-    outDir: "build",
-  },
-});
+})
+
+export default config

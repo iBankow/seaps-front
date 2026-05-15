@@ -1,12 +1,11 @@
-import { AppSidebar } from "@/components/sidebar/app-sidebar";
-import { SiteHeader } from "@/components/site-header";
+import { AppSidebar } from "#/components/sidebar/app-sidebar";
+import { SiteHeader } from "#/components/sidebar/site-header";
 import {
   SIDEBAR_COOKIE_NAME,
   SidebarInset,
   SidebarProvider,
-} from "@/components/ui/sidebar";
-import { createFileRoute } from "@tanstack/react-router";
-import { Outlet, redirect } from "@tanstack/react-router";
+} from "#/components/ui/sidebar";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_auth")({
   beforeLoad: ({ context, location }) => {
@@ -19,14 +18,14 @@ export const Route = createFileRoute("/_auth")({
       });
     }
 
-    if (!context.auth.user?.is_active) {
-      throw redirect({
-        to: "/request",
-        search: {
-          redirect: location.href,
-        },
-      });
-    }
+    // if (!context.auth.user?.is_active) {
+    //   throw redirect({
+    //     to: "/request",
+    //     search: {
+    //       redirect: location.href,
+    //     },
+    //   });
+    // }
   },
   component: AuthLayout,
 });
@@ -48,7 +47,7 @@ function AuthLayout() {
       defaultOpen={defaultOpen === "true"}
     >
       <AppSidebar variant="inset" />
-      <SidebarInset className="overflow-x-hidden">
+      <SidebarInset className="overflow-clip">
         <SiteHeader />
         <div className="p-2 h-full">
           <Outlet />

@@ -1,77 +1,62 @@
+import { ModeToggle } from "#/components/mode-toggle";
+import { Button } from "#/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "#/components/ui/dialog";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "#/components/ui/select";
 import { createFileRoute } from "@tanstack/react-router";
-import { BarComponent } from "./-components/bar-card";
-import { useEffect, useState } from "react";
-import { api } from "@/lib/api";
-import { NumberCard } from "./-components/cards/numbers";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChecklistsCard } from "./-components/checklist-card";
-import { Building, CheckCircle, ListCheck } from "lucide-react";
-import { IRMBarComponent } from "./-components/irm-chart";
 
-export const Route = createFileRoute("/_auth/")({
-  component: App,
-  loader: () => {
-    return {
-      crumb: "Dashboard",
-    };
-  },
-});
+export const Route = createFileRoute("/_auth/")({ component: Home });
 
-function App() {
-  const [ranges, setRanges] = useState<any[]>([]);
-  const [properties, setProperties] = useState<any>({});
-  const [inspected, setInspected] = useState<any>({});
-  const [checklists, setChecklists] = useState<any>({});
-  const [igm, setIGM] = useState<any>([]);
-
-  useEffect(() => {
-    api.get("api/v1/dashboards").then(({ data }) => {
-      setRanges(data.ranges);
-      setProperties(data.properties);
-      setInspected(data.inspected);
-      setChecklists(data.checklists);
-      setIGM(data.igm);
-    });
-  }, []);
-
+function Home() {
   return (
-    <div className="text-center space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <NumberCard
-          title="Imóveis Cadastrados"
-          number={properties?.total}
-          icon={Building}
-          className="bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-foreground"
-        />
-        <NumberCard
-          title="Imóveis Vistoriados"
-          number={inspected?.total}
-          icon={CheckCircle}
-          className="bg-green-50 text-green-700 dark:bg-green-950 dark:text-foreground"
-        />
-        <NumberCard
-          title="Checklists Realizados"
-          number={checklists?.total}
-          icon={ListCheck}
-          className="bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-foreground"
-        />
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <BarComponent data={ranges} />
-        <Card className="col-span-1 sm:col-span-2">
-          <CardHeader>
-            <CardTitle>Últimos Checklists Fechados</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ChecklistsCard />
-          </CardContent>
-        </Card>
-        <Card className="col-span-1 sm:col-span-3">
-          <CardContent>
-            <IRMBarComponent data={igm} />
-          </CardContent>
-        </Card>
-      </div>
+    <div className="p-8">
+      <ModeToggle />
+      <h1 className="text-4xl font-bold">Welcome to TanStack Start</h1>
+      <p className="mt-4 text-lg">
+        Edit <code>src/routes/index.tsx</code> to get started.
+      </p>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="outline">Share</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you absolutely sure?</DialogTitle>
+            <DialogDescription>
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button">Close</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <Select>
+        <SelectTrigger className="w-full max-w-48">
+          <SelectValue placeholder="Select a fruit" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Fruits</SelectLabel>
+            <SelectItem value="apple">Apple</SelectItem>
+            <SelectItem value="banana">Banana</SelectItem>
+            <SelectItem value="blueberry">Blueberry</SelectItem>
+            <SelectItem value="grapes">Grapes</SelectItem>
+            <SelectItem value="pineapple">Pineapple</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
     </div>
   );
 }

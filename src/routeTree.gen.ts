@@ -9,52 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as RequestRouteImport } from './routes/request'
-import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as AuthIndexRouteImport } from './routes/_auth/index'
-import { Route as AuthUsersRouteRouteImport } from './routes/_auth/users/route'
-import { Route as AuthPropertiesRouteRouteImport } from './routes/_auth/properties/route'
-import { Route as AuthPersonsRouteRouteImport } from './routes/_auth/persons/route'
-import { Route as AuthModelsRouteRouteImport } from './routes/_auth/models/route'
 import { Route as AuthChecklistsRouteRouteImport } from './routes/_auth/checklists/route'
-import { Route as AuthUsersIndexRouteImport } from './routes/_auth/users/index'
-import { Route as AuthPropertiesIndexRouteImport } from './routes/_auth/properties/index'
-import { Route as AuthModelsIndexRouteImport } from './routes/_auth/models/index'
 import { Route as AuthChecklistsIndexRouteImport } from './routes/_auth/checklists/index'
-import { Route as AuthAccountIndexRouteImport } from './routes/_auth/account/index'
-import { Route as AuthPersonsCreateRouteImport } from './routes/_auth/persons/create'
-import { Route as AuthPropertiesPropertyIdRouteRouteImport } from './routes/_auth/properties/$propertyId/route'
-import { Route as AuthModelsModelIdRouteRouteImport } from './routes/_auth/models/$modelId/route'
-import { Route as AuthChecklistsChecklistIdRouteRouteImport } from './routes/_auth/checklists/$checklistId/route'
-import { Route as AuthUsersUserIdIndexRouteImport } from './routes/_auth/users/$userId/index'
-import { Route as AuthPropertiesCreateIndexRouteImport } from './routes/_auth/properties/create/index'
-import { Route as AuthPropertiesPropertyIdIndexRouteImport } from './routes/_auth/properties/$propertyId/index'
-import { Route as AuthModelsCreateIndexRouteImport } from './routes/_auth/models/create/index'
-import { Route as AuthModelsModelIdIndexRouteImport } from './routes/_auth/models/$modelId/index'
 import { Route as AuthChecklistsCreateIndexRouteImport } from './routes/_auth/checklists/create/index'
-import { Route as AuthChecklistsChecklistIdIndexRouteImport } from './routes/_auth/checklists/$checklistId/index'
-import { Route as AuthChecklistsChecklistIdItemsRouteRouteImport } from './routes/_auth/checklists/$checklistId/items/route'
-import { Route as AuthUsersUserIdEditIndexRouteImport } from './routes/_auth/users/$userId/edit/index'
-import { Route as AuthPropertiesPropertyIdEditIndexRouteImport } from './routes/_auth/properties/$propertyId/edit/index'
-import { Route as AuthModelsModelIdEditIndexRouteImport } from './routes/_auth/models/$modelId/edit/index'
-import { Route as AuthChecklistsChecklistIdItemsIndexRouteImport } from './routes/_auth/checklists/$checklistId/items/index'
-import { Route as AuthChecklistsChecklistIdHistoryIndexRouteImport } from './routes/_auth/checklists/$checklistId/history/index'
-import { Route as AuthChecklistsChecklistIdEditIndexRouteImport } from './routes/_auth/checklists/$checklistId/edit/index'
-import { Route as AuthChecklistsChecklistIdItemsItemIdRouteRouteImport } from './routes/_auth/checklists/$checklistId/items/$itemId/route'
-import { Route as AuthChecklistsChecklistIdItemsItemIdIndexRouteImport } from './routes/_auth/checklists/$checklistId/items/$itemId/index'
 
-const RequestRoute = RequestRouteImport.update({
-  id: '/request',
-  path: '/request',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
-  id: '/privacy-policy',
-  path: '/privacy-policy',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -69,104 +30,15 @@ const AuthIndexRoute = AuthIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthRoute,
 } as any)
-const AuthUsersRouteRoute = AuthUsersRouteRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => AuthRoute,
-} as any)
-const AuthPropertiesRouteRoute = AuthPropertiesRouteRouteImport.update({
-  id: '/properties',
-  path: '/properties',
-  getParentRoute: () => AuthRoute,
-} as any)
-const AuthPersonsRouteRoute = AuthPersonsRouteRouteImport.update({
-  id: '/persons',
-  path: '/persons',
-  getParentRoute: () => AuthRoute,
-} as any)
-const AuthModelsRouteRoute = AuthModelsRouteRouteImport.update({
-  id: '/models',
-  path: '/models',
-  getParentRoute: () => AuthRoute,
-} as any)
 const AuthChecklistsRouteRoute = AuthChecklistsRouteRouteImport.update({
   id: '/checklists',
   path: '/checklists',
   getParentRoute: () => AuthRoute,
 } as any)
-const AuthUsersIndexRoute = AuthUsersIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AuthUsersRouteRoute,
-} as any)
-const AuthPropertiesIndexRoute = AuthPropertiesIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AuthPropertiesRouteRoute,
-} as any)
-const AuthModelsIndexRoute = AuthModelsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AuthModelsRouteRoute,
-} as any)
 const AuthChecklistsIndexRoute = AuthChecklistsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthChecklistsRouteRoute,
-} as any)
-const AuthAccountIndexRoute = AuthAccountIndexRouteImport.update({
-  id: '/account/',
-  path: '/account/',
-  getParentRoute: () => AuthRoute,
-} as any)
-const AuthPersonsCreateRoute = AuthPersonsCreateRouteImport.update({
-  id: '/create',
-  path: '/create',
-  getParentRoute: () => AuthPersonsRouteRoute,
-} as any)
-const AuthPropertiesPropertyIdRouteRoute =
-  AuthPropertiesPropertyIdRouteRouteImport.update({
-    id: '/$propertyId',
-    path: '/$propertyId',
-    getParentRoute: () => AuthPropertiesRouteRoute,
-  } as any)
-const AuthModelsModelIdRouteRoute = AuthModelsModelIdRouteRouteImport.update({
-  id: '/$modelId',
-  path: '/$modelId',
-  getParentRoute: () => AuthModelsRouteRoute,
-} as any)
-const AuthChecklistsChecklistIdRouteRoute =
-  AuthChecklistsChecklistIdRouteRouteImport.update({
-    id: '/$checklistId',
-    path: '/$checklistId',
-    getParentRoute: () => AuthChecklistsRouteRoute,
-  } as any)
-const AuthUsersUserIdIndexRoute = AuthUsersUserIdIndexRouteImport.update({
-  id: '/$userId/',
-  path: '/$userId/',
-  getParentRoute: () => AuthUsersRouteRoute,
-} as any)
-const AuthPropertiesCreateIndexRoute =
-  AuthPropertiesCreateIndexRouteImport.update({
-    id: '/create/',
-    path: '/create/',
-    getParentRoute: () => AuthPropertiesRouteRoute,
-  } as any)
-const AuthPropertiesPropertyIdIndexRoute =
-  AuthPropertiesPropertyIdIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthPropertiesPropertyIdRouteRoute,
-  } as any)
-const AuthModelsCreateIndexRoute = AuthModelsCreateIndexRouteImport.update({
-  id: '/create/',
-  path: '/create/',
-  getParentRoute: () => AuthModelsRouteRoute,
-} as any)
-const AuthModelsModelIdIndexRoute = AuthModelsModelIdIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AuthModelsModelIdRouteRoute,
 } as any)
 const AuthChecklistsCreateIndexRoute =
   AuthChecklistsCreateIndexRouteImport.update({
@@ -174,294 +46,56 @@ const AuthChecklistsCreateIndexRoute =
     path: '/create/',
     getParentRoute: () => AuthChecklistsRouteRoute,
   } as any)
-const AuthChecklistsChecklistIdIndexRoute =
-  AuthChecklistsChecklistIdIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthChecklistsChecklistIdRouteRoute,
-  } as any)
-const AuthChecklistsChecklistIdItemsRouteRoute =
-  AuthChecklistsChecklistIdItemsRouteRouteImport.update({
-    id: '/items',
-    path: '/items',
-    getParentRoute: () => AuthChecklistsChecklistIdRouteRoute,
-  } as any)
-const AuthUsersUserIdEditIndexRoute =
-  AuthUsersUserIdEditIndexRouteImport.update({
-    id: '/$userId/edit/',
-    path: '/$userId/edit/',
-    getParentRoute: () => AuthUsersRouteRoute,
-  } as any)
-const AuthPropertiesPropertyIdEditIndexRoute =
-  AuthPropertiesPropertyIdEditIndexRouteImport.update({
-    id: '/edit/',
-    path: '/edit/',
-    getParentRoute: () => AuthPropertiesPropertyIdRouteRoute,
-  } as any)
-const AuthModelsModelIdEditIndexRoute =
-  AuthModelsModelIdEditIndexRouteImport.update({
-    id: '/edit/',
-    path: '/edit/',
-    getParentRoute: () => AuthModelsModelIdRouteRoute,
-  } as any)
-const AuthChecklistsChecklistIdItemsIndexRoute =
-  AuthChecklistsChecklistIdItemsIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthChecklistsChecklistIdItemsRouteRoute,
-  } as any)
-const AuthChecklistsChecklistIdHistoryIndexRoute =
-  AuthChecklistsChecklistIdHistoryIndexRouteImport.update({
-    id: '/history/',
-    path: '/history/',
-    getParentRoute: () => AuthChecklistsChecklistIdRouteRoute,
-  } as any)
-const AuthChecklistsChecklistIdEditIndexRoute =
-  AuthChecklistsChecklistIdEditIndexRouteImport.update({
-    id: '/edit/',
-    path: '/edit/',
-    getParentRoute: () => AuthChecklistsChecklistIdRouteRoute,
-  } as any)
-const AuthChecklistsChecklistIdItemsItemIdRouteRoute =
-  AuthChecklistsChecklistIdItemsItemIdRouteRouteImport.update({
-    id: '/$itemId',
-    path: '/$itemId',
-    getParentRoute: () => AuthChecklistsChecklistIdItemsRouteRoute,
-  } as any)
-const AuthChecklistsChecklistIdItemsItemIdIndexRoute =
-  AuthChecklistsChecklistIdItemsItemIdIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthChecklistsChecklistIdItemsItemIdRouteRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
-  '/login': typeof LoginRoute
-  '/privacy-policy': typeof PrivacyPolicyRoute
-  '/request': typeof RequestRoute
-  '/checklists': typeof AuthChecklistsRouteRouteWithChildren
-  '/models': typeof AuthModelsRouteRouteWithChildren
-  '/persons': typeof AuthPersonsRouteRouteWithChildren
-  '/properties': typeof AuthPropertiesRouteRouteWithChildren
-  '/users': typeof AuthUsersRouteRouteWithChildren
   '/': typeof AuthIndexRoute
-  '/checklists/$checklistId': typeof AuthChecklistsChecklistIdRouteRouteWithChildren
-  '/models/$modelId': typeof AuthModelsModelIdRouteRouteWithChildren
-  '/properties/$propertyId': typeof AuthPropertiesPropertyIdRouteRouteWithChildren
-  '/persons/create': typeof AuthPersonsCreateRoute
-  '/account': typeof AuthAccountIndexRoute
+  '/login': typeof LoginRoute
+  '/checklists': typeof AuthChecklistsRouteRouteWithChildren
   '/checklists/': typeof AuthChecklistsIndexRoute
-  '/models/': typeof AuthModelsIndexRoute
-  '/properties/': typeof AuthPropertiesIndexRoute
-  '/users/': typeof AuthUsersIndexRoute
-  '/checklists/$checklistId/items': typeof AuthChecklistsChecklistIdItemsRouteRouteWithChildren
-  '/checklists/$checklistId/': typeof AuthChecklistsChecklistIdIndexRoute
-  '/checklists/create': typeof AuthChecklistsCreateIndexRoute
-  '/models/$modelId/': typeof AuthModelsModelIdIndexRoute
-  '/models/create': typeof AuthModelsCreateIndexRoute
-  '/properties/$propertyId/': typeof AuthPropertiesPropertyIdIndexRoute
-  '/properties/create': typeof AuthPropertiesCreateIndexRoute
-  '/users/$userId': typeof AuthUsersUserIdIndexRoute
-  '/checklists/$checklistId/items/$itemId': typeof AuthChecklistsChecklistIdItemsItemIdRouteRouteWithChildren
-  '/checklists/$checklistId/edit': typeof AuthChecklistsChecklistIdEditIndexRoute
-  '/checklists/$checklistId/history': typeof AuthChecklistsChecklistIdHistoryIndexRoute
-  '/checklists/$checklistId/items/': typeof AuthChecklistsChecklistIdItemsIndexRoute
-  '/models/$modelId/edit': typeof AuthModelsModelIdEditIndexRoute
-  '/properties/$propertyId/edit': typeof AuthPropertiesPropertyIdEditIndexRoute
-  '/users/$userId/edit': typeof AuthUsersUserIdEditIndexRoute
-  '/checklists/$checklistId/items/$itemId/': typeof AuthChecklistsChecklistIdItemsItemIdIndexRoute
+  '/checklists/create/': typeof AuthChecklistsCreateIndexRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
-  '/privacy-policy': typeof PrivacyPolicyRoute
-  '/request': typeof RequestRoute
-  '/persons': typeof AuthPersonsRouteRouteWithChildren
   '/': typeof AuthIndexRoute
-  '/persons/create': typeof AuthPersonsCreateRoute
-  '/account': typeof AuthAccountIndexRoute
   '/checklists': typeof AuthChecklistsIndexRoute
-  '/models': typeof AuthModelsIndexRoute
-  '/properties': typeof AuthPropertiesIndexRoute
-  '/users': typeof AuthUsersIndexRoute
-  '/checklists/$checklistId': typeof AuthChecklistsChecklistIdIndexRoute
   '/checklists/create': typeof AuthChecklistsCreateIndexRoute
-  '/models/$modelId': typeof AuthModelsModelIdIndexRoute
-  '/models/create': typeof AuthModelsCreateIndexRoute
-  '/properties/$propertyId': typeof AuthPropertiesPropertyIdIndexRoute
-  '/properties/create': typeof AuthPropertiesCreateIndexRoute
-  '/users/$userId': typeof AuthUsersUserIdIndexRoute
-  '/checklists/$checklistId/edit': typeof AuthChecklistsChecklistIdEditIndexRoute
-  '/checklists/$checklistId/history': typeof AuthChecklistsChecklistIdHistoryIndexRoute
-  '/checklists/$checklistId/items': typeof AuthChecklistsChecklistIdItemsIndexRoute
-  '/models/$modelId/edit': typeof AuthModelsModelIdEditIndexRoute
-  '/properties/$propertyId/edit': typeof AuthPropertiesPropertyIdEditIndexRoute
-  '/users/$userId/edit': typeof AuthUsersUserIdEditIndexRoute
-  '/checklists/$checklistId/items/$itemId': typeof AuthChecklistsChecklistIdItemsItemIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
-  '/privacy-policy': typeof PrivacyPolicyRoute
-  '/request': typeof RequestRoute
   '/_auth/checklists': typeof AuthChecklistsRouteRouteWithChildren
-  '/_auth/models': typeof AuthModelsRouteRouteWithChildren
-  '/_auth/persons': typeof AuthPersonsRouteRouteWithChildren
-  '/_auth/properties': typeof AuthPropertiesRouteRouteWithChildren
-  '/_auth/users': typeof AuthUsersRouteRouteWithChildren
   '/_auth/': typeof AuthIndexRoute
-  '/_auth/checklists/$checklistId': typeof AuthChecklistsChecklistIdRouteRouteWithChildren
-  '/_auth/models/$modelId': typeof AuthModelsModelIdRouteRouteWithChildren
-  '/_auth/properties/$propertyId': typeof AuthPropertiesPropertyIdRouteRouteWithChildren
-  '/_auth/persons/create': typeof AuthPersonsCreateRoute
-  '/_auth/account/': typeof AuthAccountIndexRoute
   '/_auth/checklists/': typeof AuthChecklistsIndexRoute
-  '/_auth/models/': typeof AuthModelsIndexRoute
-  '/_auth/properties/': typeof AuthPropertiesIndexRoute
-  '/_auth/users/': typeof AuthUsersIndexRoute
-  '/_auth/checklists/$checklistId/items': typeof AuthChecklistsChecklistIdItemsRouteRouteWithChildren
-  '/_auth/checklists/$checklistId/': typeof AuthChecklistsChecklistIdIndexRoute
   '/_auth/checklists/create/': typeof AuthChecklistsCreateIndexRoute
-  '/_auth/models/$modelId/': typeof AuthModelsModelIdIndexRoute
-  '/_auth/models/create/': typeof AuthModelsCreateIndexRoute
-  '/_auth/properties/$propertyId/': typeof AuthPropertiesPropertyIdIndexRoute
-  '/_auth/properties/create/': typeof AuthPropertiesCreateIndexRoute
-  '/_auth/users/$userId/': typeof AuthUsersUserIdIndexRoute
-  '/_auth/checklists/$checklistId/items/$itemId': typeof AuthChecklistsChecklistIdItemsItemIdRouteRouteWithChildren
-  '/_auth/checklists/$checklistId/edit/': typeof AuthChecklistsChecklistIdEditIndexRoute
-  '/_auth/checklists/$checklistId/history/': typeof AuthChecklistsChecklistIdHistoryIndexRoute
-  '/_auth/checklists/$checklistId/items/': typeof AuthChecklistsChecklistIdItemsIndexRoute
-  '/_auth/models/$modelId/edit/': typeof AuthModelsModelIdEditIndexRoute
-  '/_auth/properties/$propertyId/edit/': typeof AuthPropertiesPropertyIdEditIndexRoute
-  '/_auth/users/$userId/edit/': typeof AuthUsersUserIdEditIndexRoute
-  '/_auth/checklists/$checklistId/items/$itemId/': typeof AuthChecklistsChecklistIdItemsItemIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/login'
-    | '/privacy-policy'
-    | '/request'
-    | '/checklists'
-    | '/models'
-    | '/persons'
-    | '/properties'
-    | '/users'
     | '/'
-    | '/checklists/$checklistId'
-    | '/models/$modelId'
-    | '/properties/$propertyId'
-    | '/persons/create'
-    | '/account'
+    | '/login'
+    | '/checklists'
     | '/checklists/'
-    | '/models/'
-    | '/properties/'
-    | '/users/'
-    | '/checklists/$checklistId/items'
-    | '/checklists/$checklistId/'
-    | '/checklists/create'
-    | '/models/$modelId/'
-    | '/models/create'
-    | '/properties/$propertyId/'
-    | '/properties/create'
-    | '/users/$userId'
-    | '/checklists/$checklistId/items/$itemId'
-    | '/checklists/$checklistId/edit'
-    | '/checklists/$checklistId/history'
-    | '/checklists/$checklistId/items/'
-    | '/models/$modelId/edit'
-    | '/properties/$propertyId/edit'
-    | '/users/$userId/edit'
-    | '/checklists/$checklistId/items/$itemId/'
+    | '/checklists/create/'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/login'
-    | '/privacy-policy'
-    | '/request'
-    | '/persons'
-    | '/'
-    | '/persons/create'
-    | '/account'
-    | '/checklists'
-    | '/models'
-    | '/properties'
-    | '/users'
-    | '/checklists/$checklistId'
-    | '/checklists/create'
-    | '/models/$modelId'
-    | '/models/create'
-    | '/properties/$propertyId'
-    | '/properties/create'
-    | '/users/$userId'
-    | '/checklists/$checklistId/edit'
-    | '/checklists/$checklistId/history'
-    | '/checklists/$checklistId/items'
-    | '/models/$modelId/edit'
-    | '/properties/$propertyId/edit'
-    | '/users/$userId/edit'
-    | '/checklists/$checklistId/items/$itemId'
+  to: '/login' | '/' | '/checklists' | '/checklists/create'
   id:
     | '__root__'
     | '/_auth'
     | '/login'
-    | '/privacy-policy'
-    | '/request'
     | '/_auth/checklists'
-    | '/_auth/models'
-    | '/_auth/persons'
-    | '/_auth/properties'
-    | '/_auth/users'
     | '/_auth/'
-    | '/_auth/checklists/$checklistId'
-    | '/_auth/models/$modelId'
-    | '/_auth/properties/$propertyId'
-    | '/_auth/persons/create'
-    | '/_auth/account/'
     | '/_auth/checklists/'
-    | '/_auth/models/'
-    | '/_auth/properties/'
-    | '/_auth/users/'
-    | '/_auth/checklists/$checklistId/items'
-    | '/_auth/checklists/$checklistId/'
     | '/_auth/checklists/create/'
-    | '/_auth/models/$modelId/'
-    | '/_auth/models/create/'
-    | '/_auth/properties/$propertyId/'
-    | '/_auth/properties/create/'
-    | '/_auth/users/$userId/'
-    | '/_auth/checklists/$checklistId/items/$itemId'
-    | '/_auth/checklists/$checklistId/edit/'
-    | '/_auth/checklists/$checklistId/history/'
-    | '/_auth/checklists/$checklistId/items/'
-    | '/_auth/models/$modelId/edit/'
-    | '/_auth/properties/$propertyId/edit/'
-    | '/_auth/users/$userId/edit/'
-    | '/_auth/checklists/$checklistId/items/$itemId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   LoginRoute: typeof LoginRoute
-  PrivacyPolicyRoute: typeof PrivacyPolicyRoute
-  RequestRoute: typeof RequestRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/request': {
-      id: '/request'
-      path: '/request'
-      fullPath: '/request'
-      preLoaderRoute: typeof RequestRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy-policy': {
-      id: '/privacy-policy'
-      path: '/privacy-policy'
-      fullPath: '/privacy-policy'
-      preLoaderRoute: typeof PrivacyPolicyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -472,7 +106,7 @@ declare module '@tanstack/react-router' {
     '/_auth': {
       id: '/_auth'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -483,61 +117,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthIndexRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/_auth/users': {
-      id: '/_auth/users'
-      path: '/users'
-      fullPath: '/users'
-      preLoaderRoute: typeof AuthUsersRouteRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/properties': {
-      id: '/_auth/properties'
-      path: '/properties'
-      fullPath: '/properties'
-      preLoaderRoute: typeof AuthPropertiesRouteRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/persons': {
-      id: '/_auth/persons'
-      path: '/persons'
-      fullPath: '/persons'
-      preLoaderRoute: typeof AuthPersonsRouteRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/models': {
-      id: '/_auth/models'
-      path: '/models'
-      fullPath: '/models'
-      preLoaderRoute: typeof AuthModelsRouteRouteImport
-      parentRoute: typeof AuthRoute
-    }
     '/_auth/checklists': {
       id: '/_auth/checklists'
       path: '/checklists'
       fullPath: '/checklists'
       preLoaderRoute: typeof AuthChecklistsRouteRouteImport
       parentRoute: typeof AuthRoute
-    }
-    '/_auth/users/': {
-      id: '/_auth/users/'
-      path: '/'
-      fullPath: '/users/'
-      preLoaderRoute: typeof AuthUsersIndexRouteImport
-      parentRoute: typeof AuthUsersRouteRoute
-    }
-    '/_auth/properties/': {
-      id: '/_auth/properties/'
-      path: '/'
-      fullPath: '/properties/'
-      preLoaderRoute: typeof AuthPropertiesIndexRouteImport
-      parentRoute: typeof AuthPropertiesRouteRoute
-    }
-    '/_auth/models/': {
-      id: '/_auth/models/'
-      path: '/'
-      fullPath: '/models/'
-      preLoaderRoute: typeof AuthModelsIndexRouteImport
-      parentRoute: typeof AuthModelsRouteRoute
     }
     '/_auth/checklists/': {
       id: '/_auth/checklists/'
@@ -546,221 +131,22 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthChecklistsIndexRouteImport
       parentRoute: typeof AuthChecklistsRouteRoute
     }
-    '/_auth/account/': {
-      id: '/_auth/account/'
-      path: '/account'
-      fullPath: '/account'
-      preLoaderRoute: typeof AuthAccountIndexRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/persons/create': {
-      id: '/_auth/persons/create'
-      path: '/create'
-      fullPath: '/persons/create'
-      preLoaderRoute: typeof AuthPersonsCreateRouteImport
-      parentRoute: typeof AuthPersonsRouteRoute
-    }
-    '/_auth/properties/$propertyId': {
-      id: '/_auth/properties/$propertyId'
-      path: '/$propertyId'
-      fullPath: '/properties/$propertyId'
-      preLoaderRoute: typeof AuthPropertiesPropertyIdRouteRouteImport
-      parentRoute: typeof AuthPropertiesRouteRoute
-    }
-    '/_auth/models/$modelId': {
-      id: '/_auth/models/$modelId'
-      path: '/$modelId'
-      fullPath: '/models/$modelId'
-      preLoaderRoute: typeof AuthModelsModelIdRouteRouteImport
-      parentRoute: typeof AuthModelsRouteRoute
-    }
-    '/_auth/checklists/$checklistId': {
-      id: '/_auth/checklists/$checklistId'
-      path: '/$checklistId'
-      fullPath: '/checklists/$checklistId'
-      preLoaderRoute: typeof AuthChecklistsChecklistIdRouteRouteImport
-      parentRoute: typeof AuthChecklistsRouteRoute
-    }
-    '/_auth/users/$userId/': {
-      id: '/_auth/users/$userId/'
-      path: '/$userId'
-      fullPath: '/users/$userId'
-      preLoaderRoute: typeof AuthUsersUserIdIndexRouteImport
-      parentRoute: typeof AuthUsersRouteRoute
-    }
-    '/_auth/properties/create/': {
-      id: '/_auth/properties/create/'
-      path: '/create'
-      fullPath: '/properties/create'
-      preLoaderRoute: typeof AuthPropertiesCreateIndexRouteImport
-      parentRoute: typeof AuthPropertiesRouteRoute
-    }
-    '/_auth/properties/$propertyId/': {
-      id: '/_auth/properties/$propertyId/'
-      path: '/'
-      fullPath: '/properties/$propertyId/'
-      preLoaderRoute: typeof AuthPropertiesPropertyIdIndexRouteImport
-      parentRoute: typeof AuthPropertiesPropertyIdRouteRoute
-    }
-    '/_auth/models/create/': {
-      id: '/_auth/models/create/'
-      path: '/create'
-      fullPath: '/models/create'
-      preLoaderRoute: typeof AuthModelsCreateIndexRouteImport
-      parentRoute: typeof AuthModelsRouteRoute
-    }
-    '/_auth/models/$modelId/': {
-      id: '/_auth/models/$modelId/'
-      path: '/'
-      fullPath: '/models/$modelId/'
-      preLoaderRoute: typeof AuthModelsModelIdIndexRouteImport
-      parentRoute: typeof AuthModelsModelIdRouteRoute
-    }
     '/_auth/checklists/create/': {
       id: '/_auth/checklists/create/'
       path: '/create'
-      fullPath: '/checklists/create'
+      fullPath: '/checklists/create/'
       preLoaderRoute: typeof AuthChecklistsCreateIndexRouteImport
       parentRoute: typeof AuthChecklistsRouteRoute
     }
-    '/_auth/checklists/$checklistId/': {
-      id: '/_auth/checklists/$checklistId/'
-      path: '/'
-      fullPath: '/checklists/$checklistId/'
-      preLoaderRoute: typeof AuthChecklistsChecklistIdIndexRouteImport
-      parentRoute: typeof AuthChecklistsChecklistIdRouteRoute
-    }
-    '/_auth/checklists/$checklistId/items': {
-      id: '/_auth/checklists/$checklistId/items'
-      path: '/items'
-      fullPath: '/checklists/$checklistId/items'
-      preLoaderRoute: typeof AuthChecklistsChecklistIdItemsRouteRouteImport
-      parentRoute: typeof AuthChecklistsChecklistIdRouteRoute
-    }
-    '/_auth/users/$userId/edit/': {
-      id: '/_auth/users/$userId/edit/'
-      path: '/$userId/edit'
-      fullPath: '/users/$userId/edit'
-      preLoaderRoute: typeof AuthUsersUserIdEditIndexRouteImport
-      parentRoute: typeof AuthUsersRouteRoute
-    }
-    '/_auth/properties/$propertyId/edit/': {
-      id: '/_auth/properties/$propertyId/edit/'
-      path: '/edit'
-      fullPath: '/properties/$propertyId/edit'
-      preLoaderRoute: typeof AuthPropertiesPropertyIdEditIndexRouteImport
-      parentRoute: typeof AuthPropertiesPropertyIdRouteRoute
-    }
-    '/_auth/models/$modelId/edit/': {
-      id: '/_auth/models/$modelId/edit/'
-      path: '/edit'
-      fullPath: '/models/$modelId/edit'
-      preLoaderRoute: typeof AuthModelsModelIdEditIndexRouteImport
-      parentRoute: typeof AuthModelsModelIdRouteRoute
-    }
-    '/_auth/checklists/$checklistId/items/': {
-      id: '/_auth/checklists/$checklistId/items/'
-      path: '/'
-      fullPath: '/checklists/$checklistId/items/'
-      preLoaderRoute: typeof AuthChecklistsChecklistIdItemsIndexRouteImport
-      parentRoute: typeof AuthChecklistsChecklistIdItemsRouteRoute
-    }
-    '/_auth/checklists/$checklistId/history/': {
-      id: '/_auth/checklists/$checklistId/history/'
-      path: '/history'
-      fullPath: '/checklists/$checklistId/history'
-      preLoaderRoute: typeof AuthChecklistsChecklistIdHistoryIndexRouteImport
-      parentRoute: typeof AuthChecklistsChecklistIdRouteRoute
-    }
-    '/_auth/checklists/$checklistId/edit/': {
-      id: '/_auth/checklists/$checklistId/edit/'
-      path: '/edit'
-      fullPath: '/checklists/$checklistId/edit'
-      preLoaderRoute: typeof AuthChecklistsChecklistIdEditIndexRouteImport
-      parentRoute: typeof AuthChecklistsChecklistIdRouteRoute
-    }
-    '/_auth/checklists/$checklistId/items/$itemId': {
-      id: '/_auth/checklists/$checklistId/items/$itemId'
-      path: '/$itemId'
-      fullPath: '/checklists/$checklistId/items/$itemId'
-      preLoaderRoute: typeof AuthChecklistsChecklistIdItemsItemIdRouteRouteImport
-      parentRoute: typeof AuthChecklistsChecklistIdItemsRouteRoute
-    }
-    '/_auth/checklists/$checklistId/items/$itemId/': {
-      id: '/_auth/checklists/$checklistId/items/$itemId/'
-      path: '/'
-      fullPath: '/checklists/$checklistId/items/$itemId/'
-      preLoaderRoute: typeof AuthChecklistsChecklistIdItemsItemIdIndexRouteImport
-      parentRoute: typeof AuthChecklistsChecklistIdItemsItemIdRouteRoute
-    }
   }
 }
-
-interface AuthChecklistsChecklistIdItemsItemIdRouteRouteChildren {
-  AuthChecklistsChecklistIdItemsItemIdIndexRoute: typeof AuthChecklistsChecklistIdItemsItemIdIndexRoute
-}
-
-const AuthChecklistsChecklistIdItemsItemIdRouteRouteChildren: AuthChecklistsChecklistIdItemsItemIdRouteRouteChildren =
-  {
-    AuthChecklistsChecklistIdItemsItemIdIndexRoute:
-      AuthChecklistsChecklistIdItemsItemIdIndexRoute,
-  }
-
-const AuthChecklistsChecklistIdItemsItemIdRouteRouteWithChildren =
-  AuthChecklistsChecklistIdItemsItemIdRouteRoute._addFileChildren(
-    AuthChecklistsChecklistIdItemsItemIdRouteRouteChildren,
-  )
-
-interface AuthChecklistsChecklistIdItemsRouteRouteChildren {
-  AuthChecklistsChecklistIdItemsItemIdRouteRoute: typeof AuthChecklistsChecklistIdItemsItemIdRouteRouteWithChildren
-  AuthChecklistsChecklistIdItemsIndexRoute: typeof AuthChecklistsChecklistIdItemsIndexRoute
-}
-
-const AuthChecklistsChecklistIdItemsRouteRouteChildren: AuthChecklistsChecklistIdItemsRouteRouteChildren =
-  {
-    AuthChecklistsChecklistIdItemsItemIdRouteRoute:
-      AuthChecklistsChecklistIdItemsItemIdRouteRouteWithChildren,
-    AuthChecklistsChecklistIdItemsIndexRoute:
-      AuthChecklistsChecklistIdItemsIndexRoute,
-  }
-
-const AuthChecklistsChecklistIdItemsRouteRouteWithChildren =
-  AuthChecklistsChecklistIdItemsRouteRoute._addFileChildren(
-    AuthChecklistsChecklistIdItemsRouteRouteChildren,
-  )
-
-interface AuthChecklistsChecklistIdRouteRouteChildren {
-  AuthChecklistsChecklistIdItemsRouteRoute: typeof AuthChecklistsChecklistIdItemsRouteRouteWithChildren
-  AuthChecklistsChecklistIdIndexRoute: typeof AuthChecklistsChecklistIdIndexRoute
-  AuthChecklistsChecklistIdEditIndexRoute: typeof AuthChecklistsChecklistIdEditIndexRoute
-  AuthChecklistsChecklistIdHistoryIndexRoute: typeof AuthChecklistsChecklistIdHistoryIndexRoute
-}
-
-const AuthChecklistsChecklistIdRouteRouteChildren: AuthChecklistsChecklistIdRouteRouteChildren =
-  {
-    AuthChecklistsChecklistIdItemsRouteRoute:
-      AuthChecklistsChecklistIdItemsRouteRouteWithChildren,
-    AuthChecklistsChecklistIdIndexRoute: AuthChecklistsChecklistIdIndexRoute,
-    AuthChecklistsChecklistIdEditIndexRoute:
-      AuthChecklistsChecklistIdEditIndexRoute,
-    AuthChecklistsChecklistIdHistoryIndexRoute:
-      AuthChecklistsChecklistIdHistoryIndexRoute,
-  }
-
-const AuthChecklistsChecklistIdRouteRouteWithChildren =
-  AuthChecklistsChecklistIdRouteRoute._addFileChildren(
-    AuthChecklistsChecklistIdRouteRouteChildren,
-  )
 
 interface AuthChecklistsRouteRouteChildren {
-  AuthChecklistsChecklistIdRouteRoute: typeof AuthChecklistsChecklistIdRouteRouteWithChildren
   AuthChecklistsIndexRoute: typeof AuthChecklistsIndexRoute
   AuthChecklistsCreateIndexRoute: typeof AuthChecklistsCreateIndexRoute
 }
 
 const AuthChecklistsRouteRouteChildren: AuthChecklistsRouteRouteChildren = {
-  AuthChecklistsChecklistIdRouteRoute:
-    AuthChecklistsChecklistIdRouteRouteWithChildren,
   AuthChecklistsIndexRoute: AuthChecklistsIndexRoute,
   AuthChecklistsCreateIndexRoute: AuthChecklistsCreateIndexRoute,
 }
@@ -768,116 +154,14 @@ const AuthChecklistsRouteRouteChildren: AuthChecklistsRouteRouteChildren = {
 const AuthChecklistsRouteRouteWithChildren =
   AuthChecklistsRouteRoute._addFileChildren(AuthChecklistsRouteRouteChildren)
 
-interface AuthModelsModelIdRouteRouteChildren {
-  AuthModelsModelIdIndexRoute: typeof AuthModelsModelIdIndexRoute
-  AuthModelsModelIdEditIndexRoute: typeof AuthModelsModelIdEditIndexRoute
-}
-
-const AuthModelsModelIdRouteRouteChildren: AuthModelsModelIdRouteRouteChildren =
-  {
-    AuthModelsModelIdIndexRoute: AuthModelsModelIdIndexRoute,
-    AuthModelsModelIdEditIndexRoute: AuthModelsModelIdEditIndexRoute,
-  }
-
-const AuthModelsModelIdRouteRouteWithChildren =
-  AuthModelsModelIdRouteRoute._addFileChildren(
-    AuthModelsModelIdRouteRouteChildren,
-  )
-
-interface AuthModelsRouteRouteChildren {
-  AuthModelsModelIdRouteRoute: typeof AuthModelsModelIdRouteRouteWithChildren
-  AuthModelsIndexRoute: typeof AuthModelsIndexRoute
-  AuthModelsCreateIndexRoute: typeof AuthModelsCreateIndexRoute
-}
-
-const AuthModelsRouteRouteChildren: AuthModelsRouteRouteChildren = {
-  AuthModelsModelIdRouteRoute: AuthModelsModelIdRouteRouteWithChildren,
-  AuthModelsIndexRoute: AuthModelsIndexRoute,
-  AuthModelsCreateIndexRoute: AuthModelsCreateIndexRoute,
-}
-
-const AuthModelsRouteRouteWithChildren = AuthModelsRouteRoute._addFileChildren(
-  AuthModelsRouteRouteChildren,
-)
-
-interface AuthPersonsRouteRouteChildren {
-  AuthPersonsCreateRoute: typeof AuthPersonsCreateRoute
-}
-
-const AuthPersonsRouteRouteChildren: AuthPersonsRouteRouteChildren = {
-  AuthPersonsCreateRoute: AuthPersonsCreateRoute,
-}
-
-const AuthPersonsRouteRouteWithChildren =
-  AuthPersonsRouteRoute._addFileChildren(AuthPersonsRouteRouteChildren)
-
-interface AuthPropertiesPropertyIdRouteRouteChildren {
-  AuthPropertiesPropertyIdIndexRoute: typeof AuthPropertiesPropertyIdIndexRoute
-  AuthPropertiesPropertyIdEditIndexRoute: typeof AuthPropertiesPropertyIdEditIndexRoute
-}
-
-const AuthPropertiesPropertyIdRouteRouteChildren: AuthPropertiesPropertyIdRouteRouteChildren =
-  {
-    AuthPropertiesPropertyIdIndexRoute: AuthPropertiesPropertyIdIndexRoute,
-    AuthPropertiesPropertyIdEditIndexRoute:
-      AuthPropertiesPropertyIdEditIndexRoute,
-  }
-
-const AuthPropertiesPropertyIdRouteRouteWithChildren =
-  AuthPropertiesPropertyIdRouteRoute._addFileChildren(
-    AuthPropertiesPropertyIdRouteRouteChildren,
-  )
-
-interface AuthPropertiesRouteRouteChildren {
-  AuthPropertiesPropertyIdRouteRoute: typeof AuthPropertiesPropertyIdRouteRouteWithChildren
-  AuthPropertiesIndexRoute: typeof AuthPropertiesIndexRoute
-  AuthPropertiesCreateIndexRoute: typeof AuthPropertiesCreateIndexRoute
-}
-
-const AuthPropertiesRouteRouteChildren: AuthPropertiesRouteRouteChildren = {
-  AuthPropertiesPropertyIdRouteRoute:
-    AuthPropertiesPropertyIdRouteRouteWithChildren,
-  AuthPropertiesIndexRoute: AuthPropertiesIndexRoute,
-  AuthPropertiesCreateIndexRoute: AuthPropertiesCreateIndexRoute,
-}
-
-const AuthPropertiesRouteRouteWithChildren =
-  AuthPropertiesRouteRoute._addFileChildren(AuthPropertiesRouteRouteChildren)
-
-interface AuthUsersRouteRouteChildren {
-  AuthUsersIndexRoute: typeof AuthUsersIndexRoute
-  AuthUsersUserIdIndexRoute: typeof AuthUsersUserIdIndexRoute
-  AuthUsersUserIdEditIndexRoute: typeof AuthUsersUserIdEditIndexRoute
-}
-
-const AuthUsersRouteRouteChildren: AuthUsersRouteRouteChildren = {
-  AuthUsersIndexRoute: AuthUsersIndexRoute,
-  AuthUsersUserIdIndexRoute: AuthUsersUserIdIndexRoute,
-  AuthUsersUserIdEditIndexRoute: AuthUsersUserIdEditIndexRoute,
-}
-
-const AuthUsersRouteRouteWithChildren = AuthUsersRouteRoute._addFileChildren(
-  AuthUsersRouteRouteChildren,
-)
-
 interface AuthRouteChildren {
   AuthChecklistsRouteRoute: typeof AuthChecklistsRouteRouteWithChildren
-  AuthModelsRouteRoute: typeof AuthModelsRouteRouteWithChildren
-  AuthPersonsRouteRoute: typeof AuthPersonsRouteRouteWithChildren
-  AuthPropertiesRouteRoute: typeof AuthPropertiesRouteRouteWithChildren
-  AuthUsersRouteRoute: typeof AuthUsersRouteRouteWithChildren
   AuthIndexRoute: typeof AuthIndexRoute
-  AuthAccountIndexRoute: typeof AuthAccountIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthChecklistsRouteRoute: AuthChecklistsRouteRouteWithChildren,
-  AuthModelsRouteRoute: AuthModelsRouteRouteWithChildren,
-  AuthPersonsRouteRoute: AuthPersonsRouteRouteWithChildren,
-  AuthPropertiesRouteRoute: AuthPropertiesRouteRouteWithChildren,
-  AuthUsersRouteRoute: AuthUsersRouteRouteWithChildren,
   AuthIndexRoute: AuthIndexRoute,
-  AuthAccountIndexRoute: AuthAccountIndexRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
@@ -885,8 +169,6 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   LoginRoute: LoginRoute,
-  PrivacyPolicyRoute: PrivacyPolicyRoute,
-  RequestRoute: RequestRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

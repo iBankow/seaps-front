@@ -1,3 +1,4 @@
+import { useAuth } from "#/contexts/auth-context";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -14,7 +15,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useAuth } from "@/contexts/auth-contexts";
 import { Link } from "@tanstack/react-router";
 import {
   Bell,
@@ -22,21 +22,10 @@ import {
   LogOutIcon,
   UserCircle,
 } from "lucide-react";
-export function NavUser({
-  user,
-}: {
-  user:
-  | {
-    name: string;
-    email: string;
-    // avatar: string;
-  }
-  | undefined
-  | null;
-}) {
+export function NavUser() {
   const { isMobile } = useSidebar();
 
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
 
   if (!user) {
     return null;
@@ -44,7 +33,7 @@ export function NavUser({
 
   const createAvatarFallback = (name?: string) => {
     if (!name) {
-     return 'UK'
+      return "UK";
     }
     const names = name.trim().toUpperCase().split(/\s+/); // Remove espaços extras e divide por espaços
     if (names.length === 1) return names[0][0];
@@ -65,7 +54,7 @@ export function NavUser({
 
   const getFirstAndLastName = (name?: string) => {
     if (!name) {
-     return 'UK'
+      return "UK";
     }
 
     const names = name.trim().split(/\s+/);
@@ -136,7 +125,7 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
-                <Link to="/account">
+                <Link to="/">
                   <UserCircle />
                   Conta
                 </Link>

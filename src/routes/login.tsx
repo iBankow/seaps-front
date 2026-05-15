@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { config } from "@/lib/mt-login";
 import { useEffect } from "react";
-import { useAuth } from "@/contexts/auth-contexts";
+import { useAuth } from "#/contexts/auth-context";
 
 const fallback = "/" as const;
 
@@ -39,7 +39,7 @@ function LoginComponent() {
       <div className="w-full max-w-sm md:max-w-3xl">
         <div className={"flex flex-col gap-6"}>
           <Card className="overflow-hidden shadow-lg py-0">
-            <CardContent className="grid min-h-[547px] p-0 md:grid-cols-2">
+            <CardContent className="grid min-h-135 p-0 md:grid-cols-2">
               <div className="self-center p-6 md:p-8">
                 <div className="flex flex-col gap-6">
                   <div className="flex flex-col items-center text-center">
@@ -87,7 +87,7 @@ function LoginComponent() {
         </div>
       </div>
       <div className="mt-4 inline-flex items-center gap-4">
-        <Link to="/privacy-policy" className="text-sky-600 hover:underline">
+        <Link to="/" className="text-sky-600 hover:underline">
           Politica de Privacidade
         </Link>
         <p className="text-sm">Versão: 1.0.0</p>
