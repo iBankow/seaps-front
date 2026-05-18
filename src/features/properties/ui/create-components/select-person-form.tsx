@@ -1,5 +1,5 @@
 import { Controller, type UseFormReturn } from "react-hook-form";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Input } from "#/components/ui/input";
 import {
   Card,
@@ -31,6 +31,7 @@ import type {
 } from "./create-property-wizard";
 import { usePersonsList } from "#/features/persons/api/persons";
 import { CreatePersonDialog } from "#/features/persons/ui/create-person-dialog";
+import debounce from "lodash.debounce";
 
 interface SelectPersonFormProps {
   form: UseFormReturn<PropertyFormSchemaType>;
@@ -56,6 +57,18 @@ export const SelectPersonForm = ({
 
   const persons = data?.data ?? [];
 
+  const debouncedSearch = useCallback(
+    debounce((query: string) => {
+      setSearch(query.trim());
+    }, 400),
+    [],
+  );
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(e.target.value);
+    setPagination((prev) => ({ ...prev, page: 1 }));
+  };
+
   return (
     <Card className="overflow-clip">
       <CardHeader className="space-y-2">
@@ -73,11 +86,8 @@ export const SelectPersonForm = ({
         <div className="flex gap-2">
           <Input
             placeholder="Buscar responsável"
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setPagination((prev) => ({ ...prev, page: 1 }));
-            }}
+            defaultValue={""}
+            onChange={handleChange}
           />
         </div>
         <Controller

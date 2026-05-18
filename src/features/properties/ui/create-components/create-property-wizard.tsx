@@ -25,7 +25,7 @@ const formSchema = z.object({
   type: z.string().min(1, { message: "Informe o tipo do imóvel" }),
   organization_id: z.uuid({ message: "Selecione a organização" }),
   person_id: z.uuid({ message: "Selecione o responsável" }),
-  address: z.string().min(1, { message: "Informe o endereço" }).optional(),
+  address: z.string().optional(),
   cep: z
     .string()
     .min(8, { message: "Informe um CEP com 8 dígitos" })
@@ -92,8 +92,7 @@ export function CreatePropertyWizard() {
           data.state &&
           data.city &&
           data.neighborhood &&
-          data.street &&
-          data.address
+          data.street
         );
       case 4:
         return true;

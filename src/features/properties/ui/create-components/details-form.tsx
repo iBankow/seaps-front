@@ -6,7 +6,6 @@ import {
   FieldLabel,
 } from "#/components/ui/field";
 import { Card, CardContent } from "#/components/ui/card";
-import { Input } from "#/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -23,6 +22,7 @@ import type {
   PropertyFormDataType,
   PropertyFormSchemaType,
 } from "./create-property-wizard";
+import { NameForm } from "./name-form";
 
 const propertyTypes = [
   { value: "OWN", label: "PRÓPRIO" },
@@ -138,29 +138,7 @@ export const DetailsForm = ({ form, updateFormData }: DetailsFormProps) => {
               )}
             />
 
-            <Controller
-              name="name"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldContent>
-                    <FieldLabel htmlFor="property-name">
-                      Nome do Imóvel
-                    </FieldLabel>
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </FieldContent>
-                  <Input
-                    {...field}
-                    id="property-name"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Ex: Residencial Palmeiras"
-                    className="uppercase placeholder:normal-case"
-                  />
-                </Field>
-              )}
-            />
+            <NameForm form={form} />
           </FieldGroup>
         </CardContent>
       </Card>
