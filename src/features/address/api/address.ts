@@ -12,6 +12,9 @@ export const addressApi = {
   },
   getCities: async (state: string) => {
     const cities = await api.get<Array<City>>(`/address/cities/${state}`);
-    return cities.data;
+    return cities.data.map((city) => ({
+      id: String(city.id),
+      name: city.name,
+    }));
   },
 };

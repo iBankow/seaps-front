@@ -1,5 +1,5 @@
 import type { PaginatedResponse } from "#/lib/axios";
-import api from "#/lib/axios";
+import api, { initialData } from "#/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import type { User, UsersListParams } from "../types";
 import { usersKeys } from "./query-keys";
@@ -8,6 +8,7 @@ export const useUsersList = (filters?: UsersListParams) => {
   return useQuery({
     queryKey: usersKeys.list(filters),
     queryFn: () => usersApi.list(filters),
+    initialData,
   });
 };
 
