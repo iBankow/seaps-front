@@ -59,8 +59,20 @@ export interface PaginatedResponse<T> {
 }
 
 export interface PaginatedParams {
-  page: number;
+  page?: number;
   per_page?: number;
+}
+
+export const initialData = {
+  data: [],
+  meta: {
+    current_page: 1,
+    last_page: 1,
+    next_page: null,
+    per_page: 10,
+    prev_page: null,
+    total: 0,
+  },
 }
 
 export default api;
