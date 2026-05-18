@@ -4,6 +4,7 @@ import type { City, State } from "../type";
 export const addressApi = {
   getAddress: async (cep: string) => {
     const address = await api.get(`/address/zipcode/${cep}`);
+
     return address.data;
   },
   getStates: async () => {

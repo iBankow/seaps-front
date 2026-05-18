@@ -1,9 +1,11 @@
+import type { PaginatedParams } from "#/lib/axios";
+
 export interface Property {
   id: string;
   organization_id: string;
   person_id: string;
   created_by: string;
-  type: string;
+  type: "OWN" | "RENTED" | "GRANT";
   name: string;
   name_normalized: string;
   address: string;
@@ -28,4 +30,28 @@ export interface Property {
     email: string;
     role: string;
   };
+}
+
+export interface PropertiesListParams extends PaginatedParams {
+  organization_id?: string;
+  person_id?: string;
+  name?: string;
+  type?: "OWN" | "RENTED" | "GRANT";
+  city?: string;
+  state?: string;
+  neighborhood?: string;
+}
+
+export interface PropertyCreatePayload {
+  organization_id: string;
+  person_id: string;
+  type: "OWN" | "RENTED" | "GRANT";
+  name: string;
+  address?: string;
+  cep: string;
+  state: string;
+  city: string;
+  neighborhood: string;
+  street: string;
+  number?: string | null;
 }
