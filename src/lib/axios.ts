@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
@@ -73,6 +73,48 @@ export const initialData = {
     prev_page: null,
     total: 0,
   },
+};
+
+export interface ApiErrorBody {
+  name?: string;
+  message?: string;
+  action?: string;
+  status?: number;
+  errorId?: string;
+}
+
+export function isApiError(error: unknown) {
+  if (error instanceof AxiosError) {
+    const body = error.response?.data as ApiErrorBody | undefined;
+
+    return !!body?.message && !!body?.action;
+  }
+
+  return false;
+}
+
+export function getApiErrorMessage(
+  error: unknown,
+  fallbackMessage = "Nao foi possivel completar a operacao.",
+) {
+  if (error instanceof AxiosError) {
+    const body = error.response?.data as ApiErrorBody | undefined;
+    return body?.message ?? fallbackMessage;
+  }
+
+  return fallbackMessage;
+}
+
+export function getApiErrorAction(
+  error: unknown,
+  fallbackMessage = "Tente novamente mais tarde.",
+) {
+  if (error instanceof AxiosError) {
+    const body = error.response?.data as ApiErrorBody | undefined;
+    return body?.action ?? fallbackMessage;
+  }
+
+  return fallbackMessage;
 }
 
 export default api;
