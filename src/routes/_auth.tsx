@@ -1,3 +1,4 @@
+import { NotFound } from "#/components/not-found";
 import { AppSidebar } from "#/components/sidebar/app-sidebar";
 import { SiteHeader } from "#/components/sidebar/site-header";
 import {
@@ -28,6 +29,7 @@ export const Route = createFileRoute("/_auth")({
     // }
   },
   component: AuthLayout,
+  notFoundComponent: NotFound
 });
 
 function AuthLayout() {
