@@ -33,6 +33,14 @@ import { usersApi } from "#/features/users/api/users";
 import { useQueries } from "@tanstack/react-query";
 import { addressApi } from "#/features/address/api/address";
 import { initialData } from "#/lib/axios";
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "#/components/ui/combobox";
 
 const filterSchema = z.object({
   organization_id: z.string().optional(),
@@ -249,7 +257,7 @@ export function DataFilterForm() {
             </Button>
           </DialogTrigger>
 
-          <DialogContent className="sm:max-w-5xl sm:w-full">
+          <DialogContent className="sm:max-w-5xl sm:w-full" aria-describedby="">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <Filter className="h-5 w-5" />
@@ -330,20 +338,30 @@ export function DataFilterForm() {
                   control={form.control}
                   name="city"
                   render={({ field }) => (
-                    <Field>
+                    <Field className="z-1000">
                       <FieldLabel>Cidade</FieldLabel>
-                      <RSSelect
-                        {...field}
-                        placeholder="Selecione a Cidade"
-                        options={cities}
-                        onChange={(val) => {
-                          field.onChange(val ? val.id : undefined);
-                        }}
-                        value={
-                          cities.find((city) => city.id === field.value) ||
-                          undefined
+                      <Combobox
+                        items={cities}
+                        value={field.value as undefined}
+                        onValueChange={field.onChange}
+                        itemToStringValue={(city: (typeof cities)[number]) =>
+                          city.name
                         }
-                      />
+                      >
+                        <ComboboxInput placeholder="Selecione a Cidade" />
+                        <ComboboxContent>
+                          <ComboboxEmpty>
+                            Nenhuma cidade encontrada.
+                          </ComboboxEmpty>
+                          <ComboboxList>
+                            {(item) => (
+                              <ComboboxItem key={item.id} value={item.name}>
+                                {item.name}
+                              </ComboboxItem>
+                            )}
+                          </ComboboxList>
+                        </ComboboxContent>
+                      </Combobox>
                       <FieldError />
                     </Field>
                   )}
