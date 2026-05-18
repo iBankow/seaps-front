@@ -97,7 +97,7 @@ function buildClassNames(size: RSSelectSize, invalid: boolean) {
         "mt-1 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md",
         "animate-in fade-in-0 zoom-in-95",
       ),
-    menuList: () => "max-h-64 overflow-y-auto p-1",
+    menuList: () => "max-h-64 overflow-y-auto p-1 z-50",
     option: ({ isFocused, isSelected }) =>
       cn(
         "cursor-default select-none rounded-sm text-xs",

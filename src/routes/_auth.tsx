@@ -49,7 +49,7 @@ function AuthLayout() {
       defaultOpen={defaultOpen === "true"}
     >
       <AppSidebar variant="inset" />
-      <SidebarInset className="overflow-clip">
+      <SidebarInset className="overflow-hidden">
         <SiteHeader />
         <div className="p-2 h-full">
           <Outlet />

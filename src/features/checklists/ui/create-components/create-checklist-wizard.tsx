@@ -253,7 +253,7 @@ export function CreateOrderWizard() {
               {renderStepContent()}
               {currentStep === steps.length && (
                 <div className="mt-6 flex justify-center">
-                  <Button type="submit" className="w-full" size="lg">
+                  <Button type="submit" className="w-full max-w-3xl" size="lg">
                     Criar Checklist <Save />
                   </Button>
                 </div>
