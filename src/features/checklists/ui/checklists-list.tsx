@@ -6,9 +6,9 @@ import { DataTableSkeleton } from "@/components/skeletons/data-table";
 
 import { Link } from "@tanstack/react-router";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { columns } from "./columns";
+import { columns } from "./list-components/columns";
 import { useChecklistsList } from "../api/checklists";
-import { DataFilterForm } from "./filter-form";
+import { DataFilterForm } from "./list-components/filter-form";
 
 export function ChecklistList({ params }: { params: any }) {
   const { data, ...rest } = useChecklistsList(params);
