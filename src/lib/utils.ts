@@ -28,3 +28,11 @@ export const formatPhone = (value: string) => {
         .replace(/(\d{1})(\d{4})(\d)/, "$1 $2-$3")
         .slice(0, 16);
 };
+
+export const formatDate = (date: string) => {
+  return new Date(date).toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "2-digit",
+  });
+};

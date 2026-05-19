@@ -1,5 +1,7 @@
 import type { PaginatedParams } from "#/lib/axios";
 
+export type PropertyType = "OWN" | "RENTED" | "GRANT";
+
 export interface Property {
   id: string;
   organization_id: string;
