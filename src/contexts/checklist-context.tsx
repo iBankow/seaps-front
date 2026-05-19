@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import { api } from "@/lib/api";
-import type { Checklist } from "types/types";
+import type { Checklist } from "../../types/types";
 
 interface ChecklistContextType {
   checklist: Checklist | null;
