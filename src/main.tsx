@@ -11,11 +11,22 @@ import reportWebVitals from "./reportWebVitals.ts";
 import { AuthProvider, useAuth } from "./contexts/auth-contexts.tsx";
 import { ThemeProvider } from "./components/theme-provider.tsx";
 import { Toaster } from "./components/ui/sonner.tsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchInterval: 300000, // Refetch data every 5 minutes
+    },
+  },
+});
 
 // Create a new router instance
 const router = createRouter({
   routeTree,
   context: {
+    queryClient,
     auth: undefined!,
   },
   defaultPreload: "intent",
@@ -39,9 +50,11 @@ function InnerApp() {
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <AuthProvider>
-        <InnerApp />
-      </AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <InnerApp />
+        </AuthProvider>
+      </QueryClientProvider>
       <Toaster />
     </ThemeProvider>
   );
@@ -54,7 +67,7 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <App />
-    </StrictMode>
+    </StrictMode>,
   );
 }
 
