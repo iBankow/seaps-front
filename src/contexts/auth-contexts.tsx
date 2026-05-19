@@ -6,9 +6,7 @@ import {
   type FC,
   type ReactNode,
 } from "react";
-// import { redirect } from "@tanstack/react-router";
 import { api } from "@/lib/api";
-import { Loader2 } from "lucide-react";
 import { config } from "@/lib/mt-login";
 
 type User = {
@@ -68,8 +66,17 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader2 className="animate-spin h-20 w-20" />
+      <div className="flex min-h-screen items-center justify-center flex-col font-mono gap-4">
+        <div className="relative animate-pulse">
+          <div className="absolute border-primary size-32 animate-spin rounded-full border-b-2"></div>
+          <div className="size-32 rounded overflow-hidden p-4">
+            <img
+              src="/logo-app.png"
+              alt="Logo Governo"
+              className="rounded-full"
+            />
+          </div>
+        </div>
       </div>
     );
   }
