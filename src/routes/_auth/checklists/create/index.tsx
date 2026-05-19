@@ -1,8 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { CreateCheckListForm } from "../-components/create-form";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
+import { CreateOrderWizard } from "@/features/checklists/ui/create-components/create-checklist-wizard";
 
 export const Route = createFileRoute("/_auth/checklists/create/")({
   component: RouteComponent,
@@ -15,20 +12,8 @@ export const Route = createFileRoute("/_auth/checklists/create/")({
 
 function RouteComponent() {
   return (
-    <div className="flex flex-col gap-y-4">
-      <Card>
-        <CardContent>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/checklists">
-                <ArrowLeft className="h-4 w-4" />
-              </Link>
-            </Button>
-            <h1 className="text-2xl font-bold">Criar Checklist</h1>
-          </div>
-        </CardContent>
-      </Card>
-      <CreateCheckListForm />
+    <div className="sm:px-8">
+      <CreateOrderWizard />
     </div>
   );
 }
