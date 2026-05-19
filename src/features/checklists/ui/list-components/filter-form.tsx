@@ -12,9 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { getFirstAndLastName } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-import { RSSelect } from "@/components/react-select";
 import { useRouter, useSearch } from "@tanstack/react-router";
 import { FilterChips } from "@/components/filter-chips";
 import {
@@ -315,21 +313,39 @@ export function DataFilterForm() {
                   render={({ field }) => (
                     <Field>
                       <FieldLabel>Responsável</FieldLabel>
-                      <RSSelect
-                        {...field}
-                        placeholder="Selecione o Responsável"
-                        options={users.map((user) => ({
-                          ...user,
-                          id: user.id,
-                          name: getFirstAndLastName(user.name),
-                        }))}
-                        onChange={(val) => {
-                          field.onChange(val ? val.id : null);
-                        }}
-                        value={
-                          users.find((user) => user.id === field.value) || null
+                      <Combobox
+                        items={users}
+                        onValueChange={(value) =>
+                          value
+                            ? field.onChange(String(value.id))
+                            : field.onChange("")
                         }
-                      />
+                        defaultValue={
+                          field.value
+                            ? users.find((u) => String(u.id) === field.value)
+                            : undefined
+                        }
+                        itemToStringValue={(user: (typeof users)[number]) =>
+                          user.id
+                        }
+                        itemToStringLabel={(user: (typeof users)[number]) =>
+                          user.name
+                        }
+                      >
+                        <ComboboxInput placeholder="Selecione o Responsável" />
+                        <ComboboxContent>
+                          <ComboboxEmpty>
+                            Nenhum responsável encontrado.
+                          </ComboboxEmpty>
+                          <ComboboxList>
+                            {(item) => (
+                              <ComboboxItem key={item.id} value={item}>
+                                {item.name}
+                              </ComboboxItem>
+                            )}
+                          </ComboboxList>
+                        </ComboboxContent>
+                      </Combobox>
                       <FieldError />
                     </Field>
                   )}
