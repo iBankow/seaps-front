@@ -8,7 +8,6 @@ import { Link } from "@tanstack/react-router";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { columns } from "./list-components/columns";
 import { useChecklistsList } from "../api/checklists";
-import { DataFilterForm } from "./list-components/filter-form";
 
 export function ChecklistList({ params }: { params: any }) {
   const { data, ...rest } = useChecklistsList(params);
@@ -36,7 +35,6 @@ export function ChecklistList({ params }: { params: any }) {
       </Card>
       <Card>
         <CardContent className="space-y-4">
-          <DataFilterForm />
           <div className="relative">
             {rest.isLoading && (
               <div className="absolute h-full w-full bg-background/50 z-50 rounded-md backdrop-blur-md flex items-center justify-center gap-y-2 flex-col">

@@ -10,9 +10,9 @@ import { ObservationDialog } from "@/components/observation-dialog";
 import { ImageDialog } from "@/components/image-dialog";
 import { useChecklist } from "@/contexts/checklist-context";
 import { toast } from "sonner";
-import type { ChecklistItem } from "types/types";
 import { Loading } from "@/components/loading";
 import { DeleteDialog } from "./-components/delete-dialog";
+import type { ChecklistItem } from "../../../../../../../types/types";
 
 export const Route = createFileRoute(
   "/_auth/checklists/$checklistId/items/$itemId/"

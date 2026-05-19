@@ -26,11 +26,11 @@ import {
 import { Filter, Search, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { initialData } from "#/lib/axios";
-import { FilterChips } from "#/components/filter-chips";
 import { Field, FieldError, FieldLabel } from "#/components/ui/field";
 import { useQueries } from "@tanstack/react-query";
 import { organizationsApi } from "#/features/organizations/api/organizations";
 import { addressApi } from "#/features/address/api/address";
+import { FilterChips } from "@/components/ui/filter-chips";
 
 const filterSchema = z.object({
   organization_id: z.string().optional(),

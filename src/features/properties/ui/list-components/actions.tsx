@@ -30,7 +30,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link to="/properties/$id" params={{ id: row.original.id }}>
+            <Link to="/properties/$propertyId" params={{ propertyId: row.original.id }}>
               <ChevronRight size={16} />
               Visualizar
             </Link>

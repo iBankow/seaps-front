@@ -49,8 +49,8 @@ export const columns: ColumnDef<Column>[] = [
       return (
         <Link
           title={row.original.id}
-          to="/properties/$id"
-          params={{ id: row.original.id }}
+          to="/properties/$propertyId"
+          params={{ propertyId: row.original.id }}
           className="font-mono truncate"
         >
           {row.original.id}
