@@ -1,3 +1,4 @@
+import { NotFound } from "#/components/not-found";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_auth/properties")({
@@ -7,6 +8,7 @@ export const Route = createFileRoute("/_auth/properties")({
       crumb: "Imóveis",
     };
   },
+  notFoundComponent: NotFound,
 });
 
 function RouteComponent() {
