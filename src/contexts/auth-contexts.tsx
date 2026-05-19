@@ -71,7 +71,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
           <div className="absolute border-primary size-32 animate-spin rounded-full border-b-2"></div>
           <div className="size-32 rounded overflow-hidden p-4">
             <img
-              src="/logo-app.png"
+              src="/icon192.png"
               alt="Logo Governo"
               className="rounded-full"
             />
