@@ -1,70 +1,57 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  type ReactNode,
-} from "react";
-import { api } from "@/lib/api";
+import { createContext, useContext, type ReactNode } from "react";
+import { useChecklistDetail as useChecklistDetail } from "@/features/checklists/api/checklists";
+import { useRouter } from "@tanstack/react-router";
 import type { Checklist } from "../../types/types";
 
 interface ChecklistContextType {
-  checklist: Checklist | null;
+  checklist: Checklist;
   loading: boolean;
   error: string | null;
   refreshChecklist: () => Promise<void>;
 }
 
 const ChecklistContext = createContext<ChecklistContextType | undefined>(
-  undefined
+  undefined,
 );
 
 interface ChecklistProviderProps {
   children: ReactNode;
   checklistId: string;
-  checklist: Checklist;
 }
 
 export function ChecklistProvider({
   children,
   checklistId,
-  checklist: Checklist,
 }: ChecklistProviderProps) {
-  const [checklist, setChecklist] = useState<Checklist | null>(Checklist);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchChecklist = async () => {
-    try {
-      setError(null);
-      const response = await api.get(`/api/v1/checklists/${checklistId}`);
-      setChecklist(response.data);
-    } catch (err) {
-      setError("Erro ao carregar checklist");
-      console.error("Error fetching checklist:", err);
-    }
-  };
+  const route = useRouter();
+  const { data, isLoading, refetch, error } = useChecklistDetail(checklistId);
 
   const refreshChecklist = async () => {
-    await fetchChecklist();
+    await refetch();
   };
 
-  useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      await fetchChecklist();
-      setLoading(false);
-    };
+  const checklist = data || null;
 
-    if (checklistId && !checklist) {
-      loadData();
-    }
-  }, [checklistId]);
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p>Carregando checklist...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isLoading && error) {
+    route.navigate({ to: "/checklists" });
+    return null;
+  }
 
   const value: ChecklistContextType = {
-    checklist,
-    loading,
-    error,
+    checklist: checklist as Checklist,
+    loading: isLoading,
+    error: error ? (error as Error).message : null,
     refreshChecklist,
   };
 

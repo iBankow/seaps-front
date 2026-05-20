@@ -12,6 +12,8 @@ import type {
   ChecklistListItem,
   ChecklistListParams,
 } from "../types/types";
+import { AxiosError } from "axios";
+import { toast } from "sonner";
 
 export const useChecklistsList = (filters?: ChecklistListParams) => {
   return useQuery({
@@ -21,10 +23,22 @@ export const useChecklistsList = (filters?: ChecklistListParams) => {
   });
 };
 
-export const useChecklist = (id: string) => {
+export const useChecklistDetail = (id: string) => {
   return useQuery({
     queryKey: checklistsKeys.details(id),
     queryFn: () => checklistsApi.details(id),
+    retry: false,
+    retryDelay(_, error) {
+      if (error instanceof AxiosError && error.response?.status === 404) {
+        toast.error(
+          error.response.data?.message || "Checklist não encontrado.",
+          {
+            description: error.response.data?.action,
+          },
+        );
+      }
+      return 0;
+    },
   });
 };
 
@@ -35,7 +49,7 @@ export const useCreateChecklist = () => {
     mutationFn: (payload: Omit<ChecklistCreatePayload, "id">) =>
       checklistsApi.create(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: checklistsKeys.all });
+      queryClient.invalidateQueries({ queryKey: checklistsKeys.list() });
     },
   });
 };
