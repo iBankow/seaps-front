@@ -58,7 +58,7 @@ function App() {
           </AuthProvider>
         </TooltipProvider>
       </QueryClientProvider>
-      <Toaster />
+      <Toaster richColors />
     </ThemeProvider>
   );
 }
