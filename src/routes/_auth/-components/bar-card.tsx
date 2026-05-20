@@ -66,7 +66,7 @@ export function BarComponent({ data }: { data: Data[] }) {
               dataKey="total"
               nameKey="status"
               stroke="0"
-              label={({ status, total, percent }) =>
+              label={({ status, total, percent }: any) =>
                 `${status}: ${total} (${(percent * 100).toFixed(1)}%)`
               }
               labelLine={true}
