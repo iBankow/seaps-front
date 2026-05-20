@@ -1,5 +1,10 @@
 import api, { type PaginatedResponse } from "#/lib/axios";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { checklistsKeys } from "./query-keys";
 import type {
   ChecklistCreatePayload,
@@ -12,6 +17,7 @@ export const useChecklistsList = (filters?: ChecklistListParams) => {
   return useQuery({
     queryKey: checklistsKeys.list(filters),
     queryFn: () => checklistsApi.list(filters),
+    placeholderData: keepPreviousData,
   });
 };
 
