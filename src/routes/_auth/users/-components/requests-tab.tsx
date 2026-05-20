@@ -110,16 +110,6 @@ export function RequestsTab({ search }: RequestsTabProps) {
         </div>
       </CardContent>
       <CardFooter className="flex items-center justify-between border-t mt-6 pt-6">
-        {/* <div className="text-sm text-muted-foreground">
-          {data?.meta && (
-            <span>
-              Mostrando{" "}
-              <span className="font-medium">{data?.data?.length || 0}</span> de{" "}
-              <span className="font-medium">{data?.meta?.total || 0}</span>{" "}
-              solicitação(ões)
-            </span>
-          )}
-        </div> */}
         {data?.meta?.total > 10 && <Pagination meta={data?.meta} />}
       </CardFooter>
 

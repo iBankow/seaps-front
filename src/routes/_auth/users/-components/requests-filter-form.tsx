@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 
@@ -22,6 +22,14 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { useRouter, useSearch } from "@tanstack/react-router";
+import {
+  Field,
+  FieldContent,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field";
+import { useQuery } from "@tanstack/react-query";
+import { organizationsApi } from "@/features/organizations/api/organizations";
 
 const filterSchema = z.object({
   organization: z.string().optional(),
@@ -80,7 +88,11 @@ export function RequestsFilterForm() {
     }
 
     if (values.status) {
-      newSearchParams.status = values.status;
+      if (values.status === "all") {
+        newSearchParams.status = undefined; // Remove o filtro de status para mostrar todos
+      } else {
+        newSearchParams.status = values.status;
+      }
     }
 
     if (values.user_name) {
@@ -94,6 +106,12 @@ export function RequestsFilterForm() {
     });
   }
 
+  const { data: organizationsData } = useQuery({
+    queryKey: ["organizations"],
+    queryFn: organizationsApi.list,
+  });
+  const organizations = organizationsData?.data || [];
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -105,7 +123,7 @@ export function RequestsFilterForm() {
               <FormItem>
                 <FormLabel>Nome do Usuário</FormLabel>
                 <FormControl>
-                  <Input placeholder="Nome..." {...field} />
+                  <Input placeholder="Nome" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -122,13 +140,11 @@ export function RequestsFilterForm() {
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Todos" />
-                    </SelectTrigger>
-                  </FormControl>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Todos" />
+                  </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value=" ">Todos</SelectItem>
+                    <SelectItem value="all">Todos</SelectItem>
                     <SelectItem value="PENDING">Pendente</SelectItem>
                     <SelectItem value="APPROVED">Aprovado</SelectItem>
                     <SelectItem value="REJECTED">Rejeitado</SelectItem>
@@ -139,17 +155,42 @@ export function RequestsFilterForm() {
             )}
           />
 
-          <FormField
-            control={form.control}
+          <Controller
             name="organization"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Organização</FormLabel>
-                <FormControl>
-                  <Input placeholder="Organização..." {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldContent>
+                  <FieldLabel htmlFor="form-rhf-select-organization">
+                    Organização
+                  </FieldLabel>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </FieldContent>
+                <Select
+                  name={field.name}
+                  value={field.value}
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                  }}
+                >
+                  <SelectTrigger
+                    id="form-rhf-select-organization"
+                    aria-invalid={fieldState.invalid}
+                    className="min-w-30"
+                  >
+                    <SelectValue placeholder="Selecione o órgão" />
+                  </SelectTrigger>
+                  <SelectContent position="item-aligned">
+                    {organizations?.map((item) => (
+                      <SelectItem key={item.id} value={item.id}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Field>
             )}
           />
 
