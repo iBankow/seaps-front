@@ -12,6 +12,7 @@ import { AuthProvider, useAuth } from "./contexts/auth-contexts.tsx";
 import { ThemeProvider } from "./components/theme-provider.tsx";
 import { Toaster } from "./components/ui/sonner.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { TooltipProvider } from "./components/ui/tooltip.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -51,9 +52,11 @@ function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <InnerApp />
-        </AuthProvider>
+        <TooltipProvider>
+          <AuthProvider>
+            <InnerApp />
+          </AuthProvider>
+        </TooltipProvider>
       </QueryClientProvider>
       <Toaster />
     </ThemeProvider>
