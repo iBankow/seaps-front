@@ -1,12 +1,20 @@
 import { isMatch, Link, useMatches } from "@tanstack/react-router";
-import { BreadcrumbItem, BreadcrumbSeparator } from "./ui/breadcrumb";
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "./ui/breadcrumb";
 import React from "react";
 import { cn } from "@/lib/utils";
 
 export const Breadcrumbs = () => {
   const matches = useMatches();
   const matchesWithCrumbs = matches.filter((match) =>
-    isMatch(match, "loaderData.crumb")
+    isMatch(match, "loaderData.crumb"),
   );
 
   const items = matchesWithCrumbs.map(({ pathname, loaderData }) => {
@@ -16,23 +24,63 @@ export const Breadcrumbs = () => {
     };
   });
 
+  if (items.length > 3) {
+    return (
+      <Breadcrumb className="overflow-hidden overflow-ellipsis">
+        <BreadcrumbList className="flex-nowrap">
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link
+                to={items[0].href}
+                replace
+                preload={false}
+                className={cn("breadcrumb-link")}
+              >
+                {items[0].label}
+              </Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator className="self-center" />
+          <BreadcrumbEllipsis />
+          <BreadcrumbSeparator className="self-center" />
+          <BreadcrumbItem>
+            <BreadcrumbPage className="line-clamp-1">
+              {items[items.length - 1].label}
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+    );
+  }
+
   return (
-    <nav aria-label="breadcrumb">
-      <ol className="flex space-x-2">
+    <Breadcrumb>
+      <BreadcrumbList className="flex-nowrap">
         {items.map((item, index) => (
           <React.Fragment key={index}>
-            <BreadcrumbItem key={index}>
-              <Link
-                to={item.href}
-                preload={false}
-                className={cn(
-                  "breadcrumb-link",
-                  index === items.length - 1 && "font-bold"
-                )}
-              >
-                {item.label}
-              </Link>
-            </BreadcrumbItem>
+            {index === items.length - 1 ? (
+              <BreadcrumbItem>
+                <BreadcrumbPage key={index} className="line-clamp-1">
+                  {item.label}
+                </BreadcrumbPage>
+              </BreadcrumbItem>
+            ) : (
+              <BreadcrumbItem key={index}>
+                <BreadcrumbLink asChild>
+                  <Link
+                    to={item.href}
+                    replace
+                    preload={false}
+                    className={cn(
+                      "breadcrumb-link",
+                      index === items.length - 1 && "font-bold",
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            )}
             {index < items.length - 1 && (
               <BreadcrumbSeparator
                 key={"separator-" + index}
@@ -41,7 +89,7 @@ export const Breadcrumbs = () => {
             )}
           </React.Fragment>
         ))}
-      </ol>
-    </nav>
+      </BreadcrumbList>
+    </Breadcrumb>
   );
 };
