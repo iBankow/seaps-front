@@ -50,8 +50,10 @@ function AuthLayout() {
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
-        <div className="p-2 h-full">
-          <Outlet />
+        <div className="flex flex-1 flex-col">
+          <div className="@container/main flex flex-1 flex-col gap-2 p-2">
+            <Outlet />
+          </div>
         </div>
       </SidebarInset>
     </SidebarProvider>
