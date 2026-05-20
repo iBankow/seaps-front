@@ -14,8 +14,10 @@ export function RouteComponent() {
 
   return (
     <ChecklistProvider checklistId={checklistId}>
-      <ChecklistHeader />
-      <Outlet />
+      <div>
+        <ChecklistHeader />
+        <Outlet />
+      </div>
     </ChecklistProvider>
   );
 }
