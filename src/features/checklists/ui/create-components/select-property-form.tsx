@@ -10,13 +10,11 @@ import {
   CardTitle,
 } from "#/components/ui/card";
 import { usePropertiesList } from "#/features/properties/api/properties";
-import { RadioGroup, RadioGroupItem } from "#/components/ui/radio-group";
 import {
   Field,
   FieldContent,
   FieldDescription,
   FieldGroup,
-  FieldLabel,
   FieldTitle,
 } from "#/components/ui/field";
 import {
@@ -55,6 +53,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "#/components/ui/select";
+import { cn } from "@/lib/utils";
 
 interface SelectPropertyFormProps {
   form: UseFormReturn<FormSchemaType>;
@@ -131,19 +130,7 @@ export const SelectPropertyForm = ({
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <RadioGroup
-                value={field.value}
-                onValueChange={(fieldValue) => {
-                  field.onChange(fieldValue);
-                  const property = properties.find(
-                    (property) => property.id === fieldValue,
-                  );
-                  updateFormData({
-                    property: property,
-                  });
-                }}
-                className="md:grid-cols-2 overflow-y-auto scrollbar-custom min-h-77 max-h-77"
-              >
+              <div className="grid md:grid-cols-2 gap-2 overflow-y-auto scrollbar-custom min-h-77 max-h-77">
                 {!isLoading && properties.length === 0 && (
                   <div className="col-span-2 py-8 text-center">
                     <div className="text-muted-foreground text-sm">
@@ -155,18 +142,31 @@ export const SelectPropertyForm = ({
                 )}
                 {properties.length > 0 &&
                   properties.map((property) => (
-                    <FieldLabel
+                    <button
+                      type="button"
                       key={property.id}
-                      htmlFor={`form-rhf-radiogroup-${property.id}`}
-                      className="h-fit"
+                      className="h-fit text-left"
+                      onClick={() => {
+                        field.onChange(property.id);
+                        updateFormData({
+                          property,
+                        });
+                      }}
+                      aria-pressed={field.value === property.id}
                     >
                       <Field
                         orientation="horizontal"
-                        className="items-center flex"
+                        className={`relative items-center flex rounded-md border p-3 transition-colors ${
+                          field.value === property.id
+                            ? "border-primary bg-primary/10"
+                            : "border-border"
+                        }`}
                         data-invalid={fieldState.invalid}
                       >
                         <FieldContent>
-                          <FieldTitle>{property.name}</FieldTitle>
+                          <FieldTitle className="mb-px">
+                            {property.name}
+                          </FieldTitle>
                           <FieldDescription className="line-clamp-1">
                             {property.city ?? "--"}
                           </FieldDescription>
@@ -174,16 +174,22 @@ export const SelectPropertyForm = ({
                             {property.address.trim()}
                           </FieldDescription>
                         </FieldContent>
-                        <RadioGroupItem
-                          value={property.id}
-                          id={`form-rhf-radiogroup-${property.id}`}
-                          className="self-center"
-                          aria-invalid={fieldState.invalid}
-                        />
+                        <div className="absolute top-1/2 right-4 -translate-y-1/2">
+                          <span
+                            className={cn(
+                              "absolute top-1/2 left-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full ring bg-input ring-muted-foreground",
+                              field.value === property.id &&
+                                "bg-primary ring-primary",
+                            )}
+                          />
+                          {field.value === property.id && (
+                            <span className="absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-foreground" />
+                          )}
+                        </div>
                       </Field>
-                    </FieldLabel>
+                    </button>
                   ))}
-              </RadioGroup>
+              </div>
             </Field>
           )}
         />
