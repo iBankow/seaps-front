@@ -56,7 +56,7 @@ function AuthLayout() {
             </div>
           </div>
         </header>
-        <div className="flex-1">
+        <div className="flex-1 p-2">
           <Outlet />
         </div>
         <BottomNav />

@@ -49,7 +49,13 @@ const filterSchema = z.object({
   city: z.string().optional(),
 });
 
-export function DataFilterForm({ data, totalRecords }: { data?: any[], totalRecords?: number }) {
+export function DataFilterForm({
+  data,
+  totalRecords,
+}: {
+  data?: any[];
+  totalRecords?: number;
+}) {
   const searchParams = useSearch({ from: "/_auth/checklists/" });
   const router = useRouter();
 
@@ -89,7 +95,7 @@ export function DataFilterForm({ data, totalRecords }: { data?: any[], totalReco
 
     if (searchParams.organization_id) {
       const org = organizations.find(
-        (o) => String(o.id) === searchParams.organization_id
+        (o) => String(o.id) === searchParams.organization_id,
       );
       if (org) {
         filters.push({
@@ -171,6 +177,11 @@ export function DataFilterForm({ data, totalRecords }: { data?: any[], totalReco
   };
 
   useEffect(() => {
+    if (!isModalOpen) {
+      setLoading(false);
+      return;
+    }
+
     try {
       api
         .get("/api/v1/organizations?per_page=100")
@@ -180,19 +191,19 @@ export function DataFilterForm({ data, totalRecords }: { data?: any[], totalReco
           data.data.map((user: any) => ({
             ...user,
             name: getFirstAndLastName(user.name),
-          }))
-        )
+          })),
+        ),
       );
       axios
         .get(
-          `https://brasilapi.com.br/api/ibge/municipios/v1/MT?providers=dados-abertos-br,gov,wikipedia`
+          `https://brasilapi.com.br/api/ibge/municipios/v1/MT?providers=dados-abertos-br,gov,wikipedia`,
         )
         .then(({ data }) => {
           setCities(
             data.map((city: { nome: string; codigo_ibge: string }) => ({
               id: city.nome.replace(/\s*\(.*?\)/g, ""),
               name: city.nome.replace(/\s*\(.*?\)/g, ""),
-            }))
+            })),
           );
         })
         .catch(() => {
@@ -204,7 +215,7 @@ export function DataFilterForm({ data, totalRecords }: { data?: any[], totalReco
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [isModalOpen]);
 
   useEffect(() => {
     form.reset({
@@ -269,177 +280,178 @@ export function DataFilterForm({ data, totalRecords }: { data?: any[], totalReco
               </Button>
             </DialogTrigger>
 
-          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">
-                <Filter className="h-5 w-5" />
-                Filtros Avançados
-              </DialogTitle>
-            </DialogHeader>
+            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <Filter className="h-5 w-5" />
+                  Filtros Avançados
+                </DialogTitle>
+              </DialogHeader>
 
-            <div className="py-4">
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-6"
-                >
-                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                    <FormField
-                      control={form.control}
-                      name="organization_id"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Orgão</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            value={field.value || undefined}
-                          >
-                            <FormControl className="w-full">
-                              <SelectTrigger>
-                                <SelectValue placeholder="Selecione o Orgão" />
-                              </SelectTrigger>
+              <div className="py-4">
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-6"
+                  >
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                      <FormField
+                        control={form.control}
+                        name="organization_id"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Orgão</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              value={field.value || undefined}
+                            >
+                              <FormControl className="w-full">
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Selecione o Orgão" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {organizations.map((item) => (
+                                  <SelectItem
+                                    key={item.id}
+                                    value={String(item.id)}
+                                  >
+                                    {item.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="property_name"
+                        render={({ field }) => (
+                          <FormItem className="w-full">
+                            <FormLabel>Nome do Imóvel</FormLabel>
+                            <div className="relative">
+                              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                              <Input
+                                {...field}
+                                placeholder="Buscar por nome..."
+                                className="pl-9"
+                                onBlur={(e) => field.onChange(toUpperCase(e))}
+                              />
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="user_id"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Responsável</FormLabel>
+                            <FormControl>
+                              <RSSelect
+                                {...field}
+                                placeholder="Selecione o Responsável"
+                                options={users}
+                                onChange={(val) => {
+                                  field.onChange(val ? val.id : null);
+                                }}
+                                value={
+                                  users.find(
+                                    (user) => user.id === field.value,
+                                  ) || null
+                                }
+                              />
                             </FormControl>
-                            <SelectContent>
-                              {organizations.map((item) => (
-                                <SelectItem
-                                  key={item.id}
-                                  value={String(item.id)}
-                                >
-                                  {item.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="property_name"
-                      render={({ field }) => (
-                        <FormItem className="w-full">
-                          <FormLabel>Nome do Imóvel</FormLabel>
-                          <div className="relative">
-                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                            <Input
-                              {...field}
-                              placeholder="Buscar por nome..."
-                              className="pl-9"
-                              onBlur={(e) => field.onChange(toUpperCase(e))}
-                            />
-                          </div>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="user_id"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Responsável</FormLabel>
-                          <FormControl>
-                            <RSSelect
-                              {...field}
-                              placeholder="Selecione o Responsável"
-                              options={users}
-                              onChange={(val) => {
-                                field.onChange(val ? val.id : null);
-                              }}
-                              value={
-                                users.find((user) => user.id === field.value) ||
-                                null
-                              }
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="city"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Cidade</FormLabel>
-                          <FormControl>
-                            <RSSelect
-                              {...field}
-                              placeholder="Selecione a Cidade"
-                              options={cities}
-                              onChange={(val) => {
-                                field.onChange(val ? val.id : undefined);
-                              }}
-                              value={
-                                cities.find(
-                                  (city) => city.id === field.value
-                                ) || undefined
-                              }
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="status"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Status</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            value={field.value || undefined}
-                          >
-                            <FormControl className="w-full">
-                              <SelectTrigger>
-                                <SelectValue placeholder="Selecione o Status" />
-                              </SelectTrigger>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="city"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Cidade</FormLabel>
+                            <FormControl>
+                              <RSSelect
+                                {...field}
+                                placeholder="Selecione a Cidade"
+                                options={cities}
+                                onChange={(val) => {
+                                  field.onChange(val ? val.id : undefined);
+                                }}
+                                value={
+                                  cities.find(
+                                    (city) => city.id === field.value,
+                                  ) || undefined
+                                }
+                              />
                             </FormControl>
-                            <SelectContent>
-                              <SelectItem value="OPEN">ABERTO</SelectItem>
-                              <SelectItem value="CLOSED">FECHADO</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="status"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Status</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              value={field.value || undefined}
+                            >
+                              <FormControl className="w-full">
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Selecione o Status" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="OPEN">ABERTO</SelectItem>
+                                <SelectItem value="CLOSED">FECHADO</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
 
-                  <DialogFooter className="gap-2 pt-4 border-t">
-                    <Button
-                      variant="outline"
-                      type="button"
-                      onClick={() => {
-                        form.reset({
-                          organization_id: "",
-                          user_id: "",
-                          status: "",
-                          property_name: "",
-                          city: "",
-                        });
-                      }}
-                      className="gap-2"
-                    >
-                      <X className="h-4 w-4" />
-                      Limpar
-                    </Button>
-                    <Button
-                      type="submit"
-                      className="gap-2"
-                      onClick={() => setIsModalOpen(false)}
-                    >
-                      <Search className="h-4 w-4" />
-                      Aplicar Filtros
-                    </Button>
-                  </DialogFooter>
-                </form>
-              </Form>
-            </div>
-          </DialogContent>
-        </Dialog>
+                    <DialogFooter className="gap-2 pt-4 border-t">
+                      <Button
+                        variant="outline"
+                        type="button"
+                        onClick={() => {
+                          form.reset({
+                            organization_id: "",
+                            user_id: "",
+                            status: "",
+                            property_name: "",
+                            city: "",
+                          });
+                        }}
+                        className="gap-2"
+                      >
+                        <X className="h-4 w-4" />
+                        Limpar
+                      </Button>
+                      <Button
+                        type="submit"
+                        className="gap-2"
+                        onClick={() => setIsModalOpen(false)}
+                      >
+                        <Search className="h-4 w-4" />
+                        Aplicar Filtros
+                      </Button>
+                    </DialogFooter>
+                  </form>
+                </Form>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </div>
