@@ -198,7 +198,7 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="gap-2">
+        <Button variant="outline" className="gap-2 hidden sm:inline-flex">
           <Sheet className="h-4 w-4" />
           Exportar Dados
         </Button>

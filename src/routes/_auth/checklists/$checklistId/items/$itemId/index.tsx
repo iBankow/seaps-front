@@ -1,8 +1,8 @@
-import { createFileRoute, useParams, Link } from "@tanstack/react-router";
+import { createFileRoute, useParams } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Camera, Upload } from "lucide-react";
+import { Camera, Upload } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useModal } from "@/hooks/use-modal";
@@ -15,7 +15,7 @@ import { DeleteDialog } from "./-components/delete-dialog";
 import type { ChecklistItem } from "../../../../../../../types/types";
 
 export const Route = createFileRoute(
-  "/_auth/checklists/$checklistId/items/$itemId/"
+  "/_auth/checklists/$checklistId/items/$itemId/",
 )({
   component: ChecklistItem,
 });
@@ -35,7 +35,7 @@ function ChecklistItem() {
   const imageDialog = useModal();
 
   const handleImageUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const files = event.target.files;
     if (!files || files.length === 0) return;
@@ -72,7 +72,7 @@ function ChecklistItem() {
 
       if (filesToUpload.length < files.length) {
         toast.warning(
-          `Apenas ${availableSlots} imagens foram enviadas. Limite máximo de 10 imagens por item.`
+          `Apenas ${availableSlots} imagens foram enviadas. Limite máximo de 10 imagens por item.`,
         );
       } else {
         toast.success("Imagens enviadas com sucesso!");
@@ -101,20 +101,12 @@ function ChecklistItem() {
   // const IS_VALIDED = item?.is_valid !== null;
 
   return (
-    <div className="flex flex-col gap-y-4">
+    <div className="flex flex-col gap-y-4 p-2">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" asChild>
-          <Link to=".." search={{ id: checklistId }}>
-            <ArrowLeft className="h-4 w-4" />
-          </Link>
-        </Button>
         <div>
           <h2 className="text-2xl font-bold tracking-tight">
             {item.item?.name}
           </h2>
-          <p className="text-sm text-muted-foreground">
-            Checklist: {checklist?.property?.name} - Status: {checklist?.status}
-          </p>
         </div>
       </div>
 

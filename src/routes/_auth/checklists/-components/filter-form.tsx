@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import {
   Select,
   SelectContent,
@@ -40,6 +40,7 @@ import { Badge } from "@/components/ui/badge";
 import { Filter, Search, X } from "lucide-react";
 import axios from "axios";
 import { ExportModal } from "./export-modal";
+import debounce from "lodash.debounce";
 
 const filterSchema = z.object({
   organization_id: z.string().optional(),
@@ -239,11 +240,27 @@ export function DataFilterForm({
       }
     });
 
+    if (values.property_name) {
+      newSearchParams.property_name = values.property_name.toUpperCase();
+    }
+
     router.navigate({
       to: "/checklists",
       search: newSearchParams,
     });
   }
+
+  const setPropertyNameFilter = (value: string) => {
+    if (value.trim().length >= 3 || value.trim().length === 0) {
+      form.setValue("property_name", value);
+      onSubmit(form.getValues());
+    }
+  };
+
+  const debouncedPropertyFilterName = useCallback(
+    debounce(setPropertyNameFilter, 400),
+    [],
+  );
 
   if (loading) {
     return <LoadingSkeleton />;
@@ -252,208 +269,218 @@ export function DataFilterForm({
   return (
     <div className="space-y-4">
       {/* Chips de filtros ativos */}
+      <div className="flex items-center gap-2">
+        <Input
+          id="input-property-name"
+          className="uppercase placeholder:normal-case hidden sm:block"
+          placeholder="Pesquisar pelo imóvel..."
+          onChange={(e) => debouncedPropertyFilterName(e.target.value)}
+        />
+        {/* Botão para abrir modal de filtros */}
+        <div className="flex items-center justify-between gap-2">
+          {/* <div className="text-sm text-muted-foreground text-nowrap">
+            {activeFilters.length > 0 &&
+              `${activeFilters.length} filtro${activeFilters.length !== 1 ? "s" : ""} aplicado${activeFilters.length !== 1 ? "s" : ""}`}
+          </div> */}
+
+          <div className="space-x-2 flex">
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="gap-2">
+                  <Filter className="h-4 w-4" />
+                  Filtros Avançados
+                  {activeFilters.length > 0 && (
+                    <Badge variant="secondary" className="ml-1">
+                      {activeFilters.length}
+                    </Badge>
+                  )}
+                </Button>
+              </DialogTrigger>
+
+              <DialogContent className="sm:min-w-4xl max-h-[80vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2">
+                    <Filter className="h-5 w-5" />
+                    Filtros Avançados
+                  </DialogTitle>
+                </DialogHeader>
+
+                <div className="py-4">
+                  <Form {...form}>
+                    <form
+                      onSubmit={form.handleSubmit(onSubmit)}
+                      className="space-y-6"
+                    >
+                      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <FormField
+                          control={form.control}
+                          name="organization_id"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Orgão</FormLabel>
+                              <Select
+                                onValueChange={field.onChange}
+                                value={field.value || undefined}
+                              >
+                                <FormControl className="w-full">
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Selecione o Orgão" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {organizations.map((item) => (
+                                    <SelectItem
+                                      key={item.id}
+                                      value={String(item.id)}
+                                    >
+                                      {item.name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="property_name"
+                          render={({ field }) => (
+                            <FormItem className="w-full">
+                              <FormLabel>Nome do Imóvel</FormLabel>
+                              <div className="relative">
+                                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                <Input
+                                  {...field}
+                                  placeholder="Buscar por nome..."
+                                  className="pl-9"
+                                  onBlur={(e) => field.onChange(toUpperCase(e))}
+                                />
+                              </div>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="user_id"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Responsável</FormLabel>
+                              <FormControl>
+                                <RSSelect
+                                  {...field}
+                                  placeholder="Selecione o Responsável"
+                                  options={users}
+                                  onChange={(val) => {
+                                    field.onChange(val ? val.id : null);
+                                  }}
+                                  value={
+                                    users.find(
+                                      (user) => user.id === field.value,
+                                    ) || null
+                                  }
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="city"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Cidade</FormLabel>
+                              <FormControl>
+                                <RSSelect
+                                  {...field}
+                                  placeholder="Selecione a Cidade"
+                                  options={cities}
+                                  onChange={(val) => {
+                                    field.onChange(val ? val.id : undefined);
+                                  }}
+                                  value={
+                                    cities.find(
+                                      (city) => city.id === field.value,
+                                    ) || undefined
+                                  }
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="status"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Status</FormLabel>
+                              <Select
+                                onValueChange={field.onChange}
+                                value={field.value || undefined}
+                              >
+                                <FormControl className="w-full">
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Selecione o Status" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="OPEN">ABERTO</SelectItem>
+                                  <SelectItem value="CLOSED">
+                                    FECHADO
+                                  </SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <DialogFooter className="gap-2 pt-4 border-t">
+                        <Button
+                          variant="outline"
+                          type="button"
+                          onClick={() => {
+                            form.reset({
+                              organization_id: "",
+                              user_id: "",
+                              status: "",
+                              property_name: "",
+                              city: "",
+                            });
+                          }}
+                          className="gap-2"
+                        >
+                          <X className="h-4 w-4" />
+                          Limpar
+                        </Button>
+                        <Button
+                          type="submit"
+                          className="gap-2"
+                          onClick={() => setIsModalOpen(false)}
+                        >
+                          <Search className="h-4 w-4" />
+                          Aplicar Filtros
+                        </Button>
+                      </DialogFooter>
+                    </form>
+                  </Form>
+                </div>
+              </DialogContent>
+            </Dialog>
+            <ExportModal data={data || []} totalRecords={totalRecords} />
+          </div>
+        </div>
+      </div>
+
       <FilterChips
         filters={activeFilters}
         onRemoveFilter={handleRemoveFilter}
         onClearAll={handleClearAll}
       />
-
-      {/* Botão para abrir modal de filtros */}
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-muted-foreground">
-          {activeFilters.length > 0 &&
-            `${activeFilters.length} filtro${activeFilters.length !== 1 ? "s" : ""} aplicado${activeFilters.length !== 1 ? "s" : ""}`}
-        </div>
-
-        <div className="space-x-2">
-          <ExportModal data={data || []} totalRecords={totalRecords} />
-          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-            <DialogTrigger asChild>
-              <Button variant="outline" className="gap-2">
-                <Filter className="h-4 w-4" />
-                Filtros Avançados
-                {activeFilters.length > 0 && (
-                  <Badge variant="secondary" className="ml-1">
-                    {activeFilters.length}
-                  </Badge>
-                )}
-              </Button>
-            </DialogTrigger>
-
-            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle className="flex items-center gap-2">
-                  <Filter className="h-5 w-5" />
-                  Filtros Avançados
-                </DialogTitle>
-              </DialogHeader>
-
-              <div className="py-4">
-                <Form {...form}>
-                  <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-6"
-                  >
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                      <FormField
-                        control={form.control}
-                        name="organization_id"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Orgão</FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value || undefined}
-                            >
-                              <FormControl className="w-full">
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Selecione o Orgão" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {organizations.map((item) => (
-                                  <SelectItem
-                                    key={item.id}
-                                    value={String(item.id)}
-                                  >
-                                    {item.name}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="property_name"
-                        render={({ field }) => (
-                          <FormItem className="w-full">
-                            <FormLabel>Nome do Imóvel</FormLabel>
-                            <div className="relative">
-                              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                              <Input
-                                {...field}
-                                placeholder="Buscar por nome..."
-                                className="pl-9"
-                                onBlur={(e) => field.onChange(toUpperCase(e))}
-                              />
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="user_id"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Responsável</FormLabel>
-                            <FormControl>
-                              <RSSelect
-                                {...field}
-                                placeholder="Selecione o Responsável"
-                                options={users}
-                                onChange={(val) => {
-                                  field.onChange(val ? val.id : null);
-                                }}
-                                value={
-                                  users.find(
-                                    (user) => user.id === field.value,
-                                  ) || null
-                                }
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="city"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Cidade</FormLabel>
-                            <FormControl>
-                              <RSSelect
-                                {...field}
-                                placeholder="Selecione a Cidade"
-                                options={cities}
-                                onChange={(val) => {
-                                  field.onChange(val ? val.id : undefined);
-                                }}
-                                value={
-                                  cities.find(
-                                    (city) => city.id === field.value,
-                                  ) || undefined
-                                }
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="status"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Status</FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value || undefined}
-                            >
-                              <FormControl className="w-full">
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Selecione o Status" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="OPEN">ABERTO</SelectItem>
-                                <SelectItem value="CLOSED">FECHADO</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-
-                    <DialogFooter className="gap-2 pt-4 border-t">
-                      <Button
-                        variant="outline"
-                        type="button"
-                        onClick={() => {
-                          form.reset({
-                            organization_id: "",
-                            user_id: "",
-                            status: "",
-                            property_name: "",
-                            city: "",
-                          });
-                        }}
-                        className="gap-2"
-                      >
-                        <X className="h-4 w-4" />
-                        Limpar
-                      </Button>
-                      <Button
-                        type="submit"
-                        className="gap-2"
-                        onClick={() => setIsModalOpen(false)}
-                      >
-                        <Search className="h-4 w-4" />
-                        Aplicar Filtros
-                      </Button>
-                    </DialogFooter>
-                  </form>
-                </Form>
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
-      </div>
     </div>
   );
 }

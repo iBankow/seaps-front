@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { Actions } from "./actions";
 import { Link } from "@tanstack/react-router";
+import { getFirstAndLastName } from "@/lib/utils";
 
 const PROPERTY_TYPE_ENUM = {
   OWN: {
@@ -35,26 +36,45 @@ export type Column = {
 } & any;
 
 export const columns: ColumnDef<Column>[] = [
+  // {
+  //   accessorKey: "id",
+  //   header: "ID",
+  //   cell({ row }) {
+  //     return (
+  //       <Link
+  //         title={row.original.id}
+  //         to="/properties/$propertyId"
+  //         params={{ propertyId: row.original.id }}
+  //         className="font-mono truncate"
+  //       >
+  //         {row.original.id}
+  //       </Link>
+  //     );
+  //   },
+  //   meta: {
+  //     headerClassName: "hidden md:table-cell",
+  //     cellClassName:
+  //       "truncate hidden md:table-cell text-sky-400 hover:text-sky-700",
+  //     size: 80,
+  //   },
+  // },
   {
-    accessorKey: "id",
-    header: "ID",
+    accessorKey: "name",
+    header: "Nome",
     cell({ row }) {
       return (
         <Link
-          title={row.original.id}
+          title={row.original.name}
           to="/properties/$propertyId"
           params={{ propertyId: row.original.id }}
-          className="font-mono truncate"
+          className="text-sky-400 hover:text-sky-700"
         >
-          {row.original.id}
+          {row.original.name}
         </Link>
       );
     },
     meta: {
-      headerClassName: "hidden md:table-cell",
-      cellClassName:
-        "truncate hidden md:table-cell text-sky-400 hover:text-sky-700",
-      size: 80,
+      cellClassName: "truncate w-[50%]",
     },
   },
   {
@@ -67,13 +87,6 @@ export const columns: ColumnDef<Column>[] = [
       headerClassName: "hidden md:table-cell",
       cellClassName: "truncate hidden md:table-cell",
       size: 130,
-    },
-  },
-  {
-    accessorKey: "name",
-    header: "Nome",
-    meta: {
-      cellClassName: "truncate max-w-xs",
     },
   },
   {
@@ -100,7 +113,7 @@ export const columns: ColumnDef<Column>[] = [
     accessorKey: "person",
     header: "Responsável",
     accessorFn(row) {
-      return row.person?.name || "--";
+      return getFirstAndLastName(row.person?.name) || "--";
     },
     meta: {
       headerClassName: "hidden md:table-cell",

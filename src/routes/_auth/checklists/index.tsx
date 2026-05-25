@@ -12,7 +12,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -22,6 +21,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import z from "zod";
 import { StatusBadge } from "@/components/status-badge";
 import { cn } from "@/lib/utils";
+import { Loading } from "@/components/loading";
 
 const SearchSchema = z.object({
   page: z.number().default(1),
@@ -46,8 +46,6 @@ export function RouteComponent() {
   const { data, isLoading, isFetching } = useChecklistsList(search);
 
   const checklists = data?.data || [];
-
-  console.log(isMobile);
 
   if (isMobile) {
     return (
@@ -101,45 +99,35 @@ export function RouteComponent() {
   }
 
   return (
-    <div className="flex flex-col gap-y-4 flex-1">
-      <Card>
-        <CardContent>
-          <div className="flex justify-between">
-            <div>
-              <h2 className="text-2xl font-bold tracking-tight">Checklists</h2>
-            </div>
-            <div className="self-end">
-              {can(["checklists:create"], user?.permissions) && (
-                <Button asChild>
-                  <Link to="/checklists/create">
-                    <Plus />
-                    Criar Checklist
-                  </Link>
-                </Button>
-              )}
-            </div>
+    <div className="flex flex-col gap-y-4 flex-1 p-4">
+      <div className="flex justify-between">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">Checklists</h2>
+          <p className="mt-1">Gerencie todos os checklists disponíveis.</p>
+        </div>
+        <div className="self-end">
+          {can(["checklists:create"], user?.permissions) && (
+            <Button asChild>
+              <Link to="/checklists/create">
+                <Plus />
+                Criar Checklist
+              </Link>
+            </Button>
+          )}
+        </div>
+      </div>
+
+      <DataFilterForm data={data?.data} totalRecords={data?.meta.total} />
+      <div className="relative">
+        {isLoading && isFetching && <DataTableSkeleton columns={columns} />}
+        {isFetching && (
+          <div className="absolute z-10 rounded-lg backdrop-blur-md inset-0 bg-black/10 flex items-center justify-center flex-col gap-y-2">
+            <Loading size="sm" />
           </div>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardContent className="space-y-4">
-          <DataFilterForm data={data?.data} totalRecords={data?.meta.total} />
-          <div className="relative">
-            {isLoading && !isFetching && (
-              <DataTableSkeleton columns={columns} />
-            )}
-            {isFetching && (
-              <div className="absolute z-10 rounded-lg backdrop-blur-md inset-0 bg-black/10 flex items-center justify-center flex-col gap-y-2">
-                <Loader className="animate-spin text-primary size-12" />
-              </div>
-            )}
-            <DataTable columns={columns} data={checklists} />
-          </div>
-        </CardContent>
-        <CardFooter>
-          <MetaPagination meta={data?.meta} />
-        </CardFooter>
-      </Card>
+        )}
+        {!isLoading && <DataTable columns={columns} data={checklists} />}
+      </div>
+      <MetaPagination meta={data?.meta} />
     </div>
   );
 }
