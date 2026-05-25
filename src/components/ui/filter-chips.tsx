@@ -26,16 +26,12 @@ export const FilterChips: React.FC<FilterChipsProps> = ({
 
   return (
     <div className={`flex flex-wrap items-center gap-2 ${className}`}>
-      <span className="text-sm font-medium text-muted-foreground">
-        Filtros ativos:
-      </span>
-      
       {filters.map((filter) => (
         <Chip
           key={filter.key}
-          variant="primary"
+          variant="secondary"
           onRemove={() => onRemoveFilter(filter.key)}
-          className="animate-in slide-in-from-bottom-1 duration-200"
+          className="animate-in slide-in-from-bottom-1 duration-200 p-2 py-px"
         >
           <span className="font-medium">{filter.label}:</span>
           <span className="ml-1">{filter.value}</span>

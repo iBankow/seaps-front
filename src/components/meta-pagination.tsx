@@ -6,7 +6,7 @@ export const MetaPagination = ({ meta, label }: any) => {
   if (meta?.total <= 10) return null;
 
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+    <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 items-center bg-card rounded-md p-4 border">
       <Pagination className="col-start-1 md:col-start-2" meta={meta} />
       <div className="text-sm text-muted-foreground justify-self-end md:col-start-3">
         <span>
