@@ -230,7 +230,7 @@ export function DataFilterForm({
         <Input
           id="input-property-name"
           className="uppercase placeholder:normal-case hidden sm:block"
-          placeholder="Pesquisar pelo imóvel..."
+          placeholder="Pesquisar pelo nome..."
           defaultValue={form.getValues("name")}
           onChange={(e) => debouncedPropertyFilterName(e.target.value)}
         />
