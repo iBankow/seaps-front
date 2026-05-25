@@ -1,6 +1,7 @@
 import api, { type PaginatedResponse } from "#/lib/axios";
 import {
   keepPreviousData,
+  useInfiniteQuery,
   useMutation,
   useQuery,
   useQueryClient,
@@ -20,6 +21,24 @@ export const useChecklistsList = (filters?: ChecklistListParams) => {
     queryKey: checklistsKeys.list(filters),
     queryFn: () => checklistsApi.list(filters),
     placeholderData: keepPreviousData,
+  });
+};
+
+export const useInfiniteChecklistsList = (
+  filters?: Omit<ChecklistListParams, "page">,
+) => {
+  return useInfiniteQuery({
+    queryKey: checklistsKeys.list(filters),
+    queryFn: ({ pageParam = 1 }) =>
+      checklistsApi.list({ ...filters, page: pageParam }),
+    placeholderData: keepPreviousData,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.meta || !lastPage.meta.next_page) return undefined;
+      if (lastPage.meta.current_page >= 5) return undefined; // Limite de 5 páginas para evitar muitos registros
+
+      return lastPage.meta.current_page + 1;
+    },
   });
 };
 

@@ -1,5 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { getFirstAndLastName } from "@/lib/utils";
+import { format } from "date-fns";
 import { Actions } from "./actions";
 import { StatusBadge } from "@/components/status-badge";
 import { Link } from "@tanstack/react-router";
@@ -17,14 +18,6 @@ export type Column = {
   };
 } & any;
 
-function format(date: string) {
-  return new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "2-digit",
-  }).format(new Date(date));
-}
-
 export const columns: ColumnDef<Column>[] = [
   {
     accessorKey: "sid",
@@ -32,8 +25,8 @@ export const columns: ColumnDef<Column>[] = [
     cell({ row }) {
       return (
         <Link
-          to="/checklists"
-          // params={{ checklistId: row.original.id }}
+          to="/checklists/$checklistId"
+          params={{ checklistId: row.original.id }}
           className="font-mono text-sky-400 hover:text-sky-700"
           preload={false}
         >
@@ -139,7 +132,9 @@ export const columns: ColumnDef<Column>[] = [
     accessorKey: "finished_at",
     header: "Finalizado em",
     accessorFn(row) {
-      return row.finished_at ? format(row.finished_at) : "--";
+      return row.finished_at
+        ? format(new Date(row.finished_at), "dd/MM/yyyy")
+        : "--";
     },
     meta: {
       headerClassName: "hidden md:table-cell",

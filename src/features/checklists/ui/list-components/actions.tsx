@@ -1,4 +1,4 @@
-"use client";
+import { api } from "@/lib/api";
 
 import { Button } from "@/components/ui/button";
 import type { Row } from "@tanstack/react-table";
@@ -15,10 +15,9 @@ import {
 import { useState } from "react";
 
 import { toast } from "sonner";
-// import { ReOpenDialog } from "./dialogs/reopen-dialog";
-// import { DeleteDialog } from "./dialogs/delete-dialog";
-// import { FinishDialog } from "./dialogs/finish-dialog";
-// import { ValidateDialog } from "./dialogs/validate-dialog";
+import { ReOpenDialog } from "./dialogs/reopen-dialog";
+import { DeleteDialog } from "./dialogs/delete-dialog";
+import { FinishDialog } from "./dialogs/finish-dialog";
 import { useModal } from "@/hooks/use-modal";
 import {
   DropdownMenu,
@@ -29,18 +28,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 
 import type { Column } from "./columns";
-import api from "#/lib/axios";
+import { ValidateDialog } from "./dialogs/validate-dialog";
 
 export const Actions = ({ row }: { row: Row<Column> }) => {
+  const router = useRouter();
   const reopenDialog = useModal();
   const deleteDialog = useModal();
   const finishDialog = useModal();
   const validateDialog = useModal();
 
-  const [loading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleGetReport = () => {
     toast.promise(
@@ -66,9 +66,55 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
     );
   };
 
+  const handleReopenChecklist = () => {
+    setLoading(true);
+    toast.promise(
+      api.put("/api/v1/checklists/" + row.original.id + "/re-open"),
+      {
+        loading: "Reabrindo checklist...",
+        success: `Checklist ${row.original?.sid} - ${row.original?.property?.name} reaberto!`,
+        error: "Erro ao reabrir o checklist",
+        finally: () => {
+          setLoading(false);
+          router.navigate({
+            to: ".",
+            replace: true,
+            search: {
+              ...router.latestLocation.search,
+              refresh: Date.now(),
+            },
+          });
+        },
+      },
+    );
+  };
+
+  const handleValidateChecklist = () => {
+    setLoading(true);
+    toast.promise(
+      api.put("/api/v1/checklists/" + row.original.id + "/validate"),
+      {
+        loading: "Validando checklist...",
+        success: `Checklist ${row.original?.sid} - ${row.original?.property?.name} validado!`,
+        error: "Erro ao validar o checklist",
+        finally: () => {
+          setLoading(false);
+          router.navigate({
+            to: ".",
+            replace: true,
+            search: {
+              ...router.latestLocation.search,
+              refresh: Date.now(),
+            },
+          });
+        },
+      },
+    );
+  };
+
   return (
     <>
-      {/* <ReOpenDialog
+      <ReOpenDialog
         onSubmit={handleReopenChecklist}
         onOpenChange={reopenDialog.toggle}
         open={reopenDialog.visible}
@@ -92,7 +138,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
         onValidate={handleValidateChecklist}
         onOpenChange={validateDialog.toggle}
         open={validateDialog.visible}
-      /> */}
+      />
 
       {/* <NotificationDialog
         row={row}
@@ -113,7 +159,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
             <DropdownMenuItem asChild>
               <Link
                 preload={false}
-                to="/checklists"
+                to="/checklists/$checklistId"
                 params={{ checklistId: row.original.id }}
               >
                 <ChevronRight size={16} />

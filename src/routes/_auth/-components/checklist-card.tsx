@@ -11,7 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Actions } from "../checklists/-components/actions";
 import { ClassificationBadge } from "@/components/classification-badge";
 
 export function ChecklistsCard() {
@@ -40,7 +39,6 @@ export function ChecklistsCard() {
             <TableHead>Status</TableHead>
             <TableHead>Classificação</TableHead>
             <TableHead>Pontuação</TableHead>
-            <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -72,9 +70,6 @@ export function ChecklistsCard() {
               </TableCell>
               <TableCell className="text-left">
                 {checklist.score ? Number(checklist.score).toFixed(2) : "--"}
-              </TableCell>
-              <TableCell className="text-right">
-                <Actions row={{ original: checklist } as any} />
               </TableCell>
             </TableRow>
           ))}
