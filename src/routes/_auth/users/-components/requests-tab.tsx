@@ -5,7 +5,6 @@ import { DataTableSkeleton } from "@/components/skeletons/data-table";
 import { api } from "@/lib/api";
 import { createRequestsColumns, type RequestColumn } from "./requests-columns";
 import { RequestsFilterForm } from "./requests-filter-form";
-import { CardContent, CardFooter } from "@/components/ui/card";
 import { RequestDetailsModal } from "./request-details-modal";
 import { toast } from "sonner";
 
@@ -98,20 +97,16 @@ export function RequestsTab({ search }: RequestsTabProps) {
   }, [search]);
 
   return (
-    <>
-      <CardContent className="space-y-6 pt-6">
-        <RequestsFilterForm />
-        <div className="rounded-lg border">
-          {loading ? (
-            <DataTableSkeleton columns={columns} />
-          ) : (
-            <DataTable columns={columns} data={data?.data} />
-          )}
-        </div>
-      </CardContent>
-      <CardFooter className="flex items-center justify-between border-t mt-6 pt-6">
-        {data?.meta?.total > 10 && <Pagination meta={data?.meta} />}
-      </CardFooter>
+    <div className="mt-2 flex flex-col gap-y-6">
+      <RequestsFilterForm />
+      <div className="rounded-lg border">
+        {loading ? (
+          <DataTableSkeleton columns={columns} />
+        ) : (
+          <DataTable columns={columns} data={data?.data} />
+        )}
+      </div>
+      {data?.meta?.total > 10 && <Pagination meta={data?.meta} />}
 
       <RequestDetailsModal
         request={selectedRequest}
@@ -121,6 +116,6 @@ export function RequestsTab({ search }: RequestsTabProps) {
         onReject={handleReject}
         submitting={submitting}
       />
-    </>
+    </div>
   );
 }

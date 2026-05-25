@@ -23,7 +23,7 @@ const steps = [
 const formSchema = z.object({
   name: z.string().min(1, { message: "Informe o nome do imóvel" }),
   type: z.string().min(1, { message: "Informe o tipo do imóvel" }),
-  organization_id: z.uuid({ message: "Selecione a organização" }),
+  organization_id: z.uuid({ message: "Selecione a Orgão" }),
   person_id: z.uuid({ message: "Selecione o responsável" }),
   address: z.string().optional(),
   cep: z

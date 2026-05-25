@@ -16,18 +16,12 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
 import { useRouter, useSearch } from "@tanstack/react-router";
-import {
-  Field,
-  FieldContent,
-  FieldError,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field } from "@/components/ui/field";
 import { useQuery } from "@tanstack/react-query";
 import { organizationsApi } from "@/features/organizations/api/organizations";
 
@@ -121,9 +115,8 @@ export function RequestsFilterForm() {
             name="user_name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nome do Usuário</FormLabel>
                 <FormControl>
-                  <Input placeholder="Nome" {...field} />
+                  <Input placeholder="Filtrar por nome" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -135,13 +128,12 @@ export function RequestsFilterForm() {
             name="status"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Status</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Todos" />
+                    <SelectValue placeholder="Filtrar por status" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Todos</SelectItem>
@@ -160,14 +152,6 @@ export function RequestsFilterForm() {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldContent>
-                  <FieldLabel htmlFor="form-rhf-select-organization">
-                    Organização
-                  </FieldLabel>
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </FieldContent>
                 <Select
                   name={field.name}
                   value={field.value}
@@ -180,7 +164,7 @@ export function RequestsFilterForm() {
                     aria-invalid={fieldState.invalid}
                     className="min-w-30"
                   >
-                    <SelectValue placeholder="Selecione o órgão" />
+                    <SelectValue placeholder="Filtrar por órgão" />
                   </SelectTrigger>
                   <SelectContent position="item-aligned">
                     {organizations?.map((item) => (

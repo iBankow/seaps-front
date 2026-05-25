@@ -218,12 +218,12 @@ export function RequestActionModal({
 
                             <Separator className="my-4" />
 
-                            {/* Administrador da Organização */}
+                            {/* Administrador da Orgão */}
                             <div className="flex flex-row items-center justify-between rounded-lg border-2 border-blue-500/20 bg-blue-50/50 dark:bg-blue-950/20 p-4 shadow-sm">
                               <div className="space-y-0.5 flex-1">
                                 <div className="flex items-center gap-2">
                                   <FormLabel className="mb-0 text-base font-bold">
-                                    Administrador da Organização
+                                    Administrador da Orgão
                                   </FormLabel>
                                   <Badge
                                     variant="secondary"
@@ -234,7 +234,7 @@ export function RequestActionModal({
                                 </div>
                                 <FormDescription className="text-xs">
                                   Acesso total aos recursos da própria
-                                  organização do usuário, incluindo todas as
+                                  Orgão do usuário, incluindo todas as
                                   permissões específicas.
                                 </FormDescription>
                               </div>

@@ -402,13 +402,13 @@ function EditUser() {
 
                       <Separator className="my-4" />
 
-                      {/* Administrador da Organização */}
+                      {/* Administrador da Orgão */}
                       <div className="flex flex-row items-center justify-between rounded-lg border-2 border-blue-500/20 bg-blue-50/50 dark:bg-blue-950/20 p-4 shadow-sm">
                         <div className="space-y-0.5 flex-1">
                           <div className="flex items-center gap-2">
                             <Building2 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                             <FormLabel className="mb-0 text-base font-bold">
-                              Administrador da Organização
+                              Administrador da Orgão
                             </FormLabel>
                             <Badge
                               variant="secondary"
@@ -418,7 +418,7 @@ function EditUser() {
                             </Badge>
                           </div>
                           <FormDescription className="text-xs">
-                            Acesso total aos recursos da própria organização do
+                            Acesso total aos recursos da própria Orgão do
                             usuário, incluindo todas as permissões específicas.
                           </FormDescription>
                         </div>
@@ -558,7 +558,7 @@ function EditUser() {
                           <p className="text-xs text-muted-foreground mt-1">
                             {isAdmin
                               ? "O usuário possui acesso total como Administrador"
-                              : "O usuário possui acesso total à sua organização"}
+                              : "O usuário possui acesso total à sua Orgão"}
                           </p>
                         </div>
                       )}

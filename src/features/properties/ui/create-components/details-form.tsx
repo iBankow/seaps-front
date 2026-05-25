@@ -96,7 +96,7 @@ export const DetailsForm = ({ form, updateFormData }: DetailsFormProps) => {
                 <Field data-invalid={fieldState.invalid}>
                   <FieldContent>
                     <FieldLabel htmlFor="organization-id">
-                      Organização
+                      Orgão
                     </FieldLabel>
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -124,7 +124,7 @@ export const DetailsForm = ({ form, updateFormData }: DetailsFormProps) => {
                       id="organization-id"
                       aria-invalid={fieldState.invalid}
                     >
-                      <SelectValue placeholder="Selecione a organização" />
+                      <SelectValue placeholder="Selecione a Orgão" />
                     </SelectTrigger>
                     <SelectContent>
                       {organizations.map((item) => (

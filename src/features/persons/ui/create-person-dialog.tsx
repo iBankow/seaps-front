@@ -120,7 +120,7 @@ export const CreatePersonDialog = ({
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldContent>
-                  <FieldLabel htmlFor="organization-id">Organização</FieldLabel>
+                  <FieldLabel htmlFor="organization-id">Orgão</FieldLabel>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
@@ -137,7 +137,7 @@ export const CreatePersonDialog = ({
                     id="organization-id"
                     aria-invalid={fieldState.invalid}
                   >
-                    <SelectValue placeholder="Selecione a organização" />
+                    <SelectValue placeholder="Selecione a Orgão" />
                   </SelectTrigger>
                   <SelectContent>
                     {organizations.map((item) => (

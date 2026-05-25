@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -13,19 +13,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 
 import { toUpperCase } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter, useSearch } from "@tanstack/react-router";
+import { api } from "@/lib/api";
 
 const filterSchema = z.object({
   organization: z.string().optional(),
@@ -35,6 +29,8 @@ const filterSchema = z.object({
 });
 
 export function DataFilterForm() {
+  const [organizations, setOrganizations] = useState<any[]>([]);
+
   const searchParams = useSearch({ from: "/_auth/users/" });
   const router = useRouter();
 
@@ -95,47 +91,26 @@ export function DataFilterForm() {
     });
   }
 
+  useEffect(() => {
+    api
+      .get("/api/v1/organizations?per_page=100")
+      .then(({ data }) => setOrganizations(data.data));
+  }, []);
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4"
+        className="flex flex-col sm:flex-row gap-4 items-end justify-end"
       >
-        <FormField
-          control={form.control}
-          name="role"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Função</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                value={field.value || undefined}
-              >
-                <FormControl className="w-full">
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione a Função" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="ADMIN">ADMINISTRADOR</SelectItem>
-                  <SelectItem value="MANAGER">GERENTE</SelectItem>
-                  <SelectItem value="EVALUATOR">AVALIADOR</SelectItem>
-                  <SelectItem value="USER">USUÁRIO</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Nome do Usuário</FormLabel>
               <Input
                 {...field}
-                placeholder="Insira o nome do usuário"
+                placeholder="Busque por nome do usuário"
                 onBlur={(e) => field.onChange(toUpperCase(e))}
               />
               <FormMessage />
@@ -147,13 +122,36 @@ export function DataFilterForm() {
           name="email"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Email</FormLabel>
-              <Input {...field} placeholder="Insira o email" type="email" />
+              <Input {...field} placeholder="Busque por email" type="email" />
               <FormMessage />
             </FormItem>
           )}
         />
-        <div className="space-x-2 self-end justify-self-end">
+        <FormField
+          control={form.control}
+          name="organization"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <Select
+                onValueChange={field.onChange}
+                value={field.value || undefined}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Filtrar por Orgão" />
+                </SelectTrigger>
+                <SelectContent>
+                  {organizations.map((item) => (
+                    <SelectItem key={item.id} value={String(item.id)}>
+                      {item.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="space-x-2 self-end justify-self-end flex-nowrap flex">
           <Button type="submit">Filtrar</Button>
           <Button
             variant="ghost"
@@ -192,11 +190,11 @@ export const LoadingSkeleton = () => {
       </div>
       <div className="w-full space-y-2">
         <Label>Nome do Usuário</Label>
-        <Input placeholder="Insira o nome do usuário" />
+        <Input placeholder="Busque por nome do usuário" />
       </div>
       <div className="w-full space-y-2">
         <Label>Email</Label>
-        <Input placeholder="Insira o email" />
+        <Input placeholder="Busque por email" />
       </div>
       <div className="w-full space-y-2">
         <Button type="submit" disabled>

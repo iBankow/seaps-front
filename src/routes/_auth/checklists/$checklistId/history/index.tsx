@@ -164,7 +164,7 @@ function RouteComponent() {
                 <User className="h-5 w-5 text-purple-600" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Organização</p>
+                <p className="text-sm text-muted-foreground">Orgão</p>
                 <p className="font-medium">{checklist?.organization?.name}</p>
               </div>
             </div>

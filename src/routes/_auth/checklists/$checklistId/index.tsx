@@ -251,7 +251,7 @@ function ChecklistDashboard() {
               </div>
               <div>
                 <p className="text-sm font-medium text-muted-foreground">
-                  Organização
+                  Orgão
                 </p>
                 <p>{checklist.organization?.name}</p>
               </div>

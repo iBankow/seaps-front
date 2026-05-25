@@ -102,7 +102,7 @@ export const DetailsForm = ({
                 <Field data-invalid={fieldState.invalid}>
                   <FieldContent>
                     <FieldLabel htmlFor="form-rhf-select-organization">
-                      Organização
+                      Orgão
                     </FieldLabel>
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />

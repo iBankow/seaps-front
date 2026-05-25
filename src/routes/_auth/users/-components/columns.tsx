@@ -43,7 +43,7 @@ export const columns: ColumnDef<Column>[] = [
   },
   {
     accessorKey: "organization",
-    header: "Organização",
+    header: "Orgão",
     accessorFn(row) {
       return row.organization?.acronym;
     },

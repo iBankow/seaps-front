@@ -447,7 +447,7 @@ function PropertyDetail() {
               </div>
               <div>
                 <p className="text-sm font-medium text-muted-foreground">
-                  Organização
+                  Orgão
                 </p>
                 <p>{property.organization?.name}</p>
               </div>

@@ -71,7 +71,7 @@ export const ReviewForm = ({
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2 text-base font-semibold">
-                Organização Selecionada
+                Orgão Selecionada
               </div>
               <div className="text-muted-foreground mt-1 text-sm">
                 {formData.organization?.name || "--"}

@@ -160,11 +160,11 @@ export function RequestDetailsModal({
 
           <Separator />
 
-          {/* Informações da Organização */}
+          {/* Informações da Orgão */}
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-2">
               <Building className="h-4 w-4" />
-              Organização Solicitada
+              Orgão Solicitada
             </h3>
             <div className="bg-muted/50 p-4 rounded-lg">
               <p className="text-base font-semibold">

@@ -55,7 +55,7 @@ export const createRequestsColumns = (
   },
   {
     accessorKey: "organization_name",
-    header: "Organização",
+    header: "Orgão",
     cell({ row }) {
       return (
         <span className="truncate">
