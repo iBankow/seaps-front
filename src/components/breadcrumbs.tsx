@@ -10,9 +10,11 @@ import {
 } from "./ui/breadcrumb";
 import React from "react";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const Breadcrumbs = () => {
   const matches = useMatches();
+  const isMobile = useIsMobile();
   const matchesWithCrumbs = matches.filter((match) =>
     isMatch(match, "loaderData.crumb"),
   );
@@ -24,10 +26,10 @@ export const Breadcrumbs = () => {
     };
   });
 
-  if (items.length > 3) {
+  if (items.length > 3 && isMobile) {
     return (
       <Breadcrumb className="overflow-hidden overflow-ellipsis">
-        <BreadcrumbList className="flex-nowrap">
+        <BreadcrumbList className="text-lg uppercase flex-nowrap">
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
               <Link
@@ -44,7 +46,7 @@ export const Breadcrumbs = () => {
           <BreadcrumbEllipsis />
           <BreadcrumbSeparator className="self-center" />
           <BreadcrumbItem>
-            <BreadcrumbPage className="line-clamp-1">
+            <BreadcrumbPage className="line-clamp-1 font-bold">
               {items[items.length - 1].label}
             </BreadcrumbPage>
           </BreadcrumbItem>
@@ -55,12 +57,12 @@ export const Breadcrumbs = () => {
 
   return (
     <Breadcrumb>
-      <BreadcrumbList className="flex-nowrap">
+      <BreadcrumbList className="flex-nowrap text-lg uppercase">
         {items.map((item, index) => (
           <React.Fragment key={index}>
             {index === items.length - 1 ? (
               <BreadcrumbItem>
-                <BreadcrumbPage key={index} className="line-clamp-1">
+                <BreadcrumbPage key={index} className="line-clamp-1 font-bold">
                   {item.label}
                 </BreadcrumbPage>
               </BreadcrumbItem>

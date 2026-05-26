@@ -41,6 +41,7 @@ import { Filter, Search, X } from "lucide-react";
 import axios from "axios";
 import { ExportModal } from "./export-modal";
 import debounce from "lodash.debounce";
+import { Separator } from "@/components/ui/separator";
 
 const filterSchema = z.object({
   organization_id: z.string().optional(),
@@ -267,12 +268,12 @@ export function DataFilterForm({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full">
       {/* Chips de filtros ativos */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 w-full">
         <Input
           id="input-property-name"
-          className="uppercase placeholder:normal-case hidden sm:block"
+          className="uppercase placeholder:normal-case w-full"
           placeholder="Pesquisar pelo imóvel..."
           onChange={(e) => debouncedPropertyFilterName(e.target.value)}
         />
@@ -288,7 +289,6 @@ export function DataFilterForm({
               <DialogTrigger asChild>
                 <Button variant="outline" className="gap-2">
                   <Filter className="h-4 w-4" />
-                  Filtros Avançados
                   {activeFilters.length > 0 && (
                     <Badge variant="secondary" className="ml-1">
                       {activeFilters.length}
@@ -481,6 +481,8 @@ export function DataFilterForm({
         onRemoveFilter={handleRemoveFilter}
         onClearAll={handleClearAll}
       />
+
+      <Separator />
     </div>
   );
 }

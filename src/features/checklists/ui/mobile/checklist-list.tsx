@@ -75,7 +75,7 @@ export const ChecklistListMobile = ({ search }: { search: any }) => {
 const RenderMap = (
   data: InfiniteData<PaginatedResponse<ChecklistListItem>, unknown> | undefined,
 ) => {
-  return data?.pages.map((page) =>
+  return data?.pages?.map((page) =>
     page.data.map((checklist) => (
       <Link
         to={`/checklists/$checklistId`}
