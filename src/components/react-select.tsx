@@ -37,7 +37,7 @@ export interface RSSelectBaseProps<
 }
 
 const sizeHeights: Record<RSSelectSize, string> = {
-  sm: "!min-h-9",
+  sm: "!min-h-8",
   md: "!min-h-10",
   lg: "!min-h-11",
 };

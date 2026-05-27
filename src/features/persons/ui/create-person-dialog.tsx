@@ -45,8 +45,10 @@ export type CreatePersonFormData = z.infer<typeof formSchema>;
 
 export const CreatePersonDialog = ({
   organizationId,
+  children,
 }: {
   organizationId?: string;
+  children?: React.ReactNode;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -100,13 +102,16 @@ export const CreatePersonDialog = ({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button>Criar Responsável</Button>
+        {children ? children : <Button type="button">Criar Responsável</Button>}
       </DialogTrigger>
       <DialogContent>
         <form
           id="create-person-form"
           className="flex gap-4 flex-col"
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={(e) => {
+            e.stopPropagation();
+            void form.handleSubmit(onSubmit)(e);
+          }}
         >
           <DialogHeader>
             <DialogTitle>Criar Novo Responsável</DialogTitle>

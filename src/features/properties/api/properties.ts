@@ -40,6 +40,23 @@ export const useCreateProperty = () => {
   });
 };
 
+export const useUpdateProperty = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      payload,
+    }: {
+      id: string;
+      payload: PropertyCreatePayload;
+    }) => propertiesApi.update(id, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: propertiesKeys.all });
+    },
+  });
+};
+
 export const propertiesApi = {
   list: async (filters?: PropertiesListParams) => {
     const { data } = await api.get<PaginatedResponse<Property>>("/properties", {
@@ -56,6 +73,11 @@ export const propertiesApi = {
   },
   create: async (payload: PropertyCreatePayload) => {
     const { data } = await api.post<Property>("/properties", payload);
+
+    return data;
+  },
+  update: async (id: string, payload: PropertyCreatePayload) => {
+    const { data } = await api.put<Property>(`/properties/${id}`, payload);
 
     return data;
   },

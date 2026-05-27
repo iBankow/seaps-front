@@ -4,8 +4,8 @@ import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-import { PropertyForm } from "../../-components/form";
 import { BackButton } from "@/components/back-button";
+import { EditPropertyForm } from "@/features/properties/ui/edit-form";
 
 export const Route = createFileRoute("/_auth/properties/$propertyId/edit/")({
   component: EditProperty,
@@ -77,7 +77,7 @@ function EditProperty() {
         </CardContent>
       </Card>
 
-      <PropertyForm property={property} />
+      <EditPropertyForm property={property} />
     </div>
   );
 }
