@@ -1,13 +1,13 @@
 import type { PaginatedParams } from "@/lib/axios";
 
-export type PropertyType = "OWN" | "RENTED" | "GRANT";
+export type PropertyType = "OWN" | "RENTED" | "GRANT" | "PRIVATE";
 
 export interface Property {
   id: string;
   organization_id: string;
   person_id: string;
   created_by: string;
-  type: "OWN" | "RENTED" | "GRANT";
+  type: PropertyType;
   name: string;
   name_normalized: string;
   address: string;
@@ -38,7 +38,7 @@ export interface PropertiesListParams extends PaginatedParams {
   organization_id?: string;
   person_id?: string;
   name?: string;
-  type?: "OWN" | "RENTED" | "GRANT";
+  type?: PropertyType;
   city?: string;
   state?: string;
   neighborhood?: string;
@@ -47,7 +47,7 @@ export interface PropertiesListParams extends PaginatedParams {
 export interface PropertyCreatePayload {
   organization_id: string;
   person_id: string;
-  type: "OWN" | "RENTED" | "GRANT";
+  type: PropertyType;
   name: string;
   address?: string;
   cep: string;
@@ -57,3 +57,17 @@ export interface PropertyCreatePayload {
   street: string;
   number?: string | null;
 }
+
+enum ETypeLabel {
+  OWN = "PRÓPRIO",
+  RENTED = "ALUGADO",
+  GRANT = "CEDIDO",
+  PRIVATE = "PRIVADO",
+}
+
+export const TypeLabel = {
+  OWN: ETypeLabel.OWN,
+  RENTED: ETypeLabel.RENTED,
+  GRANT: ETypeLabel.GRANT,
+  PRIVATE: ETypeLabel.PRIVATE,
+};

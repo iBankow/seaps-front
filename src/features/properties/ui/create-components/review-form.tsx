@@ -12,17 +12,12 @@ import type {
   PropertyFormDataType,
   PropertyFormSchemaType,
 } from "./create-property-wizard";
+import { TypeLabel } from "../../types";
 
 interface ReviewFormProps {
   form: UseFormReturn<PropertyFormSchemaType>;
   formData: PropertyFormDataType | null;
 }
-
-const TypeLabel = {
-  OWN: "PRÓPRIO",
-  RENTED: "ALUGADO",
-  GRANT: "CEDIDO",
-};
 
 export const ReviewForm = ({ form, formData }: ReviewFormProps) => {
   const values = form.getValues();

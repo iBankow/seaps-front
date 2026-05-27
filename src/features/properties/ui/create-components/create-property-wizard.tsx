@@ -130,6 +130,8 @@ export function CreatePropertyWizard() {
         type: values.type as "OWN" | "RENTED" | "GRANT",
         cep: values.cep.replace(/\D/g, ""),
         number: values.number ? values.number : null,
+        address:
+          `${values.street} - ${values.neighborhood}, ${values.city} - ${values.state}, ${values.cep}`.toUpperCase(),
       });
 
       toast.success("Imóvel criado com sucesso");

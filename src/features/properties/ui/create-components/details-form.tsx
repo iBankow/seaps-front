@@ -28,6 +28,7 @@ const propertyTypes = [
   { value: "OWN", label: "PRÓPRIO" },
   { value: "RENTED", label: "ALUGADO" },
   { value: "GRANT", label: "CEDIDO" },
+  { value: "PRIVATE", label: "PRIVADO" },
 ];
 
 interface DetailsFormProps {

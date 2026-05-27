@@ -43,28 +43,12 @@ import { api } from "@/lib/api";
 import { formatPhone } from "@/lib/utils";
 import { BackButton } from "@/components/back-button";
 import { can } from "@/lib/permissions";
+import { PropertyBadge } from "@/components/property-badge";
+import type { Property } from "@/features/properties/types";
 
 export const Route = createFileRoute("/_auth/properties/$propertyId/")({
   component: PropertyDetail,
 });
-
-const PROPERTY_TYPE_ENUM = {
-  OWN: {
-    label: "PRÓPRIO",
-    style: "border-blue-800 bg-blue-200 text-blue-900 hover:bg-blue-200/80",
-  },
-  RENTED: {
-    label: "ALUGADO",
-    style: "border-green-800 bg-green-200 text-green-900 hover:bg-green-200/80",
-  },
-  GRANT: {
-    label: "CEDIDO",
-    style:
-      "border-purple-800 bg-purple-200 text-purple-900 hover:bg-purple-200/80",
-  },
-};
-
-type PROPERTY_TYPE = "OWN" | "RENTED" | "GRANT";
 
 interface ChecklistSummary {
   id: string;
@@ -86,36 +70,6 @@ interface PropertyStats {
   canceled_checklists: number;
   avg_completion: number;
   recent_checklists: ChecklistSummary[];
-}
-
-interface Property {
-  id: string;
-  name: string;
-  type: PROPERTY_TYPE;
-  address?: string;
-  cep?: string;
-  state?: string;
-  city?: string;
-  neighborhood?: string;
-  street?: string;
-  coordinates?: string;
-  created_at: string;
-  updated_at?: string;
-  organization: {
-    id: string;
-    name: string;
-  };
-  person?: {
-    id: string;
-    name: string;
-    role: string;
-    phone: string;
-    email: string;
-  };
-  user?: {
-    id: string;
-    name: string;
-  };
 }
 
 function PropertyDetail() {
@@ -333,9 +287,7 @@ function PropertyDetail() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Badge className={PROPERTY_TYPE_ENUM[property.type].style}>
-                {PROPERTY_TYPE_ENUM[property.type].label}
-              </Badge>
+              <PropertyBadge type={property.type} />
               {can(["properties:edit"], user?.permissions) && (
                 <Button asChild>
                   <Link
@@ -440,9 +392,7 @@ function PropertyDetail() {
                   Tipo
                 </p>
                 <div className="mt-1">
-                  <Badge className={PROPERTY_TYPE_ENUM[property.type].style}>
-                    {PROPERTY_TYPE_ENUM[property.type].label}
-                  </Badge>
+                  <PropertyBadge type={property.type} />
                 </div>
               </div>
               <div>

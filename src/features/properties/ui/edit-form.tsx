@@ -33,7 +33,7 @@ import { CreatePersonDialog } from "@/features/persons/ui/create-person-dialog";
 const propertySchema = z.object({
   organization_id: z.string().min(1, "Orgão é obrigatório"),
   person_id: z.string().optional().nullable(),
-  type: z.enum(["OWN", "RENTED", "GRANT"]),
+  type: z.enum(["OWN", "RENTED", "GRANT", "PRIVATE"]),
   name: z.string().min(1, "Nome é obrigatório").max(255, "Nome muito longo"),
   address: z.string().optional(),
   cep: z.string().optional(),
@@ -136,6 +136,7 @@ export const EditPropertyForm = ({
                       <SelectItem value="OWN">PRÓPRIO</SelectItem>
                       <SelectItem value="RENTED">ALUGADO</SelectItem>
                       <SelectItem value="GRANT">CONCESSÃO</SelectItem>
+                      <SelectItem value="PRIVATE">PRIVADO</SelectItem>
                     </SelectContent>
                   </Select>
                 </Field>

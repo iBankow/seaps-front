@@ -14,6 +14,10 @@ const PROPERTY_TYPE_ENUM = {
     label: "CONCESSÃO",
     style: "border-red-800 bg-red-200 text-red-900 hover:bg-red-200/80",
   },
+  PRIVATE: {
+    label: "PRIVADO",
+    style: "border-green-800 bg-green-200 text-green-900 hover:bg-green-200/80",
+  },
 };
 
 export const PropertyBadge = ({ type }: { type: string }) => {
