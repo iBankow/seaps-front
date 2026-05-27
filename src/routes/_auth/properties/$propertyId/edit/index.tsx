@@ -1,11 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 import { BackButton } from "@/components/back-button";
 import { EditPropertyForm } from "@/features/properties/ui/edit-form";
+import { useProperty } from "@/features/properties/api/properties";
 
 export const Route = createFileRoute("/_auth/properties/$propertyId/edit/")({
   component: EditProperty,
@@ -15,26 +14,11 @@ export const Route = createFileRoute("/_auth/properties/$propertyId/edit/")({
 function EditProperty() {
   const { propertyId } = Route.useParams();
 
-  const [property, setProperty] = useState();
-  const [dataLoading, setDataLoading] = useState(true);
+  const { data, isLoading, error } = useProperty(propertyId);
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const { data } = await api.get(`/api/v1/properties/${propertyId}`);
+  const property = data;
 
-        if (data) {
-          setProperty(data);
-        }
-      } finally {
-        setDataLoading(false);
-      }
-    };
-
-    loadData();
-  }, [propertyId]);
-
-  if (dataLoading) {
+  if (isLoading) {
     return (
       <div className="flex flex-col gap-y-4">
         <div className="flex items-center gap-2">
@@ -58,6 +42,24 @@ function EditProperty() {
                 ))}
               </div>
             </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!property || error) {
+    return (
+      <div className="flex flex-col gap-y-4">
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="sm" asChild>
+            <BackButton variant={"ghost"} />
+          </Button>
+          <h1 className="text-2xl font-bold">Imóvel não encontrado</h1>
+        </div>
+        <Card>
+          <CardContent>
+            <p>O imóvel que você está tentando editar não foi encontrado.</p>
           </CardContent>
         </Card>
       </div>

@@ -1,6 +1,5 @@
 import { useRouter } from "@tanstack/react-router";
 import { useState } from "react";
-import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -29,6 +28,7 @@ import { Input } from "@/components/ui/input";
 import type { Property } from "../types";
 import { usePersonsList } from "@/features/persons/api/persons";
 import { CreatePersonDialog } from "@/features/persons/ui/create-person-dialog";
+import { useUpdateProperty } from "../api/properties";
 
 const propertySchema = z.object({
   organization_id: z.string().min(1, "Orgão é obrigatório"),
@@ -46,13 +46,10 @@ const propertySchema = z.object({
 
 type PropertyFormData = z.infer<typeof propertySchema>;
 
-export const EditPropertyForm = ({
-  property,
-}: {
-  property?: Partial<Property>;
-}) => {
+export const EditPropertyForm = ({ property }: { property: Property }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const updateProperty = useUpdateProperty();
 
   const form = useForm<PropertyFormData>({
     resolver: zodResolver(propertySchema),
@@ -65,26 +62,23 @@ export const EditPropertyForm = ({
   const onSubmit = async (values: PropertyFormData) => {
     setLoading(true);
     try {
-      if (property?.id) {
-        await api.put(`/api/v1/properties/${property?.id}`, {
+      await updateProperty.mutateAsync({
+        id: property.id,
+        payload: {
           ...values,
+          cep: values.cep || "",
+          state: values.state || "",
+          city: values.city || "",
+          neighborhood: values.neighborhood || "",
+          street: values.street || "",
+          person_id: values.person_id || "",
           address:
             `${values.street} - ${values.neighborhood}, ${values.city} - ${values.state}, ${values.cep}`.toUpperCase(),
-        });
-        toast.success("Imóvel atualizado com sucesso!");
-        router.navigate({ to: `..`, reloadDocument: true });
-      } else {
-        const { data } = await api.post("/api/v1/properties", {
-          ...values,
-          address:
-            `${values.street} - ${values.neighborhood}, ${values.city} - ${values.state}, ${values.cep}`.toUpperCase(),
-        });
-        toast.success("Imóvel criado com sucesso!");
-        router.navigate({
-          to: "/properties/$propertyId/edit",
-          params: { propertyId: data.id },
-        });
-      }
+        },
+      });
+
+      toast.success("Imóvel atualizado com sucesso!");
+      router.navigate({ to: `..` });
     } finally {
       setLoading(false);
     }
