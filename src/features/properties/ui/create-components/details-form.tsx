@@ -23,13 +23,7 @@ import type {
   PropertyFormSchemaType,
 } from "./create-property-wizard";
 import { NameForm } from "./name-form";
-
-const propertyTypes = [
-  { value: "OWN", label: "PRÓPRIO" },
-  { value: "RENTED", label: "ALUGADO" },
-  { value: "GRANT", label: "CEDIDO" },
-  { value: "PRIVATE", label: "PRIVADO" },
-];
+import { TypeLabel } from "../../types";
 
 interface DetailsFormProps {
   form: UseFormReturn<PropertyFormSchemaType>;
@@ -79,9 +73,9 @@ export const DetailsForm = ({ form, updateFormData }: DetailsFormProps) => {
                       <SelectValue placeholder="Selecione o tipo" />
                     </SelectTrigger>
                     <SelectContent>
-                      {propertyTypes.map((item) => (
-                        <SelectItem key={item.value} value={item.value}>
-                          {item.label}
+                      {Object.entries(TypeLabel).map(([value, label]) => (
+                        <SelectItem key={value} value={value}>
+                          {label}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -96,9 +90,7 @@ export const DetailsForm = ({ form, updateFormData }: DetailsFormProps) => {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldContent>
-                    <FieldLabel htmlFor="organization-id">
-                      Orgão
-                    </FieldLabel>
+                    <FieldLabel htmlFor="organization-id">Orgão</FieldLabel>
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}

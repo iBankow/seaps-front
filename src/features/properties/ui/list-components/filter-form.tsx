@@ -3,7 +3,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import {
   Select,
   SelectContent,
@@ -31,6 +31,8 @@ import { useQueries } from "@tanstack/react-query";
 import { organizationsApi } from "#/features/organizations/api/organizations";
 import { addressApi } from "#/features/address/api/address";
 import { FilterChips } from "@/components/ui/filter-chips";
+import { TypeLabel } from "../../types";
+import debounce from "lodash.debounce";
 
 const filterSchema = z.object({
   organization_id: z.string().optional(),
@@ -82,14 +84,7 @@ export function DataFilterForm({}: { data?: any[]; totalRecords?: number }) {
     name: "Nome do Imóvel",
   };
 
-  const typeLabels = {
-    OWN: "PRÓPRIO",
-    RENTED: "ALUGADO",
-    GRANT: "CONCESSÃO",
-  };
-
   // Opções de filtro rápido
-
   // Gerar filtros ativos para chips
   const activeFilters = useMemo(() => {
     const filters = [];
@@ -111,8 +106,7 @@ export function DataFilterForm({}: { data?: any[]; totalRecords?: number }) {
       filters.push({
         key: "type",
         label: filterLabels.type,
-        value:
-          typeLabels[search.type as keyof typeof typeLabels] || search.type,
+        value: TypeLabel[search.type] || search.type,
       });
     }
 
@@ -180,13 +174,25 @@ export function DataFilterForm({}: { data?: any[]; totalRecords?: number }) {
   function onSubmit(values: z.infer<typeof filterSchema>) {
     navigate({
       search: {
-        name: values.name || undefined,
+        name: values.name?.toUpperCase() || undefined,
         organization_id: values.organization_id || undefined,
         type: values.type || undefined,
         city: values.city || undefined,
       },
     });
   }
+
+  const setPropertyNameFilter = (value: string) => {
+    if (value.trim().length >= 3 || value.trim().length === 0) {
+      form.setValue("name", value.toUpperCase());
+      onSubmit(form.getValues());
+    }
+  };
+
+  const debouncedPropertyFilterName = useCallback(
+    debounce(setPropertyNameFilter, 400),
+    [],
+  );
 
   if (isLoading) {
     return <LoadingSkeleton />;
@@ -201,19 +207,20 @@ export function DataFilterForm({}: { data?: any[]; totalRecords?: number }) {
       />
 
       {/* Botão para abrir modal de filtros */}
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-muted-foreground">
-          {activeFilters.length > 0 &&
-            `${activeFilters.length} filtro${activeFilters.length !== 1 ? "s" : ""} aplicado${activeFilters.length !== 1 ? "s" : ""}`}
-        </div>
-
+      <div className="flex items-center gap-2 w-full">
+        <Input
+          id="input-property-name"
+          className="uppercase placeholder:normal-case w-full"
+          placeholder="Pesquisar imóvel..."
+          defaultValue={form.getValues("name")}
+          onChange={(e) => debouncedPropertyFilterName(e.target.value)}
+        />
         <div className="space-x-2">
           {/* <ExportModal data={data || []} totalRecords={totalRecords} /> */}
           <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DialogTrigger asChild>
               <Button variant="outline" className="gap-2">
                 <Filter className="h-4 w-4" />
-                Filtros Avançados
                 {activeFilters.length > 0 && (
                   <Badge variant="secondary" className="ml-1">
                     {activeFilters.length}
@@ -282,9 +289,13 @@ export function DataFilterForm({}: { data?: any[]; totalRecords?: number }) {
                               <SelectValue placeholder="Selecione o Tipo" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="OWN">PRÓPRIO</SelectItem>
-                              <SelectItem value="RENTED">ALUGADO</SelectItem>
-                              <SelectItem value="GRANT">CONCESSÃO</SelectItem>
+                              {Object.entries(TypeLabel).map(
+                                ([value, label]) => (
+                                  <SelectItem key={value} value={value}>
+                                    {label}
+                                  </SelectItem>
+                                ),
+                              )}
                             </SelectContent>
                           </Select>
                           <FieldError />

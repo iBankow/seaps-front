@@ -25,7 +25,7 @@ import { NameForm } from "./name-form";
 import { AddressForm } from "./address-form";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
-import type { Property } from "../types";
+import { TypeLabel, type Property } from "../types";
 import { usePersonsList } from "@/features/persons/api/persons";
 import { CreatePersonDialog } from "@/features/persons/ui/create-person-dialog";
 import { useUpdateProperty } from "../api/properties";
@@ -127,10 +127,11 @@ export const EditPropertyForm = ({ property }: { property: Property }) => {
                       <SelectValue placeholder="Selecione o Tipo" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="OWN">PRÓPRIO</SelectItem>
-                      <SelectItem value="RENTED">ALUGADO</SelectItem>
-                      <SelectItem value="GRANT">CONCESSÃO</SelectItem>
-                      <SelectItem value="PRIVATE">PRIVADO</SelectItem>
+                      {Object.entries(TypeLabel).map(([value, label]) => (
+                        <SelectItem key={value} value={value}>
+                          {label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </Field>
