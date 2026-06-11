@@ -47,7 +47,13 @@ export function PropertiesList({ params }: { params: any }) {
             <Loading size="sm" />
           </div>
         )}
-        {!isLoading && <DataTable columns={columns} data={properties} />}
+        {!isLoading && (
+          <DataTable
+            columns={columns}
+            data={properties}
+            className="table-fixed"
+          />
+        )}
       </div>
       <MetaPagination meta={data?.meta} />
     </div>

@@ -27,14 +27,14 @@ export const columns: ColumnDef<Column>[] = [
           title={row.original.name}
           to="/properties/$propertyId"
           params={{ propertyId: row.original.id }}
-          className="text-sky-400 hover:text-sky-700"
+          className="text-sky-400 hover:text-sky-700 block overflow-ellipsis truncate whitespace-nowrap"
         >
           {row.original.name}
         </Link>
       );
     },
     meta: {
-      cellClassName: "truncate w-[50%]",
+      headerClassName: "w-2/5",
     },
   },
   {
@@ -46,7 +46,6 @@ export const columns: ColumnDef<Column>[] = [
     meta: {
       headerClassName: "hidden md:table-cell",
       cellClassName: "truncate hidden md:table-cell",
-      size: 130,
     },
   },
   {
@@ -58,7 +57,6 @@ export const columns: ColumnDef<Column>[] = [
     meta: {
       headerClassName: "hidden md:table-cell",
       cellClassName: "truncate hidden md:table-cell",
-      size: 200,
     },
   },
   {
@@ -70,7 +68,6 @@ export const columns: ColumnDef<Column>[] = [
     meta: {
       headerClassName: "hidden md:table-cell",
       cellClassName: "truncate hidden md:table-cell",
-      size: 200,
     },
   },
   {
@@ -112,5 +109,9 @@ export const columns: ColumnDef<Column>[] = [
     accessorKey: "actions",
     header: "Ações",
     cell: ({ row }) => <Actions row={row} />,
+    meta: {
+      headerClassName: "text-center",
+      cellClassName: "text-center",
+    },
   },
 ];

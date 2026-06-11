@@ -1,10 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-
-import { useIsMobile } from "@/hooks/use-mobile";
 import { ChecklistList } from "@/features/checklists/ui/checklists-list";
-import { ChecklistListMobile } from "@/features/checklists/ui/mobile/checklist-list";
+
 import z from "zod";
-import { useEffect, useState } from "react";
 
 const SearchSchema = z.object({
   page: z.number().default(1),
@@ -22,22 +19,7 @@ export const Route = createFileRoute("/_auth/checklists/")({
 });
 
 export function RouteComponent() {
-  const isMobile = useIsMobile();
   const search = Route.useSearch();
-
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    setLoaded(true);
-  }, [isMobile]);
-
-  if (!loaded) {
-    return null;
-  }
-
-  if (isMobile) {
-    return <ChecklistListMobile search={search} />;
-  }
 
   return <ChecklistList params={search} />;
 }
