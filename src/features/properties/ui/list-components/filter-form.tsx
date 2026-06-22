@@ -33,6 +33,7 @@ import { addressApi } from "#/features/address/api/address";
 import { FilterChips } from "@/components/ui/filter-chips";
 import { TypeLabel } from "../../types";
 import debounce from "lodash.debounce";
+import { Separator } from "@/components/ui/separator";
 
 const filterSchema = z.object({
   organization_id: z.string().optional(),
@@ -200,12 +201,6 @@ export function DataFilterForm({}: { data?: any[]; totalRecords?: number }) {
 
   return (
     <div className="space-y-4">
-      <FilterChips
-        filters={activeFilters}
-        onRemoveFilter={handleRemoveFilter}
-        onClearAll={handleClearAll}
-      />
-
       {/* Botão para abrir modal de filtros */}
       <div className="flex items-center gap-2 w-full">
         <Input
@@ -216,7 +211,6 @@ export function DataFilterForm({}: { data?: any[]; totalRecords?: number }) {
           onChange={(e) => debouncedPropertyFilterName(e.target.value)}
         />
         <div className="space-x-2">
-          {/* <ExportModal data={data || []} totalRecords={totalRecords} /> */}
           <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DialogTrigger asChild>
               <Button variant="outline" className="gap-2">
@@ -383,8 +377,17 @@ export function DataFilterForm({}: { data?: any[]; totalRecords?: number }) {
               </div>
             </DialogContent>
           </Dialog>
+          {/* <ExportModal data={data || []} totalRecords={totalRecords} /> */}
         </div>
       </div>
+
+      <FilterChips
+        filters={activeFilters}
+        onRemoveFilter={handleRemoveFilter}
+        onClearAll={handleClearAll}
+      />
+
+      <Separator />
     </div>
   );
 }
