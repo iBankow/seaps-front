@@ -28,6 +28,7 @@ export const columns: ColumnDef<Column>[] = [
           to="/properties/$propertyId"
           params={{ propertyId: row.original.id }}
           className="text-sky-400 hover:text-sky-700 block overflow-ellipsis truncate whitespace-nowrap"
+          preload={false}
         >
           {row.original.name}
         </Link>

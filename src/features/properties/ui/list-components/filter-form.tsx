@@ -334,11 +334,12 @@ export function DataFilterForm({}: { data?: any[]; totalRecords?: number }) {
                             placeholder="Selecione a Cidade"
                             options={cities}
                             onChange={(val) => {
-                              field.onChange(val ? val.id : undefined);
+                              field.onChange(val ? val.name : undefined);
                             }}
                             value={
-                              cities.find((city) => city.id === field.value) ||
-                              undefined
+                              cities.find(
+                                (city) => city.name === field.value,
+                              ) || undefined
                             }
                           />
                         </Field>
