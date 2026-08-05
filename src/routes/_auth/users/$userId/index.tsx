@@ -14,10 +14,9 @@ import {
   CheckCircle2,
   XCircle,
 } from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
 import { useAuth } from "@/contexts/auth-contexts";
 import { can } from "@/lib/permissions";
+import { formatDateTimeLong } from "@/lib/format";
 
 export const Route = createFileRoute("/_auth/users/$userId/")({
   component: UserDetail,
@@ -255,11 +254,7 @@ function UserDetail() {
                 Criado em
               </label>
               <p className="text-base font-medium">
-                {format(
-                  new Date(userData.created_at || new Date()),
-                  "dd 'de' MMMM 'de' yyyy 'às' HH:mm",
-                  { locale: ptBR },
-                )}
+                {formatDateTimeLong(userData.created_at || new Date())}
               </p>
             </div>
 
@@ -271,11 +266,7 @@ function UserDetail() {
                     Última Atualização
                   </label>
                   <p className="text-base font-medium">
-                    {format(
-                      new Date(userData.updated_at),
-                      "dd 'de' MMMM 'de' yyyy 'às' HH:mm",
-                      { locale: ptBR },
-                    )}
+                    {formatDateTimeLong(userData.updated_at)}
                   </p>
                 </div>
               </>

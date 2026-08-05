@@ -14,9 +14,8 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileText, Loader2, RefreshCw } from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
+import { formatDateTimeLong } from "@/lib/format";
 
 export const Route = createFileRoute(
   "/_auth/checklists/$checklistId/notification/",
@@ -93,11 +92,7 @@ function RouteComponent() {
           <>
             <p className="text-xs text-muted-foreground mb-4">
               Atualizado em{" "}
-              {format(
-                new Date(notification.updated_at),
-                "dd 'de' MMMM 'de' yyyy 'às' HH:mm",
-                { locale: ptBR },
-              )}
+              {formatDateTimeLong(notification.updated_at)}
             </p>
             <pre className="whitespace-pre-wrap font-sans text-sm border rounded-md p-4 bg-muted/30">
               {notification.content}

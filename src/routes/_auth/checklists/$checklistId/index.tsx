@@ -18,11 +18,10 @@ import {
   TrendingUp,
   MinusCircle,
 } from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
 import { getFirstAndLastName } from "@/lib/utils";
 import { StatusBadge } from "@/components/status-badge";
 import { useChecklistsItems } from "@/features/checklist-items/api/checklist-items";
+import { formatDateLong } from "@/lib/format";
 
 export const Route = createFileRoute("/_auth/checklists/$checklistId/")({
   component: ChecklistDashboard,
@@ -268,11 +267,7 @@ function ChecklistDashboard() {
                 </p>
                 <p className="flex items-center gap-2">
                   <Calendar className="h-4 w-4" />
-                  {format(
-                    new Date(checklist.created_at),
-                    "dd 'de' MMMM 'de' yyyy",
-                    { locale: ptBR },
-                  )}
+                  {formatDateLong(checklist.created_at)}
                 </p>
               </div>
             </div>

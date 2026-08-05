@@ -31,7 +31,7 @@ import { Button } from "@/components/ui/button";
 import { useCreatePerson } from "../api/persons";
 import { useState } from "react";
 import z from "zod";
-import { formatPhone } from "@/lib/utils";
+import { formatPhone } from "@/lib/format";
 
 const formSchema = z.object({
   organization_id: z.string().optional(),

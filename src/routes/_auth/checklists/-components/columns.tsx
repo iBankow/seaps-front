@@ -1,10 +1,10 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { getFirstAndLastName } from "@/lib/utils";
-import { format } from "date-fns";
 import { Actions } from "./actions";
 import { StatusBadge } from "@/components/status-badge";
 import { Link } from "@tanstack/react-router";
 import { ClassificationBadge } from "@/components/classification-badge";
+import { formatDate } from "@/lib/format";
 
 export type Column = {
   user: {
@@ -133,7 +133,7 @@ export const columns: ColumnDef<Column>[] = [
     header: "Finalizado em",
     accessorFn(row) {
       return row.finished_at
-        ? format(new Date(row.finished_at), "dd/MM/yyyy")
+        ? formatDate(row.finished_at)
         : "--";
     },
     meta: {

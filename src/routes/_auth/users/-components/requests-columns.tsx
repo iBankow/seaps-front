@@ -2,9 +2,9 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
+import { formatDate } from "@/lib/format";
 
 export type RequestColumn = {
   id: string;
@@ -81,7 +81,7 @@ export const createRequestsColumns = (
     accessorKey: "created_at",
     header: "Solicitado em",
     accessorFn(row) {
-      return format(new Date(row.created_at), "dd/MM/yyyy");
+      return formatDate(row.created_at);
     },
     meta: {
       headerClassName: "hidden md:table-cell",

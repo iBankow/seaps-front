@@ -18,13 +18,7 @@ import {
   useUnreadNotificationsCount,
 } from "../api/notifications";
 import type { Notification } from "../api/types";
-
-function formatNotificationDate(createdAt: string) {
-  return new Date(createdAt).toLocaleString("pt-BR", {
-    dateStyle: "short",
-    timeStyle: "short",
-  });
-}
+import { formatDateTime } from "@/lib/format";
 
 export function NotificationBell() {
   const [open, setOpen] = useState(false);
@@ -114,7 +108,7 @@ export function NotificationBell() {
                 {notification.message}
               </span>
               <span className="text-[11px] text-muted-foreground">
-                {formatNotificationDate(notification.created_at)}
+                {formatDateTime(notification.created_at)}
               </span>
             </DropdownMenuItem>
           ))}

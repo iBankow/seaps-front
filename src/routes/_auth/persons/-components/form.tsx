@@ -20,7 +20,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { formatPhone, toUpperCase } from "@/lib/utils";
+import { toUpperCase } from "@/lib/utils";
+import { formatPhone } from "@/lib/format";
 import { toast } from "sonner";
 import { http as api } from "@/lib/http";
 import { useRouter, useSearch } from "@tanstack/react-router";

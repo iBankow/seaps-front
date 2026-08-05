@@ -1,10 +1,11 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { Link } from "@tanstack/react-router";
-import { differenceInBusinessDays, format } from "date-fns";
+import { differenceInBusinessDays } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ChevronRight } from "lucide-react";
 import type { ChecklistNotificationListItem } from "@/features/checklist-notifications/api/types";
+import { formatDateTime } from "@/lib/format";
 
 export type Column = ChecklistNotificationListItem;
 
@@ -76,7 +77,7 @@ export const columns: ColumnDef<Column>[] = [
     accessorKey: "created_at",
     header: "Criado em",
     accessorFn(row) {
-      return format(new Date(row.created_at), "dd/MM/yyyy 'às' HH:mm");
+      return formatDateTime(row.created_at);
     },
     meta: {
       headerClassName: "hidden md:table-cell",

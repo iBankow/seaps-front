@@ -4,6 +4,7 @@ import { Actions } from "./actions";
 import { StatusBadge } from "@/components/status-badge";
 import { Link } from "@tanstack/react-router";
 import { ClassificationBadge } from "@/components/classification-badge";
+import { formatDateShort } from "@/lib/format";
 
 export type Column = {
   user: {
@@ -16,14 +17,6 @@ export type Column = {
     name: string;
   };
 } & any;
-
-function format(date: string) {
-  return new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "2-digit",
-  }).format(new Date(date));
-}
 
 export const columns: ColumnDef<Column>[] = [
   {
@@ -139,7 +132,7 @@ export const columns: ColumnDef<Column>[] = [
     accessorKey: "finished_at",
     header: "Finalizado em",
     accessorFn(row) {
-      return row.finished_at ? format(row.finished_at) : "--";
+      return row.finished_at ? formatDateShort(row.finished_at) : "--";
     },
     meta: {
       headerClassName: "hidden md:table-cell",

@@ -2,9 +2,9 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
 import { Actions } from "./actions";
 import { Link } from "@tanstack/react-router";
+import { formatDate } from "@/lib/format";
 
 export type Column = {
   organization: {
@@ -71,7 +71,7 @@ export const columns: ColumnDef<Column>[] = [
     accessorKey: "created_at",
     header: "Criado em",
     accessorFn(row) {
-      return format(new Date(row.created_at), "dd/MM/yyyy");
+      return formatDate(row.created_at);
     },
     meta: {
       headerClassName: "hidden md:table-cell",

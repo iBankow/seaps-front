@@ -26,6 +26,7 @@ import { Switch } from "@/components/ui/switch";
 import { http as api } from "@/lib/http";
 import { useSearch } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { formatDate } from "@/lib/format";
 
 interface ExportModalProps {
   data: any[];
@@ -111,11 +112,11 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
         );
       case "created_at":
         return item.created_at
-          ? new Date(item.created_at).toLocaleDateString("pt-BR")
+          ? formatDate(item.created_at)
           : "--";
       case "updated_at":
         return item.updated_at
-          ? new Date(item.updated_at).toLocaleDateString("pt-BR")
+          ? formatDate(item.updated_at)
           : "--";
       default:
         return "--";

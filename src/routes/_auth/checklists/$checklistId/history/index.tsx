@@ -11,9 +11,9 @@ import {
 import { useChecklist } from "@/contexts/checklist-context";
 import { http as api } from "@/lib/http";
 import { createFileRoute } from "@tanstack/react-router";
-import { format } from "date-fns";
 import { Building, MapPin, User } from "lucide-react";
 import { useEffect, useState } from "react";
+import { formatDateTime } from "@/lib/format";
 
 export const Route = createFileRoute("/_auth/checklists/$checklistId/history/")(
   {
@@ -235,10 +235,7 @@ function RouteComponent() {
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
                         <div className="text-sm text-muted-foreground">
-                          {format(
-                            new Date(item.created_at),
-                            "dd/MM/yyyy 'às' HH:mm"
-                          )}
+                          {formatDateTime(item.created_at)}
                         </div>
                       </TableCell>
                       <TableCell className="hidden lg:table-cell">

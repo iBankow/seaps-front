@@ -28,6 +28,7 @@ import { useSearch } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { getFirstAndLastName } from "@/lib/utils";
 import qs from "qs";
+import { formatDate } from "@/lib/format";
 
 interface ExportModalProps {
   data: any[];
@@ -128,11 +129,11 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
         return item.user?.name ? getFirstAndLastName(item.user.name) : "--";
       case "finished_at":
         return item.finished_at
-          ? new Date(item.finished_at).toLocaleDateString("pt-BR")
+          ? formatDate(item.finished_at)
           : "--";
       case "created_at":
         return item.created_at
-          ? new Date(item.created_at).toLocaleDateString("pt-BR")
+          ? formatDate(item.created_at)
           : "--";
       default:
         return "--";

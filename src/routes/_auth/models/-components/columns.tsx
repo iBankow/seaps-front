@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
-import { format } from "date-fns";
 import { ChevronRight, Pen } from "lucide-react";
+import { formatDate } from "@/lib/format";
 
 export const columns: ColumnDef<any>[] = [
   {
@@ -46,7 +46,7 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: "created_at",
     header: "Criado em",
     accessorFn(row) {
-      return format(new Date(row.created_at), "dd/MM/yyyy");
+      return formatDate(row.created_at);
     },
     meta: {
       headerClassName: "hidden md:table-cell",
@@ -57,7 +57,7 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: "updated_at",
     header: "Atualizado em",
     accessorFn(row) {
-      return format(new Date(row.updated_at), "dd/MM/yyyy");
+      return formatDate(row.updated_at);
     },
     meta: {
       headerClassName: "hidden md:table-cell",

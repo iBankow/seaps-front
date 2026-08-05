@@ -36,13 +36,12 @@ import {
   FileCheck,
   Clock,
 } from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
 import { useAuth } from "@/contexts/auth-contexts";
 import { http as api } from "@/lib/http";
-import { formatPhone } from "@/lib/utils";
+import { formatPhone } from "@/lib/format";
 import { BackButton } from "@/components/back-button";
 import { can } from "@/lib/permissions";
+import { formatDateLong, formatDateTime } from "@/lib/format";
 
 export const Route = createFileRoute("/_auth/properties/$propertyId/")({
   component: PropertyDetail,
@@ -550,11 +549,7 @@ function PropertyDetail() {
                   Data de Criação
                 </p>
                 <p className="flex items-center gap-2">
-                  {format(
-                    new Date(property.created_at),
-                    "dd 'de' MMMM 'de' yyyy",
-                    { locale: ptBR },
-                  )}
+                  {formatDateLong(property.created_at)}
                 </p>
               </div>
 
@@ -565,10 +560,7 @@ function PropertyDetail() {
                     Última Atualização
                   </p>
                   <p>
-                    {format(
-                      new Date(property.updated_at),
-                      "dd/MM/yyyy 'às' HH:mm",
-                    )}
+                    {formatDateTime(property.updated_at)}
                   </p>
                 </div>
               )}
@@ -642,10 +634,7 @@ function PropertyDetail() {
                             Checklist • {checklist.user_name}
                           </p>
                           <p className="text-sm text-muted-foreground">
-                            {format(
-                              new Date(checklist.created_at),
-                              "dd/MM/yyyy 'às' HH:mm",
-                            )}
+                            {formatDateTime(checklist.created_at)}
                           </p>
                         </div>
                       </div>

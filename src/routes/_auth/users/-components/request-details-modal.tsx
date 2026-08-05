@@ -8,7 +8,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
 import {
   Clock,
   CheckCircle2,
@@ -25,6 +24,7 @@ import {
 import type { RequestColumn } from "./requests-columns";
 import { useState } from "react";
 import { RequestActionModal } from "./request-action-modal";
+import { formatDateTime } from "@/lib/format";
 
 interface RequestDetailsModalProps {
   request: RequestColumn | null;
@@ -220,10 +220,7 @@ export function RequestDetailsModal({
               <span>
                 Solicitado em:{" "}
                 <span className="font-medium text-foreground">
-                  {format(
-                    new Date(request.created_at),
-                    "dd/MM/yyyy 'às' HH:mm"
-                  )}
+                  {formatDateTime(request.created_at)}
                 </span>
               </span>
             </div>

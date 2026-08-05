@@ -41,7 +41,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { http as api } from "@/lib/http";
-import { format } from "date-fns";
+import { formatDateTime } from "@/lib/format";
 
 // Schema de validação do formulário
 const requestFormSchema = z.object({
@@ -245,10 +245,7 @@ function RouteComponent() {
               </div>
               <CardDescription>
                 Solicitada em{" "}
-                {format(
-                  new Date(currentRequest.created_at),
-                  "dd/MM/yyyy 'às' HH:mm"
-                )}
+                {formatDateTime(currentRequest.created_at)}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">

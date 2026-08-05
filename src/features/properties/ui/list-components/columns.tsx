@@ -2,6 +2,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@tanstack/react-router";
 import { Actions } from "./actions";
+import { formatDateShort } from "@/lib/format";
 
 const PROPERTY_TYPE_ENUM = {
   OWN: {
@@ -32,14 +33,6 @@ export type Column = {
     name: string;
   };
 } & any;
-
-const format = (date: string) => {
-  return new Date(date).toLocaleDateString("pt-BR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "2-digit",
-  });
-};
 
 export const columns: ColumnDef<Column>[] = [
   {
@@ -128,7 +121,7 @@ export const columns: ColumnDef<Column>[] = [
     accessorKey: "created_at",
     header: "Criado em",
     accessorFn(row) {
-      return format(row.updated_at);
+      return formatDateShort(row.updated_at);
     },
     meta: {
       headerClassName: "hidden md:table-cell",

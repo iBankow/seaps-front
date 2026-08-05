@@ -21,6 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { BackButton } from "@/components/back-button";
+import { formatDateTime } from "@/lib/format";
 
 export const Route = createFileRoute("/_auth/models/$modelId/")({
   component: RouteComponent,
@@ -124,16 +125,6 @@ function RouteComponent() {
     );
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("pt-BR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
   return (
     <div className="flex flex-col gap-y-4 flex-1">
       <Card>
@@ -211,7 +202,7 @@ function RouteComponent() {
                   <Calendar className="h-4 w-4" />
                   Criado em
                 </label>
-                <p className="text-sm">{formatDate(model.created_at)}</p>
+                <p className="text-sm">{formatDateTime(model.created_at)}</p>
               </div>
 
               <div>
@@ -219,7 +210,7 @@ function RouteComponent() {
                   <Calendar className="h-4 w-4" />
                   Última atualização
                 </label>
-                <p className="text-sm">{formatDate(model.updated_at)}</p>
+                <p className="text-sm">{formatDateTime(model.updated_at)}</p>
               </div>
 
               <div>
