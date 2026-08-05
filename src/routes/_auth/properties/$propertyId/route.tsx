@@ -5,7 +5,7 @@ export const Route = createFileRoute("/_auth/properties/$propertyId")({
   component: RouteComponent,
   loader: async ({ params }) => {
     const { data } = await api
-      .get(`/api/v1/properties/${params.propertyId}`)
+      .get(`/properties/${params.propertyId}`)
       .catch(() => {
         throw redirect({
           to: "..",

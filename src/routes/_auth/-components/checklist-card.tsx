@@ -20,7 +20,7 @@ export function ChecklistsCard() {
 
   useEffect(() => {
     api
-      .get("/api/v1/checklists?page=1&per_page=5&status=CLOSED")
+      .get("/checklists?page=1&per_page=5&status=CLOSED")
       .then(({ data }) => setChecklists(data.data))
       .finally(() => setLoading(false));
   }, []);

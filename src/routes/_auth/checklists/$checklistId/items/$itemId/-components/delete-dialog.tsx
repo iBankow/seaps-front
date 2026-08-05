@@ -22,7 +22,7 @@ export const DeleteDialog = ({ image, setLoad }: any) => {
     setLoading(true);
     toast.promise(
       api.delete(
-        `/api/v1/checklist-items/${image.checklist_item_id}/images/${image.id}`
+        `/checklist-items/${image.checklist_item_id}/images/${image.id}`
       ),
       {
         loading: "Excluindo imagem...",

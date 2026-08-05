@@ -32,7 +32,7 @@ export const ObservationDialog = ({
   const handleSave = async () => {
     setLoading(true);
     try {
-      await api.put(`/api/v1/checklist-items/${item.id}`, { observation });
+      await api.put(`/checklist-items/${item.id}`, { observation });
       onOpenChange(false);
     } catch (error) {
       console.error("Error saving observation:", error);

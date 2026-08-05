@@ -67,7 +67,7 @@ export const PropertyForm = ({
   useEffect(() => {
     const loadData = async () => {
       try {
-        const { data } = await api.get("/api/v1/organizations?per_page=100");
+        const { data } = await api.get("/organizations?per_page=100");
 
         setOrganizations(data.data || []);
       } catch (error) {
@@ -87,7 +87,7 @@ export const PropertyForm = ({
       try {
         setDataLoading(true);
         const { data } = await api.get(
-          `/api/v1/persons?per_page=1000&organization_id=${organization_id}`,
+          `/persons?per_page=1000&organization_id=${organization_id}`,
         );
 
         setPersons(data.data || []);
@@ -105,7 +105,7 @@ export const PropertyForm = ({
     setLoading(true);
     try {
       if (property?.id) {
-        await api.put(`/api/v1/properties/${property?.id}`, {
+        await api.put(`/properties/${property?.id}`, {
           ...values,
           address:
             `${values.street} - ${values.neighborhood}, ${values.city} - ${values.state}, ${values.cep}`.toUpperCase(),
@@ -113,7 +113,7 @@ export const PropertyForm = ({
         toast.success("Imóvel atualizado com sucesso!");
         router.navigate({ to: `..`, reloadDocument: true });
       } else {
-        const { data } = await api.post("/api/v1/properties", {
+        const { data } = await api.post("/properties", {
           ...values,
           address:
             `${values.street} - ${values.neighborhood}, ${values.city} - ${values.state}, ${values.cep}`.toUpperCase(),

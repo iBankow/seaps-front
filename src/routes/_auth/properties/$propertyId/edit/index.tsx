@@ -21,7 +21,7 @@ function EditProperty() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const { data } = await api.get(`/api/v1/properties/${propertyId}`);
+        const { data } = await api.get(`/properties/${propertyId}`);
 
         if (data) {
           setProperty(data);

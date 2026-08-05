@@ -25,7 +25,7 @@ export function UsersTab({ search }: UsersTabProps) {
   useEffect(() => {
     setLoading(true);
     api
-      .get("/api/v1/users", {
+      .get("/users", {
         params: { ...search },
       })
       .then(({ data }) => setData(data))

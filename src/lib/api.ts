@@ -1,41 +1,5 @@
-import axios from "axios";
-import { toast } from "sonner";
-import { env } from "@/config/env";
-
-const api = axios.create({
-  baseURL: env.apiUrl,
-  withCredentials: true,
-});
-
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (
-      error.config.url === "/api/v1/auth/me" &&
-      error.response?.status === 401
-    ) {
-      return Promise.reject(error);
-    }
-
-    if (error.response.data?.message) {
-      toast.error(error.response.data.message, {
-        description: error.response.data.action,
-      });
-    } else {
-      toast.error("Erro ao tentar processar a requisição. Tente novamente.");
-    }
-
-    return Promise.reject(error);
-  },
-);
-
-api.interceptors.request.use(
-  (config) => config,
-  (error) => {
-    console.log(error);
-
-    return Promise.reject(error);
-  },
-);
-
-export { api };
+/**
+ * Shim temporário — o cliente real é `lib/http.ts`.
+ * Removido no commit seguinte, quando os imports forem repontados.
+ */
+export { http as api } from "./http";

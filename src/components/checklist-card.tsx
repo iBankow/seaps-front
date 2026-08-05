@@ -53,7 +53,7 @@ const ChecklistCardComponent = ({
   // API call sem debounce, mas otimizada
   const updateScore = useCallback(async (value: string, id: string) => {
     try {
-      const { data } = await api.put(`/api/v1/checklist-items/${id}`, {
+      const { data } = await api.put(`/checklist-items/${id}`, {
         score: value,
       });
       setChecklistItem((prev) => ({ ...prev, ...data }));

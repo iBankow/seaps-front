@@ -44,7 +44,7 @@ function UserDetail() {
 
   useEffect(() => {
     api
-      .get(`/api/v1/users/${userId}`)
+      .get(`/users/${userId}`)
       .then(({ data }) => {
         setUserData(data);
       })

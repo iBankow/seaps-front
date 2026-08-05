@@ -57,8 +57,8 @@ export function EditCheckListForm({ checklist }: { checklist?: any }) {
 
     const getData = async () => {
       const [models, users] = await Promise.all([
-        api.get("/api/v1/models?per_page=100"),
-        api.get("/api/v1/users?per_page=100&role=evaluator"),
+        api.get("/models?per_page=100"),
+        api.get("/users?per_page=100&role=evaluator"),
       ]);
 
       setModels(models.data.data);
@@ -70,7 +70,7 @@ export function EditCheckListForm({ checklist }: { checklist?: any }) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (checklist) {
       return api
-        .put("/api/v1/checklists/" + checklist.id, {
+        .put("/checklists/" + checklist.id, {
           user_id: values.user_id,
           is_returned: values.is_returned,
           return: values.is_returned ? Number(values.return) : undefined,

@@ -31,7 +31,7 @@ export function RequestsTab({ search }: RequestsTabProps) {
   const loadRequests = () => {
     setLoading(true);
     api
-      .get("/api/v1/user-requests", {
+      .get("/user-requests", {
         params: { ...search },
       })
       .then(({ data }) => setData(data))
@@ -50,7 +50,7 @@ export function RequestsTab({ search }: RequestsTabProps) {
   ) => {
     try {
       setSubmitting(true);
-      await api.patch(`/api/v1/user-requests/${requestId}/status`, {
+      await api.patch(`/user-requests/${requestId}/status`, {
         status: "APPROVED",
         permissions,
       });
@@ -71,7 +71,7 @@ export function RequestsTab({ search }: RequestsTabProps) {
   const handleReject = async (requestId: string, reason: string) => {
     try {
       setSubmitting(true);
-      await api.patch(`/api/v1/user-requests/${requestId}/status`, {
+      await api.patch(`/user-requests/${requestId}/status`, {
         status: "REJECTED",
         rejection_reason: reason,
       });

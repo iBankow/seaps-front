@@ -46,7 +46,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
 
   const handleGetReport = () => {
     toast.promise(
-      api.get("/api/v1/reports/" + row.original.id, {
+      api.get("/reports/" + row.original.id, {
         responseType: "blob",
       }),
       {
@@ -71,7 +71,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
   const handleReopenChecklist = () => {
     setLoading(true);
     toast.promise(
-      api.put("/api/v1/checklists/" + row.original.id + "/re-open"),
+      api.put("/checklists/" + row.original.id + "/re-open"),
       {
         loading: "Reabrindo checklist...",
         success: `Checklist ${row.original?.sid} - ${row.original?.property?.name} reaberto!`,
@@ -94,7 +94,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
   const handleValidateChecklist = () => {
     setLoading(true);
     toast.promise(
-      api.put("/api/v1/checklists/" + row.original.id + "/validate"),
+      api.put("/checklists/" + row.original.id + "/validate"),
       {
         loading: "Validando checklist...",
         success: `Checklist ${row.original?.sid} - ${row.original?.property?.name} validado!`,

@@ -19,7 +19,7 @@ export const DeleteDialog = ({ row, onOpenChange, open }: any) => {
 
   const handleDelete = () => {
     setLoading(true);
-    toast.promise(api.delete("/api/v1/checklists/" + row.original.id), {
+    toast.promise(api.delete("/checklists/" + row.original.id), {
       loading: "Excluindo checklist...",
       success: `Checklist ${row.original?.sid} - ${row.original?.property?.name} excluído com sucesso!`,
       finally: () => {

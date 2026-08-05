@@ -149,7 +149,7 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
         ...(useFilters ? { ...search, per_page: null, page: null } : {}),
       };
 
-      const response = await api.get("/api/v1/checklists/export", {
+      const response = await api.get("/checklists/export", {
         params: exportParams,
         responseType: "blob",
         paramsSerializer: (params) =>

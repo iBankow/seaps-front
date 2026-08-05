@@ -132,7 +132,7 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
         ...(useFilters ? search : {}),
       };
 
-      const response = await api.get("/api/v1/properties/export", {
+      const response = await api.get("/properties/export", {
         params: exportParams,
         responseType: "blob",
       });

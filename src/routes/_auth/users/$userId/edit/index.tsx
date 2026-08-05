@@ -135,8 +135,8 @@ function EditUser() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const { data } = await api.get(`/api/v1/users/${userId}`);
-        const orgsResponse = await api.get(`/api/v1/organizations?per_page=100`);
+        const { data } = await api.get(`/users/${userId}`);
+        const orgsResponse = await api.get(`/organizations?per_page=100`);
         setOrganizations(orgsResponse.data.data);
         if (data) {
           form.reset({
@@ -157,7 +157,7 @@ function EditUser() {
 
   const onSubmit = async (values: UserFormData) => {
     api
-      .put(`/api/v1/users/${userId}`, {
+      .put(`/users/${userId}`, {
         permissions: values.permissions,
         is_active: values.is_active,
         organization_id: values.organization_id,

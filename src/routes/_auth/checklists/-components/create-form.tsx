@@ -110,9 +110,9 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
 
     const getData = async () => {
       const [models, organizations, users] = await Promise.all([
-        api.get("/api/v1/models?per_page=100"),
-        api.get("/api/v1/organizations?per_page=100"),
-        api.get("/api/v1/users?per_page=100&role=evaluator"),
+        api.get("/models?per_page=100"),
+        api.get("/organizations?per_page=100"),
+        api.get("/users?per_page=100&role=evaluator"),
       ]);
 
       setModels(models.data.data);
@@ -138,7 +138,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
         }
 
         const response = await api.get(
-          `/api/v1/properties?${params.toString()}`,
+          `/properties?${params.toString()}`,
         );
         setProperties(response.data.data);
         setPropertiesMeta(response.data.meta);
@@ -217,7 +217,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (checklist) {
       return api
-        .put("/api/v1/checklists/" + checklist.id, {
+        .put("/checklists/" + checklist.id, {
           user_id: values.user_id,
         })
         .then(() =>
@@ -229,7 +229,7 @@ export function CreateCheckListForm({ checklist }: { checklist?: any }) {
     }
 
     return api
-      .post("/api/v1/checklists/", values)
+      .post("/checklists/", values)
       .then(() =>
         router.navigate({
           to: "..",

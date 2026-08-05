@@ -51,7 +51,7 @@ function RouteComponent() {
       try {
         setLoading(true);
         setError(null);
-        const { data } = await api.get(`/api/v1/models/${modelId}`);
+        const { data } = await api.get(`/models/${modelId}`);
         setModel(data);
       } catch (err) {
         console.error("Erro ao carregar modelo:", err);

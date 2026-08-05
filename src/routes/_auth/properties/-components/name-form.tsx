@@ -32,7 +32,7 @@ export const NameForm = ({
     setIsChecking(true);
 
     try {
-      const { data } = await api.get(`/api/v1/properties/check`, {
+      const { data } = await api.get(`/properties/check`, {
         params: {
           name: name,
           id: propertyId,

@@ -29,7 +29,7 @@ export const AddressForm = (props: any) => {
   async function findAddressByCEP(cep: string) {
     setLoading(true);
     await api
-      .get("api/v1/address/zipcode/" + cep)
+      .get("/address/zipcode/" + cep)
       .then((response) => {
         const { data } = response;
 
@@ -50,7 +50,7 @@ export const AddressForm = (props: any) => {
     if (state) {
       setLoading(true);
       api
-        .get(`api/v1/address/states/${state}`)
+        .get(`/address/states/${state}`)
         .then(({ data }) => {
           setCities(
             data.map((city: { name: string; id: string }) => ({

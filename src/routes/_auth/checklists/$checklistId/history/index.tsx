@@ -122,7 +122,7 @@ function RouteComponent() {
 
   useEffect(() => {
     api
-      .get(`api/v1/checklists/${params.checklistId}/history`)
+      .get(`/checklists/${params.checklistId}/history`)
       .then((response) => {
         setHistory(response.data);
       });

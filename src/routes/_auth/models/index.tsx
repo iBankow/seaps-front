@@ -29,7 +29,7 @@ function RouteComponent() {
 
   useEffect(() => {
     api
-      .get("/api/v1/models", {
+      .get("/models", {
         params: { ...search },
       })
       .then(({ data }) => setData(data))

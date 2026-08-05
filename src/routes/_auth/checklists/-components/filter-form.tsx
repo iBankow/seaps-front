@@ -173,9 +173,9 @@ export function DataFilterForm({ data, totalRecords }: { data?: any[], totalReco
   useEffect(() => {
     try {
       api
-        .get("/api/v1/organizations?per_page=100")
+        .get("/organizations?per_page=100")
         .then(({ data }) => setOrganizations(data.data));
-      api.get("/api/v1/users?role=evaluator").then(({ data }) =>
+      api.get("/users?role=evaluator").then(({ data }) =>
         setUsers(
           data.data.map((user: any) => ({
             ...user,

@@ -57,7 +57,7 @@ function ChecklistContent() {
 
   useEffect(() => {
     api
-      .get(`api/v1/checklists/${checklistId}/items`)
+      .get(`/checklists/${checklistId}/items`)
       .then(({ data }) => {
         setItems(data);
 

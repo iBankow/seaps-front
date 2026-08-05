@@ -17,7 +17,7 @@ export const FinishDialog = ({ row, onOpenChange, open }: any) => {
 
   const handleFinish = () => {
     toast.promise(
-      api.put("/api/v1/checklists/" + row.original.id + "/finish"),
+      api.put("/checklists/" + row.original.id + "/finish"),
       {
         loading: "Finalizando checklist...",
         success: `Checklist ${row.original?.sid} - ${row.original?.property?.name} finalizado!`,

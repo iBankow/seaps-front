@@ -43,7 +43,7 @@ export function ProfileForm() {
 
   async function onSubmit() {
     return api
-      .put("/api/v1/auth/generate-password")
+      .put("/auth/generate-password")
       .then(({ data }) => {
         toast.success("Senha gerada com sucesso!");
         setTempPassword(data.password);

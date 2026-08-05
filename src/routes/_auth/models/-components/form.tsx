@@ -60,7 +60,7 @@ export function CreateModelForm() {
   const [items, setItems] = useState<any[]>([]);
 
   useEffect(() => {
-    api.get("/api/v1/items").then(({ data }) => setItems(data));
+    api.get("/items").then(({ data }) => setItems(data));
   }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -74,7 +74,7 @@ export function CreateModelForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     return api
-      .post("/api/v1/models", {
+      .post("/models", {
         ...values,
         name: values.name.toUpperCase(),
         description: values.description?.toUpperCase(),
@@ -251,7 +251,7 @@ export function EditModelForm({
   const [items, setItems] = useState<any[]>([]);
 
   useEffect(() => {
-    api.get("/api/v1/items").then(({ data }) => setItems(data));
+    api.get("/items").then(({ data }) => setItems(data));
   }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -267,7 +267,7 @@ export function EditModelForm({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     return api
-      .put("/api/v1/models/" + model.id, {
+      .put("/models/" + model.id, {
         ...values,
         name: values.name.toUpperCase(),
         description: values.description?.toUpperCase(),

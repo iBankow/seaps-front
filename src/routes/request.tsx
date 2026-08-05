@@ -107,7 +107,7 @@ function RouteComponent() {
     const loadCurrentRequest = async () => {
       try {
         setLoadingRequest(true);
-        const response = await api.get("/api/v1/auth/request");
+        const response = await api.get("/auth/request");
         setCurrentRequest(response.data);
       } catch (error: any) {
         // Se retornar 404, significa que não há solicitação
@@ -127,7 +127,7 @@ function RouteComponent() {
     const loadOrganizations = async () => {
       try {
         setLoading(true);
-        const response = await api.get("/api/v1/organizations?per_page=100");
+        const response = await api.get("/organizations?per_page=100");
         setOrganizations(response.data.data || []);
       } catch (error) {
         console.error("Erro ao carregar organizações:", error);
@@ -146,7 +146,7 @@ function RouteComponent() {
       setSubmitting(true);
 
       // Aqui você faria a chamada para a API para criar a solicitação
-      const response = await api.post("/api/v1/user-requests", data);
+      const response = await api.post("/user-requests", data);
 
       if (response.status === 201) {
         toast.success(

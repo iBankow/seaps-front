@@ -42,7 +42,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
 
   const handleDeleteProperty = () => {
     setLoading(true);
-    toast.promise(api.delete("/api/v1/properties/" + row.original.id), {
+    toast.promise(api.delete("/properties/" + row.original.id), {
       loading: "Excluindo imóvel...",
       success: `Imóvel ${row.original.name} excluído com sucesso!`,
       finally: () => setLoading(false),

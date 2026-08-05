@@ -138,7 +138,7 @@ function PropertyDetail() {
     const fetchPropertyStats = async () => {
       try {
         // Buscar checklists relacionados a esta propriedade
-        const response = await api.get("/api/v1/checklists", {
+        const response = await api.get("/checklists", {
           params: { property_name: property?.name, limit: 999 },
         });
 
@@ -160,7 +160,7 @@ function PropertyDetail() {
           checklists.slice(0, 5).map(async (checklist: any) => {
             try {
               const itemsResponse = await api.get(
-                `/api/v1/checklists/${checklist.id}/items`,
+                `/checklists/${checklist.id}/items`,
               );
               const items = itemsResponse.data || [];
 
@@ -281,7 +281,7 @@ function PropertyDetail() {
 
     setSaving(true);
     try {
-      await api.put(`/api/v1/persons/${property.person.id}`, editingPerson);
+      await api.put(`/persons/${property.person.id}`, editingPerson);
 
       // Atualizar o estado local da propriedade
       if (property.person) {

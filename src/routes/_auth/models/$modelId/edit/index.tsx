@@ -18,7 +18,7 @@ function RouteComponent() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const { data } = await api.get(`/api/v1/models/${modelId}`);
+        const { data } = await api.get(`/models/${modelId}`);
 
         if (data) {
           setModel(data);

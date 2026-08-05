@@ -25,7 +25,7 @@ function App() {
   const [igm, setIGM] = useState<any>([]);
 
   useEffect(() => {
-    api.get("api/v1/dashboards").then(({ data }) => {
+    api.get("/dashboards").then(({ data }) => {
       setRanges(data.ranges);
       setProperties(data.properties);
       setInspected(data.inspected);

@@ -44,7 +44,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
 
   const handleGetReport = () => {
     toast.promise(
-      api.get("/api/v1/reports/" + row.original.id, {
+      api.get("/reports/" + row.original.id, {
         responseType: "blob",
         skipErrorToast: true,
       }),

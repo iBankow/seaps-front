@@ -163,7 +163,7 @@ export function DataFilterForm({
   useEffect(() => {
     try {
       api
-        .get("/api/v1/organizations?per_page=100")
+        .get("/organizations?per_page=100")
         .then(({ data }) => setOrganizations(data.data));
       axios
         .get(

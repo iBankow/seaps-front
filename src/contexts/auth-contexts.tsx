@@ -27,7 +27,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const getUserData = () =>
     api
-      .get("/api/v1/auth/me")
+      .get("/auth/me")
       .then(({ data }) => setUser(data))
       .finally(() => setLoading(false));
 
@@ -36,13 +36,13 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    await api.post("/api/v1/sessions", { email, password });
+    await api.post("/sessions", { email, password });
 
     window.location.reload();
   };
 
   const logout = async () => {
-    api.delete("/api/v1/sessions").then(() => {
+    api.delete("/sessions").then(() => {
       setUser(null);
       window.location.replace(config.url_logout);
     });
@@ -52,7 +52,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setLoading(true);
 
     api
-      .post("/api/v1/sessions/mt-login?code=" + code, { code })
+      .post("/sessions/mt-login?code=" + code, { code })
       .then(() => window.location.replace("/"));
   };
 

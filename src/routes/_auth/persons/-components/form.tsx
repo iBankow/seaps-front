@@ -64,14 +64,14 @@ export function CreatePersonForm() {
 
   useEffect(() => {
     api
-      .get("/api/v1/organizations?per_page=1000")
+      .get("/organizations?per_page=1000")
       .then(({ data }) => setOrganizations(data.data));
   }, []);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
     return api
-      .post("/api/v1/persons/", values)
+      .post("/persons/", values)
       .then(() => {
         toast.success("Responsável criado com sucesso");
         router.history.back();

@@ -9,7 +9,7 @@ export const Route = createFileRoute(
     const { checklistId, itemId } = params;
 
     const { data } = await api
-      .get(`/api/v1/checklist-items/${itemId}`)
+      .get(`/checklist-items/${itemId}`)
       .catch(() => {
         throw redirect({
           to: "/checklists/$checklistId/items",
