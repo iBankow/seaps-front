@@ -67,7 +67,9 @@ export const PropertyForm = ({
   useEffect(() => {
     const loadData = async () => {
       try {
-        const { data } = await api.get("/organizations?per_page=100");
+        const { data } = await api.get("/organizations?per_page=100", {
+          skipErrorToast: true,
+        });
 
         setOrganizations(data.data || []);
       } catch (error) {

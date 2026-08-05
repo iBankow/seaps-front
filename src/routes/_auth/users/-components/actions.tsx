@@ -43,7 +43,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
   const handleDeleteUser = () => {
     setLoading(true);
     api
-      .delete("/users/" + row.original.id)
+      .delete("/users/" + row.original.id, { skipErrorToast: true })
       .then(() => {
         toast.success(`Usuário ${row.original.name} excluído com sucesso!`);
         deleteDialog.hide();

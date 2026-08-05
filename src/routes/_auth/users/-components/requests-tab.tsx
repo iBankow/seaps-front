@@ -50,10 +50,11 @@ export function RequestsTab({ search }: RequestsTabProps) {
   ) => {
     try {
       setSubmitting(true);
-      await api.patch(`/user-requests/${requestId}/status`, {
-        status: "APPROVED",
-        permissions,
-      });
+      await api.patch(
+        `/user-requests/${requestId}/status`,
+        { status: "APPROVED", permissions },
+        { skipErrorToast: true },
+      );
 
       toast.success("Solicitação aprovada com sucesso!");
       setModalOpen(false);
@@ -71,10 +72,11 @@ export function RequestsTab({ search }: RequestsTabProps) {
   const handleReject = async (requestId: string, reason: string) => {
     try {
       setSubmitting(true);
-      await api.patch(`/user-requests/${requestId}/status`, {
-        status: "REJECTED",
-        rejection_reason: reason,
-      });
+      await api.patch(
+        `/user-requests/${requestId}/status`,
+        { status: "REJECTED", rejection_reason: reason },
+        { skipErrorToast: true },
+      );
 
       toast.success("Solicitação rejeitada com sucesso!");
       setModalOpen(false);

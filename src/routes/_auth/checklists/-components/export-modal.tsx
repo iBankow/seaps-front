@@ -150,6 +150,7 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
       };
 
       const response = await api.get("/checklists/export", {
+        skipErrorToast: true,
         params: exportParams,
         responseType: "blob",
         paramsSerializer: (params) =>

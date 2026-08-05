@@ -65,10 +65,10 @@ function ChecklistItem() {
         formData.append("file", img);
       });
 
+      // Sem Content-Type manual: o axios define multipart com boundary
+      // sozinho para FormData, e o header sem boundary era inerte.
       await api.post(`/checklist-items/${itemId}/upload`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        skipErrorToast: true,
       });
 
       if (filesToUpload.length < files.length) {

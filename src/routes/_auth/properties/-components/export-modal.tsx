@@ -133,6 +133,7 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
       };
 
       const response = await api.get("/properties/export", {
+        skipErrorToast: true,
         params: exportParams,
         responseType: "blob",
       });

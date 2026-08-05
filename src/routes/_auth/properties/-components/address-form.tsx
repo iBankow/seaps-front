@@ -29,7 +29,7 @@ export const AddressForm = (props: any) => {
   async function findAddressByCEP(cep: string) {
     setLoading(true);
     await api
-      .get("/address/zipcode/" + cep)
+      .get("/address/zipcode/" + cep, { skipErrorToast: true })
       .then((response) => {
         const { data } = response;
 
@@ -50,7 +50,7 @@ export const AddressForm = (props: any) => {
     if (state) {
       setLoading(true);
       api
-        .get(`/address/states/${state}`)
+        .get(`/address/states/${state}`, { skipErrorToast: true })
         .then(({ data }) => {
           setCities(
             data.map((city: { name: string; id: string }) => ({
