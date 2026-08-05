@@ -2,6 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ModeToggle } from "./mode-toggle";
 import { Breadcrumbs } from "./breadcrumbs";
+import { NotificationBell } from "@/features/notifications/ui/notification-bell";
 
 export function SiteHeader() {
   return (
@@ -11,6 +12,7 @@ export function SiteHeader() {
         <Separator orientation="vertical" className="mx-2 h-4 self-center!" />
         <Breadcrumbs />
         <div className="hidden sm:flex ml-auto items-center gap-2">
+          <NotificationBell />
           <ModeToggle />
         </div>
       </div>
