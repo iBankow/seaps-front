@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { bucketUrl } from "@/config/env";
 import type { EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import { CarouselButton } from "./carousel-button";
@@ -65,7 +66,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
             <div className="embla__slide" key={item.id}>
               <img
                 loading="lazy"
-                src={import.meta.env.VITE_BUCKET_URL + item.image}
+                src={bucketUrl(item.image)}
                 className="h-96 w-full rounded object-contain"
                 width={512}
                 height={512}

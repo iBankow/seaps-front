@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { bucketUrl } from "@/config/env";
 import React from "react";
 
 type PropType = {
@@ -22,7 +23,7 @@ export const CarouselButton: React.FC<PropType> = (props) => {
         )}
       >
         <img
-          src={import.meta.env.VITE_BUCKET_URL + props.image.image}
+          src={bucketUrl(props.image.image)}
           alt="image"
           width={100}
           height={100}

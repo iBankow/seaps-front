@@ -1,8 +1,9 @@
 import axios from "axios";
 import { toast } from "sonner";
+import { env } from "@/config/env";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
+  baseURL: env.apiUrl,
   withCredentials: true,
 });
 

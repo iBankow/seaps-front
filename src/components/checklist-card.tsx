@@ -2,6 +2,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { bucketUrl } from "@/config/env";
 import {
   Card,
   CardContent,
@@ -121,7 +122,7 @@ const ChecklistCardComponent = ({
             className="w-full flex-grow overflow-hidden border bg-muted-foreground/10 object-cover p-0"
           >
             <img
-              src={import.meta.env.VITE_BUCKET_URL + item.image}
+              src={bucketUrl(item.image)}
               alt="checklist-image"
               className="pointer-events-none h-full w-full object-cover"
               loading="lazy"

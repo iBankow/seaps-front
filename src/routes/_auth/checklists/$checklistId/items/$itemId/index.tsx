@@ -1,6 +1,7 @@
 import { createFileRoute, useParams, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
+import { bucketUrl } from "@/config/env";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Camera, Upload } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -151,7 +152,7 @@ function ChecklistItem() {
                     onClick={() => imageDialog.showIndex(index)}
                   >
                     <img
-                      src={import.meta.env.VITE_BUCKET_URL + image.image}
+                      src={bucketUrl(image.image)}
                       alt={`Imagem do item ${item.item?.name}`}
                       className="h-full w-full object-cover"
                     />
