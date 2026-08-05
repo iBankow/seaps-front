@@ -1,36 +1,36 @@
 import { Controller, type UseFormReturn } from "react-hook-form";
 import { useCallback, useState } from "react";
-import { Input } from "#/components/ui/input";
+import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "#/components/ui/card";
-import { RadioGroup, RadioGroupItem } from "#/components/ui/radio-group";
+} from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Field,
   FieldContent,
   FieldDescription,
   FieldLabel,
   FieldTitle,
-} from "#/components/ui/field";
+} from "@/components/ui/field";
 import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
-} from "#/components/ui/pagination";
-import { Button } from "#/components/ui/button";
+} from "@/components/ui/pagination";
+import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import type {
   PropertyFormDataType,
   PropertyFormSchemaType,
 } from "./create-property-wizard";
-import { usePersonsList } from "#/features/persons/api/persons";
-import { CreatePersonDialog } from "#/features/persons/ui/create-person-dialog";
+import { usePersonsList } from "@/features/persons/api/persons";
+import { CreatePersonDialog } from "@/features/persons/ui/create-person-dialog";
 import debounce from "lodash.debounce";
 
 interface SelectPersonFormProps {

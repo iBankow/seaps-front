@@ -6,7 +6,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "#/components/ui/card";
+} from "@/components/ui/card";
 import { FileText, Landmark, Package, User } from "lucide-react";
 
 export const ReviewForm = ({

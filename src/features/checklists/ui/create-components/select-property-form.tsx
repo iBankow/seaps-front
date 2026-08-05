@@ -1,16 +1,16 @@
 import { Controller, type UseFormReturn } from "react-hook-form";
 import type { FormDataType, FormSchemaType } from "./create-checklist-wizard";
 import { useState } from "react";
-import { Input } from "#/components/ui/input";
+import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "#/components/ui/card";
-import { usePropertiesList } from "#/features/properties/api/properties";
-import { RadioGroup, RadioGroupItem } from "#/components/ui/radio-group";
+} from "@/components/ui/card";
+import { usePropertiesList } from "@/features/properties/api/properties";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Field,
   FieldContent,
@@ -18,14 +18,14 @@ import {
   FieldGroup,
   FieldLabel,
   FieldTitle,
-} from "#/components/ui/field";
+} from "@/components/ui/field";
 import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
-} from "#/components/ui/pagination";
-import { Button } from "#/components/ui/button";
+} from "@/components/ui/pagination";
+import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Filter, X } from "lucide-react";
 import {
   Dialog,
@@ -34,9 +34,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "#/components/ui/dialog";
-import { Label } from "#/components/ui/label";
-import { useIsMobile } from "#/hooks/use-mobile";
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Drawer,
   DrawerContent,
@@ -44,9 +44,9 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "#/components/ui/drawer";
+} from "@/components/ui/drawer";
 import { useQuery } from "@tanstack/react-query";
-import { addressApi } from "#/features/address/api/address";
+import { addressApi } from "@/features/address/api/address";
 import {
   Select,
   SelectContent,
@@ -54,7 +54,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "#/components/ui/select";
+} from "@/components/ui/select";
 
 interface SelectPropertyFormProps {
   form: UseFormReturn<FormSchemaType>;

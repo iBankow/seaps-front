@@ -1,4 +1,4 @@
-import type { PaginatedParams } from "#/lib/axios";
+import type { PaginatedParams } from "@/lib/axios";
 
 export interface ChecklistNotification {
   id: string;

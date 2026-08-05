@@ -6,7 +6,7 @@ import {
   FieldGroup,
   FieldLabel,
   FieldTitle,
-} from "#/components/ui/field";
+} from "@/components/ui/field";
 import { Controller, type UseFormReturn } from "react-hook-form";
 import type { FormDataType, FormSchemaType } from "./create-checklist-wizard";
 import {
@@ -15,13 +15,13 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "#/components/ui/select";
+} from "@/components/ui/select";
 import { useQuery } from "@tanstack/react-query";
-import { modelsApi } from "#/features/models/api/models";
-import { Card, CardContent } from "#/components/ui/card";
-import { organizationsApi } from "#/features/organizations/api/organizations";
-import { Switch } from "#/components/ui/switch";
-import { Input } from "#/components/ui/input";
+import { modelsApi } from "@/features/models/api/models";
+import { Card, CardContent } from "@/components/ui/card";
+import { organizationsApi } from "@/features/organizations/api/organizations";
+import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
 
 export const DetailsForm = ({
   form,

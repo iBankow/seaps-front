@@ -4,20 +4,20 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "#/components/ui/field";
-import { Card, CardContent } from "#/components/ui/card";
+} from "@/components/ui/field";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "#/components/ui/select";
+} from "@/components/ui/select";
 import { Controller, type UseFormReturn } from "react-hook-form";
 import { useQueries } from "@tanstack/react-query";
 
-import { organizationsApi } from "#/features/organizations/api/organizations";
-import { initialData } from "#/lib/axios";
+import { organizationsApi } from "@/features/organizations/api/organizations";
+import { initialData } from "@/lib/axios";
 import type {
   PropertyFormDataType,
   PropertyFormSchemaType,

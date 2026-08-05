@@ -9,7 +9,7 @@ import { SelectPropertyForm } from "./select-property-form";
 import { SelectUserForm } from "./select-user-form";
 import { ReviewForm } from "./review-form";
 import z from "zod";
-import type { Property } from "#/features/properties/types";
+import type { Property } from "@/features/properties/types";
 import { Link, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { useCreateChecklist } from "../../api/checklists";

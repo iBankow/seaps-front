@@ -13,25 +13,25 @@ import {
   FieldContent,
   FieldError,
   FieldLabel,
-} from "#/components/ui/field";
-import { Input } from "#/components/ui/input";
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "#/components/ui/select";
-import { organizationsApi } from "#/features/organizations/api/organizations";
-import { initialData } from "#/lib/axios";
+} from "@/components/ui/select";
+import { organizationsApi } from "@/features/organizations/api/organizations";
+import { initialData } from "@/lib/axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueries } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
-import { Button } from "#/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { useCreatePerson } from "../api/persons";
 import { useState } from "react";
 import z from "zod";
-import { formatPhone } from "#/lib/utils";
+import { formatPhone } from "@/lib/utils";
 
 const formSchema = z.object({
   organization_id: z.string().optional(),

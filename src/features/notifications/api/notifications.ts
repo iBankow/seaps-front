@@ -1,4 +1,4 @@
-import api, { type PaginatedResponse } from "#/lib/axios";
+import api, { type PaginatedResponse } from "@/lib/axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { notificationsKeys } from "./query-keys";
 import type {

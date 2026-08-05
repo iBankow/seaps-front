@@ -4,7 +4,7 @@ import api, {
   initialData,
   isApiError,
   type PaginatedResponse,
-} from "#/lib/axios";
+} from "@/lib/axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Person, PersonCreatePayload, PersonsListParams } from "../types";
 import { personsKeys } from "./query-keys";
