@@ -12,6 +12,7 @@ import {
   AlertTriangle,
   XCircle,
   Edit,
+  FileText,
   History,
   List,
   TrendingUp,
@@ -303,6 +304,18 @@ function ChecklistDashboard() {
             Histórico
           </Link>
         </Button>
+
+        {checklist.status !== "OPEN" && (
+          <Button variant="outline" size="lg" asChild>
+            <Link
+              to="/checklists/$checklistId/notification"
+              params={{ checklistId }}
+            >
+              <FileText className="h-4 w-4 mr-2" />
+              Notificação
+            </Link>
+          </Button>
+        )}
       </div>
     </div>
   );

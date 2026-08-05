@@ -94,12 +94,6 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
         open={validateDialog.visible}
       /> */}
 
-      {/* <NotificationDialog
-        row={row}
-        open={notificationDialog.visible}
-        onOpenChange={notificationDialog.toggle}
-      /> */}
-
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size={"icon"} className="h-7 flex-1">
@@ -165,9 +159,9 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
             <DropdownMenuItem
               disabled={loading}
               onClick={() => deleteDialog.show()}
-              className="text-red-600 focus:text-red-600"
+              className="text-red-600 focus:text-red-600 hover:text-red-600"
             >
-              <Trash2 size={16} className="text-red-600" />
+              <Trash2 size={16} className="text-red-600 focus:text-red-600! hover:text-red-600!" />
               Excluir
             </DropdownMenuItem>
           </DropdownMenuGroup>

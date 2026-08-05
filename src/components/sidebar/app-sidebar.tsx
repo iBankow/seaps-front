@@ -14,6 +14,7 @@ import {
 
 import {
   // Boxes,
+  Bell,
   ChartColumnIncreasing,
   ClipboardList,
   Landmark,
@@ -39,6 +40,11 @@ const data = {
       title: "Imóveis",
       url: "/properties",
       icon: Landmark,
+    },
+    {
+      title: "Notificações",
+      url: "/checklist-notifications",
+      icon: Bell,
     },
   ],
   navSecondary: [

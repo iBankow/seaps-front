@@ -142,12 +142,6 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
         open={validateDialog.visible}
       />
 
-      {/* <NotificationDialog
-        row={row}
-        open={notificationDialog.visible}
-        onOpenChange={notificationDialog.toggle}
-      /> */}
-
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size={"icon"} className="h-7 flex-1">
