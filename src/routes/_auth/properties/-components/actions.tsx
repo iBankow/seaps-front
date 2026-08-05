@@ -1,6 +1,6 @@
 "use client";
 
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 
 import { Button } from "@/components/ui/button";
 import type { Row } from "@tanstack/react-table";

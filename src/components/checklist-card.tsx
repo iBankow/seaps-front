@@ -20,7 +20,7 @@ import {
   MessageSquareText,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { cn } from "@/lib/utils";
 import { useState, useCallback, memo } from "react";
 import { useDebounce } from "@/hooks/use-debounce";

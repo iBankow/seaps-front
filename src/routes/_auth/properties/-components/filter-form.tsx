@@ -22,7 +22,7 @@ import {
 
 import { toUpperCase } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { RSSelect } from "@/components/react-select";
 import { FilterChips } from "@/components/ui/filter-chips";

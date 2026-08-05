@@ -1,7 +1,7 @@
 import { DataTable } from "@/components/data-table";
 import { useEffect, useState } from "react";
 import { DataTableSkeleton } from "@/components/skeletons/data-table";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { columns } from "./columns";
 import { DataFilterForm } from "./filter-form";
 import { CardContent, CardFooter } from "@/components/ui/card";

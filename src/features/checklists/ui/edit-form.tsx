@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRouter } from "@tanstack/react-router";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Save } from "lucide-react";

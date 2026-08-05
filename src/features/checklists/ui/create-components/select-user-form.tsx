@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
-import api from "@/lib/axios";
+import api from "@/lib/http";
 
 export const SelectUserForm = ({
   form,

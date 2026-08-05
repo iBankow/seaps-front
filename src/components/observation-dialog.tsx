@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 
 interface ObservationDialogProps {
   item: any;

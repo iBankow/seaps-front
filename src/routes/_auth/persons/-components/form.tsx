@@ -22,7 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { formatPhone, toUpperCase } from "@/lib/utils";
 import { toast } from "sonner";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { useRouter, useSearch } from "@tanstack/react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Save } from "lucide-react";

@@ -40,7 +40,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { format } from "date-fns";
 
 // Schema de validação do formulário

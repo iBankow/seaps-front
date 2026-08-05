@@ -10,7 +10,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";

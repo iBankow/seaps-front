@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useChecklist } from "@/contexts/checklist-context";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { createFileRoute } from "@tanstack/react-router";
 import { format } from "date-fns";
 import { Building, MapPin, User } from "lucide-react";

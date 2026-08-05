@@ -1,4 +1,4 @@
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_auth/properties/$propertyId")({

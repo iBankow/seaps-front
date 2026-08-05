@@ -2,7 +2,7 @@ import api, {
   getApiErrorAction,
   getApiErrorMessage,
   isApiError,
-} from "@/lib/axios";
+} from "@/lib/http";
 import { initialData, type PaginatedResponse } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Person, PersonCreatePayload, PersonsListParams } from "../types";

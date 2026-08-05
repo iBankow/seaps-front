@@ -6,7 +6,7 @@ import {
   type FC,
   type ReactNode,
 } from "react";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { config } from "@/lib/mt-login";
 import type { User } from "@/types";
 

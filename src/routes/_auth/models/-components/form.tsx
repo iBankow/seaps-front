@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Save, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RSCreatable } from "@/components/react-select";
 import { useRouter } from "@tanstack/react-router";

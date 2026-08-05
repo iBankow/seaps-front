@@ -12,7 +12,7 @@ import { Loader2Icon } from "lucide-react";
 import { toUpperCase } from "@/lib/utils";
 import { type UseFormReturn } from "react-hook-form";
 import debounce from "lodash.debounce";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 
 export const NameForm = ({
   form,

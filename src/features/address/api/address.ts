@@ -1,4 +1,4 @@
-import api from "@/lib/axios";
+import api from "@/lib/http";
 import type { City, State } from "../type";
 
 export const addressApi = {

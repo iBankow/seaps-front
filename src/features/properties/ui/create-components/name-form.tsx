@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Loader2Icon } from "lucide-react";
 import { Controller, type UseFormReturn } from "react-hook-form";
 import debounce from "lodash.debounce";
-import api from "@/lib/axios";
+import api from "@/lib/http";
 import {
   Field,
   FieldContent,

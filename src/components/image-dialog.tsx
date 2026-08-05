@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { useEffect, useState } from "react";
 import EmblaCarousel from "./carousel/embla-carousel";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { Loading } from "./loading";
 
 export function ImageDialog({ item, ...props }: any) {

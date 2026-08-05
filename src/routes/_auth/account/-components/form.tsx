@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useAuth } from "@/contexts/auth-contexts";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 
 const profileFormSchema = z.object({
   username: z.string(),

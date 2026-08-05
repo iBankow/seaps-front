@@ -32,7 +32,7 @@ import {
 import { Link } from "@tanstack/react-router";
 
 import type { Column } from "./columns";
-import api from "@/lib/axios";
+import api from "@/lib/http";
 
 export const Actions = ({ row }: { row: Row<Column> }) => {
   const reopenDialog = useModal();

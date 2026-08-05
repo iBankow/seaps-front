@@ -39,7 +39,7 @@ import {
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useAuth } from "@/contexts/auth-contexts";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { formatPhone } from "@/lib/utils";
 import { BackButton } from "@/components/back-button";
 import { can } from "@/lib/permissions";

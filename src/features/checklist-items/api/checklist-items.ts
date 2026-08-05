@@ -1,4 +1,4 @@
-import api from "@/lib/axios";
+import api from "@/lib/http";
 import { useQuery } from "@tanstack/react-query";
 import { checklistItemsKeys } from "./query-keys";
 

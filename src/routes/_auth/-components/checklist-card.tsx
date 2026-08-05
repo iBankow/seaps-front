@@ -1,4 +1,4 @@
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { StatusBadge } from "@/components/status-badge";

@@ -1,6 +1,6 @@
 import { createFileRoute, useParams, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { bucketUrl } from "@/config/env";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Camera, Upload } from "lucide-react";

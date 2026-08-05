@@ -16,7 +16,7 @@ import { RSSelect } from "@/components/react-select";
 import { debounce, states, toUpperCase } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 
 export const AddressForm = (props: any) => {
   const { form } = props;

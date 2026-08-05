@@ -25,7 +25,7 @@ import {
 import { getFirstAndLastName, toUpperCase } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { RSSelect } from "@/components/react-select";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { useRouter, useSearch } from "@tanstack/react-router";
 import { FilterChips } from "@/components/ui/filter-chips";
 import {

@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { createFileRoute } from "@tanstack/react-router";
 import { EditModelForm } from "../../-components/form";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { useEffect, useState } from "react";
 import { BackButton } from "@/components/back-button";
 

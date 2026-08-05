@@ -23,7 +23,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { useSearch } from "@tanstack/react-router";
 import { toast } from "sonner";
 

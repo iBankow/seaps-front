@@ -30,7 +30,7 @@ import {
   Building,
 } from "lucide-react";
 import { useRouter } from "@tanstack/react-router";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Steps, StepContent, StepActions } from "@/components/ui/steps";

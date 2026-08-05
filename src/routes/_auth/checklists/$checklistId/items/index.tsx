@@ -18,7 +18,7 @@ import {
 import { Link } from "@tanstack/react-router";
 import { useChecklist } from "@/contexts/checklist-context";
 import { useEffect, useState } from "react";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { DialogProvider } from "@/contexts/dialog-context";
 import { GlobalDialogs } from "@/components/global-dialogs";
 import { VirtualizedChecklistGrid } from "@/components/virtualized-checklist-grid";

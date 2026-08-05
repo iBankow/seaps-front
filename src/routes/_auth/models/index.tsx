@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { DataTableSkeleton } from "@/components/skeletons/data-table";
 
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { columns } from "./-components/columns";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import z from "zod";

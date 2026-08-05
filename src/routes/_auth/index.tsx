@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { BarComponent } from "./-components/bar-card";
 import { useEffect, useState } from "react";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { NumberCard } from "./-components/cards/numbers";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChecklistsCard } from "./-components/checklist-card";
