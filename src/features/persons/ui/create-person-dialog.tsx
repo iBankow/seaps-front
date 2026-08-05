@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { organizationsApi } from "@/features/organizations/api/organizations";
-import { initialData } from "@/lib/axios";
+import { initialData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueries } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";

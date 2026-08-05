@@ -8,15 +8,7 @@ import {
 } from "react";
 import { api } from "@/lib/api";
 import { config } from "@/lib/mt-login";
-
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  permissions: string[];
-  is_active: boolean;
-  is: boolean;
-};
+import type { User } from "@/types";
 
 export type AuthContextType = {
   isAuthenticated: boolean;

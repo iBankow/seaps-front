@@ -1,5 +1,5 @@
 import type { Property } from "@/features/properties/types";
-import type { PaginatedParams } from "@/lib/axios";
+import type { PaginatedParams } from "@/types";
 
 export interface ChecklistListParams extends PaginatedParams {
   organization_id?: string;

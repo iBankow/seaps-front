@@ -1,4 +1,5 @@
-import api, { initialData, type PaginatedResponse } from "@/lib/axios";
+import api from "@/lib/axios";
+import { initialData, type PaginatedResponse } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
 interface Organization {

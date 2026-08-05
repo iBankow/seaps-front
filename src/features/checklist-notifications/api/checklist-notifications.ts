@@ -1,4 +1,5 @@
-import api, { type PaginatedResponse } from "@/lib/axios";
+import api from "@/lib/axios";
+import type { PaginatedResponse } from "@/types";
 import {
   keepPreviousData,
   useMutation,
