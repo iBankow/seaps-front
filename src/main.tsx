@@ -1,67 +1,10 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-import { RouterProvider, createRouter } from "@tanstack/react-router";
-
-// Import the generated route tree
-import { routeTree } from "./routeTree.gen";
 
 import "./styles.css";
 import "./styles-embla.css";
+import { App } from "./app/app";
 import reportWebVitals from "./reportWebVitals.ts";
-import { AuthProvider, useAuth } from "./contexts/auth-contexts.tsx";
-import { ThemeProvider } from "./components/theme-provider.tsx";
-import { Toaster } from "./components/ui/sonner.tsx";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { TooltipProvider } from "./components/ui/tooltip.tsx";
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      refetchInterval: 300000, // Refetch data every 5 minutes
-    },
-  },
-});
-
-// Create a new router instance
-const router = createRouter({
-  routeTree,
-  context: {
-    queryClient,
-    auth: undefined!,
-  },
-  defaultPreload: "intent",
-  scrollRestoration: true,
-  defaultStructuralSharing: true,
-  defaultPreloadStaleTime: 0,
-});
-
-// Register the router instance for type safety
-declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router;
-  }
-}
-
-function InnerApp() {
-  const auth = useAuth();
-  return <RouterProvider router={router} context={{ auth }} />;
-}
-
-function App() {
-  return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <AuthProvider>
-            <InnerApp />
-          </AuthProvider>
-        </TooltipProvider>
-      </QueryClientProvider>
-      <Toaster richColors />
-    </ThemeProvider>
-  );
-}
 
 // Render the app
 const rootElement = document.getElementById("app");
