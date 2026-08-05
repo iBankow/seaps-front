@@ -46,6 +46,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
     toast.promise(
       api.get("/api/v1/reports/" + row.original.id, {
         responseType: "blob",
+        skipErrorToast: true,
       }),
       {
         loading: "Caregando Relatório...",

@@ -3,7 +3,10 @@ import type { City, State } from "../type";
 
 export const addressApi = {
   getAddress: async (cep: string) => {
-    const address = await api.get(`/address/zipcode/${cep}`);
+    // CEP não encontrado é fluxo normal — quem chama exibe a mensagem.
+    const address = await api.get(`/address/zipcode/${cep}`, {
+      skipErrorToast: true,
+    });
 
     return address.data;
   },

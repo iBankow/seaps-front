@@ -56,7 +56,10 @@ export const propertiesApi = {
     return data;
   },
   create: async (payload: PropertyCreatePayload) => {
-    const { data } = await api.post<Property>("/properties", payload);
+    // O wizard exibe o erro via getErrorMessage().
+    const { data } = await api.post<Property>("/properties", payload, {
+      skipErrorToast: true,
+    });
 
     return data;
   },

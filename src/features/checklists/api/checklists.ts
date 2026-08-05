@@ -67,14 +67,19 @@ export const checklistsApi = {
     return data;
   },
   details: async (id: string) => {
-    const { data } = await api.get<ChecklistDetail>(`/checklists/${id}`);
+    // O toast do 404 é feito no retryDelay de useChecklistDetail.
+    const { data } = await api.get<ChecklistDetail>(`/checklists/${id}`, {
+      skipErrorToast: true,
+    });
 
     return data;
   },
   create: async (payload: Omit<ChecklistCreatePayload, "id">) => {
+    // O wizard exibe o erro via getErrorMessage().
     const { data } = await api.post<ChecklistCreatePayload>(
       "/checklists",
       payload,
+      { skipErrorToast: true },
     );
 
     return data;

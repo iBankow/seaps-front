@@ -52,7 +52,10 @@ export const personsApi = {
   },
 
   create: async (payload: PersonCreatePayload) => {
-    const { data } = await api.post<Person>("/persons", payload);
+    // O onError de useCreatePerson já exibe a mensagem.
+    const { data } = await api.post<Person>("/persons", payload, {
+      skipErrorToast: true,
+    });
 
     return data;
   },
