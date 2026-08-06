@@ -1,14 +1,16 @@
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useState,
   type FC,
   type ReactNode,
 } from "react";
-import { http as api } from "@/lib/http";
-import { config } from "@/lib/mt-login";
 import type { User } from "@/types";
+import { sessionsApi } from "../api/sessions";
+import { config } from "../lib/mt-login";
+import { can } from "../lib/permissions";
 
 export type AuthContextType = {
   isAuthenticated: boolean;
@@ -25,35 +27,30 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null | undefined>();
   const [loading, setLoading] = useState(true);
 
-  const getUserData = () =>
-    api
-      .get("/auth/me")
-      .then(({ data }) => setUser(data))
-      .finally(() => setLoading(false));
-
   useEffect(() => {
-    getUserData();
+    sessionsApi
+      .me()
+      .then(setUser)
+      .catch(() => setUser(null))
+      .finally(() => setLoading(false));
   }, []);
 
   const login = async (email: string, password: string) => {
-    await api.post("/sessions", { email, password });
+    await sessionsApi.login(email, password);
 
     window.location.reload();
   };
 
   const logout = async () => {
-    api.delete("/sessions").then(() => {
-      setUser(null);
-      window.location.replace(config.url_logout);
-    });
+    await sessionsApi.logout();
+    setUser(null);
+    window.location.replace(config.url_logout);
   };
 
   const loginWithMTLogin = (code: string) => {
     setLoading(true);
 
-    api
-      .post("/sessions/mt-login?code=" + code, { code })
-      .then(() => window.location.replace("/"));
+    sessionsApi.loginWithMTLogin(code).then(() => window.location.replace("/"));
   };
 
   if (loading) {
@@ -95,4 +92,23 @@ export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) throw new Error("useAuth precisa estar dentro do AuthProvider");
   return context;
+};
+
+/**
+ * Verifica permissões do usuário logado.
+ *
+ * ```tsx
+ * const can = useCan();
+ * {can("properties:edit") && <BotaoEditar />}
+ * ```
+ *
+ * Com vários guards, exige **todos**: `can("a", "b")`.
+ */
+export const useCan = () => {
+  const { user } = useAuth();
+
+  return useCallback(
+    (...guards: string[]) => can(guards, user?.permissions),
+    [user?.permissions],
+  );
 };

@@ -14,7 +14,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useAuth } from "@/contexts/auth-contexts";
+import { useAuth } from "@/features/auth";
 import { Link } from "@tanstack/react-router";
 import {
   Bell,

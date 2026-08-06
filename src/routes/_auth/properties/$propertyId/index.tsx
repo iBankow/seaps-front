@@ -36,11 +36,11 @@ import {
   FileCheck,
   Clock,
 } from "lucide-react";
-import { useAuth } from "@/contexts/auth-contexts";
+import { useAuth } from "@/features/auth";
 import { http as api } from "@/lib/http";
 import { formatPhone } from "@/lib/format";
 import { BackButton } from "@/components/back-button";
-import { can } from "@/lib/permissions";
+import { can } from "@/features/auth";
 import { formatDateLong, formatDateTime } from "@/lib/format";
 
 export const Route = createFileRoute("/_auth/properties/$propertyId/")({

@@ -20,7 +20,7 @@ import {
   Landmark,
   // Users,
 } from "lucide-react";
-import { useAuth } from "@/contexts/auth-contexts";
+import { useAuth } from "@/features/auth";
 import { Link } from "@tanstack/react-router";
 import { NavSecondary } from "./nav-secondary";
 

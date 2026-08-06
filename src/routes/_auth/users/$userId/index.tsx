@@ -14,8 +14,8 @@ import {
   CheckCircle2,
   XCircle,
 } from "lucide-react";
-import { useAuth } from "@/contexts/auth-contexts";
-import { can } from "@/lib/permissions";
+import { useAuth } from "@/features/auth";
+import { can } from "@/features/auth";
 import { formatDateTimeLong } from "@/lib/format";
 
 export const Route = createFileRoute("/_auth/users/$userId/")({

@@ -21,7 +21,7 @@ import {
 import { Link } from "@tanstack/react-router";
 
 import type { Column } from "./columns";
-import { useAuth } from "@/contexts/auth-contexts";
+import { useAuth } from "@/features/auth";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,7 +32,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { can } from "@/lib/permissions";
+import { can } from "@/features/auth";
 
 export const Actions = ({ row }: { row: Row<Column> }) => {
   const { user } = useAuth();

@@ -5,11 +5,11 @@ import { Loader, Plus } from "lucide-react";
 import { DataTableSkeleton } from "@/components/skeletons/data-table";
 
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useAuth } from "@/contexts/auth-contexts";
+import { useAuth } from "@/features/auth";
 import { columns } from "./-components/columns";
 import { DataFilterForm } from "./-components/filter-form";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { can } from "@/lib/permissions";
+import { can } from "@/features/auth";
 import { useChecklistsList } from "@/features/checklists/api/checklists";
 import z from "zod";
 

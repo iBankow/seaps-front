@@ -2,7 +2,7 @@ import { RouterProvider } from "@tanstack/react-router";
 
 import { AppProviders } from "./providers";
 import { router } from "./router";
-import { useAuth } from "@/contexts/auth-contexts";
+import { useAuth } from "@/features/auth";
 
 /**
  * Ponte entre o AuthProvider (context do React) e o context do router.

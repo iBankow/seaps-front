@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useChecklist } from "@/contexts/checklist-context";
-import { useAuth } from "@/contexts/auth-contexts";
-import { can } from "@/lib/permissions";
+import { useAuth } from "@/features/auth";
+import { can } from "@/features/auth";
 import {
   useChecklistNotification,
   useGenerateChecklistNotification,
