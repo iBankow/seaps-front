@@ -50,7 +50,9 @@ src/
 - `features/*` podem usar `components/*`, `lib/*`, `config/*`, `types/*`.
 - `components/*` e `lib/*` **não** importam de `features/*` (fluxo de fora p/ dentro).
 - Import **entre features** só pelo **barrel** (`@/features/x`), nunca por caminho
-  interno. Dentro do próprio feature, use caminhos diretos (evita ciclos com o barrel).
+  interno. Vale também para quem vem de fora (`routes/*`, `components/*`).
+  Dentro do próprio feature, use caminhos **relativos** — importar o próprio
+  barrel fecha um ciclo assim que ele reexporta o arquivo que está importando.
 - **Nada** lê `import.meta.env` direto — só `config/env.ts`.
 - Toda chamada HTTP passa pela instância `http` de `lib/http.ts`.
 - `@/` é o **único** alias de import (`@/* → ./src/*`).
@@ -84,6 +86,16 @@ apenas `/checklists`, nunca `/api/v1/checklists`.
 2. A pasta `api/` deve conter o arquivo `api/models.ts` que deve conter apenas chamadas à API (axios) e hooks de TanStack Query, e suas chaves em `api/query-keys.ts`.
 3. Exponha o que for público em `src/features/models/index.ts`.
 4. Registre a rota em `src/routes/_auth/models`.
+
+### O que vai no barrel
+
+O `index.ts` é um **contrato**, não um índice de arquivos. Entram os hooks de
+query, o objeto `*Api`, as query keys, os tipos de domínio e os componentes de
+UI feitos para uso externo. Ficam de fora as peças internas — passos de wizard,
+subcomponentes de formulário, helpers locais.
+
+Reexportar tudo (`export * from ...` em cada arquivo) devolve o problema que o
+barrel resolve: se qualquer coisa é pública, nada é interno.
 
 As pastas com rotas não devem conter lógica de negócio ou componentes de UI, apenas composição de componentes e chamadas à API (Mais enxuto possível).
 

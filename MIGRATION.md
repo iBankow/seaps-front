@@ -10,15 +10,17 @@ que ainda não foi movido para dentro dele.
 
 Legenda: ✅ conforme · ⚠️ parcial · ❌ não conforme / inexistente
 
-> **Status:** as etapas 1 (Fundação) e 2 (`features/auth`) do plano da seção 4
-> foram concluídas — as seções 1 e 2 abaixo descrevem o estado *anterior* e
-> estão mantidas como registro.
+> **Status:** as etapas 1 (Fundação), 2 (`features/auth`) e 3 (barrels) do plano
+> da seção 4 foram concluídas — as seções 1 e 2 abaixo descrevem o estado
+> *anterior* e estão mantidas como registro.
 >
 > - **Etapa 1:** `config/env.ts`, `lib/http.ts` (client único),
 >   `lib/query-client.ts`, `lib/format.ts`, `src/types/`,
 >   `app/{app,router,providers}`, alias `@/` único.
 > - **Etapa 2:** `features/auth` (primeiro feature com barrel), `useCan()`,
 >   `<PermissionGate>`, `requirePermission()` e `config/navigation.ts`.
+> - **Etapa 3:** `index.ts` nas 9 features restantes e os 23 imports de caminho
+>   interno migrados para o barrel.
 >
 > Ver "Achados" no fim do documento.
 
@@ -230,8 +232,9 @@ consumi-la.
    `routes/login.tsx` para dentro do feature; implementar `useCan()` e
    `<PermissionGate>` de verdade; criar `config/navigation.ts` com permissão
    por item e usá-lo em `app-sidebar.tsx`.~~ ✅ **concluído**
-3. **Barrels** — adicionar `index.ts` em todas as features existentes e
-   corrigir os imports cross-feature listados acima para passar por ele.
+3. ~~**Barrels** — adicionar `index.ts` em todas as features existentes e
+   corrigir os imports cross-feature listados acima para passar por ele.~~
+   ✅ **concluído**
 4. **Fechar os módulos incompletos**: `models` (criar `query-keys.ts`,
    `types/`, `ui/`, mover form+columns de `routes/`), `organizations`
    (`query-keys.ts`, `types/`), `checklist-items` (`ui/`),
@@ -277,6 +280,29 @@ Dois agravantes:
 - **Não existe nenhuma permissão de `models`.** Por isso a área de Modelos ficou
   gateada por `system:admin`, à falta de coisa melhor. Se algum perfil legítimo
   usa /models hoje sem ser admin, a guarda de rota o tranca para fora.
+
+### Etapa 3: o que ficou de fora
+
+- **Os forks degradados não entraram em nenhum barrel.** `checklists/ui/checklists-list.tsx`,
+  `properties/ui/properties-list.tsx` e os dois `ui/list-components/*` continuam
+  sem importador e agora também sem superfície pública — dar `export` a eles
+  seria apontar para o código errado. Some junto na etapa 6.
+- **`features/checklist-items/types/index.ts`** virou módulo de verdade
+  (ganhou `export`), o que era pré-requisito para o barrel. Descoberta no
+  caminho: o `ChecklistItem` de `types/types.d.ts` (raiz) **não** colidia com
+  ele, porque aquele arquivo tem `import "knex"` no topo e portanto também é
+  módulo. São dois tipos homônimos e de formatos diferentes — o da raiz tem
+  `images[]` e `item.level`, o do feature tem `item_id`, `is_inspected` e
+  `created_at`. Quem consome os dois é `routes/.../items/$itemId/index.tsx` e
+  `api/checklist-items.ts`, respectivamente. Vale unificar na etapa 4.
+- **`address/type/` continua no singular** — renomear para `types/` é etapa 4.
+  O barrel já reexporta `State` e `City`, então o rename não vaza para fora.
+- **`models` e `organizations` têm barrel quase vazio**, porque o feature em si
+  está quase vazio (`models` não tem hook, query key nem tipo). O barrel cresce
+  na etapa 4.
+- **Nada garante a regra automaticamente.** Não há lint proibindo
+  `@/features/x/api/y`; hoje isso é convenção verificada por `grep`. Uma regra
+  `no-restricted-imports` no ESLint resolveria — vale considerar.
 
 ### Etapa 2: o que ficou de fora
 
