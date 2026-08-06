@@ -14,9 +14,8 @@ import {
   CheckCircle2,
   XCircle,
 } from "lucide-react";
-import { useAuth } from "@/features/auth";
-import { can } from "@/features/auth";
 import { formatDateTimeLong } from "@/lib/format";
+import { PermissionGate } from "@/features/auth";
 
 export const Route = createFileRoute("/_auth/users/$userId/")({
   component: UserDetail,
@@ -37,7 +36,6 @@ interface IUser {
 
 function UserDetail() {
   const { userId } = Route.useParams();
-  const { user } = useAuth();
   const [userData, setUserData] = useState<IUser>();
   const [loading, setLoading] = useState(true);
 
@@ -130,13 +128,13 @@ function UserDetail() {
             </p>
           </div>
         </div>
-        {can(["users:edit"], user?.permissions) && (
+        <PermissionGate permissions="users:edit">
           <Button asChild size="lg">
             <Link to={`/users/$userId/edit`} params={{ userId }}>
               Editar Usuário
             </Link>
           </Button>
-        )}
+        </PermissionGate>
       </div>
 
       {/* Status Badge */}

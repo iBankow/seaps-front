@@ -21,7 +21,7 @@ import {
 import { Link } from "@tanstack/react-router";
 
 import type { Column } from "./columns";
-import { useAuth } from "@/features/auth";
+import { PermissionGate } from "@/features/auth";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,10 +32,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { can } from "@/features/auth";
 
 export const Actions = ({ row }: { row: Row<Column> }) => {
-  const { user } = useAuth();
   const deleteDialog = useModal();
 
   const [loading, setLoading] = useState(false);
@@ -99,24 +97,22 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
                 Visualizar
               </Link>
             </DropdownMenuItem>
-            {can(["properties:edit"], user?.permissions) && (
-              <>
-                <DropdownMenuItem asChild>
-                  <Link to={"/properties/" + row.original.id + "/edit"}>
-                    <Pen size={16} />
-                    Editar
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  disabled={loading}
-                  onClick={() => deleteDialog.show()}
-                  className="text-red-600 focus:text-red-600"
-                >
-                  <Trash2 size={16} className="text-red-600" />
-                  Excluir
-                </DropdownMenuItem>
-              </>
-            )}
+            <PermissionGate permissions="properties:edit">
+              <DropdownMenuItem asChild>
+                <Link to={"/properties/" + row.original.id + "/edit"}>
+                  <Pen size={16} />
+                  Editar
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                disabled={loading}
+                onClick={() => deleteDialog.show()}
+                className="text-red-600 focus:text-red-600"
+              >
+                <Trash2 size={16} className="text-red-600" />
+                Excluir
+              </DropdownMenuItem>
+            </PermissionGate>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -36,12 +36,11 @@ import {
   FileCheck,
   Clock,
 } from "lucide-react";
-import { useAuth } from "@/features/auth";
 import { http as api } from "@/lib/http";
 import { formatPhone } from "@/lib/format";
 import { BackButton } from "@/components/back-button";
-import { can } from "@/features/auth";
 import { formatDateLong, formatDateTime } from "@/lib/format";
+import { PermissionGate } from "@/features/auth";
 
 export const Route = createFileRoute("/_auth/properties/$propertyId/")({
   component: PropertyDetail,
@@ -120,7 +119,6 @@ interface Property {
 function PropertyDetail() {
   const { propertyId } = Route.useParams();
   const { data } = useLoaderData({ from: "/_auth/properties/$propertyId" });
-  const { user } = useAuth();
   const [property] = useState<Property | null>(data || null);
   const [stats, setStats] = useState<PropertyStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -335,7 +333,7 @@ function PropertyDetail() {
               <Badge className={PROPERTY_TYPE_ENUM[property.type].style}>
                 {PROPERTY_TYPE_ENUM[property.type].label}
               </Badge>
-              {can(["properties:edit"], user?.permissions) && (
+              <PermissionGate permissions="properties:edit">
                 <Button asChild>
                   <Link
                     to={`/properties/$propertyId/edit`}
@@ -344,7 +342,7 @@ function PropertyDetail() {
                     Editar Imóvel
                   </Link>
                 </Button>
-              )}
+              </PermissionGate>
             </div>
           </div>
         </CardContent>
@@ -494,7 +492,7 @@ function PropertyDetail() {
                         {property.person.name}
                       </p>
                     </div>
-                    {can(["properties:edit"], user?.permissions) && (
+                    <PermissionGate permissions="properties:edit">
                       <Button
                         variant="outline"
                         size="sm"
@@ -503,7 +501,7 @@ function PropertyDetail() {
                         <Edit className="h-4 w-4 mr-1" />
                         Editar
                       </Button>
-                    )}
+                    </PermissionGate>
                   </div>
 
                   {property.person.role && (

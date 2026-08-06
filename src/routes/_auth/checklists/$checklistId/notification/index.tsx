@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useChecklist } from "@/contexts/checklist-context";
-import { useAuth } from "@/features/auth";
-import { can } from "@/features/auth";
+import { useCan } from "@/features/auth";
 import {
   useChecklistNotification,
   useGenerateChecklistNotification,
@@ -29,16 +28,13 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const { checklist } = useChecklist();
   const { checklistId } = Route.useParams();
-  const { user } = useAuth();
+  const can = useCan();
 
   const { data: notification, isLoading } =
     useChecklistNotification(checklistId);
   const generateMutation = useGenerateChecklistNotification();
 
-  const canGenerate = can(
-    ["checklist:generate_notification"],
-    user?.permissions,
-  );
+  const canGenerate = can("checklist:generate_notification");
 
   const handleGenerate = () => {
     toast.promise(generateMutation.mutateAsync(checklistId), {

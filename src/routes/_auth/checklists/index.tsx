@@ -5,13 +5,12 @@ import { Loader, Plus } from "lucide-react";
 import { DataTableSkeleton } from "@/components/skeletons/data-table";
 
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useAuth } from "@/features/auth";
 import { columns } from "./-components/columns";
 import { DataFilterForm } from "./-components/filter-form";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { can } from "@/features/auth";
 import { useChecklistsList } from "@/features/checklists/api/checklists";
 import z from "zod";
+import { PermissionGate } from "@/features/auth";
 
 const SearchSchema = z.object({
   page: z.number().default(1),
@@ -29,7 +28,6 @@ export const Route = createFileRoute("/_auth/checklists/")({
 });
 
 export function RouteComponent() {
-  const { user } = useAuth();
 
   const search = Route.useSearch();
 
@@ -46,14 +44,14 @@ export function RouteComponent() {
               <h2 className="text-2xl font-bold tracking-tight">Checklists</h2>
             </div>
             <div className="self-end">
-              {can(["checklists:create"], user?.permissions) && (
+              <PermissionGate permissions="checklists:create">
                 <Button asChild>
                   <Link to="/checklists/create">
                     <Plus />
                     Criar Checklist
                   </Link>
                 </Button>
-              )}
+              </PermissionGate>
             </div>
           </div>
         </CardContent>
