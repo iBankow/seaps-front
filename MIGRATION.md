@@ -10,11 +10,17 @@ que ainda não foi movido para dentro dele.
 
 Legenda: ✅ conforme · ⚠️ parcial · ❌ não conforme / inexistente
 
-> **Status:** a etapa 1 (Fundação) do plano da seção 4 foi concluída — a seção 1
-> abaixo descreve o estado *anterior* e está mantida como registro. O que mudou:
-> `config/env.ts`, `lib/http.ts` (client único), `lib/query-client.ts`,
-> `lib/format.ts`, `src/types/`, `app/{app,router,providers}` e alias `@/` único.
-> As seções 2 e 3 seguem válidas. Ver "Achados da etapa 1" no fim do documento.
+> **Status:** as etapas 1 (Fundação) e 2 (`features/auth`) do plano da seção 4
+> foram concluídas — as seções 1 e 2 abaixo descrevem o estado *anterior* e
+> estão mantidas como registro.
+>
+> - **Etapa 1:** `config/env.ts`, `lib/http.ts` (client único),
+>   `lib/query-client.ts`, `lib/format.ts`, `src/types/`,
+>   `app/{app,router,providers}`, alias `@/` único.
+> - **Etapa 2:** `features/auth` (primeiro feature com barrel), `useCan()`,
+>   `<PermissionGate>`, `requirePermission()` e `config/navigation.ts`.
+>
+> Ver "Achados" no fim do documento.
 
 ---
 
@@ -219,11 +225,11 @@ consumi-la.
 1. ~~**Fundação (`lib/`, `config/`)** — unificar os dois clients HTTP, corrigir
    o bug do `baseURL`, criar `config/env.ts`, escolher um único alias (`@/`)
    e remover `#/`.~~ ✅ **concluído**
-2. **`features/auth`** — migrar `contexts/auth-contexts.tsx`,
+2. ~~**`features/auth`** — migrar `contexts/auth-contexts.tsx`,
    `lib/permissions.ts`, `lib/mt-login.ts`, `components/login-form.tsx` e
    `routes/login.tsx` para dentro do feature; implementar `useCan()` e
    `<PermissionGate>` de verdade; criar `config/navigation.ts` com permissão
-   por item e usá-lo em `app-sidebar.tsx`.
+   por item e usá-lo em `app-sidebar.tsx`.~~ ✅ **concluído**
 3. **Barrels** — adicionar `index.ts` em todas as features existentes e
    corrigir os imports cross-feature listados acima para passar por ele.
 4. **Fechar os módulos incompletos**: `models` (criar `query-keys.ts`,
@@ -247,7 +253,45 @@ consumi-la.
 
 ---
 
-## 5. Achados da etapa 1
+## 5. Achados
+
+### 🔴 O catálogo de permissões diverge entre front e back
+
+Levantado na etapa 2, **não corrigido** — é contrato de API, não refatoração de
+front. O front pede permissões que a API não cita, no plural e com outro verbo:
+
+| Front usa | Backend cita |
+|---|---|
+| `checklists:create`, `checklists:edit`, `checklists:delete`, `checklists:view_all` | `checklist:create`, `checklist:update`, `checklist:delete`, `checklist:view_all` |
+| `properties:edit` | `properties:update` |
+| `users:edit`, `users:edit_configs` | `users:update` |
+
+Ou os guards do front nunca batem (e só `system:admin` faz alguma coisa
+aparecer), ou a API devolve as duas grafias. **Precisa ser conferido contra um
+usuário real antes de confiar em qualquer gate de permissão.**
+
+Dois agravantes:
+- `users:edit` é checado em 2 lugares, mas a tela de edição de usuário só sabe
+  atribuir `users:edit_configs` — ou seja, `users:edit` só existe para
+  `system:admin`.
+- **Não existe nenhuma permissão de `models`.** Por isso a área de Modelos ficou
+  gateada por `system:admin`, à falta de coisa melhor. Se algum perfil legítimo
+  usa /models hoje sem ser admin, a guarda de rota o tranca para fora.
+
+### Etapa 2: o que ficou de fora
+
+- **`VITE_MOCK_AUTH`** continua não existindo (decisão: fora do escopo da etapa).
+- **`components/login-form.tsx`** foi apagado — formulário de e-mail/senha sem
+  nenhum importador desde que o login virou só o botão do MT Login. O
+  `AuthContext` ainda expõe `login(email, password)`, agora sem chamador.
+- **`mt-login.ts`** ainda expõe `grant_type`, `redirect_uri`, `url_token` e
+  `url_userInfo`, que o front não usa (a troca do code é feita no backend).
+- **`routes/request.tsx`** segue sem guarda de autenticação no `beforeLoad`, só
+  a de `is_active` — visitante anônimo consegue abrir `/request`.
+- **`NavSecondary`** declara `className` no tipo mas nunca o aplica, então o
+  `mt-auto` que o `app-sidebar` passa é silenciosamente ignorado.
+
+### Achados da etapa 1
 
 Coisas descobertas durante a Fundação que **não** foram tratadas nela.
 

@@ -32,11 +32,11 @@ src/
 │
 └─ features/                # Slices verticais por domínio
    ├─ auth/
-   │  ├─ api/               #   sessions.ts, mock.ts (dev)
+   │  ├─ api/               #   sessions.ts (me, login, logout, MT Login)
    │  ├─ context/           #   auth-context.tsx (AuthProvider, useAuth, useCan)
-   │  ├─ lib/               #   permissions.ts (matcher de curingas)
-   │  ├─ components/        #   ProtectedRoute.tsx
-   │  ├─ pages/             #   LoginPage.tsx
+   │  ├─ lib/               #   permissions.ts, mt-login.ts, route-guards.ts
+   │  ├─ components/        #   permission-gate.tsx
+   │  ├─ pages/             #   login-page.tsx
    │  └─ index.ts           #   barrel (superfície pública do feature)
    ├─ dashboard/
    │  ├─ data.ts            #   dados de exemplo (trocar por chamadas à API)
@@ -90,10 +90,38 @@ As pastas com rotas não devem conter lógica de negócio ou componentes de UI, 
 ## Autenticação
 
 Cookie httpOnly emitido pela API externa. `AuthProvider` hidrata a sessão via
-`GET /auth/me`; `useCan()` e `<PermissionGate>` controlam visibilidade por
-permissão. Em dev, `VITE_MOCK_AUTH=true` simula um usuário logado sem a API.
+`GET /auth/me`. A API expõe `/auth/me` e `/sessions/me`; a aplicação usa o
+primeiro.
 
-> Estado atual: `useCan()`, `<PermissionGate>` e `VITE_MOCK_AUTH` ainda **não
-> existem** — hoje as rotas chamam `can()` de `lib/permissions.ts` direto. Ver
-> `MIGRATION.md`. A API expõe `/auth/me` e `/sessions/me`; a aplicação usa
-> `/auth/me`.
+> `VITE_MOCK_AUTH` ainda **não existe** — está no roteiro, não no código.
+
+### Permissões
+
+`can(guards, permissions)` exige **todas** as permissões pedidas. `system:admin`,
+`*` e `*:*` liberam tudo; não há expansão por recurso (`properties:*` **não**
+cobre `properties:edit`).
+
+Três formas de usar, por camada:
+
+```tsx
+// 1. Esconder um trecho de UI — o caminho padrão
+<PermissionGate permissions="properties:edit">
+  <BotaoEditar />
+</PermissionGate>
+
+// 2. Precisar do resultado como valor (desabilitar campo, texto condicional)
+const can = useCan();
+const podeGerar = can("checklist:generate_notification");
+
+// 3. Barrar a navegação, no beforeLoad da rota
+beforeLoad: ({ context }) =>
+  requirePermission(context.auth, "users:edit_configs"),
+```
+
+As duas primeiras são **visibilidade**, não acesso: quem garante a regra é a
+API. A guarda de rota só evita que a pessoa chegue numa tela que não vai
+conseguir usar.
+
+Os itens de menu declaram a permissão exigida em `config/navigation.ts`, e a
+sidebar filtra com `useCan()` — menu e guarda de rota devem usar a **mesma**
+permissão, para não mostrar link que redireciona.

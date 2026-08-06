@@ -5,9 +5,8 @@ export interface Organization {
 }
 
 /**
- * Usuário autenticado. Une as duas declarações que existiam antes (uma em
- * lib/axios.ts, outra em contexts/auth-contexts.tsx): tudo que não vem em
- * todas as respostas da API é opcional.
+ * Usuário autenticado. Une as duas declarações que existiam antes de a auth
+ * virar um feature: tudo que não vem em todas as respostas da API é opcional.
  */
 export interface User {
   id: string;
