@@ -5,29 +5,16 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import { formatDate } from "@/lib/format";
+import type { UserRequest } from "../types";
 
-export type RequestColumn = {
-  id: string;
-  user_name: string;
-  user_email: string;
-  user_cpf?: string;
-  organization_name: string;
-  organization_acronym: string;
-  justification: string;
-  status: "PENDING" | "APPROVED" | "REJECTED";
-  rejection_reason?: string;
-  reviewed_by?: string;
-  reviewer_name?: string;
-  created_at: string;
-  updated_at: string;
-};
+export type RequestColumn = UserRequest;
 
 interface ActionsContext {
   onView?: (request: RequestColumn) => void;
 }
 
 export const createRequestsColumns = (
-  context?: ActionsContext
+  context?: ActionsContext,
 ): ColumnDef<RequestColumn>[] => [
   {
     accessorKey: "id",

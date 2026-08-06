@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useAuth } from "@/features/auth";
-import { http as api } from "@/lib/http";
+import { useGeneratePassword } from "../api/account";
 
 const profileFormSchema = z.object({
   username: z.string(),
@@ -26,9 +26,9 @@ const profileFormSchema = z.object({
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
-// This can come from your database or API.
 export function ProfileForm() {
   const { user } = useAuth();
+  const { mutateAsync: generatePassword } = useGeneratePassword();
 
   const [tempPassword, setTempPassword] = useState("");
 
@@ -42,9 +42,8 @@ export function ProfileForm() {
   });
 
   async function onSubmit() {
-    return api
-      .put("/auth/generate-password")
-      .then(({ data }) => {
+    return generatePassword()
+      .then((data) => {
         toast.success("Senha gerada com sucesso!");
         setTempPassword(data.password);
       })
@@ -53,10 +52,7 @@ export function ProfileForm() {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-3"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
         <FormField
           control={form.control}
           name="username"
@@ -87,10 +83,7 @@ export function ProfileForm() {
         <FormItem>
           <FormLabel>Gerar Senha</FormLabel>
           <div className="flex gap-2">
-            <div
-              className="flex h-9 w-full items-center rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors md:text-sm"
-              // className="disabled:opacity-100"
-            >
+            <div className="flex h-9 w-full items-center rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors md:text-sm">
               {tempPassword}
             </div>
             <Button type="button" onClick={onSubmit}>

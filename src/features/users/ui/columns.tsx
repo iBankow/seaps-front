@@ -2,20 +2,12 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import { Actions } from "./actions";
 import { Link } from "@tanstack/react-router";
 import { formatDate } from "@/lib/format";
+import { Actions } from "./actions";
+import type { User } from "../types";
 
-export type Column = {
-  organization: {
-    name: string;
-  };
-  person?: {
-    name: string;
-  };
-} & any;
-
-export const columns: ColumnDef<Column>[] = [
+export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "id",
     header: "ID",

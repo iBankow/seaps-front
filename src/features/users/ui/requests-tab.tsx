@@ -1,42 +1,28 @@
 import { DataTable } from "@/components/data-table";
 import { Pagination } from "@/components/pagination";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DataTableSkeleton } from "@/components/skeletons/data-table";
-import { http as api } from "@/lib/http";
+import { CardContent, CardFooter } from "@/components/ui/card";
+import { toast } from "sonner";
+import { useReviewUserRequest, useUserRequestsList } from "../api/user-requests";
+import type { UserRequestsListParams } from "../types";
 import { createRequestsColumns, type RequestColumn } from "./requests-columns";
 import { RequestsFilterForm } from "./requests-filter-form";
-import { CardContent, CardFooter } from "@/components/ui/card";
 import { RequestDetailsModal } from "./request-details-modal";
-import { toast } from "sonner";
 
 interface RequestsTabProps {
-  search: {
-    page?: number;
-    per_page?: number;
-    organization?: string;
-    status?: string;
-    user_name?: string;
-  };
+  search: UserRequestsListParams;
 }
 
 export function RequestsTab({ search }: RequestsTabProps) {
-  const [data, setData] = useState<any>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, isLoading } = useUserRequestsList(search);
+  const { mutateAsync: reviewRequest, isPending: submitting } =
+    useReviewUserRequest();
+
   const [selectedRequest, setSelectedRequest] = useState<RequestColumn | null>(
     null,
   );
   const [modalOpen, setModalOpen] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-
-  const loadRequests = () => {
-    setLoading(true);
-    api
-      .get("/user-requests", {
-        params: { ...search },
-      })
-      .then(({ data }) => setData(data))
-      .finally(() => setLoading(false));
-  };
 
   const handleViewRequest = (request: RequestColumn) => {
     setSelectedRequest(request);
@@ -49,45 +35,31 @@ export function RequestsTab({ search }: RequestsTabProps) {
     permissions?: string[],
   ) => {
     try {
-      setSubmitting(true);
-      await api.patch(
-        `/user-requests/${requestId}/status`,
-        { status: "APPROVED", permissions },
-        { skipErrorToast: true },
-      );
-
+      await reviewRequest({ id: requestId, status: "APPROVED", permissions });
       toast.success("Solicitação aprovada com sucesso!");
       setModalOpen(false);
-      loadRequests(); // Recarrega a lista
     } catch (error: any) {
       console.error("Erro ao aprovar solicitação:", error);
       toast.error(
         error.response?.data?.message || "Erro ao aprovar solicitação",
       );
-    } finally {
-      setSubmitting(false);
     }
   };
 
   const handleReject = async (requestId: string, reason: string) => {
     try {
-      setSubmitting(true);
-      await api.patch(
-        `/user-requests/${requestId}/status`,
-        { status: "REJECTED", rejection_reason: reason },
-        { skipErrorToast: true },
-      );
-
+      await reviewRequest({
+        id: requestId,
+        status: "REJECTED",
+        rejection_reason: reason,
+      });
       toast.success("Solicitação rejeitada com sucesso!");
       setModalOpen(false);
-      loadRequests(); // Recarrega a lista
     } catch (error: any) {
       console.error("Erro ao rejeitar solicitação:", error);
       toast.error(
         error.response?.data?.message || "Erro ao rejeitar solicitação",
       );
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -95,24 +67,20 @@ export function RequestsTab({ search }: RequestsTabProps) {
     onView: handleViewRequest,
   });
 
-  useEffect(() => {
-    loadRequests();
-  }, [search]);
-
   return (
     <>
       <CardContent className="space-y-6 pt-6">
         <RequestsFilterForm />
         <div className="rounded-lg border">
-          {loading ? (
+          {isLoading ? (
             <DataTableSkeleton columns={columns} />
           ) : (
-            <DataTable columns={columns} data={data?.data} />
+            <DataTable columns={columns} data={data?.data ?? []} />
           )}
         </div>
       </CardContent>
       <CardFooter className="flex items-center justify-between border-t mt-6 pt-6">
-        {data?.meta?.total > 10 && <Pagination meta={data?.meta} />}
+        {data?.meta && data.meta.total > 10 && <Pagination meta={data.meta} />}
       </CardFooter>
 
       <RequestDetailsModal

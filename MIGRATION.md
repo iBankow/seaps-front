@@ -10,9 +10,10 @@ que ainda não foi movido para dentro dele.
 
 Legenda: ✅ conforme · ⚠️ parcial · ❌ não conforme / inexistente
 
-> **Status:** as etapas 1 (Fundação), 2 (`features/auth`), 3 (barrels) e 4
-> (módulos incompletos) do plano da seção 4 foram concluídas — as seções 1 e 2
-> abaixo descrevem o estado *anterior* e estão mantidas como registro.
+> **Status:** as etapas 1 (Fundação), 2 (`features/auth`), 3 (barrels), 4
+> (módulos incompletos) e 5 (`features/users` e `features/account`) do plano
+> da seção 4 foram concluídas — as seções 1 e 2 abaixo descrevem o estado
+> *anterior* e estão mantidas como registro.
 >
 > - **Etapa 1:** `config/env.ts`, `lib/http.ts` (client único),
 >   `lib/query-client.ts`, `lib/format.ts`, `src/types/`,
@@ -30,6 +31,17 @@ Legenda: ✅ conforme · ⚠️ parcial · ❌ não conforme / inexistente
 >   `checklist-notifications` ganhou `ui/` (`columns.tsx`, `filter-form.tsx`)
 >   e `types/` própria (antes em `api/types.ts`); `address` renomeou
 >   `type/` → `types/`; `notifications` moveu `api/types.ts` para `types/`.
+> - **Etapa 5:** `features/users` criado com `api/` (`users.ts`,
+>   `user-requests.ts`, `query-keys.ts`), `types/` e `ui/` — as 9 peças que
+>   viviam em `routes/_auth/users/-components` (columns, actions, filter-form,
+>   users-tab, requests-columns, requests-filter-form, requests-tab,
+>   request-action-modal, request-details-modal) migraram para lá, e as duas
+>   páginas de detalhe/edição (`$userId/index.tsx`, `$userId/edit/index.tsx`,
+>   que não estavam em `-components`) viraram `ui/user-detail.tsx` e
+>   `ui/user-edit-form.tsx`, com as rotas reduzidas a só registrar o
+>   componente. Todo fetch cru (`useEffect`+axios) foi trocado por hooks de
+>   TanStack Query. `features/account` criado com `api/account.ts`
+>   (`useGeneratePassword`) e `ui/profile-form.tsx`.
 >
 > Ver "Achados" no fim do documento.
 
@@ -167,8 +179,8 @@ Não há `common/` nem `layout/`. Na raiz de `components/` estão misturados:
 | **auth** | — | — | — | ❌ | Não existe como feature. Espalhado em `contexts/auth-contexts.tsx`, `lib/permissions.ts`, `lib/mt-login.ts`, `components/login-form.tsx`, `routes/login.tsx`. Sem `useCan()`/`<PermissionGate>` — cada rota chama `can(...)` direto importando de `lib/permissions`. |
 | **dashboard** | — | — | — | ❌ | Não existe. Fetch com `useEffect`+`useState` cru (sem TanStack Query) dentro de [routes/_auth/index.tsx](src/routes/_auth/index.tsx) + `routes/_auth/-components/*` (bar-card, irm-chart, numbers, checklist-card). |
 | **system** | — | — | — | ❌ | Não existe. Sem página 404 customizada — nenhum `notFoundComponent` configurado no router; cai no fallback padrão do TanStack Router. |
-| **users** | ❌ | ❌ | ❌ | ❌ | Módulo inteiro (listagem, CRUD, aba de solicitações/aprovação/reprovação) vive só em `routes/_auth/users/-components/*` (8 arquivos: actions, columns, filter-form, request-action-modal, request-details-modal, requests-columns, requests-filter-form, requests-tab, users-tab). Nenhuma separação de API/UI. |
-| **account** | ❌ | ❌ | ❌ | ❌ | Só existe `routes/_auth/account/-components/form.tsx`. |
+| **users** | ✅ | ✅ | ✅ | ✅ | Etapa 5: listagem, CRUD, aba de solicitações e aprovação/reprovação migraram de `routes/_auth/users/-components/*` para `api/{users,user-requests,query-keys}.ts` + `ui/*`. As páginas de detalhe (`$userId`) e edição (`$userId/edit`) — que não estavam em `-components`, eram o corpo inteiro da rota — viraram `ui/user-detail.tsx` e `ui/user-edit-form.tsx`. |
+| **account** | ✅ | — | ✅ | ✅ | Etapa 5: `api/account.ts` (`useGeneratePassword`) e `ui/profile-form.tsx`, migrados de `routes/_auth/account/-components/form.tsx`. Sem `types/` própria — a única chamada tem um payload de resposta trivial (`{ password }`), tipado inline em `api/account.ts`. |
 | **checklists** | ✅ | ✅ | ✅ | ❌ | O mais maduro, mas `routes/_auth/checklists/-components/*` **duplica** quase tudo que já existe em `features/checklists/ui` (columns, actions, filter-form, create-form, dialogs/, header, export-modal) — a rota nunca foi migrada para consumir o feature. |
 | **properties** | ✅ | ✅ | ✅ | ❌ | Mesmo padrão de duplicação: `routes/_auth/properties/-components/*` reimplementa form/columns/actions/filter-form/export-modal/name-form/address-form que já existem em `features/properties/ui`. |
 | **persons** | ✅ | ✅ | ⚠️ | ❌ | `ui/create-person-dialog.tsx` existe, mas `routes/_auth/persons/-components/form.tsx` reimplementa outro formulário de pessoa fora do feature. |
@@ -250,8 +262,9 @@ consumi-la.
    `checklist-notifications` (`ui/`, `types/` própria), `address` (renomear
    `type/`→`types/`), `notifications` (mover `types.ts` para `types/`).~~
    ✅ **concluído**
-5. **`features/users` e `features/account`** — criar a partir do conteúdo
-   hoje só em `routes/_auth/users` e `routes/_auth/account`.
+5. ~~**`features/users` e `features/account`** — criar a partir do conteúdo
+   hoje só em `routes/_auth/users` e `routes/_auth/account`.~~
+   ✅ **concluído**
 6. **Eliminar duplicação em `checklists`/`properties`/`persons`** — apagar
    `routes/_auth/checklists/-components`, `routes/_auth/properties/-components`
    e `routes/_auth/persons/-components/form.tsx`, fazendo as rotas
@@ -267,6 +280,40 @@ consumi-la.
 ---
 
 ## 5. Achados
+
+### Etapa 5: o que ficou de fora
+
+- **`requests-columns.tsx`** tinha um tipo `RequestColumn` duplicado do
+  formato de `UserRequest`. Em vez de manter os dois, `RequestColumn` virou
+  um alias (`export type RequestColumn = UserRequest`) — mantém o nome que
+  `request-details-modal.tsx` e `requests-tab.tsx` já usavam, sem duas fontes
+  de verdade para o mesmo formato.
+- **`requests-filter-form.tsx`** buscava organizações com `useQuery` cru
+  (`queryKey: ["organizations"]`, `queryFn: organizationsApi.list`). Trocado
+  por `useOrganizationsList()` do feature `organizations` — mesma origem de
+  dados, sem key hardcoded duplicada.
+- **`actions.tsx`** (exclusão de usuário na listagem) fazia
+  `window.location.reload()` após excluir. Trocado por invalidação de query
+  (`useDeleteUser` já invalida `usersKeys.all` no `onSuccess`), que é o
+  padrão do resto do projeto — evita o reload completo da página.
+- **`LoadingSkeleton`** exportado por `filter-form.tsx` não tinha nenhum
+  importador em lugar nenhum do projeto (código morto antes da migração). Não
+  foi trazido para `features/users/ui/filter-form.tsx`.
+- **`$userId/index.tsx`** e **`$userId/edit/index.tsx`** não estavam em
+  `-components` — eram o corpo inteiro da rota. Ainda assim foram extraídos
+  para `ui/user-detail.tsx` e `ui/user-edit-form.tsx`, seguindo o mesmo
+  critério já usado em `models` na etapa 4: a rota deve só registrar o
+  componente, não conter a página. As duas rotas ficaram só com
+  `component: UserDetail` / `component: UserEditForm` e o `loader` do crumb.
+- **`account`** não ganhou `types/` — a única chamada da feature
+  (`generate-password`) devolve um payload trivial (`{ password: string }`),
+  tipado inline em `api/account.ts`. Criar uma pasta só para isso seria
+  estrutura vazia, mesmo raciocínio aplicado a `organizations` na etapa 4.
+- **Catálogo de permissões**: `user-edit-form.tsx` e `request-action-modal.tsx`
+  continuam com a lista de permissões (`checklists:create`, `properties:edit`
+  etc.) hardcoded no componente, no mesmo formato que já diverge do backend
+  (achado 🔴 abaixo). Não foi corrigido — é o mesmo problema de contrato de
+  API já registrado, fora do escopo de uma migração de estrutura de pastas.
 
 ### Etapa 4: o que ficou de fora
 

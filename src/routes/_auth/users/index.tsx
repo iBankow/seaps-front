@@ -7,8 +7,7 @@ import {
 } from "@/components/ui/card";
 import { Users, UserCheck } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { UsersTab } from "./-components/users-tab";
-import { RequestsTab } from "./-components/requests-tab";
+import { RequestsTab, UsersTab } from "@/features/users";
 
 export const Route = createFileRoute("/_auth/users/")({
   component: RouteComponent,

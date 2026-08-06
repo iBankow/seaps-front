@@ -1,11 +1,8 @@
 "use client";
 
-import { http as api } from "@/lib/http";
-
 import { Button } from "@/components/ui/button";
 import type { Row } from "@tanstack/react-table";
 import { ChevronRight, Ellipsis, Pen, Trash2 } from "lucide-react";
-import { useState } from "react";
 
 import { toast } from "sonner";
 import { useModal } from "@/hooks/use-modal";
@@ -20,7 +17,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Link } from "@tanstack/react-router";
 
-import type { Column } from "./columns";
 import { PermissionGate } from "@/features/auth";
 import {
   AlertDialog,
@@ -32,23 +28,20 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useDeleteUser } from "../api/users";
+import type { User } from "../types";
 
-export const Actions = ({ row }: { row: Row<Column> }) => {
+export const Actions = ({ row }: { row: Row<User> }) => {
   const deleteDialog = useModal();
-
-  const [loading, setLoading] = useState(false);
+  const { mutateAsync: deleteUser, isPending: loading } = useDeleteUser();
 
   const handleDeleteUser = () => {
-    setLoading(true);
-    api
-      .delete("/users/" + row.original.id, { skipErrorToast: true })
+    deleteUser(row.original.id)
       .then(() => {
         toast.success(`Usuário ${row.original.name} excluído com sucesso!`);
         deleteDialog.hide();
-        window.location.reload();
       })
-      .catch(() => toast.error("Erro ao excluir o usuário"))
-      .finally(() => setLoading(false));
+      .catch(() => toast.error("Erro ao excluir o usuário"));
   };
 
   return (

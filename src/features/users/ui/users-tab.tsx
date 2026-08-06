@@ -1,46 +1,28 @@
 import { DataTable } from "@/components/data-table";
-import { useEffect, useState } from "react";
 import { DataTableSkeleton } from "@/components/skeletons/data-table";
-import { http as api } from "@/lib/http";
-import { columns } from "./columns";
-import { DataFilterForm } from "./filter-form";
 import { CardContent, CardFooter } from "@/components/ui/card";
 import { MetaPagination } from "@/components/meta-pagination";
+import { useUsersList } from "../api/users";
+import type { UsersListParams } from "../types";
+import { columns } from "./columns";
+import { DataFilterForm } from "./filter-form";
 
 interface UsersTabProps {
-  search: {
-    page?: number;
-    per_page?: number;
-    organization?: string;
-    role?: string;
-    name?: string;
-    email?: string;
-  };
+  search: UsersListParams;
 }
 
 export function UsersTab({ search }: UsersTabProps) {
-  const [data, setData] = useState<any>();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setLoading(true);
-    api
-      .get("/users", {
-        params: { ...search },
-      })
-      .then(({ data }) => setData(data))
-      .finally(() => setLoading(false));
-  }, [search]);
+  const { data, isLoading } = useUsersList(search);
 
   return (
     <>
       <CardContent className="space-y-6 pt-6">
         <DataFilterForm />
         <div className="rounded-lg border">
-          {loading ? (
+          {isLoading ? (
             <DataTableSkeleton columns={columns} />
           ) : (
-            <DataTable columns={columns} data={data?.data} />
+            <DataTable columns={columns} data={data?.data ?? []} />
           )}
         </div>
       </CardContent>

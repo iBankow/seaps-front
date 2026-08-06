@@ -28,8 +28,7 @@ import {
   FieldError,
   FieldLabel,
 } from "@/components/ui/field";
-import { useQuery } from "@tanstack/react-query";
-import { organizationsApi } from "@/features/organizations";
+import { useOrganizationsList } from "@/features/organizations";
 
 const filterSchema = z.object({
   organization: z.string().optional(),
@@ -106,11 +105,7 @@ export function RequestsFilterForm() {
     });
   }
 
-  const { data: organizationsData } = useQuery({
-    queryKey: ["organizations"],
-    queryFn: organizationsApi.list,
-  });
-  const organizations = organizationsData?.data || [];
+  const { data: organizations } = useOrganizationsList();
 
   return (
     <Form {...form}>
@@ -183,7 +178,7 @@ export function RequestsFilterForm() {
                     <SelectValue placeholder="Selecione o órgão" />
                   </SelectTrigger>
                   <SelectContent position="item-aligned">
-                    {organizations?.map((item) => (
+                    {organizations?.data?.map((item) => (
                       <SelectItem key={item.id} value={item.id}>
                         {item.name}
                       </SelectItem>
