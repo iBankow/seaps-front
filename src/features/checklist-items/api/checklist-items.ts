@@ -1,6 +1,7 @@
 import api from "@/lib/http";
 import { useQuery } from "@tanstack/react-query";
 import { checklistItemsKeys } from "./query-keys";
+import type { ChecklistItem } from "../types";
 
 export const useChecklistsItems = (id?: string) => {
   return useQuery({

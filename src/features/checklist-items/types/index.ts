@@ -1,4 +1,4 @@
-interface ChecklistItem {
+export interface ChecklistItem {
   id: string;
   checklist_id: string;
   item_id: string;
