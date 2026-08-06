@@ -17,21 +17,10 @@ import {
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useChecklist } from "@/contexts/checklist-context";
-import { useEffect, useState } from "react";
-import { http as api } from "@/lib/http";
 import { DialogProvider } from "@/contexts/dialog-context";
 import { GlobalDialogs } from "@/components/global-dialogs";
 import { VirtualizedChecklistGrid } from "@/components/virtualized-checklist-grid";
-
-interface ItemStats {
-  total: number;
-  good: number;
-  regular: number;
-  bad: number;
-  na: number;
-  completed: number;
-  completion_percentage: number;
-}
+import { useChecklistsItems } from "@/features/checklist-items";
 
 export const Route = createFileRoute("/_auth/checklists/$checklistId/items/")({
   component: ChecklistContent,
@@ -39,53 +28,27 @@ export const Route = createFileRoute("/_auth/checklists/$checklistId/items/")({
 
 function ChecklistContent() {
   const { checklist, error } = useChecklist();
-
-  const [items, setItems] = useState<any[]>([]);
-  const [stats, setStats] = useState<ItemStats>({
-    total: 0,
-    good: 0,
-    regular: 0,
-    bad: 0,
-    na: 0,
-    completed: 0,
-    completion_percentage: 0,
-  });
-
-  const [loading, setLoading] = useState(true);
-
   const { checklistId } = Route.useParams();
 
-  useEffect(() => {
-    api
-      .get(`/checklists/${checklistId}/items`)
-      .then(({ data }) => {
-        setItems(data);
+  const { data: items, isLoading: loading } = useChecklistsItems(checklistId);
 
-        // Calcular estatísticas
-        const total = data.length;
-        const good = data.filter((item: any) => item.score === 3).length;
-        const regular = data.filter((item: any) => item.score === 1).length;
-        const bad = data.filter((item: any) => item.score === -2).length;
-        const na = data.filter((item: any) => item.score === 0).length;
-        const completed = data.filter(
-          (item: any) => item.score !== null
-        ).length;
-        const completion_percentage = total > 0 ? (completed / total) * 100 : 0;
+  const total = items.length;
+  const good = items.filter((item) => item.score === 3).length;
+  const regular = items.filter((item) => item.score === 1).length;
+  const bad = items.filter((item) => item.score === -2).length;
+  const na = items.filter((item) => item.score === 0).length;
+  const completed = items.filter((item) => item.score !== null).length;
+  const completion_percentage = total > 0 ? (completed / total) * 100 : 0;
 
-        console.log(completion_percentage);
-
-        setStats({
-          total,
-          good,
-          regular,
-          bad,
-          na,
-          completed,
-          completion_percentage,
-        });
-      })
-      .finally(() => setLoading(false));
-  }, [checklistId]);
+  const stats = {
+    total,
+    good,
+    regular,
+    bad,
+    na,
+    completed,
+    completion_percentage,
+  };
 
   if (loading) {
     return (

@@ -1,8 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { createFileRoute } from "@tanstack/react-router";
-import { EditModelForm } from "../../-components/form";
-import { http as api } from "@/lib/http";
-import { useEffect, useState } from "react";
+import { EditModelForm, useModel } from "@/features/models";
 import { BackButton } from "@/components/back-button";
 
 export const Route = createFileRoute("/_auth/models/$modelId/edit/")({
@@ -11,27 +9,9 @@ export const Route = createFileRoute("/_auth/models/$modelId/edit/")({
 
 function RouteComponent() {
   const { modelId } = Route.useParams();
+  const { data: model, isLoading } = useModel(modelId);
 
-  const [model, setModel] = useState<any>();
-  const [dataLoading, setDataLoading] = useState(true);
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const { data } = await api.get(`/models/${modelId}`);
-
-        if (data) {
-          setModel(data);
-        }
-      } finally {
-        setDataLoading(false);
-      }
-    };
-
-    loadData();
-  }, [modelId]);
-
-  if (dataLoading) {
+  if (isLoading || !model) {
     return <div>Carregando...</div>;
   }
 

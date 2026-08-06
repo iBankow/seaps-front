@@ -10,28 +10,24 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { http as api } from "@/lib/http";
 import { Trash2 } from "lucide-react";
-import { useState } from "react";
 import { toast } from "sonner";
+import { useDeleteChecklistItemImage } from "../api/checklist-items";
+import type { ChecklistItemImage } from "../types";
 
-export const DeleteDialog = ({ image, setLoad }: any) => {
-  const [loading, setLoading] = useState(false);
+export const DeleteDialog = ({ image }: { image: ChecklistItemImage }) => {
+  const { mutateAsync: deleteImage, isPending } = useDeleteChecklistItemImage();
 
   const handleDelete = () => {
-    setLoading(true);
     toast.promise(
-      api.delete(
-        `/checklist-items/${image.checklist_item_id}/images/${image.id}`
-      ),
+      deleteImage({
+        checklistItemId: image.checklist_item_id,
+        imageId: image.id,
+      }),
       {
         loading: "Excluindo imagem...",
         success: `Imagem '${image.image}' excluída com sucesso!`,
-        finally: () => {
-          setLoading(false);
-          setLoad((prev: boolean) => !prev);
-        },
-      }
+      },
     );
   };
 
@@ -58,10 +54,10 @@ export const DeleteDialog = ({ image, setLoad }: any) => {
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleDelete}
-            disabled={loading}
+            disabled={isPending}
             className="bg-red-600 hover:bg-red-700"
           >
-            {loading ? "Excluindo..." : "Excluir"}
+            {isPending ? "Excluindo..." : "Excluir"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

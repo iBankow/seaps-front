@@ -3,8 +3,9 @@ import { Link } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight, Pen } from "lucide-react";
 import { formatDate } from "@/lib/format";
+import type { Model } from "../types";
 
-export const columns: ColumnDef<any>[] = [
+export const columns: ColumnDef<Model>[] = [
   {
     accessorKey: "id",
     header: "ID",

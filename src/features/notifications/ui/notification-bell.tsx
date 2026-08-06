@@ -17,7 +17,7 @@ import {
   useNotificationsList,
   useUnreadNotificationsCount,
 } from "../api/notifications";
-import type { Notification } from "../api/types";
+import type { Notification } from "../types";
 import { formatDateTime } from "@/lib/format";
 
 export function NotificationBell() {

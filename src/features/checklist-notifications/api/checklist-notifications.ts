@@ -12,7 +12,7 @@ import type {
   ChecklistNotification,
   ChecklistNotificationListItem,
   ChecklistNotificationListParams,
-} from "./types";
+} from "../types";
 
 export const useChecklistNotificationsList = (
   filters?: ChecklistNotificationListParams,

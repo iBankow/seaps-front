@@ -6,7 +6,7 @@ import type {
   Notification,
   NotificationListParams,
   UnreadCountResponse,
-} from "./types";
+} from "../types";
 
 export const useNotificationsList = (
   filters?: NotificationListParams,

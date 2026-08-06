@@ -10,9 +10,9 @@ que ainda não foi movido para dentro dele.
 
 Legenda: ✅ conforme · ⚠️ parcial · ❌ não conforme / inexistente
 
-> **Status:** as etapas 1 (Fundação), 2 (`features/auth`) e 3 (barrels) do plano
-> da seção 4 foram concluídas — as seções 1 e 2 abaixo descrevem o estado
-> *anterior* e estão mantidas como registro.
+> **Status:** as etapas 1 (Fundação), 2 (`features/auth`), 3 (barrels) e 4
+> (módulos incompletos) do plano da seção 4 foram concluídas — as seções 1 e 2
+> abaixo descrevem o estado *anterior* e estão mantidas como registro.
 >
 > - **Etapa 1:** `config/env.ts`, `lib/http.ts` (client único),
 >   `lib/query-client.ts`, `lib/format.ts`, `src/types/`,
@@ -21,6 +21,15 @@ Legenda: ✅ conforme · ⚠️ parcial · ❌ não conforme / inexistente
 >   `<PermissionGate>`, `requirePermission()` e `config/navigation.ts`.
 > - **Etapa 3:** `index.ts` nas 9 features restantes e os 23 imports de caminho
 >   interno migrados para o barrel.
+> - **Etapa 4:** `models` ganhou `types/`, `api/query-keys.ts` e `ui/`
+>   (`model-form.tsx`, `columns.tsx`), com o formulário e a listagem migrados
+>   de `routes/-components` para hooks de TanStack Query; `organizations`
+>   ganhou `types/` e `api/query-keys.ts`; `checklist-items` ganhou `ui/`
+>   (`delete-dialog.tsx`) e unificou o `ChecklistItem` duplicado (o de
+>   `types/types.d.ts` na raiz e o do feature) num único tipo no feature;
+>   `checklist-notifications` ganhou `ui/` (`columns.tsx`, `filter-form.tsx`)
+>   e `types/` própria (antes em `api/types.ts`); `address` renomeou
+>   `type/` → `types/`; `notifications` moveu `api/types.ts` para `types/`.
 >
 > Ver "Achados" no fim do documento.
 
@@ -163,12 +172,12 @@ Não há `common/` nem `layout/`. Na raiz de `components/` estão misturados:
 | **checklists** | ✅ | ✅ | ✅ | ❌ | O mais maduro, mas `routes/_auth/checklists/-components/*` **duplica** quase tudo que já existe em `features/checklists/ui` (columns, actions, filter-form, create-form, dialogs/, header, export-modal) — a rota nunca foi migrada para consumir o feature. |
 | **properties** | ✅ | ✅ | ✅ | ❌ | Mesmo padrão de duplicação: `routes/_auth/properties/-components/*` reimplementa form/columns/actions/filter-form/export-modal/name-form/address-form que já existem em `features/properties/ui`. |
 | **persons** | ✅ | ✅ | ⚠️ | ❌ | `ui/create-person-dialog.tsx` existe, mas `routes/_auth/persons/-components/form.tsx` reimplementa outro formulário de pessoa fora do feature. |
-| **checklist-items** | ✅ | ✅ | ❌ | ❌ | Sem `ui/`; toda a interface (listagem, detalhe, delete-dialog) mora em `routes/_auth/checklists/$checklistId/items/**`. |
-| **checklist-notifications** | ✅ | ⚠️ (em `api/types.ts`) | ❌ | ❌ | UI (columns, filter-form) só existe em `routes/_auth/checklist-notifications/-components`. |
-| **notifications** | ✅ | ⚠️ (em `api/types.ts`) | ✅ | ❌ | O mais próximo do padrão do doc — falta só mover `types.ts` para uma pasta `types/` e criar o barrel. |
-| **models** | ❌ | ❌ | ❌ | ❌ | O menos desenvolvido: `api/models.ts` tem 14 linhas com uma chamada crua, sem hook de query nem `query-keys.ts`. Toda a lógica real (formulário com 418 linhas, columns) está em `routes/_auth/models/-components`. |
-| **organizations** | ⚠️ | ❌ | ❌ | ❌ | Tem um hook (`useOrganizationsList`), mas a chave da query está hardcoded inline (`["organizations"]`) em vez de em `query-keys.ts`. |
-| **address** | ✅ | ⚠️ (pasta `type/`, singular) | ❌ | ❌ | Sem UI própria — o formulário de endereço é reimplementado dentro de `properties` e de `routes`. |
+| **checklist-items** | ✅ | ✅ | ✅ | ✅ | Etapa 4: `ui/delete-dialog.tsx` migrado de `routes/-components`, e o `ChecklistItem` duplicado (raiz `types/types.d.ts` vs. feature) foi unificado num único tipo no feature. A listagem (`items/index.tsx`) e o detalhe (`items/$itemId/index.tsx`) passaram a consumir os hooks do feature em vez de `useEffect`+axios cru. |
+| **checklist-notifications** | ✅ | ✅ | ✅ | ✅ | Etapa 4: `ui/columns.tsx` e `ui/filter-form.tsx` migrados de `routes/-components`; `api/types.ts` virou `types/index.ts`. |
+| **notifications** | ✅ | ✅ | ✅ | ✅ | Etapa 4: `api/types.ts` movido para `types/index.ts`. |
+| **models** | ✅ | ✅ | ✅ | ✅ | Etapa 4: ganhou `api/query-keys.ts`, `types/` e `ui/` (`model-form.tsx`, `columns.tsx`); o formulário (antes 418 linhas cruas em `routes/-components`) e a listagem agora usam hooks de TanStack Query (`useModelsList`, `useModel`, `useCreateModel`, `useUpdateModel`, `useModelItemsCatalog`). |
+| **organizations** | ✅ | ✅ | — | ✅ | Etapa 4: ganhou `types/` e `api/query-keys.ts`; a chave de query deixou de estar hardcoded inline. Sem `ui/` própria — não há UI de domínio a migrar, só o hook. |
+| **address** | ✅ | ✅ | ❌ | ✅ | Etapa 4: pasta renomeada `type/` → `types/`. Segue sem UI própria — o formulário de endereço continua reimplementado dentro de `properties` e de `routes` (fora do escopo da etapa 4). |
 
 ### Import entre features não passa por barrel
 
@@ -235,11 +244,12 @@ consumi-la.
 3. ~~**Barrels** — adicionar `index.ts` em todas as features existentes e
    corrigir os imports cross-feature listados acima para passar por ele.~~
    ✅ **concluído**
-4. **Fechar os módulos incompletos**: `models` (criar `query-keys.ts`,
+4. ~~**Fechar os módulos incompletos**: `models` (criar `query-keys.ts`,
    `types/`, `ui/`, mover form+columns de `routes/`), `organizations`
    (`query-keys.ts`, `types/`), `checklist-items` (`ui/`),
    `checklist-notifications` (`ui/`, `types/` própria), `address` (renomear
-   `type/`→`types/`), `notifications` (mover `types.ts` para `types/`).
+   `type/`→`types/`), `notifications` (mover `types.ts` para `types/`).~~
+   ✅ **concluído**
 5. **`features/users` e `features/account`** — criar a partir do conteúdo
    hoje só em `routes/_auth/users` e `routes/_auth/account`.
 6. **Eliminar duplicação em `checklists`/`properties`/`persons`** — apagar
@@ -257,6 +267,38 @@ consumi-la.
 ---
 
 ## 5. Achados
+
+### Etapa 4: o que ficou de fora
+
+- **`models`** ganhou hooks de mutação (`useCreateModel`, `useUpdateModel`)
+  além do `list`. O catálogo de itens (`GET /items`, usado pelo `RSCreatable`
+  do formulário) foi mantido dentro de `features/models` como
+  `useModelItemsCatalog` — é a única feature que consome essa rota hoje, e
+  criar uma feature `items` só para isso seria prematuro.
+- **`checklist-items`**: a duplicidade de tipo `ChecklistItem` apontada nos
+  achados da etapa 3 foi resolvida — o tipo do feature passou a incluir
+  `images` (usado no detalhe do item) e a rota
+  `checklists/$checklistId/items/$itemId/index.tsx` importa do feature em vez
+  de `types/types.d.ts` (raiz). O campo `item.level` do tipo antigo não tinha
+  nenhum uso no código e foi descartado. O `types/types.d.ts` da raiz
+  continua existindo — outros tipos dali (`Checklist`, `Property`) não fazem
+  parte do escopo desta etapa.
+- **`organizations`** não ganhou `ui/` — a feature não tem nenhuma UI de
+  domínio própria (só é consumida via `organizationsApi`/`useOrganizationsList`
+  por formulários de outras features), então criar a pasta seria só estrutura
+  vazia.
+- **`address`** segue sem `ui/` — o formulário de endereço permanece
+  duplicado em `properties` e em `routes/_auth/properties/-components`. Isso é
+  a duplicação tratada na etapa 6, não um item da etapa 4. A inconsistência de
+  endpoint (`getCities()` usa `/address/cities/{uf}`, o formulário legado usa
+  `/address/states/{uf}`) também segue sem mexer — listado nas "Pendências
+  menores".
+- **Rotas ainda não estão "sem lógica de negócio"** — mover
+  `models`/`checklist-items`/`checklist-notifications` para consumir hooks
+  eliminou fetch cru duplicado nessas rotas, mas isso é efeito colateral da
+  etapa 4, não o objetivo dela. A regra da seção 3 ("rotas sem lógica de
+  negócio") continua valendo como trabalho das etapas 6 e 7, especialmente
+  para `checklists`/`properties`/`persons`, que não foram tocadas aqui.
 
 ### 🔴 O catálogo de permissões diverge entre front e back
 

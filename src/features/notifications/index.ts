@@ -11,6 +11,6 @@ export type {
   Notification,
   NotificationListParams,
   UnreadCountResponse,
-} from "./api/types";
+} from "./types";
 
 export { NotificationBell } from "./ui/notification-bell";

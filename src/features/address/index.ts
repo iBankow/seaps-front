@@ -1,3 +1,3 @@
 export { addressApi } from "./api/address";
 
-export type { City, State } from "./type";
+export type { City, State } from "./types";

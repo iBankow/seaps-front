@@ -1,16 +1,12 @@
 import api from "@/lib/http";
 import { initialData, type PaginatedResponse } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-
-interface Organization {
-  id: string;
-  name: string;
-  acronym: string;
-}
+import type { Organization } from "../types";
+import { organizationsKeys } from "./query-keys";
 
 export const useOrganizationsList = () => {
   return useQuery({
-    queryKey: ["organizations"],
+    queryKey: organizationsKeys.list(),
     queryFn: () => organizationsApi.list(),
     initialData,
   });

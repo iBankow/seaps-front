@@ -1,5 +1,5 @@
 import api from "@/lib/http";
-import type { City, State } from "../type";
+import type { City, State } from "../types";
 
 export const addressApi = {
   getAddress: async (cep: string) => {

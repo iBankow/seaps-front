@@ -1,4 +1,4 @@
-import type { ChecklistNotificationListParams } from "./types";
+import type { ChecklistNotificationListParams } from "../types";
 
 export const checklistNotificationsKeys = {
   all: ["checklist-notifications"] as const,

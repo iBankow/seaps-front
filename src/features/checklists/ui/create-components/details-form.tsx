@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useQuery } from "@tanstack/react-query";
-import { modelsApi } from "@/features/models";
+import { useModelsList } from "@/features/models";
 import { Card, CardContent } from "@/components/ui/card";
 import { organizationsApi } from "@/features/organizations";
 import { Switch } from "@/components/ui/switch";
@@ -30,10 +30,7 @@ export const DetailsForm = ({
   form: UseFormReturn<FormSchemaType>;
   updateFormData: (updates: Partial<FormDataType>) => void;
 }) => {
-  const { data } = useQuery({
-    queryKey: ["models"],
-    queryFn: modelsApi.list,
-  });
+  const { data } = useModelsList();
 
   const { data: organizationsData } = useQuery({
     queryKey: ["organizations"],

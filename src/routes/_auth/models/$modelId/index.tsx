@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { http as api } from "@/lib/http";
+import { useModel } from "@/features/models";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -27,47 +26,11 @@ export const Route = createFileRoute("/_auth/models/$modelId/")({
   component: RouteComponent,
 });
 
-interface ModelItem {
-  id: string;
-  name: string;
-}
-
-interface Model {
-  id: string;
-  name: string;
-  description?: string;
-  created_at: string;
-  updated_at: string;
-  items: ModelItem[];
-}
-
 function RouteComponent() {
   const { modelId } = Route.useParams();
-  const [model, setModel] = useState<Model | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: model, isLoading, isError } = useModel(modelId);
 
-  useEffect(() => {
-    const loadModel = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const { data } = await api.get(`/models/${modelId}`);
-        setModel(data);
-      } catch (err) {
-        console.error("Erro ao carregar modelo:", err);
-        setError("Erro ao carregar o modelo. Verifique se o ID está correto.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (modelId) {
-      loadModel();
-    }
-  }, [modelId]);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex flex-col gap-y-4 flex-1">
         <Card>
@@ -87,7 +50,7 @@ function RouteComponent() {
     );
   }
 
-  if (error) {
+  if (isError) {
     return (
       <div className="flex flex-col gap-y-4 flex-1">
         <Card>
@@ -96,7 +59,9 @@ function RouteComponent() {
               <BackButton />
               <h1 className="text-2xl font-bold text-red-600">Erro</h1>
             </div>
-            <p className="text-muted-foreground">{error}</p>
+            <p className="text-muted-foreground">
+              Erro ao carregar o modelo. Verifique se o ID está correto.
+            </p>
           </CardContent>
         </Card>
       </div>

@@ -1,6 +1,5 @@
 import { createFileRoute, useParams, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { http as api } from "@/lib/http";
+import { useState } from "react";
 import { bucketUrl } from "@/config/env";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Camera, Upload } from "lucide-react";
@@ -12,25 +11,28 @@ import { ImageDialog } from "@/components/image-dialog";
 import { useChecklist } from "@/contexts/checklist-context";
 import { toast } from "sonner";
 import { Loading } from "@/components/loading";
-import { DeleteDialog } from "./-components/delete-dialog";
-import type { ChecklistItem } from "../../../../../../../types/types";
+import {
+  DeleteChecklistItemImageDialog,
+  useChecklistItem,
+  useUploadChecklistItemImages,
+} from "@/features/checklist-items";
 
 export const Route = createFileRoute(
   "/_auth/checklists/$checklistId/items/$itemId/"
 )({
-  component: ChecklistItem,
+  component: ChecklistItemPage,
 });
 
-function ChecklistItem() {
+function ChecklistItemPage() {
   const { checklistId, itemId } = useParams({
     from: "/_auth/checklists/$checklistId/items/$itemId",
   });
 
   const { checklist } = useChecklist();
   const [uploading, setUploading] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [item, setItem] = useState<ChecklistItem | null>(null);
-  const [load, setLoad] = useState(false);
+
+  const { data: item, isLoading } = useChecklistItem(itemId);
+  const { mutateAsync: uploadImages } = useUploadChecklistItemImages(itemId);
 
   const observationDialog = useModal();
   const imageDialog = useModal();
@@ -39,22 +41,16 @@ function ChecklistItem() {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const files = event.target.files;
-    if (!files || files.length === 0) return;
+    if (!files || files.length === 0 || !item) return;
 
     setUploading(true);
-    setIsLoading(true);
     try {
-      const { data } = await api.get(`/checklist-items/${itemId}`);
-      const existingImages = Array.isArray(data.images)
-        ? data.images.length
-        : 0;
-
+      const existingImages = item.images?.length ?? 0;
       const maxImages = 10;
       const availableSlots = maxImages - existingImages;
 
       if (availableSlots <= 0) {
         toast.error("Limite máximo de 10 imagens atingido.");
-        setUploading(false);
         return;
       }
 
@@ -65,11 +61,7 @@ function ChecklistItem() {
         formData.append("file", img);
       });
 
-      // Sem Content-Type manual: o axios define multipart com boundary
-      // sozinho para FormData, e o header sem boundary era inerte.
-      await api.post(`/checklist-items/${itemId}/upload`, formData, {
-        skipErrorToast: true,
-      });
+      await uploadImages(formData);
 
       if (filesToUpload.length < files.length) {
         toast.warning(
@@ -82,17 +74,9 @@ function ChecklistItem() {
       console.error("Error uploading images:", error);
       toast.error("Erro ao enviar imagens");
     } finally {
-      setLoad(!load);
       setUploading(false);
     }
   };
-
-  useEffect(() => {
-    api
-      .get(`/checklist-items/${itemId}`)
-      .then(({ data }) => setItem(data))
-      .finally(() => setIsLoading(false));
-  }, [itemId, checklistId, load]);
 
   if (isLoading || !item) {
     return <Loading />;
@@ -168,7 +152,7 @@ function ChecklistItem() {
                     <Camera className="mr-2 h-4 w-4" />
                     Visualizar
                   </Button>
-                  <DeleteDialog setLoad={setLoad} image={image} />
+                  <DeleteChecklistItemImageDialog image={image} />
                 </div>
               </div>
             </CardContent>

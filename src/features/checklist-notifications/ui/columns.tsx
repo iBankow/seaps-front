@@ -4,7 +4,7 @@ import { differenceInBusinessDays } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ChevronRight } from "lucide-react";
-import type { ChecklistNotificationListItem } from "@/features/checklist-notifications";
+import type { ChecklistNotificationListItem } from "../types";
 import { formatDateTime } from "@/lib/format";
 
 export type Column = ChecklistNotificationListItem;

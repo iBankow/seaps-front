@@ -4,10 +4,12 @@ import { Loader } from "lucide-react";
 import { DataTableSkeleton } from "@/components/skeletons/data-table";
 
 import { createFileRoute } from "@tanstack/react-router";
-import { columns } from "./-components/columns";
-import { DataFilterForm } from "./-components/filter-form";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { useChecklistNotificationsList } from "@/features/checklist-notifications";
+import {
+  ChecklistNotificationsFilterForm,
+  checklistNotificationsColumns,
+  useChecklistNotificationsList,
+} from "@/features/checklist-notifications";
 import z from "zod";
 
 const SearchSchema = z.object({
@@ -39,17 +41,17 @@ export function RouteComponent() {
       </Card>
       <Card>
         <CardContent className="space-y-4">
-          <DataFilterForm />
+          <ChecklistNotificationsFilterForm />
           <div className="relative">
             {isLoading && !isFetching && (
-              <DataTableSkeleton columns={columns} />
+              <DataTableSkeleton columns={checklistNotificationsColumns} />
             )}
             {isFetching && (
               <div className="absolute z-10 rounded-lg backdrop-blur-md inset-0 bg-black/10 flex items-center justify-center flex-col gap-y-2">
                 <Loader className="animate-spin text-primary size-12" />
               </div>
             )}
-            <DataTable columns={columns} data={notifications} />
+            <DataTable columns={checklistNotificationsColumns} data={notifications} />
           </div>
         </CardContent>
         <CardFooter>
