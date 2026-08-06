@@ -12,56 +12,20 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-import {
-  // Boxes,
-  Bell,
-  ChartColumnIncreasing,
-  ClipboardList,
-  Landmark,
-  // Users,
-} from "lucide-react";
-import { useAuth } from "@/features/auth";
+import { useAuth, useCan } from "@/features/auth";
 import { Link } from "@tanstack/react-router";
 import { NavSecondary } from "./nav-secondary";
+import { navMain, navSecondary, type NavItem } from "@/config/navigation";
 
-const data = {
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "/",
-      icon: ChartColumnIncreasing,
-    },
-    {
-      title: "Checklists",
-      url: "/checklists",
-      icon: ClipboardList,
-    },
-    {
-      title: "Imóveis",
-      url: "/properties",
-      icon: Landmark,
-    },
-    {
-      title: "Notificações",
-      url: "/checklist-notifications",
-      icon: Bell,
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Modelos",
-      url: "/models",
-      // icon: Boxes,
-    },
-    {
-      title: "Usuários",
-      url: "/users",
-      // icon: Users,
-    },
-  ],
-};
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useAuth();
+  const can = useCan();
+
+  const isVisible = (item: NavItem) =>
+    !item.permissions || can(...item.permissions);
+
+  const mainItems = navMain.filter(isVisible);
+  const secondaryItems = navSecondary.filter(isVisible);
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -90,8 +54,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavMain items={mainItems} />
+        {secondaryItems.length > 0 && (
+          <NavSecondary items={secondaryItems} className="mt-auto" />
+        )}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user} />
