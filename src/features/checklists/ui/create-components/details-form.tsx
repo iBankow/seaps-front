@@ -17,9 +17,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useQuery } from "@tanstack/react-query";
-import { modelsApi } from "@/features/models/api/models";
+import { modelsApi } from "@/features/models";
 import { Card, CardContent } from "@/components/ui/card";
-import { organizationsApi } from "@/features/organizations/api/organizations";
+import { organizationsApi } from "@/features/organizations";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 

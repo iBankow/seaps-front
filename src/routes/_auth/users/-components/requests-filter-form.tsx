@@ -29,7 +29,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { useQuery } from "@tanstack/react-query";
-import { organizationsApi } from "@/features/organizations/api/organizations";
+import { organizationsApi } from "@/features/organizations";
 
 const filterSchema = z.object({
   organization: z.string().optional(),

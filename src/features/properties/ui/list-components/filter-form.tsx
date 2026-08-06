@@ -28,8 +28,8 @@ import { Badge } from "@/components/ui/badge";
 import { initialData } from "@/types";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { useQueries } from "@tanstack/react-query";
-import { organizationsApi } from "@/features/organizations/api/organizations";
-import { addressApi } from "@/features/address/api/address";
+import { organizationsApi } from "@/features/organizations";
+import { addressApi } from "@/features/address";
 import { FilterChips } from "@/components/ui/filter-chips";
 
 const filterSchema = z.object({

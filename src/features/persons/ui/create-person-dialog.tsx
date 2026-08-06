@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { organizationsApi } from "@/features/organizations/api/organizations";
+import { organizationsApi } from "@/features/organizations";
 import { initialData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueries } from "@tanstack/react-query";

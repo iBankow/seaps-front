@@ -29,8 +29,7 @@ import type {
   PropertyFormDataType,
   PropertyFormSchemaType,
 } from "./create-property-wizard";
-import { usePersonsList } from "@/features/persons/api/persons";
-import { CreatePersonDialog } from "@/features/persons/ui/create-person-dialog";
+import { CreatePersonDialog, usePersonsList } from "@/features/persons";
 import debounce from "lodash.debounce";
 
 interface SelectPersonFormProps {

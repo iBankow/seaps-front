@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useChecklist } from "@/contexts/checklist-context";
-import { EditCheckListForm } from "@/features/checklists/ui/edit-form";
+import { EditCheckListForm } from "@/features/checklists";
 
 export const Route = createFileRoute("/_auth/checklists/$checklistId/edit/")({
   component: RouteComponent,

@@ -2,7 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ModeToggle } from "./mode-toggle";
 import { Breadcrumbs } from "./breadcrumbs";
-import { NotificationBell } from "@/features/notifications/ui/notification-bell";
+import { NotificationBell } from "@/features/notifications";
 
 export function SiteHeader() {
   return (

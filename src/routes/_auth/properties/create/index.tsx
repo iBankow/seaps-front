@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { CreatePropertyWizard } from "@/features/properties/ui/create-components/create-property-wizard";
+import { CreatePropertyWizard } from "@/features/properties";
 
 export const Route = createFileRoute("/_auth/properties/create/")({
   component: RouteComponent,

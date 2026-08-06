@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { getFirstAndLastName } from "@/lib/utils";
 import { StatusBadge } from "@/components/status-badge";
-import { useChecklistsItems } from "@/features/checklist-items/api/checklist-items";
+import { useChecklistsItems } from "@/features/checklist-items";
 import { formatDateLong } from "@/lib/format";
 
 export const Route = createFileRoute("/_auth/checklists/$checklistId/")({

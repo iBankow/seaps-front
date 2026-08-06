@@ -16,7 +16,7 @@ import {
 import { Controller, type UseFormReturn } from "react-hook-form";
 import { useQueries } from "@tanstack/react-query";
 
-import { organizationsApi } from "@/features/organizations/api/organizations";
+import { organizationsApi } from "@/features/organizations";
 import { initialData } from "@/types";
 import type {
   PropertyFormDataType,

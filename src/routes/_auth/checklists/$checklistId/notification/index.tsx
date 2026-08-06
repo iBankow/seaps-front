@@ -4,7 +4,7 @@ import { useCan } from "@/features/auth";
 import {
   useChecklistNotification,
   useGenerateChecklistNotification,
-} from "@/features/checklist-notifications/api/checklist-notifications";
+} from "@/features/checklist-notifications";
 import {
   Card,
   CardContent,

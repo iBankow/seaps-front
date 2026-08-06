@@ -8,7 +8,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { columns } from "./-components/columns";
 import { DataFilterForm } from "./-components/filter-form";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { useChecklistsList } from "@/features/checklists/api/checklists";
+import { useChecklistsList } from "@/features/checklists";
 import z from "zod";
 import { PermissionGate } from "@/features/auth";
 

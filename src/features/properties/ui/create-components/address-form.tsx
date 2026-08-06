@@ -17,7 +17,7 @@ import {
 import { Controller, type UseFormReturn } from "react-hook-form";
 import { useQueries } from "@tanstack/react-query";
 
-import { addressApi } from "@/features/address/api/address";
+import { addressApi } from "@/features/address";
 import type { PropertyFormSchemaType } from "./create-property-wizard";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";

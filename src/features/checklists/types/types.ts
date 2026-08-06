@@ -1,4 +1,4 @@
-import type { Property } from "@/features/properties/types";
+import type { Property } from "@/features/properties";
 import type { PaginatedParams } from "@/types";
 
 export interface ChecklistListParams extends PaginatedParams {

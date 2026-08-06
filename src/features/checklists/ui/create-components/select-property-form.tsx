@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { usePropertiesList } from "@/features/properties/api/properties";
+import { usePropertiesList } from "@/features/properties";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Field,
@@ -46,7 +46,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useQuery } from "@tanstack/react-query";
-import { addressApi } from "@/features/address/api/address";
+import { addressApi } from "@/features/address";
 import {
   Select,
   SelectContent,

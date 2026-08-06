@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import z from "zod";
 
 import { Button } from "@/components/ui/button";
-import { useCreateProperty } from "@/features/properties/api/properties";
+import { useCreateProperty } from "../../api/properties";
 import { AddressForm } from "./address-form";
 import { DetailsForm } from "./details-form";
 import { SelectPersonForm } from "./select-person-form";

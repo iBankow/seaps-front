@@ -7,7 +7,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { columns } from "./-components/columns";
 import { DataFilterForm } from "./-components/filter-form";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { useChecklistNotificationsList } from "@/features/checklist-notifications/api/checklist-notifications";
+import { useChecklistNotificationsList } from "@/features/checklist-notifications";
 import z from "zod";
 
 const SearchSchema = z.object({
