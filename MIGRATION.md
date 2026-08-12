@@ -11,10 +11,11 @@ que ainda não foi movido para dentro dele.
 Legenda: ✅ conforme · ⚠️ parcial · ❌ não conforme / inexistente
 
 > **Status:** as etapas 1 (Fundação), 2 (`features/auth`), 3 (barrels), 4
-> (módulos incompletos), 5 (`features/users` e `features/account`) e 6
-> (duplicação em `checklists`/`properties`/`persons`) do plano da seção 4
-> foram concluídas — as seções 1 e 2 abaixo descrevem o estado *anterior* e
-> estão mantidas como registro.
+> (módulos incompletos), 5 (`features/users` e `features/account`), 6
+> (duplicação em `checklists`/`properties`/`persons`) e 7
+> (`features/dashboard` e `features/system`) do plano da seção 4 foram
+> concluídas — as seções 1 e 2 abaixo descrevem o estado *anterior* e estão
+> mantidas como registro.
 >
 > - **Etapa 1:** `config/env.ts`, `lib/http.ts` (client único),
 >   `lib/query-client.ts`, `lib/format.ts`, `src/types/`,
@@ -71,6 +72,27 @@ Legenda: ✅ conforme · ⚠️ parcial · ❌ não conforme / inexistente
 >   `ChecklistActions`, necessário porque `routes/_auth/-components/
 >   checklist-card.tsx` (dashboard, fora do escopo desta etapa) também
 >   importava a versão antiga de `Actions`.
+> - **Etapa 7:** `features/dashboard` criado com `api/dashboard.ts`
+>   (`useDashboard()`, `GET /dashboards`), `types/` e `ui/` — `bar-card.tsx`,
+>   `numbers-card.tsx` (antes `cards/numbers.tsx`) e `irm-chart.tsx` migraram
+>   de `routes/_auth/-components` sem mudança de comportamento (só recebem
+>   props). `checklist-card.tsx` também migrou, mas trocou o fetch cru
+>   (`useEffect`+axios em `/checklists?...&status=CLOSED`) por
+>   `useChecklistsList({ page: 1, per_page: 5, status: "CLOSED" })`, hook que
+>   já existia em `features/checklists` — sem duplicar lógica de busca.
+>   `pages/DashboardPage.tsx` compõe as quatro peças e substitui o corpo da
+>   rota; `routes/_auth/index.tsx` ficou só com `component: DashboardPage`.
+>   `features/system` criado com `pages/NotFoundPage.tsx`, registrado como
+>   `notFoundComponent` em `routes/__root.tsx` (não em `createRouter()` — a
+>   opção não existe no construtor desta versão do TanStack Router, só na
+>   rota raiz). Os nomes de arquivo `DashboardPage.tsx`/`NotFoundPage.tsx`
+>   (PascalCase) seguem literalmente o que `ARCHITECTURE.md` e o texto desta
+>   etapa já especificavam, mesmo destoando do kebab-case usado no resto do
+>   projeto — é o mesmo padrão que `features/auth/pages/login-page.tsx` já
+>   estabeleceu para a pasta `pages/` (ainda que esse em kebab-case).
+>   Verificado num browser real (Playwright): a página 404 renderiza e o link
+>   "Voltar para o início" navega corretamente; o dashboard não foi
+>   verificado logado porque não há backend real disponível neste ambiente.
 >
 > Ver "Achados" no fim do documento.
 
@@ -206,8 +228,8 @@ Não há `common/` nem `layout/`. Na raiz de `components/` estão misturados:
 | Feature | api/ | types/ | ui/ | index.ts (barrel) | Observação |
 |---|:---:|:---:|:---:|:---:|---|
 | **auth** | — | — | — | ❌ | Não existe como feature. Espalhado em `contexts/auth-contexts.tsx`, `lib/permissions.ts`, `lib/mt-login.ts`, `components/login-form.tsx`, `routes/login.tsx`. Sem `useCan()`/`<PermissionGate>` — cada rota chama `can(...)` direto importando de `lib/permissions`. |
-| **dashboard** | — | — | — | ❌ | Não existe. Fetch com `useEffect`+`useState` cru (sem TanStack Query) dentro de [routes/_auth/index.tsx](src/routes/_auth/index.tsx) + `routes/_auth/-components/*` (bar-card, irm-chart, numbers, checklist-card). |
-| **system** | — | — | — | ❌ | Não existe. Sem página 404 customizada — nenhum `notFoundComponent` configurado no router; cai no fallback padrão do TanStack Router. |
+| **dashboard** | ✅ | ✅ | ✅ | ✅ | Etapa 7: `api/dashboard.ts` (`useDashboard()`) substitui o fetch cru de `routes/_auth/index.tsx`; `bar-card`, `numbers-card`, `irm-chart` e `checklist-card` migraram de `routes/_auth/-components` para `ui/`; `checklist-card` passou a usar `useChecklistsList()` de `features/checklists` em vez de axios direto. `pages/DashboardPage.tsx` compõe tudo; a rota só registra o componente. |
+| **system** | — | — | ✅ | ✅ | Etapa 7: `pages/NotFoundPage.tsx` criado e registrado como `notFoundComponent` em `routes/__root.tsx`. Sem `api/`/`types/` — não há dados nem chamada de API envolvidos. |
 | **users** | ✅ | ✅ | ✅ | ✅ | Etapa 5: listagem, CRUD, aba de solicitações e aprovação/reprovação migraram de `routes/_auth/users/-components/*` para `api/{users,user-requests,query-keys}.ts` + `ui/*`. As páginas de detalhe (`$userId`) e edição (`$userId/edit`) — que não estavam em `-components`, eram o corpo inteiro da rota — viraram `ui/user-detail.tsx` e `ui/user-edit-form.tsx`. |
 | **account** | ✅ | — | ✅ | ✅ | Etapa 5: `api/account.ts` (`useGeneratePassword`) e `ui/profile-form.tsx`, migrados de `routes/_auth/account/-components/form.tsx`. Sem `types/` própria — a única chamada tem um payload de resposta trivial (`{ password }`), tipado inline em `api/account.ts`. |
 | **checklists** | ✅ | ✅ | ✅ | ✅ | Etapa 6: `routes/_auth/checklists/-components/*` (columns, actions, dialogs/, filter-form, export-modal, header) movido para `features/checklists/ui`, sobrescrevendo os stubs degradados; `create-form.tsx` (sem importador) descartado. |
@@ -256,9 +278,14 @@ alguns dentro de `features/*` que usam `#/`, uma mistura sem critério claro.
 
 ## 3. Regra "rotas sem lógica de negócio" — violada na maior parte do repo
 
+> Descreve o estado *anterior* às etapas 4-7 (ver "Status" no topo do
+> documento) — mantida como registro. Os quatro exemplos abaixo já foram
+> resolvidos: `models` na etapa 4, `users` na etapa 5, `checklists`/
+> `properties` na etapa 6, `routes/_auth/index.tsx` na etapa 7.
+
 O doc é explícito: *"As pastas com rotas não devem conter lógica de negócio
 ou componentes de UI, apenas composição de componentes e chamadas à API."*
-Na prática, quase todo `routes/_auth/**/-components/` viola isso:
+Na prática, quase todo `routes/_auth/**/-components/` violava isso:
 
 - `routes/_auth/models/-components/form.tsx` — 418 linhas de formulário completo.
 - `routes/_auth/users/-components/*` — 8 arquivos com todo o CRUD de usuários e o fluxo de aprovação/reprovação de solicitações.
@@ -299,11 +326,11 @@ consumi-la.
    dentro de `features/*/ui` (sobrescrevendo os stubs degradados) e só então
    apagar as pastas `-components` das rotas, fazendo-as consumir
    `features/*/ui` via barrel.~~ ✅ **concluído**
-7. **`features/dashboard` e `features/system`** — mover
+7. ~~**`features/dashboard` e `features/system`** — mover
    `routes/_auth/index.tsx` + `routes/_auth/-components/*` para
    `features/dashboard`, trocar o fetch cru por hooks de TanStack Query;
    criar `features/system/pages/NotFoundPage.tsx` e registrar como
-   `notFoundComponent` no router.
+   `notFoundComponent` no router.~~ ✅ **concluído**
 8. **`components/`** — separar em `ui/`, `common/` e `layout/`, e mover os
    componentes de domínio para dentro da feature correspondente.
 
@@ -489,7 +516,8 @@ Exceções em que a versão do feature é de fato a mais nova: os `address-form`
 - **`routes/request.tsx`** não tem guarda de autenticação no `beforeLoad`, só a
   de `is_active` — um visitante anônimo consegue abrir `/request`.
 - **`features/address`**: `getCities()` chama `/address/cities/{uf}`, enquanto
-  `routes/_auth/properties/-components/address-form.tsx` chama
+  `features/properties/ui/edit-components/address-form.tsx` (movido de
+  `routes/_auth/properties/-components/address-form.tsx` na etapa 6) chama
   `/address/states/{uf}` para a mesma finalidade. Uma das duas está errada.
 - **Testes**: não havia config de vitest (nem `vitest.config.*` nem bloco
   `test:`), então o environment caía em `node` e 19 dos 41 testes quebravam com

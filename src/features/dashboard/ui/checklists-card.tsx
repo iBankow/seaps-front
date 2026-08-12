@@ -1,6 +1,4 @@
-import { http as api } from "@/lib/http";
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import { StatusBadge } from "@/components/status-badge";
 import {
   Table,
@@ -11,21 +9,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ChecklistActions as Actions } from "@/features/checklists";
+import { ChecklistActions as Actions, useChecklistsList } from "@/features/checklists";
 import { ClassificationBadge } from "@/components/classification-badge";
 
 export function ChecklistsCard() {
-  const [loading, setLoading] = useState(true);
-  const [checklists, setChecklists] = useState<any[]>([]);
+  const { data, isLoading } = useChecklistsList({
+    page: 1,
+    per_page: 5,
+    status: "CLOSED",
+  });
 
-  useEffect(() => {
-    api
-      .get("/checklists?page=1&per_page=5&status=CLOSED")
-      .then(({ data }) => setChecklists(data.data))
-      .finally(() => setLoading(false));
-  }, []);
+  const checklists = data?.data ?? [];
 
-  if (loading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
