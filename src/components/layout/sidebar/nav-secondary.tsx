@@ -14,7 +14,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "../ui/collapsible";
+} from "../../ui/collapsible";
 import { ChevronRight, Settings } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 

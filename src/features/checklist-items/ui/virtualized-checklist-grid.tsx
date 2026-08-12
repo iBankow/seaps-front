@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { ChecklistCard } from "@/components/checklist-card";
+import { ChecklistCard } from "./checklist-card";
 
 interface VirtualizedChecklistGridProps {
   items: any[];

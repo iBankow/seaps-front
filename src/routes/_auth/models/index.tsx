@@ -1,8 +1,8 @@
-import { DataTable } from "@/components/data-table";
-import { MetaPagination } from "@/components/meta-pagination";
+﻿import { DataTable } from "@/components/common/data-table";
+import { MetaPagination } from "@/components/common/meta-pagination";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { DataTableSkeleton } from "@/components/skeletons/data-table";
+import { DataTableSkeleton } from "@/components/common/skeletons/data-table";
 
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { modelsColumns, useModelsList } from "@/features/models";

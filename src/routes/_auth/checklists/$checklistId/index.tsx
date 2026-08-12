@@ -19,7 +19,7 @@ import {
   MinusCircle,
 } from "lucide-react";
 import { getFirstAndLastName } from "@/lib/utils";
-import { StatusBadge } from "@/components/status-badge";
+import { StatusBadge } from "@/features/checklists";
 import { useChecklistsItems } from "@/features/checklist-items";
 import { formatDateLong } from "@/lib/format";
 

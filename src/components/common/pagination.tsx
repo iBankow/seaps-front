@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/pagination";
 import { Link, useRouter } from "@tanstack/react-router";
 import type { HTMLAttributes } from "react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface IPaginationComponent {

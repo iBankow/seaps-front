@@ -1,6 +1,6 @@
-import { Link } from "@tanstack/react-router";
+﻿import { Link } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { ModeToggle } from "@/components/mode-toggle";
+import { ModeToggle } from "@/components/layout/mode-toggle";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { config } from "../lib/mt-login";

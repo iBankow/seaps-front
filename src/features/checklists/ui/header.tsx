@@ -1,7 +1,7 @@
-import { Card, CardContent } from "@/components/ui/card";
+﻿import { Card, CardContent } from "@/components/ui/card";
 import { useChecklist } from "@/contexts/checklist-context";
-import { BackButton } from "@/components/back-button";
-import { StatusBadge } from "@/components/status-badge";
+import { BackButton } from "@/components/layout/back-button";
+import { StatusBadge } from "./status-badge";
 
 export const ChecklistHeader = () => {
   const { checklist } = useChecklist();

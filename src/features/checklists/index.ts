@@ -19,3 +19,5 @@ export { ChecklistHeader } from "./ui/header";
 export { columns as checklistColumns } from "./ui/columns";
 export { Actions as ChecklistActions } from "./ui/actions";
 export { DataFilterForm as ChecklistFilterForm } from "./ui/filter-form";
+export { StatusBadge } from "./ui/status-badge";
+export { ClassificationBadge } from "./ui/classification-badge";

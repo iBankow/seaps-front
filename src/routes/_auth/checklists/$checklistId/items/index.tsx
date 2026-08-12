@@ -18,9 +18,11 @@ import {
 import { Link } from "@tanstack/react-router";
 import { useChecklist } from "@/contexts/checklist-context";
 import { DialogProvider } from "@/contexts/dialog-context";
-import { GlobalDialogs } from "@/components/global-dialogs";
-import { VirtualizedChecklistGrid } from "@/components/virtualized-checklist-grid";
-import { useChecklistsItems } from "@/features/checklist-items";
+import {
+  GlobalDialogs,
+  VirtualizedChecklistGrid,
+  useChecklistsItems,
+} from "@/features/checklist-items";
 
 export const Route = createFileRoute("/_auth/checklists/$checklistId/items/")({
   component: ChecklistContent,

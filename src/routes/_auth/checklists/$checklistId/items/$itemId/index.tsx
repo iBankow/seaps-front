@@ -1,4 +1,4 @@
-import { createFileRoute, useParams, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, useParams, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { bucketUrl } from "@/config/env";
 import { Button } from "@/components/ui/button";
@@ -6,13 +6,13 @@ import { ArrowLeft, Camera, Upload } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useModal } from "@/hooks/use-modal";
-import { ObservationDialog } from "@/components/observation-dialog";
-import { ImageDialog } from "@/components/image-dialog";
 import { useChecklist } from "@/contexts/checklist-context";
 import { toast } from "sonner";
-import { Loading } from "@/components/loading";
+import { Loading } from "@/components/common/loading";
 import {
   DeleteChecklistItemImageDialog,
+  ImageDialog,
+  ObservationDialog,
   useChecklistItem,
   useUploadChecklistItemImages,
 } from "@/features/checklist-items";

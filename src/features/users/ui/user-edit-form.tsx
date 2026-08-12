@@ -1,4 +1,4 @@
-import { Link, useParams, useRouter } from "@tanstack/react-router";
+﻿import { Link, useParams, useRouter } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -34,7 +34,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
-import { RSSelect } from "@/components/react-select";
+import { RSSelect } from "@/components/common/react-select";
 import { useOrganizationsList } from "@/features/organizations";
 import { useUpdateUser, useUser } from "../api/users";
 

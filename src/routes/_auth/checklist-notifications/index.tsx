@@ -1,7 +1,7 @@
-import { DataTable } from "@/components/data-table";
-import { MetaPagination } from "@/components/meta-pagination";
+﻿import { DataTable } from "@/components/common/data-table";
+import { MetaPagination } from "@/components/common/meta-pagination";
 import { Loader } from "lucide-react";
-import { DataTableSkeleton } from "@/components/skeletons/data-table";
+import { DataTableSkeleton } from "@/components/common/skeletons/data-table";
 
 import { createFileRoute } from "@tanstack/react-router";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";

@@ -1,4 +1,4 @@
-import { z } from "zod";
+﻿import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -24,7 +24,7 @@ import { toUpperCase } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { http as api } from "@/lib/http";
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import { RSSelect } from "@/components/react-select";
+import { RSSelect } from "@/components/common/react-select";
 import { FilterChips } from "@/components/ui/filter-chips";
 import {
   Dialog,

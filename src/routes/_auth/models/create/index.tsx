@@ -1,7 +1,7 @@
-import { Card, CardContent } from "@/components/ui/card";
+﻿import { Card, CardContent } from "@/components/ui/card";
 import { createFileRoute } from "@tanstack/react-router";
 import { CreateModelForm } from "@/features/models";
-import { BackButton } from "@/components/back-button";
+import { BackButton } from "@/components/layout/back-button";
 
 export const Route = createFileRoute("/_auth/models/create/")({
   component: RouteComponent,

@@ -1,5 +1,5 @@
-import { ObservationDialog } from "@/components/observation-dialog";
-import { ImageDialog } from "@/components/image-dialog";
+import { ObservationDialog } from "./observation-dialog";
+import { ImageDialog } from "./image-dialog";
 import { useDialogContext } from "@/contexts/dialog-context";
 
 export function GlobalDialogs() {

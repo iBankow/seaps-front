@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -24,7 +24,7 @@ import {
 
 import { getFirstAndLastName, toUpperCase } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-import { RSSelect } from "@/components/react-select";
+import { RSSelect } from "@/components/common/react-select";
 import { http as api } from "@/lib/http";
 import { useRouter, useSearch } from "@tanstack/react-router";
 import { FilterChips } from "@/components/ui/filter-chips";

@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import { StatusBadge } from "@/components/status-badge";
 import {
   Table,
   TableBody,
@@ -9,8 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ChecklistActions as Actions, useChecklistsList } from "@/features/checklists";
-import { ClassificationBadge } from "@/components/classification-badge";
+import {
+  ChecklistActions as Actions,
+  ClassificationBadge,
+  StatusBadge,
+  useChecklistsList,
+} from "@/features/checklists";
 
 export function ChecklistsCard() {
   const { data, isLoading } = useChecklistsList({

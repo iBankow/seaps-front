@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { useModel } from "@/features/models";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { BackButton } from "@/components/back-button";
+import { BackButton } from "@/components/layout/back-button";
 import { formatDateTime } from "@/lib/format";
 
 export const Route = createFileRoute("/_auth/models/$modelId/")({

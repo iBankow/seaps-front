@@ -1,7 +1,7 @@
-import { DataTable } from "@/components/data-table";
-import { Pagination } from "@/components/pagination";
+﻿import { DataTable } from "@/components/common/data-table";
+import { Pagination } from "@/components/common/pagination";
 import { useState } from "react";
-import { DataTableSkeleton } from "@/components/skeletons/data-table";
+import { DataTableSkeleton } from "@/components/common/skeletons/data-table";
 import { CardContent, CardFooter } from "@/components/ui/card";
 import { toast } from "sonner";
 import { useReviewUserRequest, useUserRequestsList } from "../api/user-requests";

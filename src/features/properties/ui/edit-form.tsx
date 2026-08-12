@@ -1,4 +1,4 @@
-import { Link, useRouter } from "@tanstack/react-router";
+﻿import { Link, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { http as api } from "@/lib/http";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import { RSSelect } from "@/components/react-select";
+import { RSSelect } from "@/components/common/react-select";
 import { NameForm } from "./edit-components/name-form";
 import { AddressForm } from "./edit-components/address-form";
 import { Separator } from "@/components/ui/separator";

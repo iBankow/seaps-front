@@ -1,11 +1,11 @@
-import { DataTable } from "@/components/data-table";
+﻿import { DataTable } from "@/components/common/data-table";
 import { Button } from "@/components/ui/button";
 import { Loader, Plus } from "lucide-react";
-import { DataTableSkeleton } from "@/components/skeletons/data-table";
+import { DataTableSkeleton } from "@/components/common/skeletons/data-table";
 
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { MetaPagination } from "@/components/meta-pagination";
+import { MetaPagination } from "@/components/common/meta-pagination";
 import {
   propertiesColumns as columns,
   PropertyFilterForm as DataFilterForm,

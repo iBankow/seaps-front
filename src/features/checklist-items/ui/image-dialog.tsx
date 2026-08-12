@@ -6,9 +6,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useEffect, useState } from "react";
-import EmblaCarousel from "./carousel/embla-carousel";
+import EmblaCarousel from "@/components/common/carousel/embla-carousel";
 import { http as api } from "@/lib/http";
-import { Loading } from "./loading";
+import { Loading } from "@/components/common/loading";
 
 export function ImageDialog({ item, ...props }: any) {
   const [images, setImages] = useState<any[]>([]);

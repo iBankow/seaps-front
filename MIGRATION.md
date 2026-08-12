@@ -12,10 +12,10 @@ Legenda: ✅ conforme · ⚠️ parcial · ❌ não conforme / inexistente
 
 > **Status:** as etapas 1 (Fundação), 2 (`features/auth`), 3 (barrels), 4
 > (módulos incompletos), 5 (`features/users` e `features/account`), 6
-> (duplicação em `checklists`/`properties`/`persons`) e 7
-> (`features/dashboard` e `features/system`) do plano da seção 4 foram
-> concluídas — as seções 1 e 2 abaixo descrevem o estado *anterior* e estão
-> mantidas como registro.
+> (duplicação em `checklists`/`properties`/`persons`), 7 (`features/dashboard`
+> e `features/system`) e 8 (`components/` em `ui/`/`common`/`layout`) do
+> plano da seção 4 foram concluídas — as seções 1 e 2 abaixo descrevem o
+> estado *anterior* e estão mantidas como registro.
 >
 > - **Etapa 1:** `config/env.ts`, `lib/http.ts` (client único),
 >   `lib/query-client.ts`, `lib/format.ts`, `src/types/`,
@@ -93,6 +93,32 @@ Legenda: ✅ conforme · ⚠️ parcial · ❌ não conforme / inexistente
 >   Verificado num browser real (Playwright): a página 404 renderiza e o link
 >   "Voltar para o início" navega corretamente; o dashboard não foi
 >   verificado logado porque não há backend real disponível neste ambiente.
+> - **Etapa 8:** `components/layout/` recebeu `back-button.tsx`,
+>   `breadcrumbs.tsx`, `mode-toggle.tsx`, `site-header.tsx`, `sidebar/*` e,
+>   por extensão do critério do doc, `theme-provider.tsx` (só é usado por
+>   `mode-toggle.tsx` e por `app/providers.tsx`, não é um componente
+>   genérico nem de domínio). `components/common/` recebeu `data-table.tsx`,
+>   `pagination.tsx`, `meta-pagination.tsx`, `loading.tsx`,
+>   `skeletons/data-table.tsx`, e por extensão `react-select.tsx` e
+>   `carousel/*` — nenhum dos dois estava listado no doc, mas ambos são
+>   genéricos (wrapper de input, carrossel de imagens) sem lógica de domínio.
+>   Dos componentes de domínio, `checklist-card.tsx`, `observation-dialog.tsx`,
+>   `image-dialog.tsx`, `virtualized-checklist-grid.tsx` e `global-dialogs.tsx`
+>   foram para `features/checklist-items/ui` — não `features/checklists/ui`
+>   como o doc supunha; todos operam em `/checklist-items/{id}` e só têm um
+>   importador, `routes/.../checklists/$checklistId/items/*`, que já é a área
+>   de preenchimento de item, domínio de `checklist-items`. `status-badge.tsx`
+>   e `classification-badge.tsx` foram para `features/checklists/ui` (campos
+>   `status`/`classification` são do checklist) e voltaram a ser consumidos
+>   por `features/dashboard` e pela rota de detalhe via barrel. Dois achados
+>   de dead code apagados no caminho: `components/ui/data-table.tsx`
+>   (`DataTableDemo`, boilerplate do shadcn, zero importadores — item já
+>   citado em "Pendências menores") e `components/property-badge.tsx`
+>   (`PropertyBadge`, zero importadores; `features/properties/ui/columns.tsx`
+>   já tem seu próprio `PROPERTY_TYPE_ENUM` duplicado inline — duplicação
+>   pré-existente, fora do escopo desta etapa). Verificado num browser real
+>   (Playwright): login e 404 renderizam sem erro de console além dos 401
+>   esperados (sem backend real neste ambiente).
 >
 > Ver "Achados" no fim do documento.
 
@@ -331,8 +357,9 @@ consumi-la.
    `features/dashboard`, trocar o fetch cru por hooks de TanStack Query;
    criar `features/system/pages/NotFoundPage.tsx` e registrar como
    `notFoundComponent` no router.~~ ✅ **concluído**
-8. **`components/`** — separar em `ui/`, `common/` e `layout/`, e mover os
-   componentes de domínio para dentro da feature correspondente.
+8. ~~**`components/`** — separar em `ui/`, `common/` e `layout/`, e mover os
+   componentes de domínio para dentro da feature correspondente.~~
+   ✅ **concluído**
 
 ---
 
@@ -503,8 +530,6 @@ Exceções em que a versão do feature é de fato a mais nova: os `address-form`
 - **`features/checklist-items/types/index.ts`** não tem nenhum `export`, então é
   um *script global*, e `api/checklist-items.ts` usa `ChecklistItem` sem
   importar — resolve pelo global. Arrumar junto com o feature.
-- **`components/ui/data-table.tsx:124-138`** ainda tem as colunas de exemplo do
-  shadcn, com `Intl.NumberFormat("en-US", { currency: "USD" })`.
 - **`bucketUrl()`** concatena `VITE_BUCKET_URL` + path sem normalizar barras,
   igual ao que os call sites faziam. Vale revisar quando o formato dos caminhos
   gravados no banco estiver confirmado.

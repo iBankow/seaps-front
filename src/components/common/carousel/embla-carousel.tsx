@@ -3,7 +3,7 @@ import { bucketUrl } from "@/config/env";
 import type { EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import { CarouselButton } from "./carousel-button";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 

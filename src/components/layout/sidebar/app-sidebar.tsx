@@ -1,7 +1,7 @@
-import * as React from "react";
+﻿import * as React from "react";
 
-import { NavMain } from "@/components/sidebar/nav-main";
-import { NavUser } from "@/components/sidebar/nav-user";
+import { NavMain } from "@/components/layout/sidebar/nav-main";
+import { NavUser } from "@/components/layout/sidebar/nav-user";
 import {
   Sidebar,
   SidebarContent,

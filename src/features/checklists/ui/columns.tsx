@@ -1,9 +1,9 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { getFirstAndLastName } from "@/lib/utils";
 import { Actions } from "./actions";
-import { StatusBadge } from "@/components/status-badge";
+import { StatusBadge } from "./status-badge";
 import { Link } from "@tanstack/react-router";
-import { ClassificationBadge } from "@/components/classification-badge";
+import { ClassificationBadge } from "./classification-badge";
 import { formatDate } from "@/lib/format";
 
 export type Column = {

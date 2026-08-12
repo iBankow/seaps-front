@@ -1,7 +1,7 @@
-import { DataTable } from "@/components/data-table";
-import { DataTableSkeleton } from "@/components/skeletons/data-table";
+﻿import { DataTable } from "@/components/common/data-table";
+import { DataTableSkeleton } from "@/components/common/skeletons/data-table";
 import { CardContent, CardFooter } from "@/components/ui/card";
-import { MetaPagination } from "@/components/meta-pagination";
+import { MetaPagination } from "@/components/common/meta-pagination";
 import { useUsersList } from "../api/users";
 import type { UsersListParams } from "../types";
 import { columns } from "./columns";
