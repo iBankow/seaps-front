@@ -1,10 +1,9 @@
-﻿import { DataTable } from "@/components/common/data-table";
+import { DataTable } from "@/components/common/data-table";
 import { MetaPagination } from "@/components/common/meta-pagination";
-import { Loader } from "lucide-react";
 import { DataTableSkeleton } from "@/components/common/skeletons/data-table";
+import { Loading } from "@/components/common/loading";
 
 import { createFileRoute } from "@tanstack/react-router";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
   ChecklistNotificationsFilterForm,
   checklistNotificationsColumns,
@@ -33,31 +32,24 @@ export function RouteComponent() {
   const notifications = data?.data || [];
 
   return (
-    <div className="flex flex-col gap-y-4 flex-1">
-      <Card>
-        <CardContent>
-          <h2 className="text-2xl font-bold tracking-tight">Notificações</h2>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardContent className="space-y-4">
-          <ChecklistNotificationsFilterForm />
-          <div className="relative">
-            {isLoading && !isFetching && (
-              <DataTableSkeleton columns={checklistNotificationsColumns} />
-            )}
-            {isFetching && (
-              <div className="absolute z-10 rounded-lg backdrop-blur-md inset-0 bg-black/10 flex items-center justify-center flex-col gap-y-2">
-                <Loader className="animate-spin text-primary size-12" />
-              </div>
-            )}
-            <DataTable columns={checklistNotificationsColumns} data={notifications} />
+    <div className="flex flex-col gap-y-4 flex-1 p-4">
+      <div>
+        <h2 className="text-2xl font-bold tracking-tight">Notificações</h2>
+        <p className="mt-1">Acompanhe as notificações dos checklists.</p>
+      </div>
+      <ChecklistNotificationsFilterForm />
+      <div className="relative">
+        {isLoading && !isFetching && (
+          <DataTableSkeleton columns={checklistNotificationsColumns} />
+        )}
+        {isFetching && (
+          <div className="absolute z-10 rounded-lg backdrop-blur-md inset-0 bg-black/10 flex items-center justify-center flex-col gap-y-2">
+            <Loading size="sm" />
           </div>
-        </CardContent>
-        <CardFooter>
-          <MetaPagination meta={data?.meta} />
-        </CardFooter>
-      </Card>
+        )}
+        <DataTable columns={checklistNotificationsColumns} data={notifications} />
+      </div>
+      <MetaPagination meta={data?.meta} />
     </div>
   );
 }

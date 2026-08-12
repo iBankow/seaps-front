@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import {
   Select,
   SelectContent,
@@ -40,6 +40,8 @@ import { Badge } from "@/components/ui/badge";
 import { Filter, Search, X } from "lucide-react";
 import axios from "axios";
 import { ExportModal } from "./export-modal";
+import debounce from "lodash.debounce";
+import { Separator } from "@/components/ui/separator";
 
 const filterSchema = z.object({
   organization_id: z.string().optional(),
@@ -171,6 +173,11 @@ export function DataFilterForm({ data, totalRecords }: { data?: any[], totalReco
   };
 
   useEffect(() => {
+    if (!isModalOpen) {
+      setLoading(false);
+      return;
+    }
+
     try {
       api
         .get("/organizations?per_page=100")
@@ -204,7 +211,7 @@ export function DataFilterForm({ data, totalRecords }: { data?: any[], totalReco
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [isModalOpen]);
 
   useEffect(() => {
     form.reset({
@@ -234,42 +241,46 @@ export function DataFilterForm({ data, totalRecords }: { data?: any[], totalReco
     });
   }
 
+  const setPropertyNameFilter = (value: string) => {
+    if (value.trim().length >= 3 || value.trim().length === 0) {
+      form.setValue("property_name", value);
+      onSubmit(form.getValues());
+    }
+  };
+
+  const debouncedPropertyFilterName = useCallback(
+    debounce(setPropertyNameFilter, 400),
+    [],
+  );
+
   if (loading) {
     return <LoadingSkeleton />;
   }
 
   return (
-    <div className="space-y-4">
-      {/* Chips de filtros ativos */}
-      <FilterChips
-        filters={activeFilters}
-        onRemoveFilter={handleRemoveFilter}
-        onClearAll={handleClearAll}
-      />
+    <div className="space-y-4 w-full">
+      <div className="flex items-center gap-2 w-full">
+        <Input
+          id="input-property-name"
+          className="uppercase placeholder:normal-case w-full"
+          placeholder="Pesquisar pelo imóvel..."
+          onChange={(e) => debouncedPropertyFilterName(e.target.value)}
+        />
+        <div className="flex items-center justify-between gap-2">
+          <div className="space-x-2 flex">
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="gap-2">
+                  <Filter className="h-4 w-4" />
+                  {activeFilters.length > 0 && (
+                    <Badge variant="secondary" className="ml-1">
+                      {activeFilters.length}
+                    </Badge>
+                  )}
+                </Button>
+              </DialogTrigger>
 
-      {/* Botão para abrir modal de filtros */}
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-muted-foreground">
-          {activeFilters.length > 0 &&
-            `${activeFilters.length} filtro${activeFilters.length !== 1 ? "s" : ""} aplicado${activeFilters.length !== 1 ? "s" : ""}`}
-        </div>
-
-        <div className="space-x-2">
-          <ExportModal data={data || []} totalRecords={totalRecords} />
-          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-            <DialogTrigger asChild>
-              <Button variant="outline" className="gap-2">
-                <Filter className="h-4 w-4" />
-                Filtros Avançados
-                {activeFilters.length > 0 && (
-                  <Badge variant="secondary" className="ml-1">
-                    {activeFilters.length}
-                  </Badge>
-                )}
-              </Button>
-            </DialogTrigger>
-
-          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogContent className="sm:min-w-4xl max-h-[80vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <Filter className="h-5 w-5" />
@@ -439,9 +450,19 @@ export function DataFilterForm({ data, totalRecords }: { data?: any[], totalReco
               </Form>
             </div>
           </DialogContent>
-        </Dialog>
+            </Dialog>
+            <ExportModal data={data || []} totalRecords={totalRecords} />
+          </div>
         </div>
       </div>
+
+      <FilterChips
+        filters={activeFilters}
+        onRemoveFilter={handleRemoveFilter}
+        onClearAll={handleClearAll}
+      />
+
+      <Separator />
     </div>
   );
 }

@@ -2,7 +2,6 @@
 import { Pagination } from "@/components/common/pagination";
 import { useState } from "react";
 import { DataTableSkeleton } from "@/components/common/skeletons/data-table";
-import { CardContent, CardFooter } from "@/components/ui/card";
 import { toast } from "sonner";
 import { useReviewUserRequest, useUserRequestsList } from "../api/user-requests";
 import type { UserRequestsListParams } from "../types";
@@ -68,20 +67,16 @@ export function RequestsTab({ search }: RequestsTabProps) {
   });
 
   return (
-    <>
-      <CardContent className="space-y-6 pt-6">
-        <RequestsFilterForm />
-        <div className="rounded-lg border">
-          {isLoading ? (
-            <DataTableSkeleton columns={columns} />
-          ) : (
-            <DataTable columns={columns} data={data?.data ?? []} />
-          )}
-        </div>
-      </CardContent>
-      <CardFooter className="flex items-center justify-between border-t mt-6 pt-6">
-        {data?.meta && data.meta.total > 10 && <Pagination meta={data.meta} />}
-      </CardFooter>
+    <div className="mt-2 flex flex-col gap-y-6">
+      <RequestsFilterForm />
+      <div className="rounded-lg border">
+        {isLoading ? (
+          <DataTableSkeleton columns={columns} />
+        ) : (
+          <DataTable columns={columns} data={data?.data ?? []} />
+        )}
+      </div>
+      {data?.meta && data.meta.total > 10 && <Pagination meta={data.meta} />}
 
       <RequestDetailsModal
         request={selectedRequest}
@@ -91,6 +86,6 @@ export function RequestsTab({ search }: RequestsTabProps) {
         onReject={handleReject}
         submitting={submitting}
       />
-    </>
+    </div>
   );
 }

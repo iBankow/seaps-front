@@ -13,6 +13,7 @@ export type {
   ChecklistListParams,
 } from "./types/types";
 
+export { ChecklistList } from "./ui/checklists-list";
 export { EditCheckListForm } from "./ui/edit-form";
 export { CreateOrderWizard } from "./ui/create-components/create-checklist-wizard";
 export { ChecklistHeader } from "./ui/header";

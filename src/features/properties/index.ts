@@ -15,5 +15,6 @@ export type {
 
 export { CreatePropertyWizard } from "./ui/create-components/create-property-wizard";
 export { PropertyForm } from "./ui/edit-form";
+export { PropertiesList } from "./ui/properties-list";
 export { columns as propertiesColumns } from "./ui/columns";
 export { DataFilterForm as PropertyFilterForm } from "./ui/filter-form";

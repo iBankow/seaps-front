@@ -1,10 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Users, UserCheck } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RequestsTab, UsersTab } from "@/features/users";
@@ -43,51 +37,40 @@ export function RouteComponent() {
   };
 
   return (
-    <div className="flex flex-col gap-y-6">
-      <Card className="border-none shadow-sm">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div className="space-y-1">
-              <CardTitle className="text-3xl font-bold tracking-tight flex items-center gap-2">
-                <Users className="h-8 w-8 text-primary" />
-                Gerenciamento de Usuários
-              </CardTitle>
-              <CardDescription className="text-base">
-                Gerencie usuários do sistema e solicitações de ativação
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-      </Card>
+    <div className="flex flex-col gap-y-6 p-4">
+      <div className="flex items-center justify-between">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-bold tracking-tight">Usuários</h2>
+          <p className="mt-1">
+            Gerencie usuários do sistema e solicitações de ativação.
+          </p>
+        </div>
+      </div>
 
-      <Card className="shadow-sm">
-        <Tabs
-          value={search.tab}
-          onValueChange={handleTabChange}
-          className="w-full"
-        >
-          <CardHeader className="pb-3 w-full">
-            <TabsList className="grid w-full grid-cols-2 h-11">
-              <TabsTrigger value="users" className="gap-2 w-full">
-                <Users className="h-4 w-4" />
-                Usuários
-              </TabsTrigger>
-              <TabsTrigger value="requests" className="gap-2 w-full">
-                <UserCheck className="h-4 w-4" />
-                Solicitações de Ativação
-              </TabsTrigger>
-            </TabsList>
-          </CardHeader>
+      <Tabs
+        value={search.tab}
+        onValueChange={handleTabChange}
+        className="w-full"
+      >
+        <TabsList className="grid w-full grid-cols-2 h-11">
+          <TabsTrigger value="users" className="gap-2 w-full">
+            <Users className="h-4 w-4" />
+            Usuários
+          </TabsTrigger>
+          <TabsTrigger value="requests" className="gap-2 w-full">
+            <UserCheck className="h-4 w-4" />
+            Solicitações de Ativação
+          </TabsTrigger>
+        </TabsList>
 
-          <TabsContent value="users" className="mt-0">
-            <UsersTab search={search} />
-          </TabsContent>
+        <TabsContent value="users" className="mt-0">
+          <UsersTab search={search} />
+        </TabsContent>
 
-          <TabsContent value="requests" className="mt-0">
-            <RequestsTab search={search} />
-          </TabsContent>
-        </Tabs>
-      </Card>
+        <TabsContent value="requests" className="mt-0">
+          <RequestsTab search={search} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
