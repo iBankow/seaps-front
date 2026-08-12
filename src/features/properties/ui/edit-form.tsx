@@ -23,8 +23,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { RSSelect } from "@/components/react-select";
-import { NameForm } from "./name-form";
-import { AddressForm } from "./address-form";
+import { NameForm } from "./edit-components/name-form";
+import { AddressForm } from "./edit-components/address-form";
 import { Separator } from "@/components/ui/separator";
 
 const propertySchema = z.object({

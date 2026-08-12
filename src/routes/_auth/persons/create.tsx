@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import z from "zod";
-import { CreatePersonForm } from "./-components/form";
+import { CreatePersonForm } from "@/features/persons";
 
 const SearchSchema = z.object({
   organization_id: z.string().optional(),

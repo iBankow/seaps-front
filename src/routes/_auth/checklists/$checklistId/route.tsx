@@ -1,6 +1,6 @@
 import { ChecklistProvider } from "@/contexts/checklist-context";
 import { createFileRoute, Outlet, useParams } from "@tanstack/react-router";
-import { ChecklistHeader } from "../-components/header";
+import { ChecklistHeader } from "@/features/checklists";
 
 export const Route = createFileRoute("/_auth/checklists/$checklistId")({
   component: RouteComponent,

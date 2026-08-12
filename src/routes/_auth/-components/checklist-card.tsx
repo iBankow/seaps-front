@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Actions } from "../checklists/-components/actions";
+import { ChecklistActions as Actions } from "@/features/checklists";
 import { ClassificationBadge } from "@/components/classification-badge";
 
 export function ChecklistsCard() {

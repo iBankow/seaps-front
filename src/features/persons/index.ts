@@ -8,3 +8,4 @@ export type {
 } from "./types";
 
 export { CreatePersonDialog } from "./ui/create-person-dialog";
+export { CreatePersonForm } from "./ui/create-person-form";

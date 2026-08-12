@@ -4,7 +4,7 @@ import { http as api } from "@/lib/http";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-import { PropertyForm } from "../../-components/form";
+import { PropertyForm } from "@/features/properties";
 import { BackButton } from "@/components/back-button";
 
 export const Route = createFileRoute("/_auth/properties/$propertyId/edit/")({

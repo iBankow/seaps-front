@@ -15,8 +15,7 @@ export type {
 
 export { EditCheckListForm } from "./ui/edit-form";
 export { CreateOrderWizard } from "./ui/create-components/create-checklist-wizard";
-
-// `ui/checklists-list.tsx` e `ui/list-components/*` ficam de fora de propósito:
-// são forks degradados e sem importador — a versão viva está em
-// `routes/_auth/checklists/-components`. Expô-los aqui seria convidar o uso.
-// Ver "Achados" no MIGRATION.md.
+export { ChecklistHeader } from "./ui/header";
+export { columns as checklistColumns } from "./ui/columns";
+export { Actions as ChecklistActions } from "./ui/actions";
+export { DataFilterForm as ChecklistFilterForm } from "./ui/filter-form";

@@ -11,7 +11,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -22,11 +21,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { toUpperCase } from "@/lib/utils";
 import { formatPhone } from "@/lib/format";
-import { toast } from "sonner";
-import { http as api } from "@/lib/http";
 import { useRouter, useSearch } from "@tanstack/react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Save } from "lucide-react";
+import { useCreatePerson } from "../api/persons";
+import { useOrganizationsList } from "@/features/organizations";
 
 const formSchema = z.object({
   name: z
@@ -49,8 +48,9 @@ export function CreatePersonForm() {
 
   const router = useRouter();
 
-  const [organizations, setOrganizations] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
+  const { data: organizationsData } = useOrganizationsList();
+  const organizations = organizationsData?.data ?? [];
+  const createPerson = useCreatePerson();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -63,21 +63,12 @@ export function CreatePersonForm() {
     },
   });
 
-  useEffect(() => {
-    api
-      .get("/organizations?per_page=1000")
-      .then(({ data }) => setOrganizations(data.data));
-  }, []);
-
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setLoading(true);
-    return api
-      .post("/persons/", values)
-      .then(() => {
-        toast.success("Responsável criado com sucesso");
-        router.history.back();
-      })
-      .finally(() => setLoading(false));
+    await createPerson.mutateAsync({
+      ...values,
+      email: values.email ?? "",
+    });
+    router.history.back();
   }
 
   return (
@@ -179,9 +170,9 @@ export function CreatePersonForm() {
               >
                 Cancelar
               </Button>
-              <Button type="submit" disabled={loading}>
+              <Button type="submit" disabled={createPerson.isPending}>
                 <Save className="mr-2 h-4 w-4" />
-                {loading ? "Criando..." : "Criar Responsável"}
+                {createPerson.isPending ? "Criando..." : "Criar Responsável"}
               </Button>
             </div>
           </CardContent>

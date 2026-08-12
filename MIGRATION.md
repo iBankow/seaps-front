@@ -11,9 +11,10 @@ que ainda não foi movido para dentro dele.
 Legenda: ✅ conforme · ⚠️ parcial · ❌ não conforme / inexistente
 
 > **Status:** as etapas 1 (Fundação), 2 (`features/auth`), 3 (barrels), 4
-> (módulos incompletos) e 5 (`features/users` e `features/account`) do plano
-> da seção 4 foram concluídas — as seções 1 e 2 abaixo descrevem o estado
-> *anterior* e estão mantidas como registro.
+> (módulos incompletos), 5 (`features/users` e `features/account`) e 6
+> (duplicação em `checklists`/`properties`/`persons`) do plano da seção 4
+> foram concluídas — as seções 1 e 2 abaixo descrevem o estado *anterior* e
+> estão mantidas como registro.
 >
 > - **Etapa 1:** `config/env.ts`, `lib/http.ts` (client único),
 >   `lib/query-client.ts`, `lib/format.ts`, `src/types/`,
@@ -42,6 +43,34 @@ Legenda: ✅ conforme · ⚠️ parcial · ❌ não conforme / inexistente
 >   componente. Todo fetch cru (`useEffect`+axios) foi trocado por hooks de
 >   TanStack Query. `features/account` criado com `api/account.ts`
 >   (`useGeneratePassword`) e `ui/profile-form.tsx`.
+> - **Etapa 6:** seguiu a correção registrada no achado "A etapa 6 acima está
+>   com a direção invertida" (abaixo), não o texto original do plano — as
+>   versões vivas de `routes/_auth/{checklists,properties}/-components`
+>   foram movidas **para dentro** de `features/{checklists,properties}/ui`
+>   (sobrescrevendo os stubs degradados de `ui/list-components/*`), e só
+>   então as pastas `-components` das rotas foram apagadas. `checklists`
+>   ganhou `ui/{actions,columns,filter-form,export-modal,header}.tsx` e
+>   `ui/dialogs/*` (reopen/delete/finish/validate); `create-form.tsx` foi
+>   descartado por não ter nenhum importador (a rota `/checklists/create` já
+>   usava `CreateOrderWizard`). `properties` ganhou
+>   `ui/{actions,columns,filter-form,export-modal,edit-form}.tsx`; o
+>   `PropertyForm` de edição trouxe consigo seu próprio `name-form`/
+>   `address-form` para `ui/edit-components/`, **sem** sobrescrever
+>   `ui/create-components/{name-form,address-form}.tsx` — essas são as
+>   versões mais novas (usadas pelo wizard de criação, com `addressApi` e
+>   `Field`) e a duplicação create-vs-edit já existia antes desta etapa, fora
+>   do escopo dela. `persons` não tinha stub degradado: `CreatePersonForm`
+>   (usado por `/persons/create`) e `CreatePersonDialog` (usado dentro do
+>   wizard de propriedade) são dois componentes distintos e legítimos, não
+>   duplicatas — só o primeiro foi movido para `features/persons/ui`,
+>   trocando fetch cru por `useCreatePerson()`/`useOrganizationsList()`. Os
+>   forks mortos `ui/{checklists-list,create-checklists}.tsx` (checklists) e
+>   `ui/properties-list.tsx` (properties) foram apagados. Os barrels ganharam
+>   os exports correspondentes (`checklistColumns`, `ChecklistFilterForm`,
+>   `ChecklistActions`, `ChecklistHeader`, `PropertyForm`, etc.) — inclusive
+>   `ChecklistActions`, necessário porque `routes/_auth/-components/
+>   checklist-card.tsx` (dashboard, fora do escopo desta etapa) também
+>   importava a versão antiga de `Actions`.
 >
 > Ver "Achados" no fim do documento.
 
@@ -181,9 +210,9 @@ Não há `common/` nem `layout/`. Na raiz de `components/` estão misturados:
 | **system** | — | — | — | ❌ | Não existe. Sem página 404 customizada — nenhum `notFoundComponent` configurado no router; cai no fallback padrão do TanStack Router. |
 | **users** | ✅ | ✅ | ✅ | ✅ | Etapa 5: listagem, CRUD, aba de solicitações e aprovação/reprovação migraram de `routes/_auth/users/-components/*` para `api/{users,user-requests,query-keys}.ts` + `ui/*`. As páginas de detalhe (`$userId`) e edição (`$userId/edit`) — que não estavam em `-components`, eram o corpo inteiro da rota — viraram `ui/user-detail.tsx` e `ui/user-edit-form.tsx`. |
 | **account** | ✅ | — | ✅ | ✅ | Etapa 5: `api/account.ts` (`useGeneratePassword`) e `ui/profile-form.tsx`, migrados de `routes/_auth/account/-components/form.tsx`. Sem `types/` própria — a única chamada tem um payload de resposta trivial (`{ password }`), tipado inline em `api/account.ts`. |
-| **checklists** | ✅ | ✅ | ✅ | ❌ | O mais maduro, mas `routes/_auth/checklists/-components/*` **duplica** quase tudo que já existe em `features/checklists/ui` (columns, actions, filter-form, create-form, dialogs/, header, export-modal) — a rota nunca foi migrada para consumir o feature. |
-| **properties** | ✅ | ✅ | ✅ | ❌ | Mesmo padrão de duplicação: `routes/_auth/properties/-components/*` reimplementa form/columns/actions/filter-form/export-modal/name-form/address-form que já existem em `features/properties/ui`. |
-| **persons** | ✅ | ✅ | ⚠️ | ❌ | `ui/create-person-dialog.tsx` existe, mas `routes/_auth/persons/-components/form.tsx` reimplementa outro formulário de pessoa fora do feature. |
+| **checklists** | ✅ | ✅ | ✅ | ✅ | Etapa 6: `routes/_auth/checklists/-components/*` (columns, actions, dialogs/, filter-form, export-modal, header) movido para `features/checklists/ui`, sobrescrevendo os stubs degradados; `create-form.tsx` (sem importador) descartado. |
+| **properties** | ✅ | ✅ | ✅ | ✅ | Etapa 6: `routes/_auth/properties/-components/*` movido para `features/properties/ui` (columns, actions, filter-form, export-modal, `edit-form.tsx`); `name-form`/`address-form` do form de edição foram para `ui/edit-components/`, sem tocar nos de `ui/create-components/` (versões mais novas, usadas pelo wizard). |
+| **persons** | ✅ | ✅ | ✅ | ✅ | Etapa 6: `CreatePersonForm` (usado por `/persons/create`) migrou para `features/persons/ui`, trocando fetch cru por `useCreatePerson()`/`useOrganizationsList()`. Não duplicava `CreatePersonDialog` — são dois componentes distintos (página vs. dialog embutido no wizard de propriedade), os dois seguem existindo. |
 | **checklist-items** | ✅ | ✅ | ✅ | ✅ | Etapa 4: `ui/delete-dialog.tsx` migrado de `routes/-components`, e o `ChecklistItem` duplicado (raiz `types/types.d.ts` vs. feature) foi unificado num único tipo no feature. A listagem (`items/index.tsx`) e o detalhe (`items/$itemId/index.tsx`) passaram a consumir os hooks do feature em vez de `useEffect`+axios cru. |
 | **checklist-notifications** | ✅ | ✅ | ✅ | ✅ | Etapa 4: `ui/columns.tsx` e `ui/filter-form.tsx` migrados de `routes/-components`; `api/types.ts` virou `types/index.ts`. |
 | **notifications** | ✅ | ✅ | ✅ | ✅ | Etapa 4: `api/types.ts` movido para `types/index.ts`. |
@@ -265,10 +294,11 @@ consumi-la.
 5. ~~**`features/users` e `features/account`** — criar a partir do conteúdo
    hoje só em `routes/_auth/users` e `routes/_auth/account`.~~
    ✅ **concluído**
-6. **Eliminar duplicação em `checklists`/`properties`/`persons`** — apagar
-   `routes/_auth/checklists/-components`, `routes/_auth/properties/-components`
-   e `routes/_auth/persons/-components/form.tsx`, fazendo as rotas
-   consumirem `features/*/ui` diretamente.
+6. ~~**Eliminar duplicação em `checklists`/`properties`/`persons`** — mover as
+   versões vivas de `routes/_auth/{checklists,properties}/-components` para
+   dentro de `features/*/ui` (sobrescrevendo os stubs degradados) e só então
+   apagar as pastas `-components` das rotas, fazendo-as consumir
+   `features/*/ui` via barrel.~~ ✅ **concluído**
 7. **`features/dashboard` e `features/system`** — mover
    `routes/_auth/index.tsx` + `routes/_auth/-components/*` para
    `features/dashboard`, trocar o fetch cru por hooks de TanStack Query;
@@ -410,10 +440,13 @@ Dois agravantes:
 
 Coisas descobertas durante a Fundação que **não** foram tratadas nela.
 
-### ⚠️ A etapa 6 acima está com a direção invertida
+### ⚠️ A etapa 6 acima estava com a direção invertida (corrigido)
 
-A etapa 6 manda apagar `routes/_auth/{checklists,properties}/-components` e
-fazer as rotas consumirem `features/*/ui`. **Isso perderia funcionalidade.**
+O texto original da etapa 6 mandava apagar
+`routes/_auth/{checklists,properties}/-components` e fazer as rotas
+consumirem `features/*/ui` diretamente. **Isso teria perdido funcionalidade**
+— por isso a execução da etapa 6 seguiu a correção descrita abaixo, não o
+texto original (ver "Status" no topo do documento).
 
 As cópias em `features/*/ui/list-components/` são forks degradados e hoje
 inalcançáveis — nada importa `features/checklists/ui/checklists-list.tsx` nem

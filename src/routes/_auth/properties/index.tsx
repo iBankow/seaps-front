@@ -4,11 +4,13 @@ import { Loader, Plus } from "lucide-react";
 import { DataTableSkeleton } from "@/components/skeletons/data-table";
 
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { columns } from "./-components/columns";
-import { DataFilterForm } from "./-components/filter-form";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { MetaPagination } from "@/components/meta-pagination";
-import { usePropertiesList } from "@/features/properties";
+import {
+  propertiesColumns as columns,
+  PropertyFilterForm as DataFilterForm,
+  usePropertiesList,
+} from "@/features/properties";
 import z from "zod";
 import { PermissionGate } from "@/features/auth";
 
