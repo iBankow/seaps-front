@@ -11,11 +11,12 @@ export const useChecklistsItems = (id?: string) => {
   });
 };
 
-export const useChecklistItem = (id?: string) => {
+export const useChecklistItem = (id?: string, initialData?: ChecklistItem) => {
   return useQuery({
     queryKey: checklistItemsKeys.details(id),
     queryFn: () => checklistItemsApi.details(id!),
     enabled: !!id,
+    initialData,
   });
 };
 
@@ -49,6 +50,21 @@ export const useDeleteChecklistItemImage = () => {
   });
 };
 
+export const useUpdateChecklistItem = (id: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: Partial<Pick<ChecklistItem, "observation" | "score">>) =>
+      checklistItemsApi.update(id, payload),
+    onSuccess: (data) => {
+      queryClient.setQueryData(checklistItemsKeys.details(id), data);
+      queryClient.invalidateQueries({
+        queryKey: checklistItemsKeys.list(data.checklist_id),
+      });
+    },
+  });
+};
+
 export const checklistItemsApi = {
   list: async (id?: string) => {
     const { data } = await api.get<Array<ChecklistItem>>(
@@ -59,6 +75,17 @@ export const checklistItemsApi = {
   },
   details: async (id: string) => {
     const { data } = await api.get<ChecklistItem>(`/checklist-items/${id}`);
+
+    return data;
+  },
+  update: async (
+    id: string,
+    payload: Partial<Pick<ChecklistItem, "observation" | "score">>,
+  ) => {
+    const { data } = await api.put<ChecklistItem>(
+      `/checklist-items/${id}`,
+      payload,
+    );
 
     return data;
   },

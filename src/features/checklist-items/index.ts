@@ -3,6 +3,7 @@ export {
   useChecklistItem,
   useChecklistsItems,
   useDeleteChecklistItemImage,
+  useUpdateChecklistItem,
   useUploadChecklistItemImages,
 } from "./api/checklist-items";
 export { checklistItemsKeys } from "./api/query-keys";

@@ -10,11 +10,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
-import { http as api } from "@/lib/http";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { useChecklistItem, useUpdateChecklistItem } from "../api/checklist-items";
+import type { ChecklistItem } from "../types";
 
 interface ObservationDialogProps {
-  item: any;
+  item: ChecklistItem;
   status: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -26,19 +28,28 @@ export const ObservationDialog = ({
   open,
   onOpenChange,
 }: ObservationDialogProps) => {
-  const [observation, setObservation] = useState(item.observation || "");
-  const [loading, setLoading] = useState(false);
+  // Busca via cache do tanstack query (com fallback pro item recebido) para
+  // sempre refletir o valor salvo mais recente, mesmo se o card que abriu o
+  // dialog estiver com uma cópia local desatualizada do item.
+  const { data: checklistItem = item } = useChecklistItem(item.id, item);
+  const [observation, setObservation] = useState(checklistItem.observation || "");
+  const { mutateAsync: updateObservation, isPending } = useUpdateChecklistItem(
+    item.id,
+  );
+
+  useEffect(() => {
+    if (open) {
+      setObservation(checklistItem.observation || "");
+    }
+  }, [open, checklistItem.observation]);
 
   const handleSave = async () => {
-    setLoading(true);
-    try {
-      await api.put(`/checklist-items/${item.id}`, { observation });
-      onOpenChange(false);
-    } catch (error) {
-      console.error("Error saving observation:", error);
-    } finally {
-      setLoading(false);
-    }
+    await updateObservation({ observation })
+      .then(() => {
+        toast.success("Observação salva com sucesso!");
+        onOpenChange(false);
+      })
+      .catch(() => toast.error("Não foi possível salvar a observação."));
   };
 
   const IS_CLOSE = ["APPROVED", "CLOSED"].includes(status);
@@ -65,12 +76,12 @@ export const ObservationDialog = ({
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            disabled={loading}
+            disabled={isPending}
           >
             Cancelar
           </Button>
-          <Button onClick={handleSave} disabled={loading || IS_CLOSE}>
-            {loading ? "Salvando..." : "Salvar"}
+          <Button onClick={handleSave} disabled={isPending || IS_CLOSE}>
+            {isPending ? "Salvando..." : "Salvar"}
           </Button>
         </DialogFooter>
       </DialogContent>
