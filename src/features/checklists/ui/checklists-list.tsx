@@ -10,7 +10,7 @@ import { useChecklistsList } from "../api/checklists";
 import { PermissionGate } from "@/features/auth";
 import { DataFilterForm } from "./filter-form";
 import { Loading } from "@/components/common/loading";
-import { HeaderActions } from "@/contexts/header-actions-context";
+import { PageHeader } from "@/components/layout/page-header";
 
 export function ChecklistList({ params }: { params: any }) {
   const { data, isLoading, isFetching } = useChecklistsList(params);
@@ -19,7 +19,7 @@ export function ChecklistList({ params }: { params: any }) {
 
   return (
     <div className="flex flex-col gap-y-4 flex-1 p-4">
-      <HeaderActions>
+      <PageHeader eyebrow="Operação" title="Checklists">
         <PermissionGate permissions="checklists:create">
           <Button asChild>
             <Link to="/checklists/create">
@@ -28,7 +28,7 @@ export function ChecklistList({ params }: { params: any }) {
             </Link>
           </Button>
         </PermissionGate>
-      </HeaderActions>
+      </PageHeader>
 
       <DataFilterForm data={data?.data} totalRecords={data?.meta?.total} />
       <div className="relative">

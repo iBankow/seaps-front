@@ -10,7 +10,7 @@ import { columns } from "./columns";
 import { DataFilterForm } from "./filter-form";
 import { PermissionGate } from "@/features/auth";
 import { Loading } from "@/components/common/loading";
-import { HeaderActions } from "@/contexts/header-actions-context";
+import { PageHeader } from "@/components/layout/page-header";
 
 export function PropertiesList({ params }: { params: any }) {
   const { data, isLoading, isFetching } = usePropertiesList(params);
@@ -19,7 +19,7 @@ export function PropertiesList({ params }: { params: any }) {
 
   return (
     <div className="flex flex-col gap-y-4 flex-1 p-4">
-      <HeaderActions>
+      <PageHeader eyebrow="Cadastros" title="Imóveis">
         <PermissionGate permissions="properties:create">
           <Button asChild>
             <Link to="/properties/create">
@@ -28,7 +28,7 @@ export function PropertiesList({ params }: { params: any }) {
             </Link>
           </Button>
         </PermissionGate>
-      </HeaderActions>
+      </PageHeader>
       <DataFilterForm data={data?.data} totalRecords={data?.meta.total} />
       <div className="relative">
         {isLoading && isFetching && <DataTableSkeleton columns={columns} />}

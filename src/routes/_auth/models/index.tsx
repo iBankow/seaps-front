@@ -6,7 +6,7 @@ import { DataTableSkeleton } from "@/components/common/skeletons/data-table";
 
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { modelsColumns, useModelsList } from "@/features/models";
-import { HeaderActions } from "@/contexts/header-actions-context";
+import { PageHeader } from "@/components/layout/page-header";
 import z from "zod";
 
 const SearchSchema = z.object({
@@ -26,14 +26,14 @@ function RouteComponent() {
 
   return (
     <div className="flex flex-col gap-y-4 flex-1 p-4">
-      <HeaderActions>
+      <PageHeader eyebrow="Configuração" title="Modelos de checklist">
         <Button asChild>
           <Link to="/models/create">
             <Plus />
             Criar Modelo
           </Link>
         </Button>
-      </HeaderActions>
+      </PageHeader>
       {isLoading ? (
         <DataTableSkeleton columns={modelsColumns} />
       ) : (

@@ -1,5 +1,10 @@
 import { isMatch, Link, useMatches } from "@tanstack/react-router";
 
+/**
+ * Slim navigational trail in the persistent top bar. Pages that render a
+ * <PageHeader> own the big title themselves — this stays small/muted so the
+ * two never compete for the same visual weight.
+ */
 export const Breadcrumbs = () => {
   const matches = useMatches();
   const matchesWithCrumbs = matches.filter((match) =>
@@ -13,31 +18,25 @@ export const Breadcrumbs = () => {
 
   if (items.length === 0) return null;
 
-  const parents = items.slice(0, -1);
-  const current = items[items.length - 1];
-
   return (
-    <div className="min-w-0 leading-tight">
-      {parents.length > 0 && (
-        <div className="font-mono flex flex-nowrap items-center gap-1 truncate text-[10px] tracking-widest text-muted-foreground uppercase">
-          {parents.map((item, index) => (
-            <span key={item.href} className="flex items-center gap-1">
-              <Link
-                to={item.href}
-                replace
-                preload={false}
-                className="transition-colors hover:text-foreground"
-              >
-                {item.label}
-              </Link>
-              {index < parents.length - 1 && <span aria-hidden>/</span>}
-            </span>
-          ))}
-        </div>
-      )}
-      <div className="font-heading truncate text-sm font-bold tracking-wide text-foreground uppercase">
-        {current.label}
-      </div>
+    <div className="font-mono flex min-w-0 flex-nowrap items-center gap-1 truncate text-[10px] tracking-widest text-muted-foreground uppercase">
+      {items.map((item, index) => (
+        <span key={item.href} className="flex items-center gap-1">
+          {index === items.length - 1 ? (
+            <span className="text-foreground">{item.label}</span>
+          ) : (
+            <Link
+              to={item.href}
+              replace
+              preload={false}
+              className="transition-colors hover:text-foreground"
+            >
+              {item.label}
+            </Link>
+          )}
+          {index < items.length - 1 && <span aria-hidden>/</span>}
+        </span>
+      ))}
     </div>
   );
 };

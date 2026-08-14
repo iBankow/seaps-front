@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Users, UserCheck } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PageHeader } from "@/components/layout/page-header";
 import { RequestsTab, UsersTab } from "@/features/users";
 
 export const Route = createFileRoute("/_auth/users/")({
@@ -38,6 +39,7 @@ export function RouteComponent() {
 
   return (
     <div className="flex flex-col gap-y-6 p-4">
+      <PageHeader eyebrow="Configuração" title="Usuários" />
       <Tabs
         value={search.tab}
         onValueChange={handleTabChange}

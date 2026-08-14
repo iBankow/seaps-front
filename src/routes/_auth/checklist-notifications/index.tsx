@@ -9,6 +9,7 @@ import {
   checklistNotificationsColumns,
   useChecklistNotificationsList,
 } from "@/features/checklist-notifications";
+import { PageHeader } from "@/components/layout/page-header";
 import z from "zod";
 
 const SearchSchema = z.object({
@@ -33,6 +34,7 @@ export function RouteComponent() {
 
   return (
     <div className="flex flex-col gap-y-4 flex-1 p-4">
+      <PageHeader eyebrow="Operação" title="Notificações" />
       <ChecklistNotificationsFilterForm />
       <div className="relative">
         {isLoading && !isFetching && (

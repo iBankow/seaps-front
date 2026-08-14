@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PageHeader } from "@/components/layout/page-header";
 import { useDashboard } from "../api/dashboard";
 import { NumberCard } from "../ui/numbers-card";
 import { IRMBarComponent } from "../ui/irm-chart";
@@ -14,6 +15,8 @@ export function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-3.5">
+      <PageHeader eyebrow="Visão geral" title="Dashboard" />
+
       <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 xl:grid-cols-4">
         <NumberCard
           title="Imóveis cadastrados"
