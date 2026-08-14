@@ -69,7 +69,7 @@ export function ScoreRadioGroup({
     <RadioGroupPrimitive.Root
       data-slot="radio-group"
       className={cn(
-        "grid w-full grid-cols-1 gap-2.5 sm:grid-cols-2",
+        "grid w-full grid-cols-1 gap-2.5 sm:grid-cols-4",
         className,
       )}
       disabled={disabled}

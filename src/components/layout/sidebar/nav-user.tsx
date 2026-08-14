@@ -26,13 +26,13 @@ export function NavUser({
   user,
 }: {
   user:
-  | {
-    name: string;
-    email: string;
-    // avatar: string;
-  }
-  | undefined
-  | null;
+    | {
+        name: string;
+        email: string;
+        // avatar: string;
+      }
+    | undefined
+    | null;
 }) {
   const { isMobile } = useSidebar();
 
@@ -44,7 +44,7 @@ export function NavUser({
 
   const createAvatarFallback = (name?: string) => {
     if (!name) {
-     return 'UK'
+      return "UK";
     }
     const names = name.trim().toUpperCase().split(/\s+/); // Remove espaços extras e divide por espaços
     if (names.length === 1) return names[0][0];
@@ -54,18 +54,9 @@ export function NavUser({
 
   const avatarFallback = createAvatarFallback(user.name);
 
-  const getColorFromInitials = (initials: string) => {
-    let hash = 0;
-    for (let i = 0; i < initials.length; i++) {
-      hash = initials.charCodeAt(i) + ((hash << 4) - hash);
-    }
-    const hue = Math.abs(hash) % 360;
-    return `hsl(${hue}, 70%, 60%)`;
-  };
-
   const getFirstAndLastName = (name?: string) => {
     if (!name) {
-     return 'UK'
+      return "UK";
     }
 
     const names = name.trim().split(/\s+/);
@@ -84,12 +75,7 @@ export function NavUser({
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={""} alt={user.name} />
-                <AvatarFallback
-                  className={`rounded-lg`}
-                  style={{
-                    backgroundColor: getColorFromInitials(avatarFallback),
-                  }}
-                >
+                <AvatarFallback className={`rounded-full text-primary`}>
                   {avatarFallback}
                 </AvatarFallback>
               </Avatar>
@@ -114,12 +100,7 @@ export function NavUser({
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage src={""} alt={user.name} />
-                  <AvatarFallback
-                    className="rounded-lg"
-                    style={{
-                      backgroundColor: getColorFromInitials(avatarFallback),
-                    }}
-                  >
+                  <AvatarFallback className="rounded-lg">
                     {avatarFallback}
                   </AvatarFallback>
                 </Avatar>

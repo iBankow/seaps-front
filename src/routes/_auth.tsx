@@ -52,7 +52,7 @@ function AuthLayout() {
         <AppSidebar variant="sidebar" />
         <SidebarInset>
           <SiteHeader />
-          <div className="@container/main flex flex-1 flex-col p-[26px_30px_46px]">
+          <div className="@container/main flex flex-1 flex-col p-[16px_30px_46px]">
             <Outlet />
           </div>
         </SidebarInset>

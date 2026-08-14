@@ -37,7 +37,7 @@ export function NavMain({ items }: { items: MenuItem[] }) {
                 <SidebarMenuButton
                   tooltip={item.title}
                   isActive={isActive}
-                  className="font-heading gap-2.5 px-2.5 text-xs font-semibold tracking-wide uppercase data-active:text-white"
+                  className="font-heading gap-2.5 px-2.5 text-xs font-normal tracking-wide uppercase data-active:text-white data-active:font-black text-muted/80" 
                   asChild
                 >
                   <Link to={item.url} className="w-full">

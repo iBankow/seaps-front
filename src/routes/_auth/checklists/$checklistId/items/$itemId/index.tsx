@@ -108,7 +108,7 @@ function ChecklistItemPage() {
   const imageCount = item.images?.length ?? 0;
 
   return (
-    <Card className="gap-0 p-[22px]">
+    <Card className="gap-0 p-[22px] min-h-[610px]">
       <h2 className="font-heading text-[19px] leading-tight font-bold tracking-[0.03em] uppercase">
         {item.item?.name}
       </h2>

@@ -33,14 +33,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              className="data-[slot=sidebar-menu-button]:!px-0 !py-3 h-full hover:bg-transparent"
+              className="data-[slot=sidebar-menu-button]:!px-0 hover:bg-transparent h-full py-1"
               asChild
             >
               <Link to="/">
                 <img
                   src={"/logo.png"}
                   alt="logo"
-                  className="flex aspect-square size-9 items-center object-contain justify-center rounded-lg bg-white/95 p-0.5"
+                  className="flex aspect-square size-9 items-center object-cover justify-center rounded-lg"
                 />
                 <div className="grid flex-1 text-left leading-tight">
                   <span className="font-heading text-2xl leading-none font-extrabold tracking-wide text-white">
