@@ -108,11 +108,13 @@ function ChecklistContent() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Progresso</CardTitle>
+              <CardTitle className="font-mono text-[10px] font-medium tracking-widest text-muted-foreground uppercase">
+                Progresso
+              </CardTitle>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="font-heading text-2xl font-bold">
                 {Math.round(stats.completion_percentage)}%
               </div>
               <Progress value={stats.completion_percentage} className="mt-2" />
@@ -124,66 +126,68 @@ function ChecklistContent() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-green-700 dark:text-green-400">
+              <CardTitle className="font-mono text-[10px] font-medium tracking-widest text-success uppercase">
                 BOM
               </CardTitle>
-              <CheckCircle2 className="h-4 w-4 text-green-600" />
+              <CheckCircle2 className="h-4 w-4 text-success" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">
+              <div className="font-heading text-2xl font-bold text-success">
                 {stats.good}
               </div>
-              <p className="text-xs text-green-600">Excelente</p>
+              <p className="text-xs text-muted-foreground">Excelente</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-yellow-700 dark:text-yellow-400">
+              <CardTitle className="text-warning-foreground font-mono text-[10px] font-medium tracking-widest uppercase">
                 REGULAR
               </CardTitle>
-              <AlertTriangle className="h-4 w-4 text-yellow-600" />
+              <AlertTriangle className="h-4 w-4 text-warning" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-yellow-600">
+              <div className="font-heading text-warning-foreground text-2xl font-bold">
                 {stats.regular}
               </div>
-              <p className="text-xs text-yellow-600">Atenção</p>
+              <p className="text-xs text-muted-foreground">Atenção</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-red-700 dark:text-red-400">
+              <CardTitle className="font-mono text-[10px] font-medium tracking-widest text-destructive uppercase">
                 RUIM
               </CardTitle>
-              <XCircle className="h-4 w-4 text-red-600" />
+              <XCircle className="h-4 w-4 text-destructive" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-600">{stats.bad}</div>
-              <p className="text-xs text-red-600">Correção</p>
+              <div className="font-heading text-2xl font-bold text-destructive">{stats.bad}</div>
+              <p className="text-xs text-muted-foreground">Correção</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-700 dark:text-gray-400">
+              <CardTitle className="font-mono text-[10px] font-medium tracking-widest text-muted-foreground uppercase">
                 N/A
               </CardTitle>
-              <MinusCircle className="h-4 w-4 text-gray-600" />
+              <MinusCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-gray-600">{stats.na}</div>
-              <p className="text-xs text-gray-600">Não aplicável</p>
+              <div className="font-heading text-2xl font-bold text-muted-foreground">{stats.na}</div>
+              <p className="text-xs text-muted-foreground">Não aplicável</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total</CardTitle>
+              <CardTitle className="font-mono text-[10px] font-medium tracking-widest text-muted-foreground uppercase">
+                Total
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.total}</div>
+              <div className="font-heading text-2xl font-bold">{stats.total}</div>
               <p className="text-xs text-muted-foreground">Itens</p>
             </CardContent>
           </Card>
@@ -192,7 +196,9 @@ function ChecklistContent() {
         {/* Checklist Items */}
         <Card>
           <CardHeader>
-            <CardTitle>Itens do Checklist</CardTitle>
+            <CardTitle className="font-heading text-xs font-bold tracking-widest uppercase">
+              Itens do Checklist
+            </CardTitle>
             <CardDescription>
               Avalie cada item conforme os critérios estabelecidos
             </CardDescription>

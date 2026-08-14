@@ -41,28 +41,11 @@ import { formatPhone } from "@/lib/format";
 import { BackButton } from "@/components/layout/back-button";
 import { formatDateLong, formatDateTime } from "@/lib/format";
 import { PermissionGate } from "@/features/auth";
+import { PROPERTY_TYPE_ENUM, type PropertyType } from "@/features/properties";
 
 export const Route = createFileRoute("/_auth/properties/$propertyId/")({
   component: PropertyDetail,
 });
-
-const PROPERTY_TYPE_ENUM = {
-  OWN: {
-    label: "PRÓPRIO",
-    style: "border-blue-800 bg-blue-200 text-blue-900 hover:bg-blue-200/80",
-  },
-  RENTED: {
-    label: "ALUGADO",
-    style: "border-green-800 bg-green-200 text-green-900 hover:bg-green-200/80",
-  },
-  GRANT: {
-    label: "CEDIDO",
-    style:
-      "border-purple-800 bg-purple-200 text-purple-900 hover:bg-purple-200/80",
-  },
-};
-
-type PROPERTY_TYPE = "OWN" | "RENTED" | "GRANT";
 
 interface ChecklistSummary {
   id: string;
@@ -89,7 +72,7 @@ interface PropertyStats {
 interface Property {
   id: string;
   name: string;
-  type: PROPERTY_TYPE;
+  type: PropertyType;
   address?: string;
   cep?: string;
   state?: string;
@@ -322,7 +305,9 @@ function PropertyDetail() {
             <div className="flex items-center gap-4">
               <BackButton variant={`outline`} />
               <div>
-                <h1 className="text-3xl font-bold">{property.name}</h1>
+                <h1 className="font-heading text-3xl font-bold tracking-wide uppercase">
+                  {property.name}
+                </h1>
                 <p className="text-muted-foreground flex items-center gap-2 mt-1">
                   <MapPin className="h-4 w-4" />
                   {property.address}
@@ -330,7 +315,7 @@ function PropertyDetail() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Badge className={PROPERTY_TYPE_ENUM[property.type].style}>
+              <Badge variant={PROPERTY_TYPE_ENUM[property.type].variant}>
                 {PROPERTY_TYPE_ENUM[property.type].label}
               </Badge>
               <PermissionGate permissions="properties:edit">
@@ -437,7 +422,7 @@ function PropertyDetail() {
                   Tipo
                 </p>
                 <div className="mt-1">
-                  <Badge className={PROPERTY_TYPE_ENUM[property.type].style}>
+                  <Badge variant={PROPERTY_TYPE_ENUM[property.type].variant}>
                     {PROPERTY_TYPE_ENUM[property.type].label}
                   </Badge>
                 </div>

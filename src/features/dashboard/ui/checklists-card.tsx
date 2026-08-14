@@ -2,88 +2,68 @@ import { Link } from "@tanstack/react-router";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  ChecklistActions as Actions,
-  ClassificationBadge,
-  StatusBadge,
-  useChecklistsList,
-} from "@/features/checklists";
+import { StatusBadge, useChecklistsList } from "@/features/checklists";
 
 export function ChecklistsCard() {
-  const { data, isLoading } = useChecklistsList({
-    page: 1,
-    per_page: 5,
-    status: "CLOSED",
-  });
+  const { data, isLoading } = useChecklistsList({ page: 1, per_page: 5 });
 
   const checklists = data?.data ?? [];
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="p-6 text-sm text-muted-foreground">Carregando…</div>;
   }
 
   return (
-    <div className="flex flex-col">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">ID</TableHead>
-            <TableHead>Orgão</TableHead>
-            <TableHead>Imóvel</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Classificação</TableHead>
-            <TableHead>Pontuação</TableHead>
-            <TableHead className="text-right"></TableHead>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Código</TableHead>
+          <TableHead>Órgão</TableHead>
+          <TableHead>Imóvel</TableHead>
+          <TableHead>Avaliador</TableHead>
+          <TableHead className="text-right">Situação</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {checklists.map((checklist) => (
+          <TableRow key={checklist.id} className="hover:bg-secondary/60">
+            <TableCell className="font-mono text-xs text-muted-foreground">
+              <Link
+                to="/checklists/$checklistId/items"
+                params={{ checklistId: checklist.id }}
+                className="hover:text-primary"
+                preload={false}
+              >
+                {checklist.sid}
+              </Link>
+            </TableCell>
+            <TableCell className="font-heading text-xs font-semibold tracking-wide">
+              {checklist.organization?.acronym}
+            </TableCell>
+            <TableCell className="font-heading max-w-56 truncate text-sm font-semibold tracking-wide uppercase">
+              {checklist.property.name}
+            </TableCell>
+            <TableCell className="text-sm text-muted-foreground">
+              {checklist.user?.name}
+            </TableCell>
+            <TableCell className="text-right">
+              <StatusBadge status={checklist.status} />
+            </TableCell>
           </TableRow>
-        </TableHeader>
-        <TableBody>
-          {checklists.map((checklist) => (
-            <TableRow key={checklist.id}>
-              <TableCell className="font-medium text-left">
-                <Link
-                  to="/checklists/$checklistId/items"
-                  params={{ checklistId: checklist.id }}
-                  className="font-mono text-sky-400 hover:text-sky-700"
-                  preload={false}
-                >
-                  {checklist.sid}
-                </Link>
-              </TableCell>
-              <TableCell className="text-left">
-                {checklist.organization?.acronym}
-              </TableCell>
-              <TableCell className="text-left truncate w-[100px]">
-                {checklist.property.name}
-              </TableCell>
-              <TableCell className="text-left">
-                <StatusBadge status={checklist.status} />
-              </TableCell>
-              <TableCell className="text-left">
-                <ClassificationBadge
-                  classification={checklist.classification}
-                />
-              </TableCell>
-              <TableCell className="text-left">
-                {checklist.score ? Number(checklist.score).toFixed(2) : "--"}
-              </TableCell>
-              <TableCell className="text-right">
-                <Actions row={{ original: checklist } as any} />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-        <TableCaption>
-          <Link to="/checklists" className="underline text-sky-400">
-            Visualizar todos os checklists
-          </Link>
-        </TableCaption>
-      </Table>
-    </div>
+        ))}
+        {checklists.length === 0 && (
+          <TableRow>
+            <TableCell colSpan={5} className="text-center text-sm text-muted-foreground">
+              Nenhum checklist encontrado.
+            </TableCell>
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
   );
 }

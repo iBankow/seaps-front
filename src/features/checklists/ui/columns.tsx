@@ -27,7 +27,7 @@ export const columns: ColumnDef<Column>[] = [
         <Link
           to="/checklists/$checklistId"
           params={{ checklistId: row.original.id }}
-          className="font-mono text-sky-400 hover:text-sky-700"
+          className="font-mono text-muted-foreground hover:text-primary"
           preload={false}
         >
           {row.original.sid}
@@ -58,7 +58,10 @@ export const columns: ColumnDef<Column>[] = [
     },
     cell({ row }) {
       return (
-        <p className="truncate" title={row.original.property.name}>
+        <p
+          className="font-heading truncate font-semibold tracking-wide uppercase"
+          title={row.original.property.name}
+        >
           {row.original.property.name}
         </p>
       );

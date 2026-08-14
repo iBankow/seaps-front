@@ -1,52 +1,67 @@
-import { Building, CheckCircle, ListCheck } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useDashboard } from "../api/dashboard";
-import { BarComponent } from "../ui/bar-card";
 import { NumberCard } from "../ui/numbers-card";
 import { IRMBarComponent } from "../ui/irm-chart";
 import { ChecklistsCard } from "../ui/checklists-card";
+import { OrgComplianceCard } from "../ui/org-compliance-card";
+import { ScoreDistributionCard } from "../ui/score-distribution-card";
 
 export function DashboardPage() {
   const { data } = useDashboard();
 
+  const itensCriticos = data?.ranges?.find((r) => r.status === "RUIM")?.total;
+
   return (
-    <div className="text-center space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div className="flex flex-col gap-3.5">
+      <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 xl:grid-cols-4">
         <NumberCard
-          title="Imóveis Cadastrados"
+          title="Imóveis cadastrados"
           number={data?.properties?.total}
-          icon={Building}
-          className="bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-foreground"
+          tone="primary"
         />
         <NumberCard
-          title="Imóveis Vistoriados"
+          title="Imóveis vistoriados"
           number={data?.inspected?.total}
-          icon={CheckCircle}
-          className="bg-green-50 text-green-700 dark:bg-green-950 dark:text-foreground"
+          hint="no ciclo atual"
+          tone="success"
         />
         <NumberCard
-          title="Checklists Realizados"
+          title="Checklists realizados"
           number={data?.checklists?.total}
-          icon={ListCheck}
-          className="bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-foreground"
+          tone="primary"
+        />
+        <NumberCard
+          title="Itens críticos"
+          number={itensCriticos}
+          hint="classificados RUIM"
+          tone="destructive"
         />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <BarComponent data={data?.ranges ?? []} />
-        <Card className="col-span-1 sm:col-span-2">
-          <CardHeader>
-            <CardTitle>Últimos Checklists Fechados</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ChecklistsCard />
-          </CardContent>
-        </Card>
-        <Card className="col-span-1 sm:col-span-3">
-          <CardContent>
-            <IRMBarComponent data={data?.igm ?? []} />
-          </CardContent>
-        </Card>
+
+      <div className="grid grid-cols-1 gap-3.5 xl:grid-cols-[1.15fr_.85fr]">
+        <OrgComplianceCard data={data?.igm ?? []} />
+        <ScoreDistributionCard data={data?.ranges ?? []} />
       </div>
+
+      <Card className="gap-0 overflow-hidden p-0">
+        <CardHeader className="flex-row items-center gap-2 border-b p-[18px_22px]">
+          <CardTitle className="font-heading text-xs font-bold tracking-widest uppercase">
+            Checklists recentes
+          </CardTitle>
+          <Link
+            to="/checklists"
+            className="ml-auto border-b-[1.5px] border-success pb-0.5 font-heading text-[10px] font-semibold tracking-widest text-primary uppercase hover:text-primary/80"
+          >
+            ver todos
+          </Link>
+        </CardHeader>
+        <CardContent className="overflow-x-auto p-0">
+          <ChecklistsCard />
+        </CardContent>
+      </Card>
+
+      <IRMBarComponent data={data?.igm ?? []} />
     </div>
   );
 }

@@ -28,23 +28,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const secondaryItems = navSecondary.filter(isVisible);
 
   return (
-    <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
+    <Sidebar collapsible="icon" variant="sidebar" {...props}>
+      <SidebarHeader className="border-b border-sidebar-border pb-3">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              className="data-[slot=sidebar-menu-button]:!px-0 !py-3 h-full"
+              className="data-[slot=sidebar-menu-button]:!px-0 !py-3 h-full hover:bg-transparent"
               asChild
             >
               <Link to="/">
                 <img
                   src={"/logo.png"}
                   alt="logo"
-                  className="flex aspect-square size-10 items-center object-contain justify-center rounded-lg"
+                  className="flex aspect-square size-9 items-center object-contain justify-center rounded-lg bg-white/95 p-0.5"
                 />
-                <div className="grid flex-1 text-left text-lg leading-tight">
-                  <span className="text-nowrap font-semibold">SEAPS</span>
-                  <span className="text-sm text-nowrap">
+                <div className="grid flex-1 text-left leading-tight">
+                  <span className="font-heading text-2xl leading-none font-extrabold tracking-wide text-white">
+                    SEAPS
+                  </span>
+                  <span className="font-mono text-[10px] tracking-widest text-sidebar-foreground/55 uppercase">
                     Sistema de Manutenção Predial
                   </span>
                 </div>
@@ -53,13 +55,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="pt-2">
         <NavMain items={mainItems} />
         {secondaryItems.length > 0 && (
           <NavSecondary items={secondaryItems} className="mt-auto" />
         )}
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="border-t border-sidebar-border pt-3">
         <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>

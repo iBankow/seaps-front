@@ -34,8 +34,11 @@ export function NavSecondary({
         <Collapsible asChild className="group/collapsible">
           <SidebarMenuItem>
             <CollapsibleTrigger asChild>
-              <SidebarMenuButton tooltip="Configurações">
-                <Settings />
+              <SidebarMenuButton
+                tooltip="Configurações"
+                className="font-heading gap-2.5 px-2.5 text-xs font-semibold tracking-wide uppercase"
+              >
+                <Settings className="shrink-0" />
                 <span>Configurações</span>
                 <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
               </SidebarMenuButton>

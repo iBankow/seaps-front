@@ -94,10 +94,10 @@ export function NavUser({
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">
+                <span className="font-heading truncate font-semibold tracking-wide uppercase">
                   {getFirstAndLastName(user.name)}
                 </span>
-                <span className="text-muted-foreground truncate text-xs">
+                <span className="font-mono text-sidebar-foreground/55 truncate text-[10px] tracking-widest">
                   {user.email}
                 </span>
               </div>

@@ -12,15 +12,15 @@ import {
 
 const status = {
   0: {
-    color: "#fa6060",
+    color: "#dc2626",
     label: "Gestão Vulnerável",
   },
   1: {
-    color: "#60a5fa",
+    color: "#e0a800",
     label: "Gestão em Aperfeiçoamento",
   },
   2: {
-    color: "#60fa93",
+    color: "#00a651",
     label: "Gestão Adequada",
   },
 };
@@ -29,7 +29,7 @@ type STATU_TYPE = 0 | 1 | 2;
 
 const chartConfig = {
   total: {
-    color: "#60a5fa",
+    color: "#17307d",
   },
 } satisfies ChartConfig;
 
@@ -46,9 +46,11 @@ type Data = {
 
 export function IRMBarComponent({ data }: { data: Data[] }) {
   return (
-    <Card className="col-span-1 border-none shadow-none sm:col-span-3">
+    <Card className="col-span-1 sm:col-span-3">
       <CardHeader>
-        <CardTitle>Classificação geral dos órgãos e entidades</CardTitle>
+        <CardTitle className="font-heading text-xs font-bold tracking-widest uppercase">
+          Classificação geral dos órgãos e entidades
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <ChartContainer

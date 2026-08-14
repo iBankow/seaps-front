@@ -79,7 +79,9 @@ const ChecklistCardComponent = ({
   return (
     <Card className="flex h-[400px] flex-col">
       <CardHeader>
-        <CardTitle>{item.item.name}</CardTitle>
+        <CardTitle className="font-heading text-[13px] font-semibold tracking-wide uppercase">
+          {item.item.name}
+        </CardTitle>
       </CardHeader>
       <CardContent
         className={cn(
@@ -135,21 +137,41 @@ const ChecklistCardComponent = ({
           onValueChange={(e) => handleChangeValue(e, item.id)}
           defaultValue={String(item.score)}
         >
-          <div className="flex w-full flex-col items-center justify-center gap-2 rounded bg-green-300 px-1 py-3 dark:bg-green-800 md:flex-row">
+          <div className="flex w-full flex-col items-center justify-center gap-2 rounded-md border border-success/35 bg-success/10 px-1 py-3 md:flex-row">
             <RadioGroupItem value="3" id={item.id + `3`} />
-            <Label htmlFor={item.id + `3`}>Bom</Label>
+            <Label
+              htmlFor={item.id + `3`}
+              className="font-heading text-[11px] font-bold tracking-wide text-success uppercase"
+            >
+              Bom
+            </Label>
           </div>
-          <div className="flex w-full flex-col items-center justify-center gap-2 rounded bg-yellow-300 px-1 py-3 dark:bg-yellow-800 md:flex-row">
+          <div className="flex w-full flex-col items-center justify-center gap-2 rounded-md border border-warning/40 bg-warning/15 px-1 py-3 md:flex-row">
             <RadioGroupItem value="1" id={item.id + `2`} />
-            <Label htmlFor={item.id + `2`}>Regular</Label>
+            <Label
+              htmlFor={item.id + `2`}
+              className="font-heading text-warning-foreground text-[11px] font-bold tracking-wide uppercase"
+            >
+              Regular
+            </Label>
           </div>
-          <div className="flex w-full flex-col items-center justify-center gap-2 rounded bg-red-300 px-1 py-3 dark:bg-red-800 md:flex-row">
+          <div className="flex w-full flex-col items-center justify-center gap-2 rounded-md border border-destructive/35 bg-destructive/10 px-1 py-3 md:flex-row">
             <RadioGroupItem value="-2" id={item.id + `1`} />
-            <Label htmlFor={item.id + `1`}>Ruim</Label>
+            <Label
+              htmlFor={item.id + `1`}
+              className="font-heading text-[11px] font-bold tracking-wide text-destructive uppercase"
+            >
+              Ruim
+            </Label>
           </div>
-          <div className="col-span-3 flex w-full items-center justify-center gap-2 rounded bg-zinc-300 px-1 py-3 dark:bg-zinc-800 md:flex-row">
+          <div className="col-span-3 flex w-full items-center justify-center gap-2 rounded-md border border-border bg-muted px-1 py-3 md:flex-row">
             <RadioGroupItem value="0" id={item.id + `0`} />
-            <Label htmlFor={item.id + `0`}>Não se Aplica</Label>
+            <Label
+              htmlFor={item.id + `0`}
+              className="font-heading text-muted-foreground text-[11px] font-bold tracking-wide uppercase"
+            >
+              Não se Aplica
+            </Label>
           </div>
         </RadioGroup>
       </CardContent>

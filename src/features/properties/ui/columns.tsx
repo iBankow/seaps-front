@@ -1,26 +1,20 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
+import { Badge, type badgeVariants } from "@/components/ui/badge";
+import type { VariantProps } from "class-variance-authority";
 import { Actions } from "./actions";
 import { Link } from "@tanstack/react-router";
 import { formatDate } from "@/lib/format";
 
-const PROPERTY_TYPE_ENUM = {
-  OWN: {
-    label: "PRÓPRIO",
-    style: "border-blue-800 bg-blue-200 text-blue-900 hover:bg-blue-200/80",
-  },
-  RENTED: {
-    label: "ALUGADO",
-    style:
-      "border-yellow-800 bg-yellow-200 text-yellow-900 hover:bg-yellow-200/80",
-  },
-  GRANT: {
-    label: "CONCESSÃO",
-    style: "border-red-800 bg-red-200 text-red-900 hover:bg-red-200/80",
-  },
+export const PROPERTY_TYPE_ENUM: Record<
+  PROPERTY_TYPE,
+  { label: string; variant: VariantProps<typeof badgeVariants>["variant"] }
+> = {
+  OWN: { label: "PRÓPRIO", variant: "outline" },
+  RENTED: { label: "ALUGADO", variant: "warning" },
+  GRANT: { label: "CONCESSÃO", variant: "destructive" },
 };
 
-type PROPERTY_TYPE = "OWN" | "RENTED" | "GRANT";
+export type PROPERTY_TYPE = "OWN" | "RENTED" | "GRANT";
 
 export type Column = {
   organization: {
@@ -72,6 +66,13 @@ export const columns: ColumnDef<Column>[] = [
   {
     accessorKey: "name",
     header: "Nome",
+    cell({ row }) {
+      return (
+        <span className="font-heading font-semibold tracking-wide uppercase">
+          {row.original.name}
+        </span>
+      );
+    },
     meta: {
       cellClassName: "truncate max-w-xs",
     },
@@ -112,14 +113,9 @@ export const columns: ColumnDef<Column>[] = [
     accessorKey: "type",
     header: "Tipo",
     cell({ row }) {
-      return PROPERTY_TYPE_ENUM[row.original.type as PROPERTY_TYPE] ? (
-        <Badge
-          className={
-            PROPERTY_TYPE_ENUM[row.original.type as PROPERTY_TYPE].style
-          }
-        >
-          {PROPERTY_TYPE_ENUM[row.original.type as PROPERTY_TYPE].label}
-        </Badge>
+      const entry = PROPERTY_TYPE_ENUM[row.original.type as PROPERTY_TYPE];
+      return entry ? (
+        <Badge variant={entry.variant}>{entry.label}</Badge>
       ) : (
         "--"
       );

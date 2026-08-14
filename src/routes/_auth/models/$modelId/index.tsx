@@ -102,7 +102,7 @@ function RouteComponent() {
                 </Link>
               </Button>
               <div>
-                <h1 className="text-2xl font-bold flex items-center gap-2">
+                <h1 className="font-heading flex items-center gap-2 text-xl font-bold tracking-wide uppercase">
                   Pré-visualização do Modelo
                 </h1>
                 <p className="text-sm text-muted-foreground">
@@ -228,46 +228,26 @@ function RouteComponent() {
                         className="hover:bg-muted/30 transition-colors border-b border-muted/40"
                       >
                         <TableCell className="text-center">
-                          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
-                            <span className="text-sm font-semibold text-blue-700">
+                          <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+                            <span className="font-mono text-xs font-semibold text-primary">
                               {String(index + 1).padStart(2, "0")}
                             </span>
                           </div>
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-3">
-                            <div className="w-2 h-8 bg-blue-200 rounded-full"></div>
-                            <span className="font-medium text-foreground leading-relaxed">
+                            <div className="h-8 w-2 rounded-full bg-primary/20"></div>
+                            <span className="font-heading font-semibold tracking-wide text-foreground uppercase">
                               {item.name}
                             </span>
                           </div>
                         </TableCell>
                         <TableCell className="w-full pr-8">
                           <div className="flex flex-wrap justify-end gap-2 w-full">
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-medium bg-green-50 border-green-300 text-green-800 hover:bg-green-100 transition-colors px-3 py-1"
-                            >
-                              ✓ BOM
-                            </Badge>
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-medium bg-yellow-50 border-yellow-300 text-yellow-800 hover:bg-yellow-100 transition-colors px-3 py-1"
-                            >
-                              ⚡ REGULAR
-                            </Badge>
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-medium bg-red-50 border-red-300 text-red-800 hover:bg-red-100 transition-colors px-3 py-1"
-                            >
-                              ✗ RUIM
-                            </Badge>
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-medium bg-gray-50 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors px-3 py-1"
-                            >
-                              ○ N/A
-                            </Badge>
+                            <Badge variant="success">BOM</Badge>
+                            <Badge variant="warning">REGULAR</Badge>
+                            <Badge variant="destructive">RUIM</Badge>
+                            <Badge variant="outline">N/A</Badge>
                           </div>
                         </TableCell>
                       </TableRow>

@@ -1,5 +1,6 @@
-import { Badge } from "@/components/ui/badge";
-import { getStatusToneClass } from "./status-colors";
+import { Badge, type badgeVariants } from "@/components/ui/badge";
+import type { VariantProps } from "class-variance-authority";
+import { getStatusTone } from "./status-colors";
 
 const STATUS_LABEL: Record<string, string> = {
   OPEN: "ABERTO",
@@ -8,12 +9,17 @@ const STATUS_LABEL: Record<string, string> = {
   APPROVED: "APROVADO",
 };
 
+const TONE_VARIANT: Record<string, VariantProps<typeof badgeVariants>["variant"]> = {
+  success: "success",
+  destructive: "destructive",
+  muted: "outline",
+  primary: "default",
+  purple: "purple",
+};
+
 export const StatusBadge = ({ status }: { status: string }) => {
   const label = STATUS_LABEL[status] ?? "ABERTO";
-  const style =
-    status === "APPROVED"
-      ? "bg-purple-500 text-white hover:bg-purple-500/80"
-      : `${getStatusToneClass(status)} hover:opacity-80`;
+  const variant = TONE_VARIANT[getStatusTone(status)];
 
-  return <Badge className={style}>{label}</Badge>;
+  return <Badge variant={variant}>{label}</Badge>;
 };

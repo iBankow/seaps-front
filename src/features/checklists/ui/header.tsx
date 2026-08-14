@@ -10,16 +10,20 @@ export const ChecklistHeader = () => {
 
   return (
     <Card className="mb-6 overflow-hidden pt-0">
-      <div className={cn("h-1", getStatusToneClass(checklist.status))} />
+      <div className={cn("h-[3px]", getStatusToneClass(checklist.status))} />
       <CardContent>
         <div className="flex items-center gap-2 w-full">
           <BackButton variant={"outline"} />
-          <h1 className="text-3xl font-bold uppercase">{checklist.sid}</h1>
+          <h1 className="font-heading text-3xl font-bold tracking-wide uppercase">
+            {checklist.sid}
+          </h1>
           <div className="ml-auto">
             <StatusBadge status={checklist.status} />
           </div>
         </div>
-        <p className="text-muted-foreground text">{checklist.property.name}</p>
+        <p className="font-heading text-sm font-semibold tracking-wide text-muted-foreground uppercase">
+          {checklist.property.name}
+        </p>
       </CardContent>
     </Card>
   );
