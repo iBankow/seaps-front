@@ -314,9 +314,11 @@ function PropertyDetail() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Badge variant={PROPERTY_TYPE_ENUM[property.type].variant}>
-                {PROPERTY_TYPE_ENUM[property.type].label}
-              </Badge>
+              {PROPERTY_TYPE_ENUM[property.type] && (
+                <Badge variant={PROPERTY_TYPE_ENUM[property.type].variant}>
+                  {PROPERTY_TYPE_ENUM[property.type].label}
+                </Badge>
+              )}
               <PermissionGate permissions="properties:edit">
                 <Button asChild>
                   <Link
@@ -390,9 +392,13 @@ function PropertyDetail() {
                   Tipo
                 </p>
                 <div className="mt-1">
-                  <Badge variant={PROPERTY_TYPE_ENUM[property.type].variant}>
-                    {PROPERTY_TYPE_ENUM[property.type].label}
-                  </Badge>
+                  {PROPERTY_TYPE_ENUM[property.type] ? (
+                    <Badge variant={PROPERTY_TYPE_ENUM[property.type].variant}>
+                      {PROPERTY_TYPE_ENUM[property.type].label}
+                    </Badge>
+                  ) : (
+                    <span className="text-muted-foreground">--</span>
+                  )}
                 </div>
               </div>
               <div>
