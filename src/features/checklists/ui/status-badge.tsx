@@ -21,5 +21,5 @@ export const StatusBadge = ({ status }: { status: string }) => {
   const label = STATUS_LABEL[status] ?? "ABERTO";
   const variant = TONE_VARIANT[getStatusTone(status)];
 
-  return <Badge variant={variant}>{label}</Badge>;
+  return <Badge variant={variant} className="leading-0">{label}</Badge>;
 };

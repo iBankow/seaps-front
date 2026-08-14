@@ -8,6 +8,7 @@ import {
 import { Link, useRouter } from "@tanstack/react-router";
 import type { HTMLAttributes } from "react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface IPaginationComponent {
@@ -15,6 +16,28 @@ interface IPaginationComponent {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   meta?: any;
 }
+
+/*
+ * Estilos da paginação do design "Painel SIMP": pílulas com borda de 1.5px que
+ * acende na cor da marca no hover. `hover:bg-card` neutraliza o `hover:bg-muted`
+ * da variante ghost — aqui quem responde ao hover é a borda, não o fundo.
+ *
+ * O raio vem de `rounded-lg` (= `--radius`) em vez dos 7px cravados no design,
+ * para acompanhar o token global.
+ */
+const NAV_BUTTON =
+  "h-8 rounded-lg border-[1.5px] border-input bg-card px-3.5 font-heading text-[10px] font-bold tracking-[0.1em] text-primary uppercase hover:border-primary hover:bg-card hover:text-primary [&_svg]:size-3";
+
+const PAGE_BUTTON =
+  "h-8 min-w-[34px] rounded-lg border-[1.5px] px-0 font-mono text-[11px] font-semibold";
+
+const PAGE_INACTIVE =
+  "border-input bg-card text-muted-foreground hover:border-primary hover:bg-card hover:text-primary";
+
+const PAGE_ACTIVE =
+  "border-primary bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground";
+
+const ELLIPSIS_BUTTON = "h-8 min-w-[34px] px-0 text-muted-foreground";
 
 export function Pagination({ className, meta }: IPaginationComponent) {
   const LE = "-3";
@@ -64,7 +87,12 @@ export function Pagination({ className, meta }: IPaginationComponent) {
     <UIPagination className={className}>
       <PaginationContent>
         <PaginationItem className="hidden sm:block">
-          <Button variant="ghost" disabled={meta?.prev_page === null} asChild>
+          <Button
+            variant="ghost"
+            disabled={meta?.prev_page === null}
+            className={NAV_BUTTON}
+            asChild
+          >
             <Link
               replace={true}
               to="."
@@ -72,7 +100,7 @@ export function Pagination({ className, meta }: IPaginationComponent) {
                 meta?.current_page ? meta?.current_page - 1 : 0
               )}
             >
-              <ChevronLeft />
+              <ChevronLeft data-icon="inline-start" />
               Anterior
             </Link>
           </Button>
@@ -81,7 +109,13 @@ export function Pagination({ className, meta }: IPaginationComponent) {
           if (typeof item === "string") {
             return (
               <PaginationItem key={index}>
-                <Button variant="ghost" disabled asChild size="icon">
+                <Button
+                  variant="ghost"
+                  disabled
+                  asChild
+                  size="icon"
+                  className={ELLIPSIS_BUTTON}
+                >
                   <Link
                     replace={true}
                     to="."
@@ -93,15 +127,26 @@ export function Pagination({ className, meta }: IPaginationComponent) {
               </PaginationItem>
             );
           }
+
+          const isActive = meta?.current_page === item;
+
           return (
             <PaginationItem key={index}>
               <Button
                 asChild
-                variant={meta.current_page === item ? "secondary" : "ghost"}
+                variant="ghost"
                 size="icon"
+                className={cn(
+                  PAGE_BUTTON,
+                  isActive ? PAGE_ACTIVE : PAGE_INACTIVE,
+                )}
               >
                 <Link
-                  replace={true} to="." search={getParams(item)}>
+                  replace={true}
+                  to="."
+                  search={getParams(item)}
+                  aria-current={isActive ? "page" : undefined}
+                >
                   {item}
                 </Link>
               </Button>
@@ -109,7 +154,12 @@ export function Pagination({ className, meta }: IPaginationComponent) {
           );
         })}
         <PaginationItem className="hidden sm:block">
-          <Button variant="ghost" disabled={meta?.next_page === null} asChild>
+          <Button
+            variant="ghost"
+            disabled={meta?.next_page === null}
+            className={NAV_BUTTON}
+            asChild
+          >
             <Link
               replace={true}
               to="."
@@ -118,7 +168,7 @@ export function Pagination({ className, meta }: IPaginationComponent) {
               )}
             >
               Proximo
-              <ChevronRight />
+              <ChevronRight data-icon="inline-end" />
             </Link>
           </Button>
         </PaginationItem>
