@@ -111,7 +111,7 @@ export function UserDetail() {
         {userData.is_active ? (
           <Badge
             variant="default"
-            className="bg-green-500 hover:bg-green-600 gap-1"
+            className="bg-success hover:bg-success/90 gap-1"
           >
             <CheckCircle2 className="h-3 w-3" />
             Ativo
@@ -198,15 +198,15 @@ export function UserDetail() {
               <div className="flex items-center gap-2">
                 {userData.is_active ? (
                   <>
-                    <CheckCircle2 className="h-5 w-5 text-green-600" />
-                    <span className="text-base font-semibold text-green-700">
+                    <CheckCircle2 className="h-5 w-5 text-success" />
+                    <span className="text-base font-semibold text-success">
                       Conta Ativa
                     </span>
                   </>
                 ) : (
                   <>
-                    <XCircle className="h-5 w-5 text-red-600" />
-                    <span className="text-base font-semibold text-red-700">
+                    <XCircle className="h-5 w-5 text-destructive" />
+                    <span className="text-base font-semibold text-destructive">
                       Conta Inativa
                     </span>
                   </>

@@ -1,14 +1,16 @@
-﻿import { createFileRoute, useParams, Link } from "@tanstack/react-router";
+import { createFileRoute, useParams, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { bucketUrl } from "@/config/env";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Camera, Upload } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useModal } from "@/hooks/use-modal";
 import { useChecklist } from "@/contexts/checklist-context";
 import { toast } from "sonner";
 import { Loading } from "@/components/common/loading";
+import { SectionLabel } from "@/components/common/section-label";
+import { StatusBadge } from "@/features/checklists";
 import {
   DeleteChecklistItemImageDialog,
   ImageDialog,
@@ -16,6 +18,8 @@ import {
   useChecklistItem,
   useUploadChecklistItemImages,
 } from "@/features/checklist-items";
+
+const MAX_IMAGES = 10;
 
 export const Route = createFileRoute(
   "/_auth/checklists/$checklistId/items/$itemId/"
@@ -46,11 +50,10 @@ function ChecklistItemPage() {
     setUploading(true);
     try {
       const existingImages = item.images?.length ?? 0;
-      const maxImages = 10;
-      const availableSlots = maxImages - existingImages;
+      const availableSlots = MAX_IMAGES - existingImages;
 
       if (availableSlots <= 0) {
-        toast.error("Limite máximo de 10 imagens atingido.");
+        toast.error(`Limite máximo de ${MAX_IMAGES} imagens atingido.`);
         return;
       }
 
@@ -65,7 +68,7 @@ function ChecklistItemPage() {
 
       if (filesToUpload.length < files.length) {
         toast.warning(
-          `Apenas ${availableSlots} imagens foram enviadas. Limite máximo de 10 imagens por item.`
+          `Apenas ${availableSlots} imagens foram enviadas. Limite máximo de ${MAX_IMAGES} imagens por item.`
         );
       } else {
         toast.success("Imagens enviadas com sucesso!");
@@ -83,81 +86,97 @@ function ChecklistItemPage() {
   }
 
   const IS_CLOSE = ["APPROVED", "CLOSED"].includes(checklist?.status || "");
-  // const IS_VALIDED = item?.is_valid !== null;
+  const imageCount = item.images?.length ?? 0;
 
   return (
-    <div className="flex flex-col gap-y-4">
-      <div className="flex items-center gap-4">
+    <Card className="gap-5 p-[22px]">
+      <div className="flex items-start gap-3">
         <Button variant="outline" size="icon" asChild>
           <Link to=".." search={{ id: checklistId }}>
             <ArrowLeft className="h-4 w-4" />
+            <span className="sr-only">Voltar para os itens</span>
           </Link>
         </Button>
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">
+        <div className="min-w-0">
+          <h2 className="font-heading text-[19px] leading-tight font-bold tracking-[0.03em] uppercase">
             {item.item?.name}
           </h2>
-          <p className="text-sm text-muted-foreground">
-            Checklist: {checklist?.property?.name} - Status: {checklist?.status}
+          <p className="mt-1 text-[11px] text-muted-foreground">
+            {checklist?.property?.name}
           </p>
+        </div>
+        <div className="ml-auto shrink-0">
+          <StatusBadge status={checklist?.status || "OPEN"} />
         </div>
       </div>
 
-      <div className="flex gap-2 self-end">
-        <Input
-          type="file"
-          accept="images/*"
-          multiple
-          onChange={handleImageUpload}
-          disabled={IS_CLOSE || uploading}
-          className="hidden"
-          id="image-upload"
-        />
-        <Button
-          variant="outline"
-          onClick={() => document.getElementById("image-upload")?.click()}
-          disabled={IS_CLOSE || uploading}
+      <div className="flex flex-col gap-3">
+        <SectionLabel
+          hint={`${imageCount}/${MAX_IMAGES}`}
+          action={
+            <>
+              <Input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleImageUpload}
+                disabled={IS_CLOSE || uploading}
+                className="hidden"
+                id="image-upload"
+              />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => document.getElementById("image-upload")?.click()}
+                disabled={IS_CLOSE || uploading}
+              >
+                <Upload />
+                {uploading ? "Enviando..." : "Enviar imagem"}
+              </Button>
+            </>
+          }
         >
-          <Upload className="mr-2 h-4 w-4" />
-          {uploading ? "Enviando..." : "Enviar Imagem"}
-        </Button>
-      </div>
+          Imagens
+        </SectionLabel>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {item.images?.map((image, index) => (
-          <Card key={image.id}>
-            <CardContent className="space-y-4">
-              <div className="space-y-4">
-                <div className="relative aspect-video overflow-hidden rounded-lg border">
-                  <Button
-                    variant={"ghost"}
-                    className="p-0"
-                    asChild
-                    onClick={() => imageDialog.showIndex(index)}
-                  >
-                    <img
-                      src={bucketUrl(image.image)}
-                      alt={`Imagem do item ${item.item?.name}`}
-                      className="h-full w-full object-cover"
-                    />
-                  </Button>
-                </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    className="flex-1"
-                    onClick={imageDialog.show}
-                    disabled={IS_CLOSE}
-                  >
-                    <Camera className="mr-2 h-4 w-4" />
-                    Visualizar
-                  </Button>
-                  <DeleteChecklistItemImageDialog image={image} />
+        {imageCount === 0 ? (
+          <div className="grid place-items-center gap-2 rounded-lg border border-dashed border-input bg-secondary py-12 text-center">
+            <Camera className="size-8 text-muted-foreground" aria-hidden />
+            <p className="font-mono text-[11px] tracking-wide text-muted-foreground uppercase">
+              Nenhuma imagem enviada
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {item.images?.map((image, index) => (
+              <div
+                key={image.id}
+                className="overflow-hidden rounded-lg border border-border bg-card"
+              >
+                <button
+                  type="button"
+                  onClick={() => imageDialog.showIndex(index)}
+                  className="block aspect-video w-full cursor-pointer overflow-hidden outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                >
+                  <img
+                    src={bucketUrl(image.image)}
+                    alt={`Imagem do item ${item.item?.name}`}
+                    className="h-full w-full object-cover transition-transform hover:scale-[1.03]"
+                    loading="lazy"
+                  />
+                </button>
+                <div className="flex items-center gap-2 border-t border-border p-2">
+                  <span className="font-mono text-[9px] tracking-[0.06em] text-muted-foreground uppercase">
+                    Foto {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <div className="ml-auto">
+                    <DeleteChecklistItemImageDialog image={image} />
+                  </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        ))}
+            ))}
+          </div>
+        )}
       </div>
 
       <ImageDialog
@@ -172,6 +191,6 @@ function ChecklistItemPage() {
         onOpenChange={observationDialog.toggle}
         open={observationDialog.visible}
       />
-    </div>
+    </Card>
   );
 }

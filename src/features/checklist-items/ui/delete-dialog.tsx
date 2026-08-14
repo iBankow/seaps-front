@@ -55,7 +55,7 @@ export const DeleteDialog = ({ image }: { image: ChecklistItemImage }) => {
           <AlertDialogAction
             onClick={handleDelete}
             disabled={isPending}
-            className="bg-red-600 hover:bg-red-700"
+            className="bg-destructive hover:bg-destructive/90"
           >
             {isPending ? "Excluindo..." : "Excluir"}
           </AlertDialogAction>

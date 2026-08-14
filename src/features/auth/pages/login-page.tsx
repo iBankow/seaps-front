@@ -71,7 +71,7 @@ export function LoginPage() {
         </div>
       </div>
       <div className="mt-4 inline-flex items-center gap-4">
-        <Link to="/privacy-policy" className="text-sky-600 hover:underline">
+        <Link to="/privacy-policy" className="text-primary hover:underline">
           Politica de Privacidade
         </Link>
         <p className="text-sm">Versão: 1.0.0</p>

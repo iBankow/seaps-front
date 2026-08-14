@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { MetaField } from "@/components/common/meta-field";
 import { useChecklist } from "@/contexts/checklist-context";
 import { http as api } from "@/lib/http";
 import { createFileRoute } from "@tanstack/react-router";
@@ -132,41 +133,44 @@ function RouteComponent() {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 font-heading text-xs font-bold tracking-widest uppercase">
             <Building className="h-5 w-5" />
             Informações do Imóvel
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-50 dark:bg-blue-950 rounded-lg">
-                <Building className="h-5 w-5 text-blue-600" />
+              <div className="rounded-lg bg-primary/10 p-2">
+                <Building className="h-5 w-5 text-primary" />
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Nome do Imóvel</p>
-                <p className="font-medium">{checklist?.property?.name}</p>
-              </div>
+              <MetaField label="Nome do imóvel">
+                <span className="font-heading font-semibold tracking-wide uppercase">
+                  {checklist?.property?.name}
+                </span>
+              </MetaField>
             </div>
 
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-50 dark:bg-green-950 rounded-lg">
-                <MapPin className="h-5 w-5 text-green-600" />
+              <div className="rounded-lg bg-success/10 p-2">
+                <MapPin className="h-5 w-5 text-success" />
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Endereço</p>
-                <p className="font-medium">{checklist?.property?.address}</p>
-              </div>
+              <MetaField label="Endereço">
+                <span className="text-muted-foreground">
+                  {checklist?.property?.address}
+                </span>
+              </MetaField>
             </div>
 
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-50 dark:bg-purple-950 rounded-lg">
-                <User className="h-5 w-5 text-purple-600" />
+              <div className="rounded-lg bg-validated/10 p-2">
+                <User className="h-5 w-5 text-validated" />
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Organização</p>
-                <p className="font-medium">{checklist?.organization?.name}</p>
-              </div>
+              <MetaField label="Órgão">
+                <span className="font-heading font-semibold tracking-wide uppercase">
+                  {checklist?.organization?.name}
+                </span>
+              </MetaField>
             </div>
           </div>
         </CardContent>
@@ -175,7 +179,7 @@ function RouteComponent() {
       {/* History Table */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 font-heading text-xs font-bold tracking-widest uppercase">
             <User className="h-5 w-5" />
             Histórico de Atividades
           </CardTitle>
@@ -260,7 +264,7 @@ function RouteComponent() {
                                 className="inline-block cursor-help max-w-[200px]"
                                 title={getFullJsonString(item.value)}
                               >
-                                <span className="font-mono bg-blue-50 dark:bg-blue-950 text-blue-800 dark:text-blue-200 px-2 py-1 rounded text-xs border">
+                                <span className="rounded border border-primary/20 bg-primary/10 px-2 py-1 font-mono text-xs text-primary">
                                   {formatJsonValue(item.value)}
                                 </span>
                               </div>

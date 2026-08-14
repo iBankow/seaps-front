@@ -2,26 +2,22 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { StatCard } from "@/components/common/stat-card";
+import { MetaField } from "@/components/common/meta-field";
 import { useChecklist } from "@/contexts/checklist-context";
 import { useMemo } from "react";
 import {
-  Building,
-  User,
-  Calendar,
   CheckCircle2,
-  AlertTriangle,
-  XCircle,
   Edit,
   FileText,
   History,
   List,
-  TrendingUp,
-  MinusCircle,
 } from "lucide-react";
 import { getFirstAndLastName } from "@/lib/utils";
 import { StatusBadge } from "@/features/checklists";
 import { useChecklistsItems } from "@/features/checklist-items";
 import { formatDateLong } from "@/lib/format";
+import { Loading } from "@/components/common/loading";
 
 export const Route = createFileRoute("/_auth/checklists/$checklistId/")({
   component: ChecklistDashboard,
@@ -62,34 +58,27 @@ function ChecklistDashboard() {
     };
   }, [checklistItems]);
 
-  const getScoreColor = (score: number) => {
-    if (score >= 2.5) return "text-green-600";
-    if (score >= 1.5) return "text-yellow-600";
-    return "text-red-600";
+  const scoreTone = (score: number) => {
+    if (score >= 2.5) return "text-success";
+    if (score >= 1.5) return "text-warning-foreground";
+    return "text-destructive";
   };
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p>Carregando checklist...</p>
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col gap-3.5">
       {/* Mostrar mensagem se o checklist estiver aprovado e quem aprovou */}
       {checklist.status === "APPROVED" && (
-        <Card className="dark:bg-purple-900 dark:border-purple-700 bg-purple-50 border-purple-200">
+        <Card className="border-validated/35 bg-validated/10 ring-validated/20">
           <CardContent>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-              <p className="text-purple-800 dark:text-purple-300">
+            <div className="flex items-center gap-2.5">
+              <CheckCircle2 className="h-5 w-5 shrink-0 text-validated" />
+              <p className="text-[13px] text-foreground">
                 Este checklist foi aprovado por{" "}
-                <span className="font-medium">
+                <span className="font-heading font-semibold tracking-wide uppercase">
                   {getFirstAndLastName(checklist.validator?.name)}
                 </span>
                 .
@@ -100,213 +89,170 @@ function ChecklistDashboard() {
       )}
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Itens BOM</CardTitle>
-            <CheckCircle2 className="h-4 w-4 text-green-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">
-              {isLoading ? "..." : stats?.good_items || 0}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Avaliações positivas
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Itens REGULAR</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-yellow-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">
-              {isLoading ? "..." : stats?.regular_items || 0}
-            </div>
-            <p className="text-xs text-muted-foreground">Necessitam atenção</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Itens RUIM</CardTitle>
-            <XCircle className="h-4 w-4 text-red-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-red-600">
-              {isLoading ? "..." : stats?.bad_items || 0}
-            </div>
-            <p className="text-xs text-muted-foreground">Requerem correção</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Itens N/A</CardTitle>
-            <MinusCircle className="h-4 w-4 text-gray-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-gray-500">
-              {isLoading ? "..." : stats?.na_items || 0}
-            </div>
-            <p className="text-xs text-muted-foreground">Não aplicável</p>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-2 gap-3.5 lg:grid-cols-4">
+        <StatCard
+          title="Itens BOM"
+          value={stats?.good_items ?? 0}
+          hint="avaliações positivas"
+          tone="success"
+        />
+        <StatCard
+          title="Itens REGULAR"
+          value={stats?.regular_items ?? 0}
+          hint="necessitam atenção"
+          tone="warning"
+        />
+        <StatCard
+          title="Itens RUIM"
+          value={stats?.bad_items ?? 0}
+          hint="requerem correção"
+          tone="destructive"
+        />
+        <StatCard
+          title="Itens N/A"
+          value={stats?.na_items ?? 0}
+          hint="não aplicável"
+          tone="muted"
+        />
       </div>
 
-      <div className="flex w-full gap-4">
+      <div className="grid grid-cols-1 gap-3.5 lg:grid-cols-2">
         {stats && stats.completed_items > 0 && (
-          <Card className="w-full">
-            <CardHeader>
-              <CardTitle>Resumo da Pontuação</CardTitle>
+          <Card className="gap-4 p-[20px_22px]">
+            <CardHeader className="p-0">
+              <CardTitle className="font-heading text-xs font-bold tracking-widest uppercase">
+                Resumo da pontuação
+              </CardTitle>
+              <p className="text-[11px] text-muted-foreground">
+                Média ponderada dos itens avaliados
+              </p>
             </CardHeader>
-            <CardContent>
-              <div className="flex flex-col gap-1">
-                <span>Pontuação Total</span>
+            <CardContent className="p-0">
+              <div className="flex items-baseline gap-2">
                 <span
-                  className={`text-2xl font-bold ${getScoreColor(stats.total_score)}`}
+                  className={`font-heading text-[30px] leading-none font-bold ${scoreTone(stats.total_score)}`}
                 >
-                  {stats.total_score.toFixed(2)} pontos
+                  {stats.total_score.toFixed(2)}
+                </span>
+                <span className="font-mono text-[11px] text-muted-foreground">
+                  pontos
                 </span>
               </div>
             </CardContent>
           </Card>
         )}
-        <Card className="w-full">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Progresso Geral
+
+        <Card className="gap-4 p-[20px_22px]">
+          <CardHeader className="p-0">
+            <CardTitle className="font-heading text-xs font-bold tracking-widest uppercase">
+              Preenchimento
             </CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            <p className="text-[11px] text-muted-foreground">
+              Progresso geral do checklist
+            </p>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {isLoading
-                ? "..."
-                : `${Math.round(stats?.completion_percentage || 0)}%`}
+          <CardContent className="p-0">
+            <div className="flex items-baseline gap-2">
+              <span className="font-heading text-[30px] leading-none font-bold">
+                {Math.round(stats?.completion_percentage || 0)}%
+              </span>
+              <span className="font-mono text-[11px] text-muted-foreground">
+                {stats?.completed_items || 0}/{stats?.total_items || 0} itens
+              </span>
             </div>
             <Progress
               value={stats?.completion_percentage || 0}
-              className="mt-2"
+              tone="success"
+              className="mt-2.5 h-2"
             />
-            <p className="text-xs text-muted-foreground mt-2">
-              {stats?.completed_items || 0} de {stats?.total_items || 0} itens
-              avaliados
-            </p>
           </CardContent>
         </Card>
       </div>
 
       {/* Property and Evaluation Details */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-3.5 lg:grid-cols-2">
         {/* Property Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Building className="h-5 w-5" />
-              Informações do Imóvel
+        <Card className="gap-4 p-[20px_22px]">
+          <CardHeader className="p-0">
+            <CardTitle className="font-heading text-xs font-bold tracking-widest uppercase">
+              Informações do imóvel
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-3">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Nome
-                </p>
-                <p className="text-lg">{checklist.property?.name}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Endereço
-                </p>
-                <p>{checklist.property?.address}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Responsável pelo Imóvel
-                </p>
-                <p>{checklist.property?.person?.name}</p>
-              </div>
-            </div>
+          <CardContent className="flex flex-col gap-4 p-0">
+            <MetaField label="Nome">
+              <span className="font-heading text-[15px] font-bold tracking-wide uppercase">
+                {checklist.property?.name}
+              </span>
+            </MetaField>
+            <MetaField label="Endereço">
+              <span className="text-muted-foreground">
+                {checklist.property?.address}
+              </span>
+            </MetaField>
+            <MetaField label="Responsável pelo imóvel">
+              {checklist.property?.person?.name}
+            </MetaField>
           </CardContent>
         </Card>
 
         {/* Evaluation Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <User className="h-5 w-5" />
-              Detalhes da Avaliação
+        <Card className="gap-4 p-[20px_22px]">
+          <CardHeader className="p-0">
+            <CardTitle className="font-heading text-xs font-bold tracking-widest uppercase">
+              Detalhes da avaliação
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-3">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Responsável
-                </p>
-                <p>{checklist.user?.name}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Organização
-                </p>
-                <p>{checklist.organization?.name}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Status
-                </p>
-                <p>{StatusBadge({ status: checklist.status })}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Data de Criação
-                </p>
-                <p className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  {formatDateLong(checklist.created_at)}
-                </p>
-              </div>
-            </div>
+          <CardContent className="flex flex-col gap-4 p-0">
+            <MetaField label="Avaliador">{checklist.user?.name}</MetaField>
+            <MetaField label="Órgão">
+              <span className="font-heading font-semibold tracking-wide uppercase">
+                {checklist.organization?.name}
+              </span>
+            </MetaField>
+            <MetaField label="Situação">
+              <StatusBadge status={checklist.status} />
+            </MetaField>
+            <MetaField label="Data de criação">
+              <span className="font-mono text-[12px] text-muted-foreground">
+                {formatDateLong(checklist.created_at)}
+              </span>
+            </MetaField>
           </CardContent>
         </Card>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex flex-wrap gap-3 justify-center">
-        <Button asChild size="lg">
+      <div className="flex flex-wrap gap-2.5">
+        <Button asChild>
           <Link to="/checklists/$checklistId/items" params={{ checklistId }}>
-            <List className="h-4 w-4 mr-2" />
+            <List />
             Ver Itens
           </Link>
         </Button>
 
         {checklist.status === "OPEN" && (
-          <Button variant="outline" size="lg" asChild>
+          <Button variant="outline" asChild>
             <Link to="/checklists/$checklistId/edit" params={{ checklistId }}>
-              <Edit className="h-4 w-4 mr-2" />
+              <Edit />
               Editar
             </Link>
           </Button>
         )}
 
-        <Button variant="outline" size="lg" asChild>
+        <Button variant="outline" asChild>
           <Link to="/checklists/$checklistId/history" params={{ checklistId }}>
-            <History className="h-4 w-4 mr-2" />
+            <History />
             Histórico
           </Link>
         </Button>
 
         {checklist.status !== "OPEN" && (
-          <Button variant="outline" size="lg" asChild>
+          <Button variant="outline" asChild>
             <Link
               to="/checklists/$checklistId/notification"
               params={{ checklistId }}
             >
-              <FileText className="h-4 w-4 mr-2" />
+              <FileText />
               Notificação
             </Link>
           </Button>

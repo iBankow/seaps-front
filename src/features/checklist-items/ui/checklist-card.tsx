@@ -10,8 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
+import { ScoreRadioGroup } from "./score-radio-group";
 import { useDialogContext } from "@/contexts/dialog-context";
 import {
   Camera,
@@ -63,7 +62,21 @@ const ChecklistCardComponent = ({
   }, []);
 
   // Usa debounce para evitar múltiplas chamadas consecutivas
-  const { debouncedCallback: handleChangeValue } = useDebounce(updateScore, 300);
+  const { debouncedCallback: debouncedUpdateScore } = useDebounce(
+    updateScore,
+    300,
+  );
+
+  // O controle de pontuação é controlado: pinta a escolha na hora e deixa a
+  // resposta da API reconciliar depois, senão a seleção só apareceria após o
+  // debounce + round-trip.
+  const handleChangeValue = useCallback(
+    (value: string, id: string) => {
+      setChecklistItem((prev) => ({ ...prev, score: Number(value) }));
+      debouncedUpdateScore(value, id);
+    },
+    [debouncedUpdateScore],
+  );
 
   const handleObservationClick = useCallback(() => {
     observationDialog.open(item, status);
@@ -131,49 +144,11 @@ const ChecklistCardComponent = ({
             />
           </Button>
         )}
-        <RadioGroup
-          className="grid w-full grid-cols-3"
+        <ScoreRadioGroup
+          value={item.score}
           disabled={(IS_VALIDED && item.is_valid) || IS_CLOSE}
           onValueChange={(e) => handleChangeValue(e, item.id)}
-          defaultValue={String(item.score)}
-        >
-          <div className="flex w-full flex-col items-center justify-center gap-2 rounded-md border border-success/35 bg-success/10 px-1 py-3 md:flex-row">
-            <RadioGroupItem value="3" id={item.id + `3`} />
-            <Label
-              htmlFor={item.id + `3`}
-              className="font-heading text-[11px] font-bold tracking-wide text-success uppercase"
-            >
-              Bom
-            </Label>
-          </div>
-          <div className="flex w-full flex-col items-center justify-center gap-2 rounded-md border border-warning/40 bg-warning/15 px-1 py-3 md:flex-row">
-            <RadioGroupItem value="1" id={item.id + `2`} />
-            <Label
-              htmlFor={item.id + `2`}
-              className="font-heading text-warning-foreground text-[11px] font-bold tracking-wide uppercase"
-            >
-              Regular
-            </Label>
-          </div>
-          <div className="flex w-full flex-col items-center justify-center gap-2 rounded-md border border-destructive/35 bg-destructive/10 px-1 py-3 md:flex-row">
-            <RadioGroupItem value="-2" id={item.id + `1`} />
-            <Label
-              htmlFor={item.id + `1`}
-              className="font-heading text-[11px] font-bold tracking-wide text-destructive uppercase"
-            >
-              Ruim
-            </Label>
-          </div>
-          <div className="col-span-3 flex w-full items-center justify-center gap-2 rounded-md border border-border bg-muted px-1 py-3 md:flex-row">
-            <RadioGroupItem value="0" id={item.id + `0`} />
-            <Label
-              htmlFor={item.id + `0`}
-              className="font-heading text-muted-foreground text-[11px] font-bold tracking-wide uppercase"
-            >
-              Não se Aplica
-            </Label>
-          </div>
-        </RadioGroup>
+        />
       </CardContent>
       <CardFooter className="flex gap-2">
         <Button

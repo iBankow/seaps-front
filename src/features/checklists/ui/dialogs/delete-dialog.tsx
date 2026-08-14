@@ -54,7 +54,7 @@ export const DeleteDialog = ({ row, onOpenChange, open }: any) => {
           <AlertDialogAction
             onClick={handleDelete}
             disabled={loading}
-            className="bg-red-600 hover:bg-red-700"
+            className="bg-destructive hover:bg-destructive/90"
           >
             {loading ? "Excluindo..." : "Excluir"}
           </AlertDialogAction>

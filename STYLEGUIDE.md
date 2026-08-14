@@ -1,38 +1,56 @@
-# Guia de Estilo — Identidade Visual do App Mobile
+# Guia de Estilo — Painel SIMP
 
 ## 1. Objetivo e contexto
 
-O painel front-end (`seaps-front`) usa shadcn/ui no estado padrão ("cru"): tema neutro definido em `components.json` (`baseColor: neutral`, estilo `radix-nova`) e tokens de cor em `src/styles.css` ainda nos valores default do shadcn (escala de cinza em oklch). O app mobile da SEAPS, em contraste, tem uma identidade visual própria e consistente — header azul-marinho, cards bem arredondados, tipografia em caixa alta e um sistema de cores semânticas para status que se repete em várias telas.
+Este documento descreve a identidade visual **implementada** no painel
+(`seaps-front`), derivada do design `Painel SIMP.dc.html` (projeto Claude
+Design "Painel web SIMP completo") e alinhada ao app mobile da SEAPS.
 
-Este documento **extrai e registra** esse estilo a partir de prints do app mobile, para servir de referência quando a migração de estilo do painel for implementada. Ele **não implementa** a migração — nenhum código foi alterado ao criar este documento.
+O painel **não** usa mais o tema neutro padrão do shadcn. Os tokens em
+`src/styles.css` estão na paleta SIMP (navy `#17307d` / verde `#00a651`), com
+tipografia Archivo (títulos) + IBM Plex Sans (corpo) + IBM Plex Mono (labels e
+números).
 
-**Importante:** todos os valores de cor, raio e espaçamento abaixo são **estimativas visuais** obtidas por inspeção de screenshots, não de um arquivo-fonte de design (Figma, tokens exportados, etc.). Antes de aplicar qualquer valor em produção, vale confirmar contra a fonte oficial do design do app mobile, se existir. Onde a fonte oficial não existir, os valores aqui podem ser adotados como baseline.
+**Regra prática:** nenhuma cor crua da escala Tailwind (`text-green-600`,
+`bg-blue-50`, `border-red-200`…) deve entrar no código. Toda cor sai de um
+token semântico. Se faltar um token para o caso, adicione o token em
+`src/styles.css` em vez de usar a escala crua.
 
 ## 2. Paleta de cores
 
-| Token sugerido | Valor estimado | Uso | Token shadcn/CSS atual que substituiria (`src/styles.css`) |
-|---|---|---|---|
-| `--brand-primary` | `#1B2A6B` | Header/app bar, títulos de seção, texto de destaque, ícones de marca | `--primary` |
-| `--brand-primary-foreground` | `#FFFFFF` | Texto/ícones sobre o header | `--primary-foreground` |
-| `--background` | `#F0F1F4` | Fundo de tela (fora dos cards) | `--background` |
-| `--surface` (card) | `#FFFFFF` | Fundo de cards, listas, inputs | `--card` |
-| `--muted-foreground` | `#8A8F98` | Textos secundários (endereço, subtítulo, labels de campo) | `--muted-foreground` |
-| `--border` | `#E4E5EA` | Bordas sutis de card/input | `--border` |
-| `--accent-soft` | `#E4EBFB` | Fundo do item ativo na navegação (ex.: ícone "home" selecionado) | `--accent` |
+Definida em `:root` e `.dark` de `src/styles.css`, exposta ao Tailwind via
+`@theme inline`.
+
+| Token | Valor (claro) | Uso |
+|---|---|---|
+| `--primary` | `#17307d` | Marca, sidebar, títulos de destaque, barras de progresso |
+| `--primary-foreground` | `#FFFFFF` | Texto/ícones sobre o navy |
+| `--background` | `#eef1f5` | Fundo de tela (fora dos cards) |
+| `--card` | `#FFFFFF` | Fundo de cards, listas, inputs |
+| `--foreground` | `#10204d` | Texto principal |
+| `--muted-foreground` | `#6b7896` | Textos secundários (endereço, subtítulo, labels) |
+| `--border` | `#e3e8f1` | Bordas sutis de card |
+| `--input` | `#dbe1ec` | Bordas de campo |
+| `--secondary` | `#f7f9fc` | Fundo de campo, linha de tabela em hover |
+| `--sidebar` | `#17307d` | Sidebar sólida navy |
 
 ## 3. Sistema de cores semânticas de status
 
-Esse sistema se repete de forma consistente em badges de imóvel, badges de checklist e na tela de pontuação de item — vale tratá-lo como um token à parte, não como cor solta por componente.
+Esse sistema se repete em badges de imóvel, badges de checklist e no controle
+de pontuação de item. Cada significado tem um token próprio.
 
-| Cor | Valor estimado | Significado por contexto |
+| Token | Valor (claro) | Significado por contexto |
 |---|---|---|
-| Verde | `#1FA34D` | Checklist **ABERTO**; pontuação **BOM** |
-| Vermelho | `#DC3D3D` | Checklist **FECHADO**; imóvel em **CONCESSÃO**; pontuação **RUIM** |
-| Amarelo/creme (fundo `#FBECC0`, texto escuro) | `#FBECC0` / texto `#5C4A12` | Pontuação **REGULAR** |
-| Cinza | `#E5E7EB` fundo / texto `#6B7280` | Pontuação **NÃO SE APLICA** |
-| Azul (= `--brand-primary`) | `#1B2A6B` | Imóvel **PRÓPRIO** (badge outline) |
+| `--success` | `#00a651` | Checklist **ABERTO**; pontuação **BOM** |
+| `--destructive` | `#dc2626` | Checklist **FECHADO**; imóvel em **CONCESSÃO**; pontuação **RUIM** |
+| `--warning` / `--warning-foreground` | `#e0a800` / `#4a3300` | Pontuação **REGULAR** |
+| `--muted-foreground` | `#6b7896` | Pontuação **NÃO SE APLICA** |
+| `--validated` | `#6d28d9` | Checklist **VALIDADO/APROVADO** |
 
-Cada cor aparece em dois formatos, dependendo do componente (ver seção 6): **outline** (borda colorida, fundo transparente — usado em badges de imóvel) e **sólido** (fundo colorido cheio — usado em badges de checklist e nas faixas de pontuação).
+Cada cor aparece em dois formatos: **suave** (`bg-<token>/10` +
+`border-<token>/35` + `text-<token>`) para o estado de repouso, e **sólido**
+(`bg-<token>` + foreground invertido) para o estado selecionado/ativo. O
+mapeamento status → tom vive em `src/features/checklists/ui/status-colors.ts`.
 
 ## 4. Tipografia
 
@@ -96,8 +114,26 @@ Cada cor aparece em dois formatos, dependendo do componente (ver seção 6): **o
 - Mobile usa uma **bottom navigation** flutuante: pílula branca com sombra, 3 ícones (home/checklists/imóveis), item ativo com fundo azul-claro (`--accent-soft`) arredondado atrás do ícone.
 - O painel desktop usa **sidebar** (`src/components/ui/sidebar.tsx`), um padrão de navegação diferente por natureza (lateral, com labels, colapsável) — a bottom nav não deve ser copiada 1:1, mas o **tratamento visual do item ativo** (fundo suave arredondado atrás do ícone/label) é o elemento reaproveitável para o item ativo da sidebar.
 
-## 7. Notas e limitações
+## 7. Primitivos compartilhados
 
-- Valores de cor e medida foram extraídos visualmente de screenshots do app mobile, sujeitos a variação de exibição de tela/compressão de imagem — não são valores de design-system oficiais.
-- Recomenda-se validar os hex exatos (e converter para oklch, já que o painel usa oklch em `src/styles.css`) contra uma fonte oficial de design do app mobile, se ela existir, antes de aplicar em produção.
-- Este documento é apenas uma referência de estilo; a implementação da migração (atualização de `src/styles.css`, variantes de `badge.tsx`, novo componente de linha de ação, etc.) é um trabalho futuro, fora do escopo desta tarefa.
+Peças recorrentes do design já extraídas para reuso:
+
+| Componente | Papel |
+|---|---|
+| `components/common/stat-card.tsx` | KPI: label mono + número Archivo grande, colorido por `tone` |
+| `components/common/meta-field.tsx` | Par label mono uppercase + valor, base das telas de detalhe |
+| `components/common/section-label.tsx` | Caption mono que abre uma seção dentro de um card (com hint/ação) |
+| `components/layout/page-header.tsx` | Cabeçalho de página: eyebrow + título + ações |
+| `features/checklist-items/ui/score-radio-group.tsx` | Controle BOM/REGULAR/RUIM/N-A em tiles coloridos |
+| `components/ui/progress.tsx` | Barra de progresso com `tone` (primary/success/warning/destructive) |
+
+Antes de escrever um bloco novo com label mono + valor, ou mais um cartão de
+número, verifique se um destes já cobre o caso.
+
+## 8. Notas e limitações
+
+- As medidas de espaçamento/raio do app mobile na seção 5 continuam sendo
+  estimativas visuais de screenshots; as **cores** e a **tipografia**, não —
+  essas vêm do design `Painel SIMP.dc.html`.
+- O tema escuro é uma adaptação da paleta SIMP, não veio do design original
+  (que só define o tema claro). Vale validar contraste ao evoluí-lo.

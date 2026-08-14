@@ -54,7 +54,7 @@ export const FinishDialog = ({ row, onOpenChange, open }: any) => {
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleFinish}
-            className="bg-green-600 hover:bg-green-700"
+            className="bg-success hover:bg-success/90"
           >
             Finalizar
           </AlertDialogAction>

@@ -40,6 +40,8 @@ code {
   --success-foreground: #ffffff;
   --warning: #e0a800;
   --warning-foreground: #4a3300;
+  --validated: #6d28d9;
+  --validated-foreground: #ffffff;
   --border: #e3e8f1;
   --input: #dbe1ec;
   --ring: #17307d;
@@ -81,6 +83,8 @@ code {
   --success-foreground: #04170b;
   --warning: #eab308;
   --warning-foreground: #241a00;
+  --validated: #a78bfa;
+  --validated-foreground: #1a0f33;
   --border: rgba(255, 255, 255, 0.1);
   --input: rgba(255, 255, 255, 0.15);
   --ring: #4a63c9;
@@ -120,6 +124,8 @@ code {
   --color-success-foreground: var(--success-foreground);
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
+  --color-validated: var(--validated);
+  --color-validated-foreground: var(--validated-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);

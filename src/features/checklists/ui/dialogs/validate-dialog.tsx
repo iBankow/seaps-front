@@ -31,7 +31,7 @@ export const ValidateDialog = ({
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction
             onClick={onValidate}
-            className="bg-green-600 hover:bg-green-700"
+            className="bg-success hover:bg-success/90"
           >
             Validar
           </AlertDialogAction>

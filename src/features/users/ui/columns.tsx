@@ -25,7 +25,7 @@ export const columns: ColumnDef<User>[] = [
     meta: {
       headerClassName: "hidden md:table-cell",
       cellClassName:
-        "truncate hidden md:table-cell text-sky-400 hover:text-sky-700",
+        "truncate hidden md:table-cell text-primary hover:text-primary/80",
       size: 90,
     },
   },

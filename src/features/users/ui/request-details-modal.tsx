@@ -78,11 +78,11 @@ export function RequestDetailsModal({
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "PENDING":
-        return <Clock className="h-5 w-5 text-yellow-600" />;
+        return <Clock className="h-5 w-5 text-warning-foreground" />;
       case "APPROVED":
-        return <CheckCircle2 className="h-5 w-5 text-green-600" />;
+        return <CheckCircle2 className="h-5 w-5 text-success" />;
       case "REJECTED":
-        return <XCircle className="h-5 w-5 text-red-600" />;
+        return <XCircle className="h-5 w-5 text-destructive" />;
       default:
         return <AlertCircle className="h-5 w-5" />;
     }
@@ -198,12 +198,12 @@ export function RequestDetailsModal({
             <>
               <Separator />
               <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-red-600 uppercase tracking-wide flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-destructive uppercase tracking-wide flex items-center gap-2">
                   <XCircle className="h-4 w-4" />
                   Motivo da Rejeição
                 </h3>
-                <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-200 dark:border-red-800">
-                  <p className="text-sm text-red-900 dark:text-red-100 leading-relaxed">
+                <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-4">
+                  <p className="text-sm text-destructive leading-relaxed">
                     {request.rejection_reason}
                   </p>
                 </div>

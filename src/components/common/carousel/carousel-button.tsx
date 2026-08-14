@@ -19,7 +19,7 @@ export const CarouselButton: React.FC<PropType> = (props) => {
         type="button"
         className={cn(
           "embla-thumbs__slide__number overflow-hidden rounded-sm",
-          selected && "border-2 border-sky-400"
+          selected && "border-2 border-primary"
         )}
       >
         <img

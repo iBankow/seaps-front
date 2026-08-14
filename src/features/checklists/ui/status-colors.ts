@@ -17,7 +17,7 @@ const TONE_CLASS: Record<StatusTone, string> = {
   destructive: "bg-destructive text-destructive-foreground",
   muted: "bg-muted text-muted-foreground",
   primary: "bg-primary text-primary-foreground",
-  purple: "bg-purple-500 text-white",
+  purple: "bg-validated text-validated-foreground",
 };
 
 export function getStatusTone(status: string): StatusTone {

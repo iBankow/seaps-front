@@ -57,7 +57,9 @@ function RouteComponent() {
           <CardContent className="p-6">
             <div className="flex items-center gap-2 mb-4">
               <BackButton />
-              <h1 className="text-2xl font-bold text-red-600">Erro</h1>
+              <h1 className="font-heading text-2xl font-bold tracking-wide text-destructive uppercase">
+                Erro
+              </h1>
             </div>
             <p className="text-muted-foreground">
               Erro ao carregar o modelo. Verifique se o ID está correto.
@@ -123,9 +125,9 @@ function RouteComponent() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5 text-blue-600" />
-            Informações do Modelo
+          <CardTitle className="flex items-center gap-2 font-heading text-xs font-bold tracking-widest uppercase">
+            <FileText className="h-4 w-4 text-primary" />
+            Informações do modelo
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -193,9 +195,9 @@ function RouteComponent() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Building className="h-5 w-5 text-green-600" />
-            Itens do Checklist
+          <CardTitle className="flex items-center gap-2 font-heading text-xs font-bold tracking-widest uppercase">
+            <Building className="h-4 w-4 text-success" />
+            Itens do checklist
           </CardTitle>
           <p className="text-sm text-muted-foreground">
             Lista dos itens que serão avaliados quando um checklist for criado
@@ -288,8 +290,8 @@ function RouteComponent() {
           {model.items.length > 0 && (
             <div className="mt-4 p-4 bg-muted/50 rounded-lg">
               <div className="flex items-start gap-3">
-                <div className="bg-blue-100 p-2 rounded-full">
-                  <CheckSquare className="h-4 w-4 text-blue-600" />
+                <div className="rounded-full bg-primary/10 p-2">
+                  <CheckSquare className="h-4 w-4 text-primary" />
                 </div>
                 <div className="flex-1">
                   <h4 className="font-medium text-sm">

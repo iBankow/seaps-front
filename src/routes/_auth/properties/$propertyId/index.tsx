@@ -31,11 +31,10 @@ import {
   Plus,
   Eye,
   Edit,
-  TrendingUp,
   BarChart3,
-  FileCheck,
   Clock,
 } from "lucide-react";
+import { StatCard } from "@/components/common/stat-card";
 import { http as api } from "@/lib/http";
 import { formatPhone } from "@/lib/format";
 import { BackButton } from "@/components/layout/back-button";
@@ -334,69 +333,38 @@ function PropertyDetail() {
       </Card>
 
       {/* Statistics Dashboard */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total de Checklists
-            </CardTitle>
-            <FileCheck className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {loading ? "..." : stats?.total_checklists || 0}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Avaliações realizadas
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Em Andamento</CardTitle>
-            <Clock className="h-4 w-4 text-blue-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-blue-600">
-              {loading ? "..." : stats?.open_checklists || 0}
-            </div>
-            <p className="text-xs text-muted-foreground">Checklists abertos</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Finalizados</CardTitle>
-            <CheckSquare className="h-4 w-4 text-green-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">
-              {loading ? "..." : stats?.closed_checklists || 0}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Avaliações completas
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Progresso Médio
-            </CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {loading ? "..." : `${Math.round(stats?.avg_completion || 0)}%`}
-            </div>
-            <Progress value={stats?.avg_completion || 0} className="mt-2" />
-            <p className="text-xs text-muted-foreground mt-2">
-              Média de conclusão
-            </p>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 gap-3.5 md:grid-cols-2 lg:grid-cols-4">
+        <StatCard
+          title="Total de checklists"
+          value={loading ? undefined : stats?.total_checklists || 0}
+          hint="avaliações realizadas"
+          tone="primary"
+        />
+        <StatCard
+          title="Em andamento"
+          value={loading ? undefined : stats?.open_checklists || 0}
+          hint="checklists abertos"
+          tone="primary"
+        />
+        <StatCard
+          title="Finalizados"
+          value={loading ? undefined : stats?.closed_checklists || 0}
+          hint="avaliações completas"
+          tone="success"
+        />
+        <StatCard
+          title="Progresso médio"
+          value={
+            loading ? undefined : `${Math.round(stats?.avg_completion || 0)}%`
+          }
+          tone="primary"
+        >
+          <Progress
+            value={stats?.avg_completion || 0}
+            tone="success"
+            className="mt-1 h-1.5"
+          />
+        </StatCard>
       </div>
 
       {/* Property and Additional Information */}
@@ -404,7 +372,7 @@ function PropertyDetail() {
         {/* Property Information */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 font-heading text-xs font-bold tracking-widest uppercase">
               <Building className="h-5 w-5" />
               Informações do Imóvel
             </CardTitle>
@@ -459,7 +427,7 @@ function PropertyDetail() {
         {/* Additional Information */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 font-heading text-xs font-bold tracking-widest uppercase">
               <User className="h-5 w-5" />
               Informações Adicionais
             </CardTitle>
@@ -557,7 +525,7 @@ function PropertyDetail() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 font-heading text-xs font-bold tracking-widest uppercase">
                 <BarChart3 className="h-5 w-5" />
                 Checklists Recentes
               </CardTitle>
@@ -647,21 +615,21 @@ function PropertyDetail() {
                           value={checklist.completion_percentage}
                           className="h-2"
                         />
-                        <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <div className="w-2 h-2 bg-green-500 rounded-full" />
+                        <div className="mt-2 flex flex-wrap items-center gap-4 font-mono text-[10px] tracking-wide text-muted-foreground uppercase">
+                          <span className="flex items-center gap-1.5">
+                            <span className="size-2 rounded-full bg-success" />
                             {checklist.good_items} BOM
                           </span>
-                          <span className="flex items-center gap-1">
-                            <div className="w-2 h-2 bg-yellow-500 rounded-full" />
+                          <span className="flex items-center gap-1.5">
+                            <span className="size-2 rounded-full bg-warning" />
                             {checklist.regular_items} REGULAR
                           </span>
-                          <span className="flex items-center gap-1">
-                            <div className="w-2 h-2 bg-red-500 rounded-full" />
+                          <span className="flex items-center gap-1.5">
+                            <span className="size-2 rounded-full bg-destructive" />
                             {checklist.bad_items} RUIM
                           </span>
-                          <span className="flex items-center gap-1">
-                            <div className="w-2 h-2 bg-gray-400 rounded-full" />
+                          <span className="flex items-center gap-1.5">
+                            <span className="size-2 rounded-full bg-muted-foreground" />
                             {checklist.na_items} N/A
                           </span>
                         </div>

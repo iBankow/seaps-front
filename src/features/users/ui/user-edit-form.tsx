@@ -279,7 +279,7 @@ export function UserEditForm() {
                       </div>
                       <FormControl>
                         <Switch
-                          className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-red-500"
+                          className="data-[state=checked]:bg-success data-[state=unchecked]:bg-destructive"
                           checked={field.value}
                           onCheckedChange={field.onChange}
                         />
@@ -384,16 +384,16 @@ export function UserEditForm() {
                       <Separator className="my-4" />
 
                       {/* Administrador da Organização */}
-                      <div className="flex flex-row items-center justify-between rounded-lg border-2 border-blue-500/20 bg-blue-50/50 dark:bg-blue-950/20 p-4 shadow-sm">
+                      <div className="flex flex-row items-center justify-between rounded-lg border-2 border-primary/20 bg-primary/5 p-4 shadow-sm">
                         <div className="space-y-0.5 flex-1">
                           <div className="flex items-center gap-2">
-                            <Building2 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                            <Building2 className="h-4 w-4 text-primary" />
                             <FormLabel className="mb-0 text-base font-bold">
                               Administrador da Organização
                             </FormLabel>
                             <Badge
                               variant="secondary"
-                              className="ml-2 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                              className="ml-2 bg-primary/10 text-primary"
                             >
                               Acesso Completo
                             </Badge>
@@ -422,7 +422,7 @@ export function UserEditForm() {
                               }
                               field.onChange(newPermissions);
                             }}
-                            className="data-[state=checked]:bg-blue-600"
+                            className="data-[state=checked]:bg-primary"
                           />
                         </FormControl>
                       </div>

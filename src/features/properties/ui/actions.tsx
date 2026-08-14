@@ -68,7 +68,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
             <AlertDialogAction
               onClick={handleDeleteProperty}
               disabled={loading}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-destructive hover:bg-destructive/90"
             >
               {loading ? "Excluindo..." : "Excluir"}
             </AlertDialogAction>
@@ -107,9 +107,9 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
               <DropdownMenuItem
                 disabled={loading}
                 onClick={() => deleteDialog.show()}
-                className="text-red-600 focus:text-red-600"
+                className="text-destructive focus:text-destructive"
               >
-                <Trash2 size={16} className="text-red-600" />
+                <Trash2 size={16} className="text-destructive" />
                 Excluir
               </DropdownMenuItem>
             </PermissionGate>

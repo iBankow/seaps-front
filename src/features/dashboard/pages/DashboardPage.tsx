@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageHeader } from "@/components/layout/page-header";
 import { useDashboard } from "../api/dashboard";
-import { NumberCard } from "../ui/numbers-card";
+import { StatCard } from "@/components/common/stat-card";
 import { IRMBarComponent } from "../ui/irm-chart";
 import { ChecklistsCard } from "../ui/checklists-card";
 import { OrgComplianceCard } from "../ui/org-compliance-card";
@@ -18,25 +18,25 @@ export function DashboardPage() {
       <PageHeader eyebrow="Visão geral" title="Dashboard" />
 
       <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 xl:grid-cols-4">
-        <NumberCard
+        <StatCard
           title="Imóveis cadastrados"
-          number={data?.properties?.total}
+          value={data?.properties?.total}
           tone="primary"
         />
-        <NumberCard
+        <StatCard
           title="Imóveis vistoriados"
-          number={data?.inspected?.total}
+          value={data?.inspected?.total}
           hint="no ciclo atual"
           tone="success"
         />
-        <NumberCard
+        <StatCard
           title="Checklists realizados"
-          number={data?.checklists?.total}
+          value={data?.checklists?.total}
           tone="primary"
         />
-        <NumberCard
+        <StatCard
           title="Itens críticos"
-          number={itensCriticos}
+          value={itensCriticos}
           hint="classificados RUIM"
           tone="destructive"
         />

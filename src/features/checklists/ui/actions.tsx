@@ -212,9 +212,9 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
             <DropdownMenuItem
               disabled={loading}
               onClick={() => deleteDialog.show()}
-              className="text-red-600 focus:text-red-600"
+              className="text-destructive focus:text-destructive"
             >
-              <Trash2 size={16} className="text-red-600" />
+              <Trash2 size={16} className="text-destructive" />
               Excluir
             </DropdownMenuItem>
           </DropdownMenuGroup>

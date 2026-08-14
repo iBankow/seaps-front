@@ -100,7 +100,7 @@ export function RequestActionModal({
       <AlertDialogContent className="min-w-2xl">
         <AlertDialogHeader>
           <AlertDialogTitle
-            className={`flex items-center gap-2 ${isReject ? "text-red-600" : "text-green-600"}`}
+            className={`flex items-center gap-2 ${isReject ? "text-destructive" : "text-success"}`}
           >
             {isReject ? (
               <>
@@ -141,11 +141,11 @@ export function RequestActionModal({
                       setReason(e.target.value);
                       setError("");
                     }}
-                    className={`min-h-32 ${error ? "border-red-500" : ""}`}
+                    className={`min-h-32 ${error ? "border-destructive" : ""}`}
                     maxLength={500}
                   />
                   <div className="flex justify-between items-center">
-                    {error && <p className="text-xs text-red-600">{error}</p>}
+                    {error && <p className="text-xs text-destructive">{error}</p>}
                     <p
                       className={`text-xs text-muted-foreground ${error ? "ml-auto" : ""}`}
                     >
@@ -153,8 +153,8 @@ export function RequestActionModal({
                     </p>
                   </div>
                 </div>
-                <div className="bg-amber-50 dark:bg-amber-900/20 p-3 rounded-md border border-amber-200 dark:border-amber-800">
-                  <p className="text-xs text-amber-800 dark:text-amber-200">
+                <div className="rounded-md border border-warning/30 bg-warning/15 p-3">
+                  <p className="text-xs text-warning-foreground">
                     ⚠️ Esta ação não pode ser desfeita. O usuário será
                     notificado sobre a rejeição.
                   </p>
@@ -163,8 +163,8 @@ export function RequestActionModal({
             )}
 
             {isApprove && (
-              <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-md border border-green-200 dark:border-green-800">
-                <p className="text-lg mb-6 text-green-800 dark:text-green-200">
+              <div className="rounded-md border border-success/25 bg-success/10 p-3">
+                <p className="text-lg mb-6 text-success">
                   ✓ O usuário terá acesso ao sistema após a aprovação.
                 </p>
                 <Form {...form}>
@@ -219,7 +219,7 @@ export function RequestActionModal({
                             <Separator className="my-4" />
 
                             {/* Administrador da Organização */}
-                            <div className="flex flex-row items-center justify-between rounded-lg border-2 border-blue-500/20 bg-blue-50/50 dark:bg-blue-950/20 p-4 shadow-sm">
+                            <div className="flex flex-row items-center justify-between rounded-lg border-2 border-primary/20 bg-primary/5 p-4 shadow-sm">
                               <div className="space-y-0.5 flex-1">
                                 <div className="flex items-center gap-2">
                                   <FormLabel className="mb-0 text-base font-bold">
@@ -227,7 +227,7 @@ export function RequestActionModal({
                                   </FormLabel>
                                   <Badge
                                     variant="secondary"
-                                    className="ml-2 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                                    className="ml-2 bg-primary/10 text-primary"
                                   >
                                     Acesso Completo
                                   </Badge>
@@ -258,7 +258,7 @@ export function RequestActionModal({
                                     }
                                     field.onChange(newPermissions);
                                   }}
-                                  className="data-[state=checked]:bg-blue-600"
+                                  className="data-[state=checked]:bg-primary"
                                 />
                               </FormControl>
                             </div>
