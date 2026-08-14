@@ -1,11 +1,16 @@
 import { useEffect, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { usePageHeaderContext } from "./page-header-context";
+import {
+  usePageHeaderContext,
+  type HeaderTone,
+} from "./page-header-context";
 
 interface PageHeaderProps {
   /** Small mono uppercase label above the title, e.g. "Operação". */
   eyebrow?: string;
   title: string;
+  /** Colour of the header's bottom rule. Defaults to the brand colour. */
+  tone?: HeaderTone;
   /** Right-aligned controls — search input, "+ Novo" button, etc. */
   children?: ReactNode;
 }
@@ -16,13 +21,18 @@ interface PageHeaderProps {
  * actions are portalled into that header's action slot. Pages that omit it
  * fall back to the route breadcrumbs for the title.
  */
-export function PageHeader({ eyebrow, title, children }: PageHeaderProps) {
+export function PageHeader({
+  eyebrow,
+  title,
+  tone,
+  children,
+}: PageHeaderProps) {
   const { setHeading, actionsSlot } = usePageHeaderContext();
 
   useEffect(() => {
-    setHeading({ eyebrow, title });
+    setHeading({ eyebrow, title, tone });
     return () => setHeading(null);
-  }, [eyebrow, title, setHeading]);
+  }, [eyebrow, title, tone, setHeading]);
 
   if (!children || !actionsSlot) return null;
 

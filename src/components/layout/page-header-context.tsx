@@ -6,10 +6,22 @@ import {
   type ReactNode,
 } from "react";
 
+/**
+ * Colour of the header's 3px bottom rule. The design paints it with the status
+ * of the record being viewed, so a checklist ABERTO gets a green rule.
+ */
+export type HeaderTone =
+  | "brand"
+  | "success"
+  | "destructive"
+  | "validated"
+  | "muted";
+
 export interface PageHeading {
   /** Small mono uppercase label above the title, e.g. "Operação". */
   eyebrow?: string;
   title: string;
+  tone?: HeaderTone;
 }
 
 interface PageHeaderContextValue {

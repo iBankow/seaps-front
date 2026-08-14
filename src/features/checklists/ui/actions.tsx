@@ -34,6 +34,7 @@ import { Link, useRouter } from "@tanstack/react-router";
 
 import type { Column } from "./columns";
 import { ValidateDialog } from "./dialogs/validate-dialog";
+import { downloadChecklistReport } from "../lib/download-report";
 
 export const Actions = ({ row }: { row: Row<Column> }) => {
   const router = useRouter();
@@ -44,30 +45,7 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
 
   const [loading, setLoading] = useState(false);
 
-  const handleGetReport = () => {
-    toast.promise(
-      api.get("/reports/" + row.original.id, {
-        responseType: "blob",
-        skipErrorToast: true,
-      }),
-      {
-        loading: "Caregando Relatório...",
-        success: (data: any) => {
-          const blob = new Blob([data.data], { type: "img/pdf" });
-          const _url = window.URL.createObjectURL(blob);
-          if (_url) {
-            const a = document.createElement("a");
-            a.href = _url;
-            a.download = `${row.original.sid.replace("/", "_")}.pdf`;
-            a.click();
-            window.URL.revokeObjectURL(_url);
-          }
-          return `Relatório gerado com sucesso`;
-        },
-        error: "Erro ao gerar relatório",
-      },
-    );
-  };
+  const handleGetReport = () => downloadChecklistReport(row.original);
 
   const handleReopenChecklist = () => {
     setLoading(true);
