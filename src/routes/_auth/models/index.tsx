@@ -6,6 +6,7 @@ import { DataTableSkeleton } from "@/components/common/skeletons/data-table";
 
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { modelsColumns, useModelsList } from "@/features/models";
+import { HeaderActions } from "@/contexts/header-actions-context";
 import z from "zod";
 
 const SearchSchema = z.object({
@@ -25,20 +26,14 @@ function RouteComponent() {
 
   return (
     <div className="flex flex-col gap-y-4 flex-1 p-4">
-      <div className="flex justify-between">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Modelos</h2>
-          <p className="mt-1">Gerencie seus modelos aqui.</p>
-        </div>
-        <div className="self-end">
-          <Button asChild>
-            <Link to="/models/create">
-              <Plus />
-              Criar Modelo
-            </Link>
-          </Button>
-        </div>
-      </div>
+      <HeaderActions>
+        <Button asChild>
+          <Link to="/models/create">
+            <Plus />
+            Criar Modelo
+          </Link>
+        </Button>
+      </HeaderActions>
       {isLoading ? (
         <DataTableSkeleton columns={modelsColumns} />
       ) : (

@@ -33,10 +33,6 @@ export function RouteComponent() {
 
   return (
     <div className="flex flex-col gap-y-4 flex-1 p-4">
-      <div>
-        <h2 className="text-2xl font-bold tracking-tight">Notificações</h2>
-        <p className="mt-1">Acompanhe as notificações dos checklists.</p>
-      </div>
       <ChecklistNotificationsFilterForm />
       <div className="relative">
         {isLoading && !isFetching && (

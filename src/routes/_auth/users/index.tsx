@@ -38,15 +38,6 @@ export function RouteComponent() {
 
   return (
     <div className="flex flex-col gap-y-6 p-4">
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h2 className="text-2xl font-bold tracking-tight">Usuários</h2>
-          <p className="mt-1">
-            Gerencie usuários do sistema e solicitações de ativação.
-          </p>
-        </div>
-      </div>
-
       <Tabs
         value={search.tab}
         onValueChange={handleTabChange}

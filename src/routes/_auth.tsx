@@ -1,10 +1,12 @@
-﻿import { AppSidebar } from "@/components/layout/sidebar/app-sidebar";
+﻿import { useState } from "react";
+import { AppSidebar } from "@/components/layout/sidebar/app-sidebar";
 import { SiteHeader } from "@/components/layout/site-header";
 import {
   SIDEBAR_COOKIE_NAME,
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar";
+import { HeaderActionsSlotContext } from "@/contexts/header-actions-context";
 import { createFileRoute } from "@tanstack/react-router";
 import { Outlet, redirect } from "@tanstack/react-router";
 
@@ -37,6 +39,8 @@ function AuthLayout() {
     .find((row) => row.startsWith(`${SIDEBAR_COOKIE_NAME}=`))
     ?.split("=")[1];
 
+  const [actionsSlot, setActionsSlot] = useState<HTMLDivElement | null>(null);
+
   return (
     <SidebarProvider
       style={
@@ -47,12 +51,14 @@ function AuthLayout() {
       }
       defaultOpen={defaultOpen === "true"}
     >
-      <AppSidebar variant="inset" />
+      <AppSidebar variant="sidebar" />
       <SidebarInset>
-        <SiteHeader />
+        <SiteHeader actionsRef={setActionsSlot} />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2 p-2">
-            <Outlet />
+            <HeaderActionsSlotContext.Provider value={actionsSlot}>
+              <Outlet />
+            </HeaderActionsSlotContext.Provider>
           </div>
         </div>
       </SidebarInset>

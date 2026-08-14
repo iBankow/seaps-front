@@ -1,15 +1,4 @@
 import { isMatch, Link, useMatches } from "@tanstack/react-router";
-import {
-  Breadcrumb,
-  BreadcrumbEllipsis,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import React from "react";
-import { cn } from "@/lib/utils";
 
 export const Breadcrumbs = () => {
   const matches = useMatches();
@@ -17,79 +6,38 @@ export const Breadcrumbs = () => {
     isMatch(match, "loaderData.crumb"),
   );
 
-  const items = matchesWithCrumbs.map(({ pathname, loaderData }) => {
-    return {
-      href: pathname,
-      label: loaderData?.crumb,
-    };
-  });
+  const items = matchesWithCrumbs.map(({ pathname, loaderData }) => ({
+    href: pathname,
+    label: loaderData?.crumb as string,
+  }));
 
-  if (items.length > 3) {
-    return (
-      <Breadcrumb className="overflow-hidden overflow-ellipsis">
-        <BreadcrumbList className="flex-nowrap">
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link
-                to={items[0].href}
-                replace
-                preload={false}
-                className={cn("breadcrumb-link")}
-              >
-                {items[0].label}
-              </Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator className="self-center" />
-          <BreadcrumbEllipsis />
-          <BreadcrumbSeparator className="self-center" />
-          <BreadcrumbItem>
-            <BreadcrumbPage className="line-clamp-1">
-              {items[items.length - 1].label}
-            </BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-    );
-  }
+  if (items.length === 0) return null;
+
+  const parents = items.slice(0, -1);
+  const current = items[items.length - 1];
 
   return (
-    <Breadcrumb>
-      <BreadcrumbList className="flex-nowrap">
-        {items.map((item, index) => (
-          <React.Fragment key={index}>
-            {index === items.length - 1 ? (
-              <BreadcrumbItem>
-                <BreadcrumbPage key={index} className="line-clamp-1">
-                  {item.label}
-                </BreadcrumbPage>
-              </BreadcrumbItem>
-            ) : (
-              <BreadcrumbItem key={index}>
-                <BreadcrumbLink asChild>
-                  <Link
-                    to={item.href}
-                    replace
-                    preload={false}
-                    className={cn(
-                      "breadcrumb-link",
-                      index === items.length - 1 && "font-bold",
-                    )}
-                  >
-                    {item.label}
-                  </Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            )}
-            {index < items.length - 1 && (
-              <BreadcrumbSeparator
-                key={"separator-" + index}
-                className="self-center"
-              />
-            )}
-          </React.Fragment>
-        ))}
-      </BreadcrumbList>
-    </Breadcrumb>
+    <div className="min-w-0 leading-tight">
+      {parents.length > 0 && (
+        <div className="font-mono flex flex-nowrap items-center gap-1 truncate text-[10px] tracking-widest text-muted-foreground uppercase">
+          {parents.map((item, index) => (
+            <span key={item.href} className="flex items-center gap-1">
+              <Link
+                to={item.href}
+                replace
+                preload={false}
+                className="transition-colors hover:text-foreground"
+              >
+                {item.label}
+              </Link>
+              {index < parents.length - 1 && <span aria-hidden>/</span>}
+            </span>
+          ))}
+        </div>
+      )}
+      <div className="font-heading truncate text-sm font-bold tracking-wide text-foreground uppercase">
+        {current.label}
+      </div>
+    </div>
   );
 };
