@@ -56,11 +56,26 @@ export const useUpdateChecklistItem = (id: string) => {
   return useMutation({
     mutationFn: (payload: Partial<Pick<ChecklistItem, "observation" | "score">>) =>
       checklistItemsApi.update(id, payload),
-    onSuccess: (data) => {
-      queryClient.setQueryData(checklistItemsKeys.details(id), data);
-      queryClient.invalidateQueries({
-        queryKey: checklistItemsKeys.list(data.checklist_id),
-      });
+    // Fixa o item desta chamada. Os callbacks do TanStack Query rodam com as
+    // options do render mais recente, então trocar de item antes do PUT
+    // responder faria a resposta do item antigo cair no cache do item novo.
+    onMutate: () => ({ targetId: id }),
+    onSuccess: (data, _payload, context) => {
+      const targetId = context?.targetId ?? data.id;
+      const key = checklistItemsKeys.details(targetId);
+
+      // Merge em vez de replace: a resposta do PUT pode não trazer as relações
+      // (item, images), e substituir apagaria o nome do item na tela.
+      const previous = queryClient.getQueryData<ChecklistItem>(key);
+      const merged = previous ? { ...previous, ...data } : data;
+
+      queryClient.setQueryData(key, merged);
+
+      if (merged.checklist_id) {
+        queryClient.invalidateQueries({
+          queryKey: checklistItemsKeys.list(merged.checklist_id),
+        });
+      }
     },
   });
 };

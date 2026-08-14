@@ -73,7 +73,11 @@ export function ScoreRadioGroup({
         className,
       )}
       disabled={disabled}
-      value={value === null || value === undefined ? undefined : String(value)}
+      // String vazia, nunca `undefined`: `undefined` faz o Radix tratar o grupo
+      // como não-controlado e guardar a escolha internamente, então ao navegar
+      // para um item sem pontuação ele reexibia a pontuação do item anterior.
+      // Nenhuma opção usa "", então o grupo continua controlado e sem seleção.
+      value={value === null || value === undefined ? "" : String(value)}
       onValueChange={onValueChange}
     >
       {OPTIONS.map((option) => (
