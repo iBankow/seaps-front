@@ -1,21 +1,49 @@
-import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ModeToggle } from "./mode-toggle";
-import { Breadcrumbs } from "./breadcrumbs";
+import { Breadcrumbs, useCrumbs } from "./breadcrumbs";
+import { usePageHeaderContext } from "./page-header-context";
 import { NotificationBell } from "@/features/notifications";
 
+/**
+ * The application's only header — the 66px bar from the "Painel SIMP" design:
+ * eyebrow + page title on the left, page actions and utilities on the right,
+ * over a 3px brand rule.
+ *
+ * Title and actions come from whichever page rendered a <PageHeader>; pages
+ * that don't render one fall back to the route breadcrumbs.
+ */
 export function SiteHeader() {
+  const { heading, setActionsSlot } = usePageHeaderContext();
+  const crumbs = useCrumbs();
+
+  const title = heading?.title ?? crumbs.at(-1)?.label ?? "";
+
   return (
-    <header className="sm:static rounded-t-xl z-10 bg-card sticky top-0 flex h-12 shrink-0 items-center gap-2 border-b">
-      <div className="flex w-full items-center gap-2 px-4 lg:gap-3 lg:px-6">
-        <SidebarTrigger className="-ml-1" />
-        <Separator orientation="vertical" className="mx-1 h-4 self-center!" />
-        <Breadcrumbs />
-        <div className="ml-auto flex items-center gap-2">
-          <NotificationBell />
-          <div className="hidden sm:flex">
-            <ModeToggle />
+    <header className="sticky top-0 z-10 flex h-[66px] shrink-0 items-center gap-3 border-b-[3px] border-b-primary bg-card px-4 lg:gap-5 lg:px-[30px]">
+      <SidebarTrigger className="-ml-1 shrink-0" />
+
+      <div className="min-w-0">
+        {heading?.eyebrow ? (
+          <div className="font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
+            {heading.eyebrow}
           </div>
+        ) : (
+          <Breadcrumbs omitLast />
+        )}
+        <h1 className="font-heading truncate text-[17px] leading-tight font-bold tracking-[0.03em] uppercase">
+          {title}
+        </h1>
+      </div>
+
+      <div
+        ref={setActionsSlot}
+        className="ml-auto flex min-w-0 flex-wrap items-center justify-end gap-3"
+      />
+
+      <div className="flex shrink-0 items-center gap-2">
+        <NotificationBell />
+        <div className="hidden sm:flex">
+          <ModeToggle />
         </div>
       </div>
     </header>

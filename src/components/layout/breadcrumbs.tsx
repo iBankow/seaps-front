@@ -1,20 +1,33 @@
 import { isMatch, Link, useMatches } from "@tanstack/react-router";
 
-/**
- * Slim navigational trail in the persistent top bar. Pages that render a
- * <PageHeader> own the big title themselves — this stays small/muted so the
- * two never compete for the same visual weight.
- */
-export const Breadcrumbs = () => {
+interface Crumb {
+  href: string;
+  label: string;
+}
+
+/** Route trail declared by each route's `loader` via `crumb`. */
+export function useCrumbs(): Crumb[] {
   const matches = useMatches();
   const matchesWithCrumbs = matches.filter((match) =>
     isMatch(match, "loaderData.crumb"),
   );
 
-  const items = matchesWithCrumbs.map(({ pathname, loaderData }) => ({
+  return matchesWithCrumbs.map(({ pathname, loaderData }) => ({
     href: pathname,
     label: loaderData?.crumb as string,
   }));
+}
+
+/**
+ * Navigational trail rendered as the eyebrow line of the site header, for
+ * pages that don't declare an explicit `eyebrow` through <PageHeader>.
+ *
+ * `omitLast` drops the deepest crumb, which the header already shows as the
+ * page title — without it the same label would appear twice.
+ */
+export const Breadcrumbs = ({ omitLast = false }: { omitLast?: boolean }) => {
+  const crumbs = useCrumbs();
+  const items = omitLast ? crumbs.slice(0, -1) : crumbs;
 
   if (items.length === 0) return null;
 

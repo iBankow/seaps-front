@@ -18,7 +18,7 @@ export function PropertiesList({ params }: { params: any }) {
   const properties = data?.data || [];
 
   return (
-    <div className="flex flex-col gap-y-4 flex-1 p-4">
+    <div className="flex flex-1 flex-col gap-3.5">
       <PageHeader eyebrow="Cadastros" title="Imóveis">
         <PermissionGate permissions="properties:create">
           <Button asChild>

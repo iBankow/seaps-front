@@ -25,7 +25,7 @@ function RouteComponent() {
   const { data, isLoading } = useModelsList(search);
 
   return (
-    <div className="flex flex-col gap-y-4 flex-1 p-4">
+    <div className="flex flex-1 flex-col gap-3.5">
       <PageHeader eyebrow="Configuração" title="Modelos de checklist">
         <Button asChild>
           <Link to="/models/create">

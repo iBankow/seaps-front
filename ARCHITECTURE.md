@@ -57,6 +57,35 @@ src/
 - Toda chamada HTTP passa pela instância `http` de `lib/http.ts`.
 - `@/` é o **único** alias de import (`@/* → ./src/*`).
 
+## Header
+
+A aplicação tem **um único** header: `components/layout/site-header.tsx`, a
+barra de 66px do design (eyebrow + título à esquerda, ações à direita, sobre
+uma régua de 3px na cor da marca). Nenhuma página deve renderizar a própria
+barra de título — foi isso que gerou o problema dos dois headers empilhados.
+
+Para definir título e ações, a página declara um `<PageHeader>`:
+
+```tsx
+<PageHeader eyebrow="Operação" title="Checklists">
+  <PermissionGate permissions="checklists:create">
+    <Button asChild><Link to="/checklists/create">Criar Checklist</Link></Button>
+  </PermissionGate>
+</PageHeader>
+```
+
+`PageHeader` **não renderiza nada no lugar onde é escrito**: o título vai para
+o `SiteHeader` via `PageHeaderProvider` (contexto) e os filhos são
+*portalados* para o slot de ações do header. Por isso ele pode ficar no topo do
+JSX da página, onde se lê naturalmente.
+
+Páginas que não declaram `<PageHeader>` (rotas de detalhe) caem no fallback: o
+título vira o último `crumb` da rota e o eyebrow vira a trilha de breadcrumbs.
+Ou seja, todo `loader` que devolve `crumb` já alimenta o header de graça.
+
+O espaçamento do conteúdo (`26px 30px 46px`) é do shell, em `routes/_auth.tsx`.
+Páginas não devem adicionar o próprio padding externo.
+
 ## Erros de HTTP
 
 `lib/http.ts` tem um interceptor que exibe `toast.error` em **toda** falha,

@@ -1,5 +1,6 @@
 ﻿import { AppSidebar } from "@/components/layout/sidebar/app-sidebar";
 import { SiteHeader } from "@/components/layout/site-header";
+import { PageHeaderProvider } from "@/components/layout/page-header-context";
 import {
   SIDEBAR_COOKIE_NAME,
   SidebarInset,
@@ -42,20 +43,20 @@ function AuthLayout() {
       style={
         {
           "--sidebar-width": "calc(var(--spacing) * 72)",
-          "--header-height": "calc(var(--spacing) * 12)",
+          "--header-height": "66px",
         } as React.CSSProperties
       }
       defaultOpen={defaultOpen === "true"}
     >
-      <AppSidebar variant="sidebar" />
-      <SidebarInset>
-        <SiteHeader />
-        <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2 p-2">
+      <PageHeaderProvider>
+        <AppSidebar variant="sidebar" />
+        <SidebarInset>
+          <SiteHeader />
+          <div className="@container/main flex flex-1 flex-col p-[26px_30px_46px]">
             <Outlet />
           </div>
-        </div>
-      </SidebarInset>
+        </SidebarInset>
+      </PageHeaderProvider>
     </SidebarProvider>
   );
 }
