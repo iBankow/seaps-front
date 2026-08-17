@@ -44,7 +44,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 />
                 <div className="grid flex-1 text-left leading-tight">
                   <span className="font-heading text-2xl leading-none font-extrabold tracking-wide text-white">
-                    SEAPS
+                    SIMP
                   </span>
                   <span className="font-mono text-[10px] tracking-widest text-sidebar-foreground/55 uppercase">
                     Sistema de Manutenção Predial

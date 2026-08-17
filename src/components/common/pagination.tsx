@@ -97,8 +97,11 @@ export function Pagination({ className, meta }: IPaginationComponent) {
               replace={true}
               to="."
               search={getParams(
-                meta?.current_page ? meta?.current_page - 1 : 0
+                meta?.current_page ? meta?.current_page - 1 : 0,
               )}
+              className={
+                meta?.prev_page === null ? "pointer-events-none opacity-50" : ""
+              }
             >
               <ChevronLeft data-icon="inline-start" />
               Anterior
@@ -164,8 +167,11 @@ export function Pagination({ className, meta }: IPaginationComponent) {
               replace={true}
               to="."
               search={getParams(
-                meta?.current_page ? meta?.current_page + 1 : 0
+                meta?.current_page ? meta?.current_page + 1 : 0,
               )}
+              className={
+                meta?.next_page === null ? "pointer-events-none opacity-50" : ""
+              }
             >
               Proximo
               <ChevronRight data-icon="inline-end" />
