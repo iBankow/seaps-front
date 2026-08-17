@@ -1,10 +1,15 @@
 import type { PaginatedParams } from "@/types";
 
+export type NotificationLevel = "INFO" | "SUCCESS" | "WARNING" | "ERROR";
+
+export type NotificationCategory = "SYSTEM" | "CHECKLIST" | "USER_REQUEST";
+
 export interface Notification {
   id: string;
   title: string;
   message: string;
-  type: string;
+  level: NotificationLevel;
+  category: NotificationCategory;
   action_url: string | null;
   metadata: Record<string, unknown> | null;
   is_read: boolean;

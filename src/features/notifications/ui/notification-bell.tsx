@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bell } from "lucide-react";
+import { Bell, CheckCircle2, Info, TriangleAlert, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -17,8 +17,19 @@ import {
   useNotificationsList,
   useUnreadNotificationsCount,
 } from "../api/notifications";
-import type { Notification } from "../types";
+import type { Notification, NotificationLevel } from "../types";
 import { formatDateTime } from "@/lib/format";
+
+/** Ícone e cor por nível, seguindo o mesmo padrão usado nos badges de checklist. */
+const LEVEL_CONFIG: Record<
+  NotificationLevel,
+  { icon: typeof Info; className: string }
+> = {
+  INFO: { icon: Info, className: "text-muted-foreground" },
+  SUCCESS: { icon: CheckCircle2, className: "text-success" },
+  WARNING: { icon: TriangleAlert, className: "text-warning" },
+  ERROR: { icon: XCircle, className: "text-destructive" },
+};
 
 export function NotificationBell() {
   const [open, setOpen] = useState(false);
@@ -87,31 +98,37 @@ export function NotificationBell() {
               Nenhuma notificação
             </p>
           )}
-          {notifications.map((notification) => (
-            <DropdownMenuItem
-              key={notification.id}
-              className={cn(
-                "flex flex-col items-start gap-0.5 whitespace-normal",
-                !notification.is_read && "bg-muted/50",
-              )}
-              onClick={() => handleSelect(notification)}
-            >
-              <div className="flex w-full items-center gap-2">
-                {!notification.is_read && (
-                  <span className="size-1.5 shrink-0 rounded-full bg-primary" />
+          {notifications.map((notification) => {
+            const { icon: LevelIcon, className: levelClassName } =
+              LEVEL_CONFIG[notification.level];
+
+            return (
+              <DropdownMenuItem
+                key={notification.id}
+                className={cn(
+                  "flex flex-col items-start gap-0.5 whitespace-normal",
+                  !notification.is_read && "bg-muted/50",
                 )}
-                <span className="truncate text-sm font-medium">
-                  {notification.title}
+                onClick={() => handleSelect(notification)}
+              >
+                <div className="flex w-full items-center gap-2">
+                  <LevelIcon className={cn("size-3.5 shrink-0", levelClassName)} />
+                  <span className="truncate text-sm font-medium">
+                    {notification.title}
+                  </span>
+                  {!notification.is_read && (
+                    <span className="ml-auto size-1.5 shrink-0 rounded-full bg-primary" />
+                  )}
+                </div>
+                <span className="line-clamp-2 text-xs text-muted-foreground">
+                  {notification.message}
                 </span>
-              </div>
-              <span className="line-clamp-2 text-xs text-muted-foreground">
-                {notification.message}
-              </span>
-              <span className="text-[11px] text-muted-foreground">
-                {formatDateTime(notification.created_at)}
-              </span>
-            </DropdownMenuItem>
-          ))}
+                <span className="text-[11px] text-muted-foreground">
+                  {formatDateTime(notification.created_at)}
+                </span>
+              </DropdownMenuItem>
+            );
+          })}
         </ScrollArea>
       </DropdownMenuContent>
     </DropdownMenu>
