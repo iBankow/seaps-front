@@ -93,19 +93,20 @@ export const SelectPropertyForm = ({
   };
 
   return (
-    <Card className="overflow-clip">
-      <CardHeader className="space-y-2">
-        <CardTitle className="text-xl font-semibold">
+    <Card className="gap-4 overflow-clip p-[20px_22px]">
+      <CardHeader className="p-0">
+        <CardTitle className="font-heading text-xs font-bold tracking-widest uppercase">
           Selecione a propriedade
         </CardTitle>
-        <CardDescription className="text-muted-foreground text-sm">
+        <CardDescription className="text-[11px] text-muted-foreground">
           Escolha a propriedade para a qual deseja criar o checklist.
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 p-0">
         <div className="flex gap-2">
           <Input
-            placeholder="Buscar propriedade"
+            className="w-full uppercase placeholder:normal-case"
+            placeholder="Pesquisar pelo imóvel..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -115,13 +116,16 @@ export const SelectPropertyForm = ({
           {filter.city && (
             <Button
               variant="outline"
+              type="button"
               size="sm"
-              className="bg-primary/20! border-primary!"
+              className="rounded-full border-primary/35 bg-primary/10 text-primary hover:bg-primary/15 hover:text-primary"
               onClick={() => updateFilter({ city: undefined })}
             >
               <div className="flex items-center gap-1">
                 <X className="text-destructive" />
-                <span className="text-primary-foreground">{filter.city}</span>
+                <span className="font-heading text-[11px] font-semibold tracking-[0.09em] uppercase">
+                  {filter.city}
+                </span>
               </div>
             </Button>
           )}

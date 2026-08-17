@@ -38,9 +38,9 @@ export const SelectUserForm = ({
   const users = data?.data || [];
 
   return (
-    <div className="w-full items-center flex flex-col">
-      <Card className="grid grid-cols-1 gap-4 bg-card max-w-3xl w-full ">
-        <CardContent>
+    <div className="flex w-full flex-col items-center">
+      <Card className="w-full max-w-3xl gap-4 p-[20px_22px]">
+        <CardContent className="p-0">
           <FieldGroup>
             <Controller
               name="user_id"

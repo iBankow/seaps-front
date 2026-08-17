@@ -2,6 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { Check, ChevronLeft, ChevronRight, Save } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { PageHeader } from "@/components/layout/page-header";
+import { SectionLabel } from "@/components/common/section-label";
+import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DetailsForm } from "./details-form";
@@ -193,126 +198,130 @@ export function CreateOrderWizard() {
     }
   };
 
+  const progress = ((currentStep - 1) / (steps.length - 1)) * 100;
+
   return (
-    <div className="flex flex-1 flex-col">
-      <div className="@container/main flex flex-1 flex-col gap-2">
-        <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-          <div className="px-4 lg:px-0">
-            {/* Header */}
-            <div className="mb-6 flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold tracking-tight">
-                  Novo Checklist
-                </h1>
-                <p className="text-muted-foreground">
-                  Etapa {currentStep} de {steps.length}:{" "}
-                  {steps[currentStep - 1].name}
-                </p>
-              </div>
-              <Button variant="outline">
-                <Link to="/checklists" className="flex items-center gap-2">
-                  <ChevronLeft className="h-4 w-4" />
-                  Cancelar
-                </Link>
-              </Button>
-            </div>
+    <div className="flex flex-1 flex-col gap-3.5">
+      <PageHeader
+        eyebrow={`Checklists · Etapa ${currentStep}/${steps.length}`}
+        title="Novo Checklist"
+      >
+        <Button variant="outline" asChild>
+          <Link to="/checklists">
+            <ChevronLeft />
+            Cancelar
+          </Link>
+        </Button>
+      </PageHeader>
 
-            {/* Progress Steps */}
-            <div className="mb-8">
-              <div
-                className="flex pb-4 items-center justify-between gap-4 overflow-auto md:gap-4 w-full"
-                ref={ref}
-                style={{
-                  scrollbarWidth: "none",
-                }}
+      <Link
+        to="/checklists"
+        className="font-heading inline-block text-[10px] font-semibold tracking-[0.11em] text-primary uppercase hover:text-primary/80"
+      >
+        ← voltar para checklists
+      </Link>
+
+      {/* Trilha de etapas */}
+      <Card className="gap-4 p-[20px_22px]">
+        <SectionLabel hint={`${currentStep}/${steps.length}`}>
+          {steps[currentStep - 1].name}
+        </SectionLabel>
+
+        <div
+          className="flex w-full items-stretch gap-2 overflow-x-auto"
+          ref={ref}
+          style={{ scrollbarWidth: "none" }}
+        >
+          {steps.map((step) => {
+            const isDone = currentStep > step.id;
+            const isCurrent = currentStep === step.id;
+
+            return (
+              <button
+                key={step.id}
+                type="button"
+                disabled={currentStep < step.id}
+                onClick={() => setCurrentStep(step.id)}
+                className={cn(
+                  "flex min-w-fit flex-1 cursor-pointer items-center gap-3 rounded-xl px-2.5 py-2 text-start transition-colors",
+                  isCurrent ? "bg-secondary" : "hover:bg-secondary/60",
+                  "disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-transparent",
+                )}
               >
-                {steps.map((step) => (
-                  <button
-                    className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 w-full flex-1"
-                    key={step.id}
-                    disabled={currentStep < step.id}
-                    onClick={() => {
-                      setCurrentStep(step.id);
-                    }}
+                <span
+                  className={cn(
+                    "font-mono flex h-9 w-9 min-w-9 items-center justify-center rounded-full border text-[12px]",
+                    isDone && "border-primary bg-primary text-primary-foreground",
+                    isCurrent && "border-primary text-primary",
+                    !isDone && !isCurrent && "border-input text-muted-foreground",
+                  )}
+                >
+                  {isDone ? <Check className="h-4 w-4" /> : step.id}
+                </span>
+
+                <span className="min-w-0 text-nowrap">
+                  <span
+                    className={cn(
+                      "font-heading block text-[11px] font-semibold tracking-[0.09em] uppercase",
+                      isCurrent || isDone ? "text-primary" : "",
+                    )}
                   >
-                    <div
-                      key={step.id}
-                      className="flex justify-start items-center"
-                    >
-                      <div
-                        className={`flex h-10 w-10 min-w-10 items-center justify-center rounded-full border-2 ${
-                          currentStep > step.id
-                            ? "bg-primary border-primary text-primary-foreground"
-                            : currentStep === step.id
-                              ? "border-primary text-primary"
-                              : "border-muted-foreground text-muted-foreground"
-                        }`}
-                      >
-                        {currentStep > step.id ? (
-                          <Check className="h-5 w-5" />
-                        ) : (
-                          <span>{step.id}</span>
-                        )}
-                      </div>
-                      <div className="ml-3 text-start text-nowrap">
-                        <div className="text-sm font-medium">{step.name}</div>
-                        <div className="text-muted-foreground text-xs">
-                          {step.description}
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-
-              {/* Progress Bar */}
-              <div className="bg-muted h-2 w-full rounded-full">
-                <div
-                  className="h-2 rounded-full bg-linear-to-r from-primary to-success transition-all duration-500 ease-in-out"
-                  style={{
-                    width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* Step Content */}
-            <form
-              id="checklist-form"
-              className="mb-8"
-              ref={formRef}
-              onSubmit={form.handleSubmit(onSubmit)}
-            >
-              {renderStepContent()}
-              {currentStep === steps.length && (
-                <div className="mt-6 flex justify-center">
-                  <Button type="submit" className="w-full max-w-3xl" size="lg">
-                    Criar Checklist <Save />
-                  </Button>
-                </div>
-              )}
-            </form>
-
-            {/* Navigation */}
-            <div className="flex justify-between">
-              <Button
-                variant="outline"
-                onClick={prevStep}
-                disabled={currentStep === 1}
-              >
-                <ChevronLeft className="mr-2 h-4 w-4" />
-                Anterior
-              </Button>
-
-              {currentStep < steps.length && (
-                <Button onClick={nextStep} disabled={!canProceed()}>
-                  Próximo
-                  <ChevronRight className="ml-2 h-4 w-4" />
-                </Button>
-              )}
-            </div>
-          </div>
+                    {step.name}
+                  </span>
+                  <span className="block text-[11px] text-muted-foreground">
+                    {step.description}
+                  </span>
+                </span>
+              </button>
+            );
+          })}
         </div>
+
+        <Progress value={progress} tone="success" className="h-2" />
+      </Card>
+
+      {/* Conteúdo da etapa */}
+      <form
+        id="checklist-form"
+        ref={formRef}
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        {renderStepContent()}
+        {currentStep === steps.length && (
+          <div className="mt-3.5 flex justify-center">
+            <Button
+              type="submit"
+              className="w-full max-w-3xl"
+              size="lg"
+              disabled={createChecklist.isPending}
+            >
+              {createChecklist.isPending
+                ? "Criando Checklist..."
+                : "Criar Checklist"}
+              <Save />
+            </Button>
+          </div>
+        )}
+      </form>
+
+      {/* Navegação */}
+      <div className="flex justify-between">
+        <Button
+          variant="outline"
+          type="button"
+          onClick={prevStep}
+          disabled={currentStep === 1}
+        >
+          <ChevronLeft />
+          Anterior
+        </Button>
+
+        {currentStep < steps.length && (
+          <Button type="button" onClick={nextStep} disabled={!canProceed()}>
+            Próximo
+            <ChevronRight />
+          </Button>
+        )}
       </div>
     </div>
   );
