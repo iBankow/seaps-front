@@ -7,7 +7,9 @@ const SearchSchema = z.object({
   page: z.number().default(1),
   per_page: z.number().default(10),
   organization_id: z.string().optional(),
-  type: z.enum(["OWN", "RENTED", "GRANT"]).optional(),
+  type: z
+    .enum(["OWN", "RENTED", "GRANT", "GUARANTY", "AFFECTATION", "DONATION"])
+    .optional(),
   city: z.string().optional(),
   state: z.string().optional(),
   name: z.string().optional(),

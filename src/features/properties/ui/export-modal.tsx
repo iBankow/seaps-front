@@ -106,6 +106,9 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
           OWN: "PRÓPRIO",
           RENTED: "ALUGADO",
           GRANT: "CONCESSÃO",
+          GUARANTY: "CAUÇÃO",
+          AFFECTATION: "AFETAÇÃO",
+          DONATION: "DOAÇÃO",
         };
         return (
           typeLabels[item.type as keyof typeof typeLabels] || item.type || "--"

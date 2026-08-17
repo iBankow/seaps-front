@@ -12,9 +12,18 @@ export const PROPERTY_TYPE_ENUM: Record<
   OWN: { label: "PRÓPRIO", variant: "outline" },
   RENTED: { label: "ALUGADO", variant: "warning" },
   GRANT: { label: "CONCESSÃO", variant: "destructive" },
+  GUARANTY: { label: "CAUÇÃO", variant: "secondary" },
+  AFFECTATION: { label: "AFETAÇÃO", variant: "secondary" },
+  DONATION: { label: "DOAÇÃO", variant: "secondary" },
 };
 
-export type PROPERTY_TYPE = "OWN" | "RENTED" | "GRANT";
+export type PROPERTY_TYPE =
+  | "OWN"
+  | "RENTED"
+  | "GRANT"
+  | "GUARANTY"
+  | "AFFECTATION"
+  | "DONATION";
 
 export type Column = {
   organization: {

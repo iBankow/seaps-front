@@ -81,6 +81,9 @@ export function DataFilterForm({
     OWN: "PRÓPRIO",
     RENTED: "ALUGADO",
     GRANT: "CONCESSÃO",
+    GUARANTY: "CAUÇÃO",
+    AFFECTATION: "AFETAÇÃO",
+    DONATION: "DOAÇÃO",
   };
 
   // Opções de filtro rápido
@@ -316,6 +319,15 @@ export function DataFilterForm({
                                 <SelectItem value="OWN">PRÓPRIO</SelectItem>
                                 <SelectItem value="RENTED">ALUGADO</SelectItem>
                                 <SelectItem value="GRANT">CONCESSÃO</SelectItem>
+                                <SelectItem value="GUARANTY">
+                                  CAUÇÃO
+                                </SelectItem>
+                                <SelectItem value="AFFECTATION">
+                                  AFETAÇÃO
+                                </SelectItem>
+                                <SelectItem value="DONATION">
+                                  DOAÇÃO
+                                </SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />

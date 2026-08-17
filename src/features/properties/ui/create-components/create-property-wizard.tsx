@@ -127,7 +127,13 @@ export function CreatePropertyWizard() {
     try {
       await createProperty.mutateAsync({
         ...values,
-        type: values.type as "OWN" | "RENTED" | "GRANT",
+        type: values.type as
+          | "OWN"
+          | "RENTED"
+          | "GRANT"
+          | "GUARANTY"
+          | "AFFECTATION"
+          | "DONATION",
         cep: values.cep.replace(/\D/g, ""),
         number: values.number ? values.number : null,
       });
