@@ -31,7 +31,7 @@ const OPTIONS: ScoreOption[] = [
     value: String(SCORE_VALUES.REGULAR),
     label: "Regular",
     className:
-      "border-warning/40 bg-warning/15 text-warning-foreground data-checked:border-warning data-checked:bg-warning data-checked:text-warning-foreground",
+      "border-warning/40 bg-warning/15 text-warning data-checked:border-warning data-checked:bg-warning data-checked:text-warning-foreground",
   },
   {
     value: String(SCORE_VALUES.RUIM),
