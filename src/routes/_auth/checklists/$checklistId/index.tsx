@@ -1,18 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
+import { createFileRoute } from "@tanstack/react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { StatCard } from "@/components/common/stat-card";
 import { MetaField } from "@/components/common/meta-field";
 import { useChecklist } from "@/contexts/checklist-context";
 import { useMemo } from "react";
-import {
-  CheckCircle2,
-  Edit,
-  FileText,
-  History,
-  List,
-} from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { getFirstAndLastName } from "@/lib/utils";
 import { StatusBadge } from "@/features/checklists";
 import { useChecklistsItems } from "@/features/checklist-items";
@@ -219,44 +212,6 @@ function ChecklistDashboard() {
             </MetaField>
           </CardContent>
         </Card>
-      </div>
-
-      {/* Action Buttons */}
-      <div className="flex flex-wrap gap-2.5">
-        <Button asChild>
-          <Link to="/checklists/$checklistId/items" params={{ checklistId }}>
-            <List />
-            Ver Itens
-          </Link>
-        </Button>
-
-        {checklist.status === "OPEN" && (
-          <Button variant="outline" asChild>
-            <Link to="/checklists/$checklistId/edit" params={{ checklistId }}>
-              <Edit />
-              Editar
-            </Link>
-          </Button>
-        )}
-
-        <Button variant="outline" asChild>
-          <Link to="/checklists/$checklistId/history" params={{ checklistId }}>
-            <History />
-            Histórico
-          </Link>
-        </Button>
-
-        {checklist.status !== "OPEN" && (
-          <Button variant="outline" asChild>
-            <Link
-              to="/checklists/$checklistId/notification"
-              params={{ checklistId }}
-            >
-              <FileText />
-              Notificação
-            </Link>
-          </Button>
-        )}
       </div>
     </div>
   );
