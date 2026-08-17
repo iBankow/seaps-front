@@ -4,26 +4,21 @@ import type { VariantProps } from "class-variance-authority";
 import { Actions } from "./actions";
 import { Link } from "@tanstack/react-router";
 import { formatDate } from "@/lib/format";
+import type { PropertyType } from "../types";
+import { getFirstAndLastName } from "@/lib/utils";
 
 export const PROPERTY_TYPE_ENUM: Record<
-  PROPERTY_TYPE,
+  PropertyType,
   { label: string; variant: VariantProps<typeof badgeVariants>["variant"] }
 > = {
   OWN: { label: "PRÓPRIO", variant: "outline" },
   RENTED: { label: "ALUGADO", variant: "warning" },
   GRANT: { label: "CONCESSÃO", variant: "destructive" },
+  PRIVATE: { label: "PRIVADO", variant: "default" },
   GUARANTY: { label: "CAUÇÃO", variant: "secondary" },
   AFFECTATION: { label: "AFETAÇÃO", variant: "secondary" },
   DONATION: { label: "DOAÇÃO", variant: "secondary" },
 };
-
-export type PROPERTY_TYPE =
-  | "OWN"
-  | "RENTED"
-  | "GRANT"
-  | "GUARANTY"
-  | "AFFECTATION"
-  | "DONATION";
 
 export type Column = {
   organization: {
@@ -75,15 +70,18 @@ export const columns: ColumnDef<Column>[] = [
   {
     accessorKey: "name",
     header: "Nome",
+    meta: {
+      size: 500,
+    },
     cell({ row }) {
       return (
-        <span className="font-heading font-semibold tracking-wide uppercase">
+        <p
+          className="font-heading truncate font-semibold tracking-wide uppercase"
+          title={row.original.name}
+        >
           {row.original.name}
-        </span>
+        </p>
       );
-    },
-    meta: {
-      cellClassName: "truncate max-w-xs",
     },
   },
   {
@@ -110,7 +108,7 @@ export const columns: ColumnDef<Column>[] = [
     accessorKey: "person",
     header: "Responsável",
     accessorFn(row) {
-      return row.person?.name || "--";
+      return getFirstAndLastName(row.person?.name) || "--";
     },
     meta: {
       headerClassName: "hidden md:table-cell",
@@ -122,7 +120,7 @@ export const columns: ColumnDef<Column>[] = [
     accessorKey: "type",
     header: "Tipo",
     cell({ row }) {
-      const entry = PROPERTY_TYPE_ENUM[row.original.type as PROPERTY_TYPE];
+      const entry = PROPERTY_TYPE_ENUM[row.original.type as PropertyType];
       return entry ? (
         <Badge variant={entry.variant}>{entry.label}</Badge>
       ) : (
@@ -145,9 +143,7 @@ export const columns: ColumnDef<Column>[] = [
     accessorKey: "updated_at",
     header: "Atualizado em",
     accessorFn(row) {
-      return row.updated_at
-        ? formatDate(row.updated_at)
-        : "--";
+      return row.updated_at ? formatDate(row.updated_at) : "--";
     },
     meta: {
       headerClassName: "hidden lg:table-cell",
@@ -157,6 +153,9 @@ export const columns: ColumnDef<Column>[] = [
   {
     accessorKey: "actions",
     header: "Ações",
+    meta: {
+      size: 80
+    },
     cell: ({ row }) => <Actions row={row} />,
   },
 ];

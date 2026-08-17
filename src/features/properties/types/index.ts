@@ -4,6 +4,7 @@ export type PropertyType =
   | "OWN"
   | "RENTED"
   | "GRANT"
+  | "PRIVATE"
   | "GUARANTY"
   | "AFFECTATION"
   | "DONATION";
