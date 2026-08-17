@@ -262,7 +262,7 @@ export function DataFilterForm({ data, totalRecords }: { data?: any[], totalReco
       <div className="flex items-center gap-2 w-full">
         <Input
           id="input-property-name"
-          className="uppercase placeholder:normal-case w-full"
+          className="uppercase placeholder:normal-case bg-card h-10 w-120"
           placeholder="Pesquisar pelo imóvel..."
           onChange={(e) => debouncedPropertyFilterName(e.target.value)}
         />
@@ -270,8 +270,9 @@ export function DataFilterForm({ data, totalRecords }: { data?: any[], totalReco
           <div className="space-x-2 flex">
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline" className="gap-2">
+                <Button variant="outline" className="gap-2 h-10 bg-card font-heading uppercase text-xs leading-0">
                   <Filter className="h-4 w-4" />
+                  Filtros
                   {activeFilters.length > 0 && (
                     <Badge variant="secondary" className="ml-1">
                       {activeFilters.length}
