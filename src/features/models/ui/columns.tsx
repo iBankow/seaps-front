@@ -31,6 +31,13 @@ export const columns: ColumnDef<Model>[] = [
   {
     accessorKey: "name",
     header: "Nome",
+    cell({ row }) {
+      return (
+        <span className="font-heading font-semibold tracking-wide uppercase">
+          {row.original.name}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "description",
@@ -46,8 +53,12 @@ export const columns: ColumnDef<Model>[] = [
   {
     accessorKey: "created_at",
     header: "Criado em",
-    accessorFn(row) {
-      return formatDate(row.created_at);
+    cell({ row }) {
+      return (
+        <span className="font-mono text-xs text-muted-foreground">
+          {formatDate(row.original.created_at)}
+        </span>
+      );
     },
     meta: {
       headerClassName: "hidden md:table-cell",
@@ -57,8 +68,12 @@ export const columns: ColumnDef<Model>[] = [
   {
     accessorKey: "updated_at",
     header: "Atualizado em",
-    accessorFn(row) {
-      return formatDate(row.updated_at);
+    cell({ row }) {
+      return (
+        <span className="font-mono text-xs text-muted-foreground">
+          {formatDate(row.original.updated_at)}
+        </span>
+      );
     },
     meta: {
       headerClassName: "hidden md:table-cell",

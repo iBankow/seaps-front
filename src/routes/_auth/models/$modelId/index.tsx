@@ -2,14 +2,9 @@
 import { useModel } from "@/features/models";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  ArrowLeft,
-  FileText,
-  Calendar,
-  Building,
-  CheckSquare,
-} from "lucide-react";
+import { ArrowLeft, FileText, Building, CheckSquare } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { MetaField } from "@/components/common/meta-field";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
@@ -81,7 +76,9 @@ function RouteComponent() {
                   <ArrowLeft className="h-4 w-4" />
                 </Link>
               </Button>
-              <h1 className="text-2xl font-bold">Modelo não encontrado</h1>
+              <h1 className="font-heading text-2xl font-bold tracking-wide uppercase">
+                Modelo não encontrado
+              </h1>
             </div>
             <p className="text-muted-foreground">
               O modelo solicitado não foi encontrado.
@@ -133,61 +130,45 @@ function RouteComponent() {
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-muted-foreground">
-                  Nome do Modelo
-                </label>
-                <p className="text-lg font-semibold">{model.name}</p>
-              </div>
+              <MetaField label="Nome do modelo">
+                <span className="font-heading text-lg font-bold tracking-wide uppercase">
+                  {model.name}
+                </span>
+              </MetaField>
 
               {model.description && (
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground">
-                    Descrição
-                  </label>
-                  <p className="text-sm">{model.description}</p>
-                </div>
+                <MetaField label="Descrição">
+                  <span className="text-sm">{model.description}</span>
+                </MetaField>
               )}
 
-              <div>
-                <label className="text-sm font-medium text-muted-foreground">
-                  Total de Itens
-                </label>
-                <div className="flex items-center gap-2">
-                  <Badge variant="secondary" className="text-sm">
-                    {model.items.length}{" "}
-                    {model.items.length === 1 ? "item" : "itens"}
-                  </Badge>
-                </div>
-              </div>
+              <MetaField label="Total de itens">
+                <Badge variant="secondary" className="text-sm">
+                  {model.items.length}{" "}
+                  {model.items.length === 1 ? "item" : "itens"}
+                </Badge>
+              </MetaField>
             </div>
 
             {/* Metadata */}
             <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-muted-foreground flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  Criado em
-                </label>
-                <p className="text-sm">{formatDateTime(model.created_at)}</p>
-              </div>
+              <MetaField label="Criado em">
+                <span className="font-mono text-xs text-muted-foreground">
+                  {formatDateTime(model.created_at)}
+                </span>
+              </MetaField>
 
-              <div>
-                <label className="text-sm font-medium text-muted-foreground flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  Última atualização
-                </label>
-                <p className="text-sm">{formatDateTime(model.updated_at)}</p>
-              </div>
+              <MetaField label="Última atualização">
+                <span className="font-mono text-xs text-muted-foreground">
+                  {formatDateTime(model.updated_at)}
+                </span>
+              </MetaField>
 
-              <div>
-                <label className="text-sm font-medium text-muted-foreground">
-                  ID do Modelo
-                </label>
-                <p className="text-sm font-mono text-muted-foreground">
+              <MetaField label="ID do modelo">
+                <span className="font-mono text-xs text-muted-foreground">
                   {model.id}
-                </p>
-              </div>
+                </span>
+              </MetaField>
             </div>
           </div>
         </CardContent>

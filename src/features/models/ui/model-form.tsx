@@ -1,5 +1,4 @@
-﻿import { useEffect, useState } from "react";
-import { z } from "zod";
+﻿import { z } from "zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "@tanstack/react-router";
@@ -18,11 +17,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RSCreatable } from "@/components/common/react-select";
 import { Save, Trash } from "lucide-react";
 
-import {
-  useCreateModel,
-  useModelItemsCatalog,
-  useUpdateModel,
-} from "../api/models";
+import { useCreateModel, useUpdateModel } from "../api/models";
+import { useItemsCatalog } from "../lib/use-items-catalog";
 import type { Model, ModelItem } from "../types";
 
 const formSchema = z.object({
@@ -60,31 +56,6 @@ const filterDuplicateItems = (items: FormValues["items"]) => {
 
   return uniqueItems;
 };
-
-function useItemsCatalog() {
-  const { data } = useModelItemsCatalog();
-  const [localItems, setLocalItems] = useState<ModelItem[]>([]);
-
-  useEffect(() => {
-    if (data) {
-      setLocalItems(data);
-    }
-  }, [data]);
-
-  const handleCreate = (
-    inputValue: string,
-    onChange: (value: string) => void,
-  ) => {
-    setLocalItems((prev) => [
-      ...prev,
-      { id: Date.now().toString(), name: inputValue.toUpperCase() },
-    ]);
-
-    return onChange(inputValue.toUpperCase());
-  };
-
-  return { items: localItems, handleCreate };
-}
 
 function ItemsFieldArray({
   form,
@@ -198,7 +169,9 @@ export function CreateModelForm() {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card>
           <CardHeader>
-            <CardTitle>Informações do Modelo</CardTitle>
+            <CardTitle className="font-heading text-xs font-bold tracking-widest uppercase">
+              Informações do Modelo
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex gap-4 flex-col">
@@ -235,7 +208,10 @@ export function CreateModelForm() {
               >
                 Cancelar
               </Button>
-              <Button type="submit">
+              <Button
+                type="submit"
+                className="font-heading uppercase text-xs leading-0"
+              >
                 <Save className="mr-2 h-4 w-4" />
                 Salvar Modelo
               </Button>
@@ -280,7 +256,9 @@ export function EditModelForm({ model }: { modelId: string; model: Model }) {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card>
           <CardHeader>
-            <CardTitle>Informações do Checklist</CardTitle>
+            <CardTitle className="font-heading text-xs font-bold tracking-widest uppercase">
+              Informações do Modelo
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex gap-4 flex-col">
@@ -313,7 +291,10 @@ export function EditModelForm({ model }: { modelId: string; model: Model }) {
               <Button type="button" variant="outline" onClick={() => router.history.back()}>
                 Cancelar
               </Button>
-              <Button type="submit">
+              <Button
+                type="submit"
+                className="font-heading uppercase text-xs leading-0"
+              >
                 <Save className="mr-2 h-4 w-4" />
                 Salvar Modelo
               </Button>
