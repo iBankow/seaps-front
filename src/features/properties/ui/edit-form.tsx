@@ -34,6 +34,7 @@ const propertySchema = z.object({
     "OWN",
     "RENTED",
     "GRANT",
+    "PRIVATE",
     "GUARANTY",
     "AFFECTATION",
     "DONATION",
@@ -157,7 +158,7 @@ export const PropertyForm = ({
                       <FormControl
                         className={dataLoading ? "animate-pulse" : ""}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder="Selecione o Orgão" />
                         </SelectTrigger>
                       </FormControl>
@@ -180,7 +181,7 @@ export const PropertyForm = ({
                     <FormLabel>Tipo *</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder="Selecione o Tipo" />
                         </SelectTrigger>
                       </FormControl>
@@ -188,6 +189,7 @@ export const PropertyForm = ({
                         <SelectItem value={"OWN"}>PRÓPRIO</SelectItem>
                         <SelectItem value={"RENTED"}>ALUGADO</SelectItem>
                         <SelectItem value={"GRANT"}>CONCESSÃO</SelectItem>
+                        <SelectItem value={"PRIVATE"}>PRIVADO</SelectItem>
                         <SelectItem value={"GUARANTY"}>CAUÇÃO</SelectItem>
                         <SelectItem value={"AFFECTATION"}>
                           AFETAÇÃO

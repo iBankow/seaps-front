@@ -13,7 +13,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { RSSelect } from "@/components/common/react-select";
-import { debounce, states, toUpperCase } from "@/lib/utils";
+import { cn, debounce, states, toUpperCase } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { http as api } from "@/lib/http";
@@ -111,7 +111,7 @@ export const AddressForm = (props: any) => {
             >
               <FormControl>
                 <SelectTrigger
-                  className={loading ? "animate-pulse" : ""}
+                  className={cn("w-full", loading ? "animate-pulse" : "")}
                   disabled={loading}
                 >
                   <SelectValue placeholder="Selecione o Estado" />
