@@ -44,6 +44,15 @@ export function ChecklistHeaderActions() {
       />
 
       <div className="mt-4">
+        <Button asChild  className="mb-2 w-full">
+          <Link
+            to="/checklists/$checklistId/items"
+            params={{ checklistId: checklist.id }}
+          >
+            <List size={16} />
+            Ver Itens
+          </Link>
+        </Button>
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="w-full justify-between">
@@ -101,7 +110,9 @@ export function ChecklistHeaderActions() {
 
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem onClick={() => downloadChecklistReport(checklist)}>
+            <DropdownMenuItem
+              onClick={() => downloadChecklistReport(checklist)}
+            >
               <Printer size={16} />
               Exportar PDF
             </DropdownMenuItem>
