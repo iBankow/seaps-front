@@ -6,6 +6,7 @@ import { StatCard } from "@/components/common/stat-card";
 import { IRMBarComponent } from "../ui/irm-chart";
 import { ChecklistsCard } from "../ui/checklists-card";
 import { OrgComplianceCard } from "../ui/org-compliance-card";
+import { OrgIgmiTable } from "../ui/org-igmi-table";
 import { ScoreDistributionCard } from "../ui/score-distribution-card";
 
 export function DashboardPage() {
@@ -65,6 +66,8 @@ export function DashboardPage() {
       </Card>
 
       <IRMBarComponent data={data?.igm ?? []} />
+
+      <OrgIgmiTable data={data?.igm ?? []} />
     </div>
   );
 }

@@ -9,23 +9,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-
-const status = {
-  0: {
-    color: "#dc2626",
-    label: "Gestão Vulnerável",
-  },
-  1: {
-    color: "#e0a800",
-    label: "Gestão em Aperfeiçoamento",
-  },
-  2: {
-    color: "#00a651",
-    label: "Gestão Adequada",
-  },
-};
-
-type STATU_TYPE = 0 | 1 | 2;
+import { getIgmiInfo } from "./igmi-status";
 
 const chartConfig = {
   total: {
@@ -77,7 +61,9 @@ export function IRMBarComponent({ data }: { data: Data[] }) {
                         className="h-2.5 w-2.5 shrink-0 rounded-[2px]"
                         style={
                           {
-                            backgroundColor: `${status[item.payload.classificacao_igmi as STATU_TYPE].color}`,
+                            backgroundColor: getIgmiInfo(
+                              item.payload.classificacao_igmi,
+                            ).color,
                           } as React.CSSProperties
                         }
                       />
@@ -89,10 +75,7 @@ export function IRMBarComponent({ data }: { data: Data[] }) {
                         {item.payload.name}
                       </div>
                       <div className="flex basis-full items-center border-t pt-1 text-xs font-medium text-foreground">
-                        {
-                          status[item.payload.classificacao_igmi as STATU_TYPE]
-                            .label
-                        }
+                        {getIgmiInfo(item.payload.classificacao_igmi).label}
                       </div>
                     </>
                   )}
@@ -104,7 +87,7 @@ export function IRMBarComponent({ data }: { data: Data[] }) {
               {data?.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={status[entry.classificacao_igmi as STATU_TYPE].color}
+                  fill={getIgmiInfo(entry.classificacao_igmi).color}
                 />
               ))}
             </Bar>
