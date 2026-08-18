@@ -44,7 +44,8 @@ function RouteComponent() {
       success: notification
         ? "Notificação regerada com sucesso!"
         : "Notificação gerada com sucesso!",
-      error: "Erro ao gerar a notificação",
+      error: (error) =>
+        error?.response?.data?.message || "Erro ao gerar a notificação",
     });
   };
 
@@ -53,6 +54,16 @@ function RouteComponent() {
       <Card>
         <CardContent className="py-12 text-center text-muted-foreground">
           A notificação só pode ser gerada após o checklist ser finalizado.
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (checklist.classification === 2) {
+    return (
+      <Card>
+        <CardContent className="py-12 text-center text-muted-foreground">
+          Notificação não é gerada para checklists com classificação "Bom".
         </CardContent>
       </Card>
     );

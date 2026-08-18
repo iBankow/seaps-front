@@ -96,7 +96,7 @@ export function ChecklistHeaderActions() {
               </Link>
             </DropdownMenuItem>
 
-            {!isOpen && (
+            {!isOpen && checklist.classification !== 2 && (
               <DropdownMenuItem asChild>
                 <Link
                   to="/checklists/$checklistId/notification"
