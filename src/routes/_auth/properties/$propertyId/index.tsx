@@ -440,7 +440,7 @@ function PropertyDetail() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-3">
-              {property.person && (
+              {property.person ? (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
@@ -498,6 +498,13 @@ function PropertyDetail() {
 
                   <Separator />
                 </div>
+              ) : (
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Responsável
+                  </p>
+                  <p className="text-sm">Nenhum responsável atribuído</p>
+                </div>
               )}
 
               <div>
@@ -516,9 +523,7 @@ function PropertyDetail() {
                     <Clock className="h-4 w-4" />
                     Última Atualização
                   </p>
-                  <p>
-                    {formatDateTime(property.updated_at)}
-                  </p>
+                  <p>{formatDateTime(property.updated_at)}</p>
                 </div>
               )}
             </div>
