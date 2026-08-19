@@ -12,6 +12,7 @@ export interface Model {
   created_at: string;
   updated_at: string;
   items: ModelItem[];
+  items_count?: number;
 }
 
 export type ModelsListParams = PaginatedParams;

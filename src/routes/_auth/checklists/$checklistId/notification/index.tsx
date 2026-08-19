@@ -100,9 +100,7 @@ function RouteComponent() {
               <Markdown
                 components={{
                   h1: ({ children }) => (
-                    <h1 className="text-lg font-semibold mb-3">
-                      {children}
-                    </h1>
+                    <h1 className="text-lg font-semibold mb-3">{children}</h1>
                   ),
                   h2: ({ children }) => (
                     <h2 className="text-base font-semibold mt-5 mb-2 first:mt-0">
@@ -110,9 +108,7 @@ function RouteComponent() {
                     </h2>
                   ),
                   p: ({ children }) => (
-                    <p className="mb-3 leading-relaxed last:mb-0">
-                      {children}
-                    </p>
+                    <p className="mb-3 leading-relaxed last:mb-0">{children}</p>
                   ),
                   strong: ({ children }) => (
                     <strong className="font-semibold text-foreground">
@@ -126,9 +122,17 @@ function RouteComponent() {
                   ),
                   hr: () => <hr className="my-4 border-border" />,
                   em: ({ children }) => (
-                    <em className="italic text-muted-foreground">
+                    <em className="italic text-muted-foreground">{children}</em>
+                  ),
+                  a: ({ children, href }) => (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary underline hover:text-primary/80"
+                    >
                       {children}
-                    </em>
+                    </a>
                   ),
                 }}
               >

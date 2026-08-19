@@ -108,9 +108,7 @@ export function ModelDetailPanel({
             <h2 className="font-heading text-xl font-bold tracking-wide uppercase">
               {model.name}
             </h2>
-            {isDirty && (
-              <Badge variant="warning">Alterações não salvas</Badge>
-            )}
+            {isDirty && <Badge variant="warning">Alterações não salvas</Badge>}
           </div>
           {model.description && (
             <p className="mt-1.5 text-[11.5px] text-muted-foreground">
@@ -177,9 +175,7 @@ export function ModelDetailPanel({
           className="flex-1"
           placeholder="Selecione ou crie um item (ex.: Subestação)"
           options={catalogItems}
-          value={
-            catalogItems.find((item) => item.name === newItemName) || null
-          }
+          value={catalogItems.find((item) => item.name === newItemName) || null}
           onChange={(val: ModelItem | null) =>
             setNewItemName(val ? val.name : null)
           }

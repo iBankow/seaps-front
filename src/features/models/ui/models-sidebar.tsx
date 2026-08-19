@@ -32,7 +32,7 @@ export function ModelsSidebar({
         <div>
           {models.map((model) => {
             const active = model.id === selectedId;
-            const itemCount = Number(model.items ?? 0);
+            const itemCount = Number(model.items_count ?? 0);
 
             return (
               <button
