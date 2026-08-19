@@ -11,10 +11,7 @@ import {
 } from "@/components/ui/chart";
 import type { DashboardStatusRange } from "../types";
 
-const SEGMENT_META: Record<
-  string,
-  { label: string; className: string }
-> = {
+const SEGMENT_META: Record<string, { label: string; className: string }> = {
   BOM: { label: "Bom", className: "bg-success" },
   REGULAR: { label: "Regular", className: "bg-warning" },
   RUIM: { label: "Ruim", className: "bg-destructive" },
@@ -61,7 +58,7 @@ export function ScoreDistributionCard({
           <>
             <ChartContainer
               config={chartConfig}
-              className="aspect-auto h-[210px] w-full"
+              className="aspect-auto h-[250px] w-full"
             >
               <PieChart>
                 <ChartTooltip
@@ -98,12 +95,10 @@ export function ScoreDistributionCard({
                 </Pie>
               </PieChart>
             </ChartContainer>
-            <div className="flex flex-col gap-2.5">
+            <div className="flex justify-between gap-2.5">
               {segments.map((s) => (
                 <div key={s.status} className="flex items-center gap-2.5">
-                  <span
-                    className={`h-2.5 w-2.5 rounded-xs ${s.className}`}
-                  />
+                  <span className={`h-2.5 w-2.5 rounded-xs ${s.className}`} />
                   <span className="font-heading text-[11px] font-semibold tracking-wide">
                     {s.label}
                   </span>
