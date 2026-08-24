@@ -48,7 +48,7 @@ const AVAILABLE_COLUMNS = [
 export function ExportModal({ data, totalRecords }: ExportModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumns, setSelectedColumns] = useState<string[]>(
-    AVAILABLE_COLUMNS.filter((col) => col.essential).map((col) => col.id)
+    AVAILABLE_COLUMNS.filter((col) => col.essential).map((col) => col.id),
   );
   const [useFilters, setUseFilters] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
@@ -71,7 +71,7 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
     setSelectedColumns((prev) =>
       prev.includes(columnId)
         ? prev.filter((id) => id !== columnId)
-        : [...prev, columnId]
+        : [...prev, columnId],
     );
   };
 
@@ -79,7 +79,7 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
     if (selectedColumns.length === AVAILABLE_COLUMNS.length) {
       // Manter apenas as essenciais
       setSelectedColumns(
-        AVAILABLE_COLUMNS.filter((col) => col.essential).map((col) => col.id)
+        AVAILABLE_COLUMNS.filter((col) => col.essential).map((col) => col.id),
       );
     } else {
       // Selecionar todas
@@ -114,13 +114,9 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
           typeLabels[item.type as keyof typeof typeLabels] || item.type || "--"
         );
       case "created_at":
-        return item.created_at
-          ? formatDate(item.created_at)
-          : "--";
+        return item.created_at ? formatDate(item.created_at) : "--";
       case "updated_at":
-        return item.updated_at
-          ? formatDate(item.updated_at)
-          : "--";
+        return item.updated_at ? formatDate(item.updated_at) : "--";
       default:
         return "--";
     }
@@ -174,7 +170,7 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
   };
 
   const selectedColumnsData = AVAILABLE_COLUMNS.filter((col) =>
-    selectedColumns.includes(col.id)
+    selectedColumns.includes(col.id),
   );
 
   const recordsToExport = useFilters
@@ -184,7 +180,10 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="gap-2">
+        <Button
+          variant="outline"
+          className="gap-2 h-10 bg-card font-heading uppercase text-xs leading-0"
+        >
           <Sheet className="h-4 w-4" />
           Exportar Dados
         </Button>

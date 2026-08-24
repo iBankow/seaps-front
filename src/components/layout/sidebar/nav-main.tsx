@@ -24,8 +24,8 @@ export function NavMain({ items }: { items: MenuItem[] }) {
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Menu</SidebarGroupLabel>
-      <SidebarGroupContent className="flex flex-col gap-1">
-        <SidebarMenu>
+      <SidebarGroupContent>
+        <SidebarMenu className="flex flex-col gap-1">
           {items.map((item) => {
             const isActive =
               item.url === "/"
@@ -37,7 +37,7 @@ export function NavMain({ items }: { items: MenuItem[] }) {
                 <SidebarMenuButton
                   tooltip={item.title}
                   isActive={isActive}
-                  className="font-heading gap-2.5 px-2.5 text-xs font-normal tracking-wide uppercase data-active:text-white data-active:font-black text-muted/80" 
+                  className="font-heading gap-2.5 py-4.5 px-2.5 text-xs font-normal tracking-wide uppercase data-active:text-white data-active:font-black text-muted/80"
                   asChild
                 >
                   <Link to={item.url} className="w-full">

@@ -21,7 +21,7 @@ export function PropertiesList({ params }: { params: any }) {
     <div className="flex flex-1 flex-col gap-3.5">
       <PageHeader eyebrow="Cadastros" title="Imóveis">
         <PermissionGate permissions="properties:create">
-          <Button asChild>
+          <Button asChild className="font-heading uppercase text-xs leading-0">
             <Link to="/properties/create">
               <Plus />
               Criar Imóvel

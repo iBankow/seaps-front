@@ -94,7 +94,7 @@ export function DataFilterForm({
 
     if (search.organization_id) {
       const org = organizations.find(
-        (o) => String(o.id) === search.organization_id
+        (o) => String(o.id) === search.organization_id,
       );
       if (org) {
         filters.push({
@@ -172,14 +172,14 @@ export function DataFilterForm({
         .then(({ data }) => setOrganizations(data.data));
       axios
         .get(
-          `https://brasilapi.com.br/api/ibge/municipios/v1/MT?providers=dados-abertos-br,gov,wikipedia`
+          `https://brasilapi.com.br/api/ibge/municipios/v1/MT?providers=dados-abertos-br,gov,wikipedia`,
         )
         .then(({ data }) => {
           setCities(
             data.map((city: { nome: string; codigo_ibge: string }) => ({
               id: city.nome.replace(/\s*\(.*?\)/g, ""),
               name: city.nome.replace(/\s*\(.*?\)/g, ""),
-            }))
+            })),
           );
         });
 
@@ -233,15 +233,18 @@ export function DataFilterForm({
       <div className="flex items-center gap-2 w-full">
         <Input
           id="input-property-name"
-          className="uppercase placeholder:normal-case w-full"
+          className="uppercase placeholder:normal-case bg-card h-10 w-120 min-w-120"
           placeholder="Pesquisar imóvel..."
           defaultValue={form.getValues("name")}
           onChange={(e) => debouncedPropertyFilterName(e.target.value)}
         />
-        <div className="space-x-2 flex">
+        <div className="flex items-center justify-between gap-2 w-full">
           <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline" className="gap-2">
+              <Button
+                variant="outline"
+                className="gap-2 h-10 bg-card font-heading uppercase text-xs leading-0"
+              >
                 <Filter className="h-4 w-4" />
                 {activeFilters.length > 0 && (
                   <Badge variant="secondary" className="ml-1">
@@ -319,15 +322,11 @@ export function DataFilterForm({
                                 <SelectItem value="OWN">PRÓPRIO</SelectItem>
                                 <SelectItem value="RENTED">ALUGADO</SelectItem>
                                 <SelectItem value="GRANT">CONCESSÃO</SelectItem>
-                                <SelectItem value="GUARANTY">
-                                  CAUÇÃO
-                                </SelectItem>
+                                <SelectItem value="GUARANTY">CAUÇÃO</SelectItem>
                                 <SelectItem value="AFFECTATION">
                                   AFETAÇÃO
                                 </SelectItem>
-                                <SelectItem value="DONATION">
-                                  DOAÇÃO
-                                </SelectItem>
+                                <SelectItem value="DONATION">DOAÇÃO</SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
@@ -371,7 +370,7 @@ export function DataFilterForm({
                                 }}
                                 value={
                                   cities.find(
-                                    (city) => city.id === field.value
+                                    (city) => city.id === field.value,
                                   ) || undefined
                                 }
                               />
