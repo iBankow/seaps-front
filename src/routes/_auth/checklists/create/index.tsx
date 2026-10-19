@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CreateOrderWizard } from "@/features/checklists/ui/create-components/create-checklist-wizard";
+import { CreateOrderWizard } from "@/features/checklists";
 
 export const Route = createFileRoute("/_auth/checklists/create/")({
   component: RouteComponent,
@@ -11,9 +11,5 @@ export const Route = createFileRoute("/_auth/checklists/create/")({
 });
 
 function RouteComponent() {
-  return (
-    <div className="sm:px-8">
-      <CreateOrderWizard />
-    </div>
-  );
+  return <CreateOrderWizard />;
 }

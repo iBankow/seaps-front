@@ -1,5 +1,5 @@
 import { createContext, useContext, type ReactNode } from "react";
-import { useChecklistDetail as useChecklistDetail } from "@/features/checklists/api/checklists";
+import { useChecklistDetail } from "@/features/checklists";
 import { useRouter } from "@tanstack/react-router";
 import type { Checklist } from "../../types/types";
 

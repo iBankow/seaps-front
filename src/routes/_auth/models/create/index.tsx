@@ -1,7 +1,7 @@
-import { Card, CardContent } from "@/components/ui/card";
+﻿import { Card, CardContent } from "@/components/ui/card";
 import { createFileRoute } from "@tanstack/react-router";
-import { CreateModelForm } from "../-components/form";
-import { BackButton } from "@/components/back-button";
+import { CreateModelForm } from "@/features/models";
+import { BackButton } from "@/components/layout/back-button";
 
 export const Route = createFileRoute("/_auth/models/create/")({
   component: RouteComponent,
@@ -17,7 +17,9 @@ function RouteComponent() {
         <CardContent>
           <div className="flex items-center gap-2">
             <BackButton />
-            <h1 className="text-2xl font-bold">Criar Modelo</h1>
+            <h1 className="font-heading text-xl font-bold tracking-wide uppercase">
+              Criar Modelo
+            </h1>
           </div>
         </CardContent>
       </Card>

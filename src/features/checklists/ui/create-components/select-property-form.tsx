@@ -1,16 +1,16 @@
 import { Controller, type UseFormReturn } from "react-hook-form";
 import type { FormDataType, FormSchemaType } from "./create-checklist-wizard";
 import { useState } from "react";
-import { Input } from "#/components/ui/input";
+import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "#/components/ui/card";
-import { usePropertiesList } from "#/features/properties/api/properties";
-import { RadioGroup, RadioGroupItem } from "#/components/ui/radio-group";
+} from "@/components/ui/card";
+import { usePropertiesList } from "@/features/properties";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Field,
   FieldContent,
@@ -18,14 +18,14 @@ import {
   FieldGroup,
   FieldLabel,
   FieldTitle,
-} from "#/components/ui/field";
+} from "@/components/ui/field";
 import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
-} from "#/components/ui/pagination";
-import { Button } from "#/components/ui/button";
+} from "@/components/ui/pagination";
+import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Filter, X } from "lucide-react";
 import {
   Dialog,
@@ -34,9 +34,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "#/components/ui/dialog";
-import { Label } from "#/components/ui/label";
-import { useIsMobile } from "#/hooks/use-mobile";
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Drawer,
   DrawerContent,
@@ -44,9 +44,9 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "#/components/ui/drawer";
+} from "@/components/ui/drawer";
 import { useQuery } from "@tanstack/react-query";
-import { addressApi } from "#/features/address/api/address";
+import { addressApi } from "@/features/address";
 import {
   Select,
   SelectContent,
@@ -54,7 +54,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "#/components/ui/select";
+} from "@/components/ui/select";
 
 interface SelectPropertyFormProps {
   form: UseFormReturn<FormSchemaType>;
@@ -93,19 +93,20 @@ export const SelectPropertyForm = ({
   };
 
   return (
-    <Card className="overflow-clip">
-      <CardHeader className="space-y-2">
-        <CardTitle className="text-xl font-semibold">
+    <Card className="gap-4 overflow-clip p-[20px_22px]">
+      <CardHeader className="p-0">
+        <CardTitle className="font-heading text-xs font-bold tracking-widest uppercase">
           Selecione a propriedade
         </CardTitle>
-        <CardDescription className="text-muted-foreground text-sm">
+        <CardDescription className="text-[11px] text-muted-foreground">
           Escolha a propriedade para a qual deseja criar o checklist.
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 p-0">
         <div className="flex gap-2">
           <Input
-            placeholder="Buscar propriedade"
+            className="w-full uppercase placeholder:normal-case"
+            placeholder="Pesquisar pelo imóvel..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -115,13 +116,16 @@ export const SelectPropertyForm = ({
           {filter.city && (
             <Button
               variant="outline"
+              type="button"
               size="sm"
-              className="bg-primary/20! border-primary!"
+              className="rounded-full border-primary/35 bg-primary/10 text-primary hover:bg-primary/15 hover:text-primary"
               onClick={() => updateFilter({ city: undefined })}
             >
               <div className="flex items-center gap-1">
                 <X className="text-destructive" />
-                <span className="text-primary-foreground">{filter.city}</span>
+                <span className="font-heading text-[11px] font-semibold tracking-[0.09em] uppercase">
+                  {filter.city}
+                </span>
               </div>
             </Button>
           )}

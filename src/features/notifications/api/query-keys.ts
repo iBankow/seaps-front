@@ -1,4 +1,4 @@
-import type { NotificationListParams } from "./types";
+import type { NotificationListParams } from "../types";
 
 export const notificationsKeys = {
   all: ["notifications"] as const,

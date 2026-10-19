@@ -7,7 +7,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "#/components/ui/card";
+} from "@/components/ui/card";
 import type {
   PropertyFormDataType,
   PropertyFormSchemaType,
@@ -22,6 +22,9 @@ const TypeLabel = {
   OWN: "PRÓPRIO",
   RENTED: "ALUGADO",
   GRANT: "CEDIDO",
+  GUARANTY: "CAUÇÃO",
+  AFFECTATION: "AFETAÇÃO",
+  DONATION: "DOAÇÃO",
 };
 
 export const ReviewForm = ({ form, formData }: ReviewFormProps) => {

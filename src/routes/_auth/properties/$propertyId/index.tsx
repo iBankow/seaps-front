@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
+﻿import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,40 +31,20 @@ import {
   Plus,
   Eye,
   Edit,
-  TrendingUp,
   BarChart3,
-  FileCheck,
   Clock,
 } from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { useAuth } from "@/contexts/auth-contexts";
-import { api } from "@/lib/api";
-import { formatPhone } from "@/lib/utils";
-import { BackButton } from "@/components/back-button";
-import { can } from "@/lib/permissions";
+import { StatCard } from "@/components/common/stat-card";
+import { http as api } from "@/lib/http";
+import { formatPhone } from "@/lib/format";
+import { BackButton } from "@/components/layout/back-button";
+import { formatDateLong, formatDateTime } from "@/lib/format";
+import { PermissionGate } from "@/features/auth";
+import { PROPERTY_TYPE_ENUM, type PropertyType } from "@/features/properties";
 
 export const Route = createFileRoute("/_auth/properties/$propertyId/")({
   component: PropertyDetail,
 });
-
-const PROPERTY_TYPE_ENUM = {
-  OWN: {
-    label: "PRÓPRIO",
-    style: "border-blue-800 bg-blue-200 text-blue-900 hover:bg-blue-200/80",
-  },
-  RENTED: {
-    label: "ALUGADO",
-    style: "border-green-800 bg-green-200 text-green-900 hover:bg-green-200/80",
-  },
-  GRANT: {
-    label: "CEDIDO",
-    style:
-      "border-purple-800 bg-purple-200 text-purple-900 hover:bg-purple-200/80",
-  },
-};
-
-type PROPERTY_TYPE = "OWN" | "RENTED" | "GRANT";
 
 interface ChecklistSummary {
   id: string;
@@ -91,7 +71,7 @@ interface PropertyStats {
 interface Property {
   id: string;
   name: string;
-  type: PROPERTY_TYPE;
+  type: PropertyType;
   address?: string;
   cep?: string;
   state?: string;
@@ -121,7 +101,6 @@ interface Property {
 function PropertyDetail() {
   const { propertyId } = Route.useParams();
   const { data } = useLoaderData({ from: "/_auth/properties/$propertyId" });
-  const { user } = useAuth();
   const [property] = useState<Property | null>(data || null);
   const [stats, setStats] = useState<PropertyStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -138,7 +117,7 @@ function PropertyDetail() {
     const fetchPropertyStats = async () => {
       try {
         // Buscar checklists relacionados a esta propriedade
-        const response = await api.get("/api/v1/checklists", {
+        const response = await api.get("/checklists", {
           params: { property_name: property?.name, limit: 999 },
         });
 
@@ -160,7 +139,7 @@ function PropertyDetail() {
           checklists.slice(0, 5).map(async (checklist: any) => {
             try {
               const itemsResponse = await api.get(
-                `/api/v1/checklists/${checklist.id}/items`,
+                `/checklists/${checklist.id}/items`,
               );
               const items = itemsResponse.data || [];
 
@@ -281,7 +260,7 @@ function PropertyDetail() {
 
     setSaving(true);
     try {
-      await api.put(`/api/v1/persons/${property.person.id}`, editingPerson);
+      await api.put(`/persons/${property.person.id}`, editingPerson);
 
       // Atualizar o estado local da propriedade
       if (property.person) {
@@ -325,7 +304,9 @@ function PropertyDetail() {
             <div className="flex items-center gap-4">
               <BackButton variant={`outline`} />
               <div>
-                <h1 className="text-3xl font-bold">{property.name}</h1>
+                <h1 className="font-heading text-3xl font-bold tracking-wide uppercase">
+                  {property.name}
+                </h1>
                 <p className="text-muted-foreground flex items-center gap-2 mt-1">
                   <MapPin className="h-4 w-4" />
                   {property.address}
@@ -333,10 +314,12 @@ function PropertyDetail() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Badge className={PROPERTY_TYPE_ENUM[property.type].style}>
-                {PROPERTY_TYPE_ENUM[property.type].label}
-              </Badge>
-              {can(["properties:edit"], user?.permissions) && (
+              {PROPERTY_TYPE_ENUM[property.type] && (
+                <Badge variant={PROPERTY_TYPE_ENUM[property.type].variant}>
+                  {PROPERTY_TYPE_ENUM[property.type].label}
+                </Badge>
+              )}
+              <PermissionGate permissions="properties:edit">
                 <Button asChild>
                   <Link
                     to={`/properties/$propertyId/edit`}
@@ -345,76 +328,45 @@ function PropertyDetail() {
                     Editar Imóvel
                   </Link>
                 </Button>
-              )}
+              </PermissionGate>
             </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Statistics Dashboard */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total de Checklists
-            </CardTitle>
-            <FileCheck className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {loading ? "..." : stats?.total_checklists || 0}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Avaliações realizadas
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Em Andamento</CardTitle>
-            <Clock className="h-4 w-4 text-blue-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-blue-600">
-              {loading ? "..." : stats?.open_checklists || 0}
-            </div>
-            <p className="text-xs text-muted-foreground">Checklists abertos</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Finalizados</CardTitle>
-            <CheckSquare className="h-4 w-4 text-green-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">
-              {loading ? "..." : stats?.closed_checklists || 0}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Avaliações completas
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Progresso Médio
-            </CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {loading ? "..." : `${Math.round(stats?.avg_completion || 0)}%`}
-            </div>
-            <Progress value={stats?.avg_completion || 0} className="mt-2" />
-            <p className="text-xs text-muted-foreground mt-2">
-              Média de conclusão
-            </p>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 gap-3.5 md:grid-cols-2 lg:grid-cols-4">
+        <StatCard
+          title="Total de checklists"
+          value={loading ? undefined : stats?.total_checklists || 0}
+          hint="avaliações realizadas"
+          tone="primary"
+        />
+        <StatCard
+          title="Em andamento"
+          value={loading ? undefined : stats?.open_checklists || 0}
+          hint="checklists abertos"
+          tone="primary"
+        />
+        <StatCard
+          title="Finalizados"
+          value={loading ? undefined : stats?.closed_checklists || 0}
+          hint="avaliações completas"
+          tone="success"
+        />
+        <StatCard
+          title="Progresso médio"
+          value={
+            loading ? undefined : `${Math.round(stats?.avg_completion || 0)}%`
+          }
+          tone="primary"
+        >
+          <Progress
+            value={stats?.avg_completion || 0}
+            tone="success"
+            className="mt-1 h-1.5"
+          />
+        </StatCard>
       </div>
 
       {/* Property and Additional Information */}
@@ -422,7 +374,7 @@ function PropertyDetail() {
         {/* Property Information */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 font-heading text-xs font-bold tracking-widest uppercase">
               <Building className="h-5 w-5" />
               Informações do Imóvel
             </CardTitle>
@@ -440,9 +392,13 @@ function PropertyDetail() {
                   Tipo
                 </p>
                 <div className="mt-1">
-                  <Badge className={PROPERTY_TYPE_ENUM[property.type].style}>
-                    {PROPERTY_TYPE_ENUM[property.type].label}
-                  </Badge>
+                  {PROPERTY_TYPE_ENUM[property.type] ? (
+                    <Badge variant={PROPERTY_TYPE_ENUM[property.type].variant}>
+                      {PROPERTY_TYPE_ENUM[property.type].label}
+                    </Badge>
+                  ) : (
+                    <span className="text-muted-foreground">--</span>
+                  )}
                 </div>
               </div>
               <div>
@@ -477,14 +433,14 @@ function PropertyDetail() {
         {/* Additional Information */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 font-heading text-xs font-bold tracking-widest uppercase">
               <User className="h-5 w-5" />
               Informações Adicionais
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-3">
-              {property.person && (
+              {property.person ? (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
@@ -495,7 +451,7 @@ function PropertyDetail() {
                         {property.person.name}
                       </p>
                     </div>
-                    {can(["properties:edit"], user?.permissions) && (
+                    <PermissionGate permissions="properties:edit">
                       <Button
                         variant="outline"
                         size="sm"
@@ -504,7 +460,7 @@ function PropertyDetail() {
                         <Edit className="h-4 w-4 mr-1" />
                         Editar
                       </Button>
-                    )}
+                    </PermissionGate>
                   </div>
 
                   {property.person.role && (
@@ -542,6 +498,13 @@ function PropertyDetail() {
 
                   <Separator />
                 </div>
+              ) : (
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Responsável
+                  </p>
+                  <p className="text-sm">Nenhum responsável atribuído</p>
+                </div>
               )}
 
               <div>
@@ -550,11 +513,7 @@ function PropertyDetail() {
                   Data de Criação
                 </p>
                 <p className="flex items-center gap-2">
-                  {format(
-                    new Date(property.created_at),
-                    "dd 'de' MMMM 'de' yyyy",
-                    { locale: ptBR },
-                  )}
+                  {formatDateLong(property.created_at)}
                 </p>
               </div>
 
@@ -564,12 +523,7 @@ function PropertyDetail() {
                     <Clock className="h-4 w-4" />
                     Última Atualização
                   </p>
-                  <p>
-                    {format(
-                      new Date(property.updated_at),
-                      "dd/MM/yyyy 'às' HH:mm",
-                    )}
-                  </p>
+                  <p>{formatDateTime(property.updated_at)}</p>
                 </div>
               )}
             </div>
@@ -582,7 +536,7 @@ function PropertyDetail() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 font-heading text-xs font-bold tracking-widest uppercase">
                 <BarChart3 className="h-5 w-5" />
                 Checklists Recentes
               </CardTitle>
@@ -642,10 +596,7 @@ function PropertyDetail() {
                             Checklist • {checklist.user_name}
                           </p>
                           <p className="text-sm text-muted-foreground">
-                            {format(
-                              new Date(checklist.created_at),
-                              "dd/MM/yyyy 'às' HH:mm",
-                            )}
+                            {formatDateTime(checklist.created_at)}
                           </p>
                         </div>
                       </div>
@@ -675,21 +626,21 @@ function PropertyDetail() {
                           value={checklist.completion_percentage}
                           className="h-2"
                         />
-                        <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <div className="w-2 h-2 bg-green-500 rounded-full" />
+                        <div className="mt-2 flex flex-wrap items-center gap-4 font-mono text-[10px] tracking-wide text-muted-foreground uppercase">
+                          <span className="flex items-center gap-1.5">
+                            <span className="size-2 rounded-full bg-success" />
                             {checklist.good_items} BOM
                           </span>
-                          <span className="flex items-center gap-1">
-                            <div className="w-2 h-2 bg-yellow-500 rounded-full" />
+                          <span className="flex items-center gap-1.5">
+                            <span className="size-2 rounded-full bg-warning" />
                             {checklist.regular_items} REGULAR
                           </span>
-                          <span className="flex items-center gap-1">
-                            <div className="w-2 h-2 bg-red-500 rounded-full" />
+                          <span className="flex items-center gap-1.5">
+                            <span className="size-2 rounded-full bg-destructive" />
                             {checklist.bad_items} RUIM
                           </span>
-                          <span className="flex items-center gap-1">
-                            <div className="w-2 h-2 bg-gray-400 rounded-full" />
+                          <span className="flex items-center gap-1.5">
+                            <span className="size-2 rounded-full bg-muted-foreground" />
                             {checklist.na_items} N/A
                           </span>
                         </div>

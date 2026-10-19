@@ -1,0 +1,100 @@
+"use client";
+
+import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  type ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { getIgmiInfo } from "./igmi-status";
+
+const chartConfig = {
+  total: {
+    color: "#17307d",
+  },
+} satisfies ChartConfig;
+
+type Data = {
+  organization_id: string;
+  name: string;
+  qtd_bom: number;
+  qtd_regular: number;
+  qtd_ruim: number;
+  total_imoveis: number;
+  irm: number;
+  classificacao_igmi: number;
+};
+
+export function IRMBarComponent({ data }: { data: Data[] }) {
+  return (
+    <Card className="col-span-1 sm:col-span-3">
+      <CardHeader>
+        <CardTitle className="font-heading text-xs font-bold tracking-widest uppercase">
+          Classificação geral dos órgãos e entidades
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer
+          config={chartConfig}
+          className="aspect-auto h-[350px] w-full"
+        >
+          <BarChart accessibilityLayer data={data}>
+            <CartesianGrid vertical={false} />
+            <YAxis domain={[0, 1]} />
+            <XAxis
+              dataKey="name"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+            />
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  hideLabel
+                  className="w-[180px]"
+                  formatter={(value, _, item) => (
+                    <>
+                      <div
+                        className="h-2.5 w-2.5 shrink-0 rounded-[2px]"
+                        style={
+                          {
+                            backgroundColor: getIgmiInfo(
+                              item.payload.classificacao_igmi,
+                            ).color,
+                          } as React.CSSProperties
+                        }
+                      />
+                      Índice
+                      <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
+                        {value}
+                      </div>
+                      <div className="flex basis-full items-center text-xs font-medium text-foreground">
+                        {item.payload.name}
+                      </div>
+                      <div className="flex basis-full items-center border-t pt-1 text-xs font-medium text-foreground">
+                        {getIgmiInfo(item.payload.classificacao_igmi).label}
+                      </div>
+                    </>
+                  )}
+                />
+              }
+              cursor={false}
+            />
+            <Bar dataKey="irm" fill="var(--color-total)" radius={4}>
+              {data?.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={getIgmiInfo(entry.classificacao_igmi).color}
+                />
+              ))}
+            </Bar>
+            {/* <ChartTooltip label="classificacao_igmi" key="var(--color-total)" /> */}
+          </BarChart>
+        </ChartContainer>
+      </CardContent>
+    </Card>
+  );
+}

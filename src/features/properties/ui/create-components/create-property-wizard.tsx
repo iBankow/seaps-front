@@ -6,8 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import z from "zod";
 
-import { Button } from "#/components/ui/button";
-import { useCreateProperty } from "#/features/properties/api/properties";
+import { Button } from "@/components/ui/button";
+import { useCreateProperty } from "../../api/properties";
 import { AddressForm } from "./address-form";
 import { DetailsForm } from "./details-form";
 import { SelectPersonForm } from "./select-person-form";
@@ -127,7 +127,13 @@ export function CreatePropertyWizard() {
     try {
       await createProperty.mutateAsync({
         ...values,
-        type: values.type as "OWN" | "RENTED" | "GRANT",
+        type: values.type as
+          | "OWN"
+          | "RENTED"
+          | "GRANT"
+          | "GUARANTY"
+          | "AFFECTATION"
+          | "DONATION",
         cep: values.cep.replace(/\D/g, ""),
         number: values.number ? values.number : null,
       });
@@ -241,7 +247,7 @@ export function CreatePropertyWizard() {
 
               <div className="bg-muted h-2 w-full rounded-full">
                 <div
-                  className="h-2 rounded-full bg-linear-to-r from-blue-600 to-green-600 transition-all duration-500 ease-in-out"
+                  className="h-2 rounded-full bg-linear-to-r from-primary to-success transition-all duration-500 ease-in-out"
                   style={{
                     width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
                   }}

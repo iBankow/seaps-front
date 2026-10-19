@@ -6,7 +6,7 @@ import {
   FieldGroup,
   FieldLabel,
   FieldTitle,
-} from "#/components/ui/field";
+} from "@/components/ui/field";
 import { Controller, type UseFormReturn } from "react-hook-form";
 import type { FormDataType, FormSchemaType } from "./create-checklist-wizard";
 import {
@@ -15,13 +15,13 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "#/components/ui/select";
+} from "@/components/ui/select";
 import { useQuery } from "@tanstack/react-query";
-import { modelsApi } from "#/features/models/api/models";
-import { Card, CardContent } from "#/components/ui/card";
-import { organizationsApi } from "#/features/organizations/api/organizations";
-import { Switch } from "#/components/ui/switch";
-import { Input } from "#/components/ui/input";
+import { useModelsList } from "@/features/models";
+import { Card, CardContent } from "@/components/ui/card";
+import { organizationsApi } from "@/features/organizations";
+import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
 
 export const DetailsForm = ({
   form,
@@ -30,10 +30,7 @@ export const DetailsForm = ({
   form: UseFormReturn<FormSchemaType>;
   updateFormData: (updates: Partial<FormDataType>) => void;
 }) => {
-  const { data } = useQuery({
-    queryKey: ["models"],
-    queryFn: modelsApi.list,
-  });
+  const { data } = useModelsList();
 
   const { data: organizationsData } = useQuery({
     queryKey: ["organizations"],
@@ -46,9 +43,9 @@ export const DetailsForm = ({
   const isReturned = form.watch("is_returned");
 
   return (
-    <div className="w-full items-center flex flex-col">
-      <Card className="grid grid-cols-1 gap-4 bg-card max-w-3xl w-full ">
-        <CardContent>
+    <div className="flex w-full flex-col items-center">
+      <Card className="w-full max-w-3xl gap-4 p-[20px_22px]">
+        <CardContent className="p-0">
           <FieldGroup>
             <Controller
               name="model_id"

@@ -1,0 +1,203 @@
+"use client";
+
+import { http as api } from "@/lib/http";
+
+import { Button } from "@/components/ui/button";
+import type { Row } from "@tanstack/react-table";
+import {
+  Check,
+  ChevronRight,
+  Ellipsis,
+  Flag,
+  Pen,
+  Printer,
+  Trash2,
+  Undo,
+} from "lucide-react";
+import { useState } from "react";
+
+import { toast } from "sonner";
+import { ReOpenDialog } from "./dialogs/reopen-dialog";
+import { DeleteDialog } from "./dialogs/delete-dialog";
+import { FinishDialog } from "./dialogs/finish-dialog";
+import { useModal } from "@/hooks/use-modal";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Link, useRouter } from "@tanstack/react-router";
+
+import type { Column } from "./columns";
+import { ValidateDialog } from "./dialogs/validate-dialog";
+import { downloadChecklistReport } from "../lib/download-report";
+
+export const Actions = ({ row }: { row: Row<Column> }) => {
+  const router = useRouter();
+  const reopenDialog = useModal();
+  const deleteDialog = useModal();
+  const finishDialog = useModal();
+  const validateDialog = useModal();
+
+  const [loading, setLoading] = useState(false);
+
+  const handleGetReport = () => downloadChecklistReport(row.original);
+
+  const handleReopenChecklist = () => {
+    setLoading(true);
+    toast.promise(
+      api.put("/checklists/" + row.original.id + "/re-open", undefined, {
+        skipErrorToast: true,
+      }),
+      {
+        loading: "Reabrindo checklist...",
+        success: `Checklist ${row.original?.sid} - ${row.original?.property?.name} reaberto!`,
+        error: "Erro ao reabrir o checklist",
+        finally: () => {
+          setLoading(false);
+          router.navigate({
+            to: ".",
+            replace: true,
+            search: {
+              ...router.latestLocation.search,
+              refresh: Date.now(),
+            },
+          });
+        },
+      },
+    );
+  };
+
+  const handleValidateChecklist = () => {
+    setLoading(true);
+    toast.promise(
+      api.put("/checklists/" + row.original.id + "/validate", undefined, {
+        skipErrorToast: true,
+      }),
+      {
+        loading: "Validando checklist...",
+        success: `Checklist ${row.original?.sid} - ${row.original?.property?.name} validado!`,
+        error: "Erro ao validar o checklist",
+        finally: () => {
+          setLoading(false);
+          router.navigate({
+            to: ".",
+            replace: true,
+            search: {
+              ...router.latestLocation.search,
+              refresh: Date.now(),
+            },
+          });
+        },
+      },
+    );
+  };
+
+  return (
+    <>
+      <ReOpenDialog
+        onSubmit={handleReopenChecklist}
+        onOpenChange={reopenDialog.toggle}
+        open={reopenDialog.visible}
+        loading={loading}
+      />
+
+      <DeleteDialog
+        row={row}
+        open={deleteDialog.visible}
+        onOpenChange={deleteDialog.toggle}
+      />
+
+      <FinishDialog
+        row={row}
+        onOpenChange={finishDialog.toggle}
+        open={finishDialog.visible}
+      />
+
+      <ValidateDialog
+        row={row}
+        onValidate={handleValidateChecklist}
+        onOpenChange={validateDialog.toggle}
+        open={validateDialog.visible}
+      />
+
+      <DropdownMenu modal={false}>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size={"icon"} className="h-7 flex-1">
+            <Ellipsis />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56">
+          <DropdownMenuLabel>ID: {row.original.sid}</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <DropdownMenuItem asChild>
+              <Link
+                preload={false}
+                to="/checklists/$checklistId"
+                params={{ checklistId: row.original.id }}
+              >
+                <ChevronRight size={16} />
+                Visualizar
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={row.original.status === "CLOSED"}
+              asChild
+            >
+              <Link
+                preload={false}
+                to={"/checklists/" + row.original.id + "/edit"}
+              >
+                <Pen size={16} />
+                Editar
+              </Link>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem
+              disabled={row.original.status === "CLOSED"}
+              onClick={() => finishDialog.show()}
+            >
+              <Flag size={16} />
+              Finalizar
+            </DropdownMenuItem>
+
+            <DropdownMenuItem
+              disabled={loading || row.original.status === "OPEN"}
+              onClick={() => reopenDialog.show()}
+            >
+              <Undo size={16} />
+              Reabrir
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={row.original.status === "OPEN" || loading}
+              onClick={handleGetReport}
+            >
+              <Printer size={16} />
+              Relatório
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={loading || row.original.status !== "CLOSED"}
+              onClick={() => validateDialog.show()}
+            >
+              <Check size={16} />
+              Validar
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={loading}
+              onClick={() => deleteDialog.show()}
+              className="text-destructive focus:text-destructive"
+            >
+              <Trash2 size={16} className="text-destructive" />
+              Excluir
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
+  );
+};

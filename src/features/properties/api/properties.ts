@@ -1,4 +1,5 @@
-import api, { type PaginatedResponse } from "@/lib/axios";
+import api from "@/lib/http";
+import type { PaginatedResponse } from "@/types";
 import {
   keepPreviousData,
   useMutation,
@@ -55,7 +56,10 @@ export const propertiesApi = {
     return data;
   },
   create: async (payload: PropertyCreatePayload) => {
-    const { data } = await api.post<Property>("/properties", payload);
+    // O wizard exibe o erro via getErrorMessage().
+    const { data } = await api.post<Property>("/properties", payload, {
+      skipErrorToast: true,
+    });
 
     return data;
   },

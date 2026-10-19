@@ -1,16 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { api } from "@/lib/api";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
+import { useModel } from "@/features/models";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  ArrowLeft,
-  FileText,
-  Calendar,
-  Building,
-  CheckSquare,
-} from "lucide-react";
+import { ArrowLeft, FileText, Building, CheckSquare } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { MetaField } from "@/components/common/meta-field";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
@@ -20,53 +14,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { BackButton } from "@/components/back-button";
+import { BackButton } from "@/components/layout/back-button";
+import { formatDateTime } from "@/lib/format";
 
 export const Route = createFileRoute("/_auth/models/$modelId/")({
   component: RouteComponent,
 });
 
-interface ModelItem {
-  id: string;
-  name: string;
-}
-
-interface Model {
-  id: string;
-  name: string;
-  description?: string;
-  created_at: string;
-  updated_at: string;
-  items: ModelItem[];
-}
-
 function RouteComponent() {
   const { modelId } = Route.useParams();
-  const [model, setModel] = useState<Model | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: model, isLoading, isError } = useModel(modelId);
 
-  useEffect(() => {
-    const loadModel = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const { data } = await api.get(`/api/v1/models/${modelId}`);
-        setModel(data);
-      } catch (err) {
-        console.error("Erro ao carregar modelo:", err);
-        setError("Erro ao carregar o modelo. Verifique se o ID está correto.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (modelId) {
-      loadModel();
-    }
-  }, [modelId]);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex flex-col gap-y-4 flex-1">
         <Card>
@@ -86,16 +45,20 @@ function RouteComponent() {
     );
   }
 
-  if (error) {
+  if (isError) {
     return (
       <div className="flex flex-col gap-y-4 flex-1">
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-2 mb-4">
               <BackButton />
-              <h1 className="text-2xl font-bold text-red-600">Erro</h1>
+              <h1 className="font-heading text-2xl font-bold tracking-wide text-destructive uppercase">
+                Erro
+              </h1>
             </div>
-            <p className="text-muted-foreground">{error}</p>
+            <p className="text-muted-foreground">
+              Erro ao carregar o modelo. Verifique se o ID está correto.
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -113,7 +76,9 @@ function RouteComponent() {
                   <ArrowLeft className="h-4 w-4" />
                 </Link>
               </Button>
-              <h1 className="text-2xl font-bold">Modelo não encontrado</h1>
+              <h1 className="font-heading text-2xl font-bold tracking-wide uppercase">
+                Modelo não encontrado
+              </h1>
             </div>
             <p className="text-muted-foreground">
               O modelo solicitado não foi encontrado.
@@ -123,16 +88,6 @@ function RouteComponent() {
       </div>
     );
   }
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("pt-BR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
 
   return (
     <div className="flex flex-col gap-y-4 flex-1">
@@ -146,7 +101,7 @@ function RouteComponent() {
                 </Link>
               </Button>
               <div>
-                <h1 className="text-2xl font-bold flex items-center gap-2">
+                <h1 className="font-heading flex items-center gap-2 text-xl font-bold tracking-wide uppercase">
                   Pré-visualização do Modelo
                 </h1>
                 <p className="text-sm text-muted-foreground">
@@ -167,69 +122,53 @@ function RouteComponent() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5 text-blue-600" />
-            Informações do Modelo
+          <CardTitle className="flex items-center gap-2 font-heading text-xs font-bold tracking-widest uppercase">
+            <FileText className="h-4 w-4 text-primary" />
+            Informações do modelo
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-muted-foreground">
-                  Nome do Modelo
-                </label>
-                <p className="text-lg font-semibold">{model.name}</p>
-              </div>
+              <MetaField label="Nome do modelo">
+                <span className="font-heading text-lg font-bold tracking-wide uppercase">
+                  {model.name}
+                </span>
+              </MetaField>
 
               {model.description && (
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground">
-                    Descrição
-                  </label>
-                  <p className="text-sm">{model.description}</p>
-                </div>
+                <MetaField label="Descrição">
+                  <span className="text-sm">{model.description}</span>
+                </MetaField>
               )}
 
-              <div>
-                <label className="text-sm font-medium text-muted-foreground">
-                  Total de Itens
-                </label>
-                <div className="flex items-center gap-2">
-                  <Badge variant="secondary" className="text-sm">
-                    {model.items.length}{" "}
-                    {model.items.length === 1 ? "item" : "itens"}
-                  </Badge>
-                </div>
-              </div>
+              <MetaField label="Total de itens">
+                <Badge variant="secondary" className="text-sm">
+                  {model.items.length}{" "}
+                  {model.items.length === 1 ? "item" : "itens"}
+                </Badge>
+              </MetaField>
             </div>
 
             {/* Metadata */}
             <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-muted-foreground flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  Criado em
-                </label>
-                <p className="text-sm">{formatDate(model.created_at)}</p>
-              </div>
+              <MetaField label="Criado em">
+                <span className="font-mono text-xs text-muted-foreground">
+                  {formatDateTime(model.created_at)}
+                </span>
+              </MetaField>
 
-              <div>
-                <label className="text-sm font-medium text-muted-foreground flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  Última atualização
-                </label>
-                <p className="text-sm">{formatDate(model.updated_at)}</p>
-              </div>
+              <MetaField label="Última atualização">
+                <span className="font-mono text-xs text-muted-foreground">
+                  {formatDateTime(model.updated_at)}
+                </span>
+              </MetaField>
 
-              <div>
-                <label className="text-sm font-medium text-muted-foreground">
-                  ID do Modelo
-                </label>
-                <p className="text-sm font-mono text-muted-foreground">
+              <MetaField label="ID do modelo">
+                <span className="font-mono text-xs text-muted-foreground">
                   {model.id}
-                </p>
-              </div>
+                </span>
+              </MetaField>
             </div>
           </div>
         </CardContent>
@@ -237,9 +176,9 @@ function RouteComponent() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Building className="h-5 w-5 text-green-600" />
-            Itens do Checklist
+          <CardTitle className="flex items-center gap-2 font-heading text-xs font-bold tracking-widest uppercase">
+            <Building className="h-4 w-4 text-success" />
+            Itens do checklist
           </CardTitle>
           <p className="text-sm text-muted-foreground">
             Lista dos itens que serão avaliados quando um checklist for criado
@@ -272,46 +211,26 @@ function RouteComponent() {
                         className="hover:bg-muted/30 transition-colors border-b border-muted/40"
                       >
                         <TableCell className="text-center">
-                          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
-                            <span className="text-sm font-semibold text-blue-700">
+                          <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+                            <span className="font-mono text-xs font-semibold text-primary">
                               {String(index + 1).padStart(2, "0")}
                             </span>
                           </div>
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-3">
-                            <div className="w-2 h-8 bg-blue-200 rounded-full"></div>
-                            <span className="font-medium text-foreground leading-relaxed">
+                            <div className="h-8 w-2 rounded-full bg-primary/20"></div>
+                            <span className="font-heading font-semibold tracking-wide text-foreground uppercase">
                               {item.name}
                             </span>
                           </div>
                         </TableCell>
                         <TableCell className="w-full pr-8">
                           <div className="flex flex-wrap justify-end gap-2 w-full">
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-medium bg-green-50 border-green-300 text-green-800 hover:bg-green-100 transition-colors px-3 py-1"
-                            >
-                              ✓ BOM
-                            </Badge>
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-medium bg-yellow-50 border-yellow-300 text-yellow-800 hover:bg-yellow-100 transition-colors px-3 py-1"
-                            >
-                              ⚡ REGULAR
-                            </Badge>
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-medium bg-red-50 border-red-300 text-red-800 hover:bg-red-100 transition-colors px-3 py-1"
-                            >
-                              ✗ RUIM
-                            </Badge>
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-medium bg-gray-50 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors px-3 py-1"
-                            >
-                              ○ N/A
-                            </Badge>
+                            <Badge variant="success">BOM</Badge>
+                            <Badge variant="warning">REGULAR</Badge>
+                            <Badge variant="destructive">RUIM</Badge>
+                            <Badge variant="outline">N/A</Badge>
                           </div>
                         </TableCell>
                       </TableRow>
@@ -352,8 +271,8 @@ function RouteComponent() {
           {model.items.length > 0 && (
             <div className="mt-4 p-4 bg-muted/50 rounded-lg">
               <div className="flex items-start gap-3">
-                <div className="bg-blue-100 p-2 rounded-full">
-                  <CheckSquare className="h-4 w-4 text-blue-600" />
+                <div className="rounded-full bg-primary/10 p-2">
+                  <CheckSquare className="h-4 w-4 text-primary" />
                 </div>
                 <div className="flex-1">
                   <h4 className="font-medium text-sm">

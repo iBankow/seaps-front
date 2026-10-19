@@ -1,11 +1,12 @@
-import api, { type PaginatedResponse } from "#/lib/axios";
+import api from "@/lib/http";
+import type { PaginatedResponse } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { notificationsKeys } from "./query-keys";
 import type {
   Notification,
   NotificationListParams,
   UnreadCountResponse,
-} from "./types";
+} from "../types";
 
 export const useNotificationsList = (
   filters?: NotificationListParams,

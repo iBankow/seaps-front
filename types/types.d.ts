@@ -94,6 +94,7 @@ interface Checklist {
   organization: {
     id: string;
     name: string;
+    acronym?: string;
   };
   user?: {
     id: string;
@@ -103,6 +104,10 @@ interface Checklist {
     id: string;
     name: string;
   }
+  model?: {
+    id: string;
+    name: string;
+  };
   created_at: string;
   finished_at?: string;
 }

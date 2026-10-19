@@ -6,7 +6,7 @@ import {
   FieldGroup,
   FieldLabel,
   FieldTitle,
-} from "#/components/ui/field";
+} from "@/components/ui/field";
 import { Controller, type UseFormReturn } from "react-hook-form";
 import type { FormDataType, FormSchemaType } from "./create-checklist-wizard";
 import {
@@ -15,10 +15,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "#/components/ui/select";
+} from "@/components/ui/select";
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent } from "#/components/ui/card";
-import api from "#/lib/axios";
+import { Card, CardContent } from "@/components/ui/card";
+import api from "@/lib/http";
 
 export const SelectUserForm = ({
   form,
@@ -38,9 +38,9 @@ export const SelectUserForm = ({
   const users = data?.data || [];
 
   return (
-    <div className="w-full items-center flex flex-col">
-      <Card className="grid grid-cols-1 gap-4 bg-card max-w-3xl w-full ">
-        <CardContent>
+    <div className="flex w-full flex-col items-center">
+      <Card className="w-full max-w-3xl gap-4 p-[20px_22px]">
+        <CardContent className="p-0">
           <FieldGroup>
             <Controller
               name="user_id"

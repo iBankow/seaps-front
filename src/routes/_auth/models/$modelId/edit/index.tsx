@@ -1,9 +1,7 @@
-import { Card, CardContent } from "@/components/ui/card";
+﻿import { Card, CardContent } from "@/components/ui/card";
 import { createFileRoute } from "@tanstack/react-router";
-import { EditModelForm } from "../../-components/form";
-import { api } from "@/lib/api";
-import { useEffect, useState } from "react";
-import { BackButton } from "@/components/back-button";
+import { EditModelForm, useModel } from "@/features/models";
+import { BackButton } from "@/components/layout/back-button";
 
 export const Route = createFileRoute("/_auth/models/$modelId/edit/")({
   component: RouteComponent,
@@ -11,27 +9,9 @@ export const Route = createFileRoute("/_auth/models/$modelId/edit/")({
 
 function RouteComponent() {
   const { modelId } = Route.useParams();
+  const { data: model, isLoading } = useModel(modelId);
 
-  const [model, setModel] = useState<any>();
-  const [dataLoading, setDataLoading] = useState(true);
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const { data } = await api.get(`/api/v1/models/${modelId}`);
-
-        if (data) {
-          setModel(data);
-        }
-      } finally {
-        setDataLoading(false);
-      }
-    };
-
-    loadData();
-  }, [modelId]);
-
-  if (dataLoading) {
+  if (isLoading || !model) {
     return <div>Carregando...</div>;
   }
 
@@ -41,7 +21,9 @@ function RouteComponent() {
         <CardContent>
           <div className="flex items-center gap-2">
             <BackButton />
-            <h1 className="text-2xl font-bold">Editar Modelo</h1>
+            <h1 className="font-heading text-xl font-bold tracking-wide uppercase">
+              Editar Modelo
+            </h1>
           </div>
         </CardContent>
       </Card>

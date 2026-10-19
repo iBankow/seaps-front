@@ -40,8 +40,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { api } from "@/lib/api";
-import { format } from "date-fns";
+import { http as api } from "@/lib/http";
+import { formatDateTime } from "@/lib/format";
 
 // Schema de validação do formulário
 const requestFormSchema = z.object({
@@ -107,7 +107,10 @@ function RouteComponent() {
     const loadCurrentRequest = async () => {
       try {
         setLoadingRequest(true);
-        const response = await api.get("/api/v1/auth/request");
+        // 404 aqui é o estado normal de "ainda não há solicitação".
+        const response = await api.get("/auth/request", {
+          skipErrorToast: true,
+        });
         setCurrentRequest(response.data);
       } catch (error: any) {
         // Se retornar 404, significa que não há solicitação
@@ -127,7 +130,9 @@ function RouteComponent() {
     const loadOrganizations = async () => {
       try {
         setLoading(true);
-        const response = await api.get("/api/v1/organizations?per_page=100");
+        const response = await api.get("/organizations?per_page=100", {
+          skipErrorToast: true,
+        });
         setOrganizations(response.data.data || []);
       } catch (error) {
         console.error("Erro ao carregar organizações:", error);
@@ -146,7 +151,9 @@ function RouteComponent() {
       setSubmitting(true);
 
       // Aqui você faria a chamada para a API para criar a solicitação
-      const response = await api.post("/api/v1/user-requests", data);
+      const response = await api.post("/user-requests", data, {
+        skipErrorToast: true,
+      });
 
       if (response.status === 201) {
         toast.success(
@@ -209,39 +216,36 @@ function RouteComponent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
+    <div className="min-h-screen bg-background p-4">
       <div className="max-w-2xl mx-auto py-8">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <div className="p-3 bg-blue-600 rounded-full">
+            <div className="rounded-full bg-primary p-3">
               <UserPlus className="h-8 w-8 text-white" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          <h1 className="text-3xl font-bold text-foreground mb-2">
             Solicitação de Ativação
           </h1>
-          <p className="text-gray-600 dark:text-gray-300">
+          <p className="text-muted-foreground">
             Selecione o órgão e justifique sua solicitação de acesso
           </p>
         </div>
 
         {/* Card da Solicitação Atual */}
         {!loadingRequest && currentRequest && (
-          <Card className="mb-6 border-2 border-blue-200 dark:border-blue-800">
+          <Card className="mb-6 border-2 border-primary/25">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2">
-                  <AlertCircle className="h-5 w-5 text-blue-600" />
+                  <AlertCircle className="h-5 w-5 text-primary" />
                   Sua Solicitação Atual
                 </CardTitle>
                 {getStatusBadge(currentRequest.status)}
               </div>
               <CardDescription>
                 Solicitada em{" "}
-                {format(
-                  new Date(currentRequest.created_at),
-                  "dd/MM/yyyy 'às' HH:mm"
-                )}
+                {formatDateTime(currentRequest.created_at)}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -262,7 +266,7 @@ function RouteComponent() {
                 <p className="text-sm font-medium text-muted-foreground mb-1">
                   Justificativa
                 </p>
-                <p className="text-sm text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 p-3 rounded-md">
+                <p className="text-sm text-foreground bg-secondary p-3 rounded-md">
                   {currentRequest.justification}
                 </p>
               </div>
@@ -272,10 +276,10 @@ function RouteComponent() {
                   <>
                     <Separator />
                     <div>
-                      <p className="text-sm font-medium text-red-600 dark:text-red-400 mb-1">
+                      <p className="text-sm font-medium text-destructive mb-1">
                         Motivo da Rejeição
                       </p>
-                      <p className="text-sm text-gray-700 dark:text-gray-300 bg-red-50 dark:bg-red-900/20 p-3 rounded-md border border-red-200 dark:border-red-800">
+                      <p className="text-sm text-foreground rounded-md border border-destructive/20 bg-destructive/10 p-3">
                         {currentRequest.rejection_reason}
                       </p>
                     </div>
@@ -289,8 +293,8 @@ function RouteComponent() {
               )}
 
               {currentRequest.status === "PENDING" && (
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-md border border-blue-200 dark:border-blue-800">
-                  <p className="text-sm text-blue-800 dark:text-blue-200 flex items-center gap-2">
+                <div className="rounded-md border border-primary/20 bg-primary/10 p-4">
+                  <p className="text-sm text-primary flex items-center gap-2">
                     <Clock className="h-4 w-4" />
                     Sua solicitação está em análise. Você será notificado assim
                     que houver uma resposta.
@@ -394,7 +398,7 @@ function RouteComponent() {
 
         {currentRequest && currentRequest.status === "PENDING" && (
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-muted-foreground">
               Você já possui uma solicitação pendente.
               <br />
               Aguarde a análise antes de enviar uma nova solicitação.
@@ -404,7 +408,7 @@ function RouteComponent() {
 
         {(!currentRequest || currentRequest.status !== "PENDING") && (
           <div className="mt-8 text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-muted-foreground">
               Sua solicitação será analisada pela equipe do órgão selecionado.
               <br />O sistema identificará automaticamente seus dados
               cadastrais.

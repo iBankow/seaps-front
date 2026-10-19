@@ -1,11 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { api } from "@/lib/api";
+import { http as api } from "@/lib/http";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-import { PropertyForm } from "../../-components/form";
-import { BackButton } from "@/components/back-button";
+import { PropertyForm } from "@/features/properties";
+import { BackButton } from "@/components/layout/back-button";
 
 export const Route = createFileRoute("/_auth/properties/$propertyId/edit/")({
   component: EditProperty,
@@ -21,7 +21,7 @@ function EditProperty() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const { data } = await api.get(`/api/v1/properties/${propertyId}`);
+        const { data } = await api.get(`/properties/${propertyId}`);
 
         if (data) {
           setProperty(data);
@@ -41,19 +41,19 @@ function EditProperty() {
           <Button variant="ghost" size="sm" asChild>
             <BackButton variant={"ghost"} />
           </Button>
-          <div className="h-6 w-48 animate-pulse rounded bg-gray-200"></div>
+          <div className="h-6 w-48 animate-pulse rounded bg-muted"></div>
         </div>
         <Card>
           <CardHeader>
-            <div className="h-6 w-32 animate-pulse rounded bg-gray-200"></div>
+            <div className="h-6 w-32 animate-pulse rounded bg-muted"></div>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 {Array.from({ length: 8 }).map((_, i) => (
                   <div key={i} className="space-y-2">
-                    <div className="h-4 w-24 animate-pulse rounded bg-gray-200"></div>
-                    <div className="h-10 w-full animate-pulse rounded bg-gray-200"></div>
+                    <div className="h-4 w-24 animate-pulse rounded bg-muted"></div>
+                    <div className="h-10 w-full animate-pulse rounded bg-muted"></div>
                   </div>
                 ))}
               </div>

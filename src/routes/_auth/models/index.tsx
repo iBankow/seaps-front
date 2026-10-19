@@ -1,73 +1,78 @@
-import { DataTable } from "@/components/data-table";
-import { MetaPagination } from "@/components/meta-pagination";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
-import { DataTableSkeleton } from "@/components/skeletons/data-table";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Plus } from "lucide-react";
 
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { api } from "@/lib/api";
-import { columns } from "./-components/columns";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import z from "zod";
-
-const SearchSchema = z.object({
-  page: z.number().default(1),
-  per_page: z.number().default(10),
-});
+import { ModelDetailPanel, ModelsSidebar, useModelsList } from "@/features/models";
+import { PageHeader } from "@/components/layout/page-header";
+import { Loading } from "@/components/common/loading";
 
 export const Route = createFileRoute("/_auth/models/")({
   component: RouteComponent,
-  validateSearch: SearchSchema,
 });
 
 function RouteComponent() {
-  const search = Route.useSearch();
-
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<any>();
+  const { data, isLoading } = useModelsList({ per_page: 100 });
+  const models = data?.data ?? [];
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   useEffect(() => {
-    api
-      .get("/api/v1/models", {
-        params: { ...search },
-      })
-      .then(({ data }) => setData(data))
-      .finally(() => setLoading(false));
-  }, [search]);
+    if (!selectedId && models.length > 0) {
+      setSelectedId(models[0].id);
+    }
+  }, [models, selectedId]);
+
+  const handleSelect = (id: string) => {
+    if (id === selectedId) return;
+    if (
+      hasUnsavedChanges &&
+      !window.confirm(
+        "Este modelo tem alterações não salvas. Trocar de modelo agora vai descartá-las. Deseja continuar?",
+      )
+    ) {
+      return;
+    }
+    setHasUnsavedChanges(false);
+    setSelectedId(id);
+  };
 
   return (
-    <div className="flex flex-col gap-y-4 flex-1">
-      <Card>
-        <CardContent>
-          <div className="flex justify-between">
-            <div>
-              <h2 className="text-2xl font-bold tracking-tight">Checklists</h2>
-            </div>
-            <div className="self-end">
-              <Button asChild>
-                <Link to="/models/create">
-                  <Plus />
-                  Criar Modelo
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardContent className="space-y-4">
-          {/* <DataFilterForm /> */}
-          {loading ? (
-            <DataTableSkeleton columns={columns} />
+    <div className="flex flex-1 flex-col gap-3.5">
+      <PageHeader eyebrow="Configuração" title="Modelos de checklist">
+        <Button asChild className="font-heading uppercase text-xs leading-0">
+          <Link to="/models/create">
+            <Plus />
+            Novo Modelo
+          </Link>
+        </Button>
+      </PageHeader>
+
+      {isLoading ? (
+        <Card className="flex h-64 items-center justify-center">
+          <Loading size="sm" />
+        </Card>
+      ) : (
+        <div className="grid flex-1 grid-cols-1 items-start gap-3.5 lg:grid-cols-[320px_minmax(0,1fr)]">
+          <ModelsSidebar
+            models={models}
+            selectedId={selectedId}
+            onSelect={handleSelect}
+            hasUnsavedChanges={hasUnsavedChanges}
+          />
+          {selectedId ? (
+            <ModelDetailPanel
+              modelId={selectedId}
+              onDirtyChange={setHasUnsavedChanges}
+            />
           ) : (
-            <DataTable columns={columns} data={data?.data} />
+            <Card className="flex h-64 items-center justify-center text-sm text-muted-foreground">
+              Nenhum modelo cadastrado ainda.
+            </Card>
           )}
-        </CardContent>
-        <CardFooter>
-          <MetaPagination meta={data?.meta} />
-        </CardFooter>
-      </Card>
+        </div>
+      )}
     </div>
   );
 }

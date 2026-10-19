@@ -1,4 +1,5 @@
-import api, { type PaginatedResponse } from "#/lib/axios";
+import api from "@/lib/http";
+import type { PaginatedResponse } from "@/types";
 import {
   keepPreviousData,
   useMutation,
@@ -11,7 +12,7 @@ import type {
   ChecklistNotification,
   ChecklistNotificationListItem,
   ChecklistNotificationListParams,
-} from "./types";
+} from "../types";
 
 export const useChecklistNotificationsList = (
   filters?: ChecklistNotificationListParams,

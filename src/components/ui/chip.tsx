@@ -17,11 +17,11 @@ const chipVariants = cva(
         destructive:
           "border-destructive/20 bg-destructive/10 text-destructive hover:bg-destructive/20",
         success:
-          "border-green-200 bg-green-50 text-green-700 hover:bg-green-100",
+          "border-success/25 bg-success/10 text-success hover:bg-success/20",
         warning:
-          "border-yellow-200 bg-yellow-50 text-yellow-700 hover:bg-yellow-100",
+          "border-warning/30 bg-warning/15 text-warning-foreground hover:bg-warning/25",
         info:
-          "border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100",
+          "border-primary/20 bg-primary/10 text-primary hover:bg-primary/20",
       },
     },
     defaultVariants: {

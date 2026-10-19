@@ -1,4 +1,12 @@
-interface ChecklistItem {
+export interface ChecklistItemImage {
+  id: string;
+  url: string;
+  image: string;
+  name: string;
+  checklist_item_id: string;
+}
+
+export interface ChecklistItem {
   id: string;
   checklist_id: string;
   item_id: string;
@@ -13,4 +21,5 @@ interface ChecklistItem {
     id: string;
     name: string;
   };
+  images?: ChecklistItemImage[];
 }

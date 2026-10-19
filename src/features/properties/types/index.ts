@@ -1,13 +1,20 @@
-import type { PaginatedParams } from "@/lib/axios";
+import type { PaginatedParams } from "@/types";
 
-export type PropertyType = "OWN" | "RENTED" | "GRANT";
+export type PropertyType =
+  | "OWN"
+  | "RENTED"
+  | "GRANT"
+  | "PRIVATE"
+  | "GUARANTY"
+  | "AFFECTATION"
+  | "DONATION";
 
 export interface Property {
   id: string;
   organization_id: string;
   person_id: string;
   created_by: string;
-  type: "OWN" | "RENTED" | "GRANT";
+  type: PropertyType;
   name: string;
   name_normalized: string;
   address: string;
@@ -38,7 +45,7 @@ export interface PropertiesListParams extends PaginatedParams {
   organization_id?: string;
   person_id?: string;
   name?: string;
-  type?: "OWN" | "RENTED" | "GRANT";
+  type?: PropertyType;
   city?: string;
   state?: string;
   neighborhood?: string;
@@ -47,7 +54,7 @@ export interface PropertiesListParams extends PaginatedParams {
 export interface PropertyCreatePayload {
   organization_id: string;
   person_id: string;
-  type: "OWN" | "RENTED" | "GRANT";
+  type: PropertyType;
   name: string;
   address?: string;
   cep: string;

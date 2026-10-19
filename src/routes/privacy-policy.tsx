@@ -1,4 +1,4 @@
-import { ModeToggle } from "@/components/mode-toggle";
+﻿import { ModeToggle } from "@/components/layout/mode-toggle";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/privacy-policy")({

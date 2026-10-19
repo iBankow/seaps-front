@@ -1,0 +1,47 @@
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useEffect, useState } from "react";
+import EmblaCarousel from "@/components/common/carousel/embla-carousel";
+import { http as api } from "@/lib/http";
+import { Loading } from "@/components/common/loading";
+
+export function ImageDialog({ item, ...props }: any) {
+  const [images, setImages] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (props.open && images.length === 0 && item) {
+      api
+        .get("/checklist-items/" + item.id)
+        .then(({ data }) => setImages(data.images))
+        .finally(() => setLoading(false));
+    }
+  }, [item.checklist_id, item.id, props.open]);
+
+  return (
+    <Dialog {...props}>
+      <DialogHeader hidden>
+        <DialogTitle hidden>Imagens</DialogTitle>
+        <DialogDescription hidden>Imagens</DialogDescription>
+      </DialogHeader>
+      <DialogContent
+        className="w-full border-none py-4 shadow-none"
+        aria-describedby="content"
+      >
+        {loading ? (
+          <Loading />
+        ) : (
+          <EmblaCarousel
+            slides={images}
+            options={{ startIndex: props.index ? props.index : 0 }}
+          />
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}

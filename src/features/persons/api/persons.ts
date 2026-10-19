@@ -1,10 +1,9 @@
 import api, {
   getApiErrorAction,
   getApiErrorMessage,
-  initialData,
   isApiError,
-  type PaginatedResponse,
-} from "#/lib/axios";
+} from "@/lib/http";
+import { initialData, type PaginatedResponse } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Person, PersonCreatePayload, PersonsListParams } from "../types";
 import { personsKeys } from "./query-keys";
@@ -53,7 +52,10 @@ export const personsApi = {
   },
 
   create: async (payload: PersonCreatePayload) => {
-    const { data } = await api.post<Person>("/persons", payload);
+    // O onError de useCreatePerson já exibe a mensagem.
+    const { data } = await api.post<Person>("/persons", payload, {
+      skipErrorToast: true,
+    });
 
     return data;
   },
