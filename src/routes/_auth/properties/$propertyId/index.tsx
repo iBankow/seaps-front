@@ -285,10 +285,13 @@ function PropertyDetail() {
     return (
       <div className="flex flex-col gap-y-4">
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" asChild>
-            <Link to="/properties">
-              <ArrowLeft className="h-4 w-4" />
-            </Link>
+          <Button
+            variant="ghost"
+            size="sm"
+            nativeButton={false}
+            render={<Link to="/properties" />}
+          >
+            <ArrowLeft className="h-4 w-4" />
           </Button>
           <h1 className="text-2xl font-bold">Imóvel não encontrado</h1>
         </div>
@@ -320,13 +323,16 @@ function PropertyDetail() {
                 </Badge>
               )}
               <PermissionGate permissions="properties:edit">
-                <Button asChild>
-                  <Link
-                    to={`/properties/$propertyId/edit`}
-                    params={{ propertyId }}
-                  >
-                    Editar Imóvel
-                  </Link>
+                <Button
+                  nativeButton={false}
+                  render={
+                    <Link
+                      to={`/properties/$propertyId/edit`}
+                      params={{ propertyId }}
+                    />
+                  }
+                >
+                  Editar Imóvel
                 </Button>
               </PermissionGate>
             </div>
@@ -544,11 +550,12 @@ function PropertyDetail() {
                 Últimas avaliações realizadas neste imóvel
               </CardDescription>
             </div>
-            <Button asChild>
-              <Link to="/checklists/create">
-                <Plus className="h-4 w-4 mr-2" />
-                Novo Checklist
-              </Link>
+            <Button
+              nativeButton={false}
+              render={<Link to="/checklists/create" />}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Novo Checklist
             </Button>
           </div>
         </CardHeader>
@@ -574,11 +581,12 @@ function PropertyDetail() {
               <p className="text-muted-foreground mb-4">
                 Nenhum checklist encontrado para este imóvel.
               </p>
-              <Button asChild>
-                <Link to="/checklists/create">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Criar Primeiro Checklist
-                </Link>
+              <Button
+                nativeButton={false}
+                render={<Link to="/checklists/create" />}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Criar Primeiro Checklist
               </Button>
             </div>
           ) : (
@@ -602,14 +610,19 @@ function PropertyDetail() {
                       </div>
                       <div className="flex items-center gap-2">
                         {getStatusBadge(checklist.status)}
-                        <Button variant="outline" size="sm" asChild>
-                          <Link
-                            to="/checklists/$checklistId"
-                            params={{ checklistId: checklist.id }}
-                          >
-                            <Eye className="h-4 w-4 mr-1" />
-                            Ver
-                          </Link>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          nativeButton={false}
+                          render={
+                            <Link
+                              to="/checklists/$checklistId"
+                              params={{ checklistId: checklist.id }}
+                            />
+                          }
+                        >
+                          <Eye className="h-4 w-4 mr-1" />
+                          Ver
                         </Button>
                       </div>
                     </div>
@@ -652,13 +665,17 @@ function PropertyDetail() {
 
               {(stats?.total_checklists || 0) > 5 && (
                 <div className="text-center pt-4">
-                  <Button variant="outline" asChild>
-                    <Link
-                      to="/checklists"
-                      search={{ property_name: property.name }}
-                    >
-                      Ver Todos os Checklists
-                    </Link>
+                  <Button
+                    variant="outline"
+                    nativeButton={false}
+                    render={
+                      <Link
+                        to="/checklists"
+                        search={{ property_name: property.name }}
+                      />
+                    }
+                  >
+                    Ver Todos os Checklists
                   </Button>
                 </div>
               )}

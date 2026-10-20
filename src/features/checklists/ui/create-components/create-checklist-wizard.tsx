@@ -206,11 +206,13 @@ export function CreateOrderWizard() {
         eyebrow={`Checklists · Etapa ${currentStep}/${steps.length}`}
         title="Novo Checklist"
       >
-        <Button variant="outline" asChild>
-          <Link to="/checklists">
-            <ChevronLeft />
-            Cancelar
-          </Link>
+        <Button
+          variant="outline"
+          nativeButton={false}
+          render={<Link to="/checklists" />}
+        >
+          <ChevronLeft />
+          Cancelar
         </Button>
       </PageHeader>
 
@@ -251,9 +253,12 @@ export function CreateOrderWizard() {
                 <span
                   className={cn(
                     "font-mono flex h-9 w-9 min-w-9 items-center justify-center rounded-full border text-[12px]",
-                    isDone && "border-primary bg-primary text-primary-foreground",
+                    isDone &&
+                      "border-primary bg-primary text-primary-foreground",
                     isCurrent && "border-primary text-primary",
-                    !isDone && !isCurrent && "border-input text-muted-foreground",
+                    !isDone &&
+                      !isCurrent &&
+                      "border-input text-muted-foreground",
                   )}
                 >
                   {isDone ? <Check className="h-4 w-4" /> : step.id}

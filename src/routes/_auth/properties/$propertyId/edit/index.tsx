@@ -1,7 +1,6 @@
 ﻿import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { http as api } from "@/lib/http";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 import { PropertyForm } from "@/features/properties";
@@ -38,9 +37,7 @@ function EditProperty() {
     return (
       <div className="flex flex-col gap-y-4">
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" asChild>
-            <BackButton variant={"ghost"} />
-          </Button>
+          <BackButton variant="ghost" size="sm" />
           <div className="h-6 w-48 animate-pulse rounded bg-muted"></div>
         </div>
         <Card>
@@ -69,9 +66,7 @@ function EditProperty() {
       <Card>
         <CardContent>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" asChild>
-              <BackButton variant={"ghost"} />
-            </Button>
+            <BackButton variant="ghost" size="sm" />
             <h1 className="text-2xl font-bold">Editar Imóvel</h1>
           </div>
         </CardContent>

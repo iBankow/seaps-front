@@ -11,8 +11,8 @@ export function NotFoundPage() {
           A página que você está procurando não existe ou foi movida.
         </p>
       </div>
-      <Button asChild>
-        <Link to="/">Voltar para o início</Link>
+      <Button nativeButton={false} render={<Link to="/" />}>
+        Voltar para o início
       </Button>
     </div>
   );

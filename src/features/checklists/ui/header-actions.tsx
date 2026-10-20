@@ -44,14 +44,18 @@ export function ChecklistHeaderActions() {
       />
 
       <div className="mt-4">
-        <Button asChild  className="mb-2 w-full">
-          <Link
-            to="/checklists/$checklistId/items"
-            params={{ checklistId: checklist.id }}
-          >
-            <List size={16} />
-            Ver Itens
-          </Link>
+        <Button
+          className="mb-2 w-full"
+          nativeButton={false}
+          render={
+            <Link
+              to="/checklists/$checklistId/items"
+              params={{ checklistId: checklist.id }}
+            />
+          }
+        >
+          <List size={16} />
+          Ver Itens
         </Button>
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>

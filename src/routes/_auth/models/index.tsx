@@ -4,7 +4,11 @@ import { Card } from "@/components/ui/card";
 import { Plus } from "lucide-react";
 
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ModelDetailPanel, ModelsSidebar, useModelsList } from "@/features/models";
+import {
+  ModelDetailPanel,
+  ModelsSidebar,
+  useModelsList,
+} from "@/features/models";
 import { PageHeader } from "@/components/layout/page-header";
 import { Loading } from "@/components/common/loading";
 
@@ -41,11 +45,13 @@ function RouteComponent() {
   return (
     <div className="flex flex-1 flex-col gap-3.5">
       <PageHeader eyebrow="Configuração" title="Modelos de checklist">
-        <Button asChild className="font-heading uppercase text-xs leading-0">
-          <Link to="/models/create">
-            <Plus />
-            Novo Modelo
-          </Link>
+        <Button
+          className="font-heading uppercase text-xs leading-0"
+          nativeButton={false}
+          render={<Link to="/models/create" />}
+        >
+          <Plus />
+          Novo Modelo
         </Button>
       </PageHeader>
 

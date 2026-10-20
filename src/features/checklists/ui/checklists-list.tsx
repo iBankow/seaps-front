@@ -21,11 +21,13 @@ export function ChecklistList({ params }: { params: any }) {
     <div className="flex flex-1 flex-col gap-3.5">
       <PageHeader eyebrow="Operação" title="Checklists">
         <PermissionGate permissions="checklists:create">
-          <Button asChild className="font-heading uppercase text-xs leading-0">
-            <Link to="/checklists/create">
-              <Plus />
-              Criar Checklist
-            </Link>
+          <Button
+            className="font-heading uppercase text-xs leading-0"
+            nativeButton={false}
+            render={<Link to="/checklists/create" />}
+          >
+            <Plus />
+            Criar Checklist
           </Button>
         </PermissionGate>
       </PageHeader>

@@ -86,15 +86,21 @@ export const columns: ColumnDef<Model>[] = [
     cell({ row }) {
       return (
         <div className="flex gap-1">
-          <Button variant="default" className="h-6 w-6 p-2" asChild>
-            <Link to={"/models/" + row.original.id}>
-              <ChevronRight size={16} />
-            </Link>
+          <Button
+            variant="default"
+            className="h-6 w-6 p-2"
+            nativeButton={false}
+            render={<Link to={"/models/" + row.original.id} />}
+          >
+            <ChevronRight size={16} />
           </Button>
-          <Button variant="secondary" className="h-6 w-6 p-2" asChild>
-            <Link to={"/models/" + row.original.id + "/edit"}>
-              <Pen size={16} />
-            </Link>
+          <Button
+            variant="secondary"
+            className="h-6 w-6 p-2"
+            nativeButton={false}
+            render={<Link to={"/models/" + row.original.id + "/edit"} />}
+          >
+            <Pen size={16} />
           </Button>
         </div>
       );

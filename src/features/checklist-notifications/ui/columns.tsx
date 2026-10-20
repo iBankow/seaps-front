@@ -101,15 +101,20 @@ export const columns: ColumnDef<Column>[] = [
     header: "Ações",
     cell({ row }) {
       return (
-        <Button variant="ghost" size="sm" asChild>
-          <Link
-            to="/checklists/$checklistId/notification"
-            params={{ checklistId: row.original.checklist_id }}
-            preload={false}
-          >
-            Ver
-            <ChevronRight size={16} />
-          </Link>
+        <Button
+          variant="ghost"
+          size="sm"
+          nativeButton={false}
+          render={
+            <Link
+              to="/checklists/$checklistId/notification"
+              params={{ checklistId: row.original.checklist_id }}
+              preload={false}
+            />
+          }
+        >
+          Ver
+          <ChevronRight size={16} />
         </Button>
       );
     },

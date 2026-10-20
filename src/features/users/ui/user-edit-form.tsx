@@ -156,10 +156,13 @@ export function UserEditForm() {
     return (
       <div className="container mx-auto py-6 space-y-6">
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" asChild>
-            <Link to={`..`}>
-              <ArrowLeft className="h-5 w-5" />
-            </Link>
+          <Button
+            variant="ghost"
+            size="icon"
+            nativeButton={false}
+            render={<Link to={`..`} />}
+          >
+            <ArrowLeft className="h-5 w-5" />
           </Button>
           <div className="space-y-2 flex-1">
             <div className="h-8 w-64 animate-pulse rounded bg-muted"></div>
@@ -194,10 +197,13 @@ export function UserEditForm() {
     <div className="container mx-auto py-6 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Button variant="ghost" size="icon" asChild>
-          <Link to={`..`}>
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
+        <Button
+          variant="ghost"
+          size="icon"
+          nativeButton={false}
+          render={<Link to={`..`} />}
+        >
+          <ArrowLeft className="h-5 w-5" />
         </Button>
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Editar Usuário</h1>
@@ -619,8 +625,13 @@ export function UserEditForm() {
 
           {/* Ações */}
           <div className="flex justify-end gap-3">
-            <Button type="button" variant="outline" asChild>
-              <Link to={`..`}>Cancelar</Link>
+            <Button
+              type="button"
+              variant="outline"
+              nativeButton={false}
+              render={<Link to={`..`} />}
+            >
+              Cancelar
             </Button>
             <Button type="submit" size="lg" className="min-w-32">
               Salvar Alterações

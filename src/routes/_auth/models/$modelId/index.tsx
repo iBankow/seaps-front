@@ -71,10 +71,13 @@ function RouteComponent() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-2 mb-4">
-              <Button variant="ghost" size="sm" asChild>
-                <Link to="/models">
-                  <ArrowLeft className="h-4 w-4" />
-                </Link>
+              <Button
+                variant="ghost"
+                size="sm"
+                nativeButton={false}
+                render={<Link to="/models" />}
+              >
+                <ArrowLeft className="h-4 w-4" />
               </Button>
               <h1 className="font-heading text-2xl font-bold tracking-wide uppercase">
                 Modelo não encontrado
@@ -95,10 +98,13 @@ function RouteComponent() {
         <CardContent>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" asChild>
-                <Link to="/models">
-                  <ArrowLeft className="h-4 w-4" />
-                </Link>
+              <Button
+                variant="ghost"
+                size="sm"
+                nativeButton={false}
+                render={<Link to="/models" />}
+              >
+                <ArrowLeft className="h-4 w-4" />
               </Button>
               <div>
                 <h1 className="font-heading flex items-center gap-2 text-xl font-bold tracking-wide uppercase">
@@ -110,10 +116,14 @@ function RouteComponent() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" asChild>
-                <Link to="/models/$modelId/edit" params={{ modelId }}>
-                  Editar Modelo
-                </Link>
+              <Button
+                variant="outline"
+                nativeButton={false}
+                render={
+                  <Link to="/models/$modelId/edit" params={{ modelId }} />
+                }
+              >
+                Editar Modelo
               </Button>
             </div>
           </div>
@@ -251,13 +261,18 @@ function RouteComponent() {
                               configurados.
                             </p>
                           </div>
-                          <Button variant="outline" size="sm" asChild>
-                            <Link
-                              to="/models/$modelId/edit"
-                              params={{ modelId }}
-                            >
-                              Adicionar Itens
-                            </Link>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            nativeButton={false}
+                            render={
+                              <Link
+                                to="/models/$modelId/edit"
+                                params={{ modelId }}
+                              />
+                            }
+                          >
+                            Adicionar Itens
                           </Button>
                         </div>
                       </TableCell>

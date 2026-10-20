@@ -191,9 +191,7 @@ export const PropertyForm = ({
                         <SelectItem value={"GRANT"}>CONCESSÃO</SelectItem>
                         <SelectItem value={"PRIVATE"}>PRIVADO</SelectItem>
                         <SelectItem value={"GUARANTY"}>CAUÇÃO</SelectItem>
-                        <SelectItem value={"AFFECTATION"}>
-                          AFETAÇÃO
-                        </SelectItem>
+                        <SelectItem value={"AFFECTATION"}>AFETAÇÃO</SelectItem>
                         <SelectItem value={"DONATION"}>DOAÇÃO</SelectItem>
                       </SelectContent>
                     </Select>
@@ -222,10 +220,18 @@ export const PropertyForm = ({
                         null
                       }
                     />
-                    <Button size={"icon"} type="button" asChild>
-                      <Link to="/persons/create" search={{ organization_id }}>
-                        <Plus />
-                      </Link>
+                    <Button
+                      size={"icon"}
+                      type="button"
+                      nativeButton={false}
+                      render={
+                        <Link
+                          to="/persons/create"
+                          search={{ organization_id }}
+                        />
+                      }
+                    >
+                      <Plus />
                     </Button>
                   </div>
                 </FormItem>

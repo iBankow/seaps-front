@@ -91,21 +91,24 @@ export function Pagination({ className, meta }: IPaginationComponent) {
             variant="ghost"
             disabled={meta?.prev_page === null}
             className={NAV_BUTTON}
-            asChild
+            nativeButton={false}
+            render={
+              <Link
+                replace={true}
+                to="."
+                search={getParams(
+                  meta?.current_page ? meta?.current_page - 1 : 0,
+                )}
+                className={
+                  meta?.prev_page === null
+                    ? "pointer-events-none opacity-50"
+                    : ""
+                }
+              />
+            }
           >
-            <Link
-              replace={true}
-              to="."
-              search={getParams(
-                meta?.current_page ? meta?.current_page - 1 : 0,
-              )}
-              className={
-                meta?.prev_page === null ? "pointer-events-none opacity-50" : ""
-              }
-            >
-              <ChevronLeft data-icon="inline-start" />
-              Anterior
-            </Link>
+            <ChevronLeft data-icon="inline-start" />
+            Anterior
           </Button>
         </PaginationItem>
         {generatePages().map((item, index) => {
@@ -115,17 +118,18 @@ export function Pagination({ className, meta }: IPaginationComponent) {
                 <Button
                   variant="ghost"
                   disabled
-                  asChild
                   size="icon"
                   className={ELLIPSIS_BUTTON}
+                  nativeButton={false}
+                  render={
+                    <Link
+                      replace={true}
+                      to="."
+                      search={getParams(meta?.current_page + Number(item))}
+                    />
+                  }
                 >
-                  <Link
-                    replace={true}
-                    to="."
-                    search={getParams(meta?.current_page + Number(item))}
-                  >
-                    <PaginationEllipsis />
-                  </Link>
+                  <PaginationEllipsis />
                 </Button>
               </PaginationItem>
             );
@@ -136,22 +140,23 @@ export function Pagination({ className, meta }: IPaginationComponent) {
           return (
             <PaginationItem key={index}>
               <Button
-                asChild
                 variant="ghost"
                 size="icon"
                 className={cn(
                   PAGE_BUTTON,
                   isActive ? PAGE_ACTIVE : PAGE_INACTIVE,
                 )}
+                nativeButton={false}
+                render={
+                  <Link
+                    replace={true}
+                    to="."
+                    search={getParams(item)}
+                    aria-current={isActive ? "page" : undefined}
+                  />
+                }
               >
-                <Link
-                  replace={true}
-                  to="."
-                  search={getParams(item)}
-                  aria-current={isActive ? "page" : undefined}
-                >
-                  {item}
-                </Link>
+                {item}
               </Button>
             </PaginationItem>
           );
@@ -161,21 +166,24 @@ export function Pagination({ className, meta }: IPaginationComponent) {
             variant="ghost"
             disabled={meta?.next_page === null}
             className={NAV_BUTTON}
-            asChild
+            nativeButton={false}
+            render={
+              <Link
+                replace={true}
+                to="."
+                search={getParams(
+                  meta?.current_page ? meta?.current_page + 1 : 0,
+                )}
+                className={
+                  meta?.next_page === null
+                    ? "pointer-events-none opacity-50"
+                    : ""
+                }
+              />
+            }
           >
-            <Link
-              replace={true}
-              to="."
-              search={getParams(
-                meta?.current_page ? meta?.current_page + 1 : 0,
-              )}
-              className={
-                meta?.next_page === null ? "pointer-events-none opacity-50" : ""
-              }
-            >
-              Proximo
-              <ChevronRight data-icon="inline-end" />
-            </Link>
+            Proximo
+            <ChevronRight data-icon="inline-end" />
           </Button>
         </PaginationItem>
       </PaginationContent>

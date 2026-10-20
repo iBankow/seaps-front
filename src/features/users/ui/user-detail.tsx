@@ -24,10 +24,13 @@ export function UserDetail() {
     return (
       <div className="container mx-auto py-6 space-y-6">
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" asChild>
-            <Link to="/users">
-              <ArrowLeft className="h-5 w-5" />
-            </Link>
+          <Button
+            variant="ghost"
+            size="icon"
+            nativeButton={false}
+            render={<Link to="/users" />}
+          >
+            <ArrowLeft className="h-5 w-5" />
           </Button>
           <div className="space-y-2 flex-1">
             <div className="h-8 w-64 animate-pulse rounded bg-muted"></div>
@@ -59,10 +62,13 @@ export function UserDetail() {
     return (
       <div className="container mx-auto py-6 space-y-6">
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" asChild>
-            <Link to="/users">
-              <ArrowLeft className="h-5 w-5" />
-            </Link>
+          <Button
+            variant="ghost"
+            size="icon"
+            nativeButton={false}
+            render={<Link to="/users" />}
+          >
+            <ArrowLeft className="h-5 w-5" />
           </Button>
           <h1 className="text-3xl font-bold text-destructive">
             Usuário não encontrado
@@ -83,10 +89,13 @@ export function UserDetail() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" asChild>
-            <Link to="/users">
-              <ArrowLeft className="h-5 w-5" />
-            </Link>
+          <Button
+            variant="ghost"
+            size="icon"
+            nativeButton={false}
+            render={<Link to="/users" />}
+          >
+            <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
             <h1 className="text-3xl font-bold tracking-tight">
@@ -98,10 +107,12 @@ export function UserDetail() {
           </div>
         </div>
         <PermissionGate permissions="users:edit">
-          <Button asChild size="lg">
-            <Link to={`/users/$userId/edit`} params={{ userId }}>
-              Editar Usuário
-            </Link>
+          <Button
+            size="lg"
+            nativeButton={false}
+            render={<Link to={`/users/$userId/edit`} params={{ userId }} />}
+          >
+            Editar Usuário
           </Button>
         </PermissionGate>
       </div>

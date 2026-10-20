@@ -39,18 +39,17 @@ export function LoginPage() {
                       <Button
                         type="button"
                         className="h-12 w-full py-1 font-bold uppercase"
-                        asChild
                         size={"lg"}
+                        nativeButton={false}
+                        render={<a href={config.url_login} />}
                       >
-                        <a href={config.url_login}>
-                          Entrar com
-                          <img
-                            src={"/mt-login.png"}
-                            width={40}
-                            height={40}
-                            alt={"MT Login Logo"}
-                          />
-                        </a>
+                        Entrar com
+                        <img
+                          src={"/mt-login.png"}
+                          width={40}
+                          height={40}
+                          alt={"MT Login Logo"}
+                        />
                       </Button>
                     </div>
                   </div>
