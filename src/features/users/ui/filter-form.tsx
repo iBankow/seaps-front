@@ -26,6 +26,13 @@ import { toUpperCase } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { useRouter, useSearch } from "@tanstack/react-router";
 
+const ROLE_ITEMS = [
+  { value: "ADMIN", label: "ADMINISTRADOR" },
+  { value: "MANAGER", label: "GERENTE" },
+  { value: "EVALUATOR", label: "AVALIADOR" },
+  { value: "USER", label: "USUÁRIO" },
+];
+
 const filterSchema = z.object({
   organization: z.string().optional(),
   role: z.string().optional(),
@@ -108,7 +115,8 @@ export function DataFilterForm() {
               <FormLabel>Função</FormLabel>
               <Select
                 onValueChange={field.onChange}
-                value={field.value || undefined}
+                value={field.value || null}
+                items={ROLE_ITEMS}
               >
                 <FormControl className="w-full">
                   <SelectTrigger>
@@ -116,10 +124,11 @@ export function DataFilterForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="ADMIN">ADMINISTRADOR</SelectItem>
-                  <SelectItem value="MANAGER">GERENTE</SelectItem>
-                  <SelectItem value="EVALUATOR">AVALIADOR</SelectItem>
-                  <SelectItem value="USER">USUÁRIO</SelectItem>
+                  {ROLE_ITEMS.map((item) => (
+                    <SelectItem key={item.value} value={item.value}>
+                      {item.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <FormMessage />

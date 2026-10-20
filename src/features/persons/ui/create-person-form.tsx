@@ -88,6 +88,10 @@ export function CreatePersonForm() {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={params.organization_id || undefined}
+                    items={organizations.map((o) => ({
+                      value: String(o.id),
+                      label: o.name,
+                    }))}
                   >
                     <FormControl>
                       <SelectTrigger>

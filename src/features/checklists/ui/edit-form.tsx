@@ -130,7 +130,14 @@ export function EditCheckListForm({ checklist }: { checklist?: any }) {
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Responsável pelo Checklist</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value ?? null}
+                      items={users.map((u) => ({
+                        value: String(u.id),
+                        label: u.name,
+                      }))}
+                    >
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Selecione o Responsável pelo checklist" />

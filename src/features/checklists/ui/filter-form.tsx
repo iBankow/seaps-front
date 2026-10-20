@@ -43,6 +43,11 @@ import debounce from "lodash.debounce";
 import { Separator } from "@/components/ui/separator";
 import { addressApi } from "@/features/address";
 
+const STATUS_ITEMS = [
+  { value: "OPEN", label: "ABERTO" },
+  { value: "CLOSED", label: "FECHADO" },
+];
+
 const filterSchema = z.object({
   organization_id: z.string().optional(),
   user_id: z.string().optional().nullable(),
@@ -312,7 +317,11 @@ export function DataFilterForm({
                             <FormLabel>Orgão</FormLabel>
                             <Select
                               onValueChange={field.onChange}
-                              value={field.value || undefined}
+                              value={field.value || null}
+                              items={organizations.map((o) => ({
+                                value: String(o.id),
+                                label: o.name,
+                              }))}
                             >
                               <FormControl className="w-full">
                                 <SelectTrigger>
@@ -411,7 +420,8 @@ export function DataFilterForm({
                             <FormLabel>Status</FormLabel>
                             <Select
                               onValueChange={field.onChange}
-                              value={field.value || undefined}
+                              value={field.value || null}
+                              items={STATUS_ITEMS}
                             >
                               <FormControl className="w-full">
                                 <SelectTrigger>
@@ -419,8 +429,14 @@ export function DataFilterForm({
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                <SelectItem value="OPEN">ABERTO</SelectItem>
-                                <SelectItem value="CLOSED">FECHADO</SelectItem>
+                                {STATUS_ITEMS.map((item) => (
+                                  <SelectItem
+                                    key={item.value}
+                                    value={item.value}
+                                  >
+                                    {item.label}
+                                  </SelectItem>
+                                ))}
                               </SelectContent>
                             </Select>
                             <FormMessage />

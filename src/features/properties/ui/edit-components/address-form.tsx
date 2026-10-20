@@ -107,7 +107,11 @@ export const AddressForm = (props: any) => {
             <FormLabel>Estado</FormLabel>
             <Select
               onValueChange={field.onChange}
-              value={field.value || undefined}
+              value={field.value || null}
+              items={states.map((s) => ({
+                value: s.acronym,
+                label: s.name.toUpperCase(),
+              }))}
             >
               <FormControl>
                 <SelectTrigger

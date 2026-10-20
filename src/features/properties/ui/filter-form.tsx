@@ -282,7 +282,11 @@ export function DataFilterForm({
                             <FormLabel>Orgão</FormLabel>
                             <Select
                               onValueChange={field.onChange}
-                              value={field.value || undefined}
+                              value={field.value || null}
+                              items={organizations.map((o) => ({
+                                value: String(o.id),
+                                label: o.name,
+                              }))}
                             >
                               <FormControl className="w-full">
                                 <SelectTrigger>
@@ -313,7 +317,8 @@ export function DataFilterForm({
                             <FormLabel>Tipo</FormLabel>
                             <Select
                               onValueChange={field.onChange}
-                              value={field.value || undefined}
+                              value={field.value || null}
+                              items={typeLabels}
                             >
                               <FormControl className="w-full">
                                 <SelectTrigger>
@@ -321,14 +326,13 @@ export function DataFilterForm({
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                <SelectItem value="OWN">PRÓPRIO</SelectItem>
-                                <SelectItem value="RENTED">ALUGADO</SelectItem>
-                                <SelectItem value="GRANT">CONCESSÃO</SelectItem>
-                                <SelectItem value="GUARANTY">CAUÇÃO</SelectItem>
-                                <SelectItem value="AFFECTATION">
-                                  AFETAÇÃO
-                                </SelectItem>
-                                <SelectItem value="DONATION">DOAÇÃO</SelectItem>
+                                {Object.entries(typeLabels).map(
+                                  ([value, label]) => (
+                                    <SelectItem key={value} value={value}>
+                                      {label}
+                                    </SelectItem>
+                                  ),
+                                )}
                               </SelectContent>
                             </Select>
                             <FormMessage />

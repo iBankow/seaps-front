@@ -57,8 +57,13 @@ export const SelectUserForm = ({
                   </FieldContent>
                   <Select
                     name={field.name}
-                    value={field.value}
+                    value={field.value ?? null}
+                    items={users?.map((u: { id: string; name: string }) => ({
+                      value: u.id,
+                      label: u.name,
+                    }))}
                     onValueChange={(value) => {
+                      if (!value) return;
                       field.onChange(value);
                       const user = users.find((m: any) => m.id === value);
                       updateFormData({
@@ -76,7 +81,7 @@ export const SelectUserForm = ({
                     >
                       <SelectValue placeholder="Selecione o modelo" />
                     </SelectTrigger>
-                    <SelectContent position="item-aligned">
+                    <SelectContent>
                       {users?.map((item: { id: string; name: string }) => (
                         <SelectItem key={item.id} value={item.id}>
                           {item.name}

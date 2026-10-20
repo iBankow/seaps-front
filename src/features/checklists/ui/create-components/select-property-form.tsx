@@ -319,7 +319,13 @@ const FilterDialog = ({
         <Label htmlFor="name-1">Estado</Label>
         <Select
           defaultValue={filter.state}
-          onValueChange={(value) => setFilter({ ...filter, state: value })}
+          items={statesQuery.data?.map((s) => ({
+            value: s.acronym,
+            label: s.name,
+          }))}
+          onValueChange={(value) => {
+            if (value) setFilter({ ...filter, state: value });
+          }}
         >
           <SelectTrigger>
             <SelectValue placeholder="Escolha um estado" />

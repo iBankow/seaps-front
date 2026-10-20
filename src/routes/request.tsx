@@ -90,7 +90,7 @@ function RouteComponent() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [currentRequest, setCurrentRequest] = useState<UserRequest | null>(
-    null
+    null,
   );
   const [loadingRequest, setLoadingRequest] = useState(true);
 
@@ -157,7 +157,7 @@ function RouteComponent() {
 
       if (response.status === 201) {
         toast.success(
-          "Solicitação enviada com sucesso! Você receberá uma resposta em breve."
+          "Solicitação enviada com sucesso! Você receberá uma resposta em breve.",
         );
         form.reset();
         setCurrentRequest(response.data);
@@ -244,8 +244,7 @@ function RouteComponent() {
                 {getStatusBadge(currentRequest.status)}
               </div>
               <CardDescription>
-                Solicitada em{" "}
-                {formatDateTime(currentRequest.created_at)}
+                Solicitada em {formatDateTime(currentRequest.created_at)}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -328,7 +327,13 @@ function RouteComponent() {
                         <FormLabel>Órgão *</FormLabel>
                         <Select
                           onValueChange={field.onChange}
-                          value={field.value}
+                          value={field.value ?? null}
+                          items={organizations.map((org) => ({
+                            value: org.id,
+                            label: org.acronym
+                              ? `${org.name} (${org.acronym})`
+                              : org.name,
+                          }))}
                           disabled={loading}
                         >
                           <FormControl>

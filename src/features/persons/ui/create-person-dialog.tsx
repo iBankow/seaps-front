@@ -126,7 +126,11 @@ export const CreatePersonDialog = ({
                 <Select
                   disabled
                   name={field.name}
-                  value={field.value}
+                  value={field.value ?? null}
+                  items={organizations.map((o) => ({
+                    value: o.id,
+                    label: o.name,
+                  }))}
                   onValueChange={(value) => {
                     field.onChange(value);
                   }}

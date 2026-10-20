@@ -27,6 +27,16 @@ import { NameForm } from "./edit-components/name-form";
 import { AddressForm } from "./edit-components/address-form";
 import { Separator } from "@/components/ui/separator";
 
+const PROPERTY_TYPE_ITEMS = [
+  { value: "OWN", label: "PRÓPRIO" },
+  { value: "RENTED", label: "ALUGADO" },
+  { value: "GRANT", label: "CONCESSÃO" },
+  { value: "PRIVATE", label: "PRIVADO" },
+  { value: "GUARANTY", label: "CAUÇÃO" },
+  { value: "AFFECTATION", label: "AFETAÇÃO" },
+  { value: "DONATION", label: "DOAÇÃO" },
+];
+
 const propertySchema = z.object({
   organization_id: z.string().min(1, "Orgão é obrigatório"),
   person_id: z.string().optional().nullable(),
@@ -154,7 +164,14 @@ export const PropertyForm = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Orgão *</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value ?? null}
+                      items={organizations.map((o) => ({
+                        value: o.id,
+                        label: o.name,
+                      }))}
+                    >
                       <FormControl
                         className={dataLoading ? "animate-pulse" : ""}
                       >
@@ -179,20 +196,22 @@ export const PropertyForm = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Tipo *</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value ?? null}
+                      items={PROPERTY_TYPE_ITEMS}
+                    >
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Selecione o Tipo" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value={"OWN"}>PRÓPRIO</SelectItem>
-                        <SelectItem value={"RENTED"}>ALUGADO</SelectItem>
-                        <SelectItem value={"GRANT"}>CONCESSÃO</SelectItem>
-                        <SelectItem value={"PRIVATE"}>PRIVADO</SelectItem>
-                        <SelectItem value={"GUARANTY"}>CAUÇÃO</SelectItem>
-                        <SelectItem value={"AFFECTATION"}>AFETAÇÃO</SelectItem>
-                        <SelectItem value={"DONATION"}>DOAÇÃO</SelectItem>
+                        {PROPERTY_TYPE_ITEMS.map((item) => (
+                          <SelectItem key={item.value} value={item.value}>
+                            {item.label}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormItem>

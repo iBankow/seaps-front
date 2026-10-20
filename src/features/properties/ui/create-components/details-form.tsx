@@ -71,7 +71,8 @@ export const DetailsForm = ({ form, updateFormData }: DetailsFormProps) => {
                   </FieldContent>
                   <Select
                     name={field.name}
-                    value={field.value}
+                    value={field.value ?? null}
+                    items={propertyTypes}
                     onValueChange={field.onChange}
                   >
                     <SelectTrigger
@@ -107,8 +108,13 @@ export const DetailsForm = ({ form, updateFormData }: DetailsFormProps) => {
                   </FieldContent>
                   <Select
                     name={field.name}
-                    value={field.value}
+                    value={field.value ?? null}
+                    items={organizations.map((o) => ({
+                      value: o.id,
+                      label: o.name,
+                    }))}
                     onValueChange={(value) => {
+                      if (!value) return;
                       field.onChange(value);
                       const organization = organizations.find(
                         (item) => item.id === value,

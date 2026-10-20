@@ -30,6 +30,13 @@ import {
 } from "@/components/ui/field";
 import { useOrganizationsList } from "@/features/organizations";
 
+const STATUS_ITEMS = [
+  { value: "all", label: "Todos" },
+  { value: "PENDING", label: "Pendente" },
+  { value: "APPROVED", label: "Aprovado" },
+  { value: "REJECTED", label: "Rejeitado" },
+];
+
 const filterSchema = z.object({
   organization: z.string().optional(),
   status: z.string().optional(),
@@ -134,15 +141,17 @@ export function RequestsFilterForm() {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  items={STATUS_ITEMS}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Todos" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Todos</SelectItem>
-                    <SelectItem value="PENDING">Pendente</SelectItem>
-                    <SelectItem value="APPROVED">Aprovado</SelectItem>
-                    <SelectItem value="REJECTED">Rejeitado</SelectItem>
+                    {STATUS_ITEMS.map((item) => (
+                      <SelectItem key={item.value} value={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -165,7 +174,11 @@ export function RequestsFilterForm() {
                 </FieldContent>
                 <Select
                   name={field.name}
-                  value={field.value}
+                  value={field.value ?? null}
+                  items={organizations?.data?.map((o) => ({
+                    value: o.id,
+                    label: o.name,
+                  }))}
                   onValueChange={(value) => {
                     field.onChange(value);
                   }}
@@ -177,7 +190,7 @@ export function RequestsFilterForm() {
                   >
                     <SelectValue placeholder="Selecione o órgão" />
                   </SelectTrigger>
-                  <SelectContent position="item-aligned">
+                  <SelectContent>
                     {organizations?.data?.map((item) => (
                       <SelectItem key={item.id} value={item.id}>
                         {item.name}

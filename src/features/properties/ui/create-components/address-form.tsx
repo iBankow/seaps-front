@@ -122,7 +122,11 @@ export const AddressForm = ({ form }: AddressFormProps) => {
                   </FieldContent>
                   <Select
                     name={field.name}
-                    value={field.value}
+                    value={field.value ?? null}
+                    items={states.map((s) => ({
+                      value: s.acronym,
+                      label: s.name,
+                    }))}
                     onValueChange={(value) => {
                       field.onChange(value);
                       form.setValue("city", "", { shouldValidate: true });
@@ -159,7 +163,7 @@ export const AddressForm = ({ form }: AddressFormProps) => {
                   </FieldContent>
                   <Select
                     name={field.name}
-                    value={field.value}
+                    value={field.value ?? null}
                     onValueChange={field.onChange}
                   >
                     <SelectTrigger

@@ -62,8 +62,10 @@ export const DetailsForm = ({
                   </FieldContent>
                   <Select
                     name={field.name}
-                    value={field.value}
+                    value={field.value ?? null}
+                    items={models?.map((m) => ({ value: m.id, label: m.name }))}
                     onValueChange={(value) => {
+                      if (!value) return;
                       field.onChange(value);
                       const model = models.find((m) => m.id === value);
                       updateFormData({
@@ -81,7 +83,7 @@ export const DetailsForm = ({
                     >
                       <SelectValue placeholder="Selecione o modelo" />
                     </SelectTrigger>
-                    <SelectContent position="item-aligned">
+                    <SelectContent>
                       {models?.map((item) => (
                         <SelectItem key={item.id} value={item.id}>
                           {item.name}
@@ -107,8 +109,13 @@ export const DetailsForm = ({
                   </FieldContent>
                   <Select
                     name={field.name}
-                    value={field.value}
+                    value={field.value ?? null}
+                    items={organizations?.map((o) => ({
+                      value: o.id,
+                      label: o.name,
+                    }))}
                     onValueChange={(value) => {
+                      if (!value) return;
                       field.onChange(value);
                       const organization = organizations.find(
                         (m) => m.id === value,
@@ -129,7 +136,7 @@ export const DetailsForm = ({
                     >
                       <SelectValue placeholder="Selecione o órgão" />
                     </SelectTrigger>
-                    <SelectContent position="item-aligned">
+                    <SelectContent>
                       {organizations?.map((item) => (
                         <SelectItem key={item.id} value={item.id}>
                           {item.name}
