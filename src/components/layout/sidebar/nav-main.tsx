@@ -38,17 +38,15 @@ export function NavMain({ items }: { items: MenuItem[] }) {
                   tooltip={item.title}
                   isActive={isActive}
                   className="font-heading gap-2.5 py-4.5 px-2.5 text-xs font-normal tracking-wide uppercase data-active:text-white data-active:font-black text-muted/80"
-                  asChild
+                  render={<Link to={item.url} className="w-full" />}
                 >
-                  <Link to={item.url} className="w-full">
-                    <span
-                      aria-hidden
-                      className="h-4 w-1 shrink-0 rounded-full bg-sidebar-primary data-[inactive=true]:bg-transparent group-data-[collapsible=icon]:hidden"
-                      data-inactive={!isActive}
-                    />
-                    {item.icon && <item.icon className="shrink-0" />}
-                    <span>{item.title}</span>
-                  </Link>
+                  <span
+                    aria-hidden
+                    className="h-4 w-1 shrink-0 rounded-full bg-sidebar-primary data-[inactive=true]:bg-transparent group-data-[collapsible=icon]:hidden"
+                    data-inactive={!isActive}
+                  />
+                  {item.icon && <item.icon className="shrink-0" />}
+                  <span>{item.title}</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             );

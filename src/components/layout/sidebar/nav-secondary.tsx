@@ -31,36 +31,38 @@ export function NavSecondary({
     <SidebarGroup>
       <SidebarGroupLabel>Sistema</SidebarGroupLabel>
       <SidebarMenu>
-        <Collapsible asChild className="group/collapsible">
-          <SidebarMenuItem>
-            <CollapsibleTrigger asChild>
+        <Collapsible className="group/collapsible" render={<SidebarMenuItem />}>
+          <CollapsibleTrigger
+            render={
               <SidebarMenuButton
                 tooltip="Configurações"
                 className="font-heading gap-2.5 px-2.5 text-xs font-semibold tracking-wide uppercase"
-              >
-                <Settings className="shrink-0" />
-                <span>Configurações</span>
-                <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-              </SidebarMenuButton>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <SidebarMenuSub>
-                {items?.map((subItem) => (
-                  <SidebarMenuSubItem key={subItem.title}>
-                    <SidebarMenuSubButton asChild>
+              />
+            }
+          >
+            <Settings className="shrink-0" />
+            <span>Configurações</span>
+            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[open]/collapsible:rotate-90" />
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <SidebarMenuSub>
+              {items?.map((subItem) => (
+                <SidebarMenuSubItem key={subItem.title}>
+                  <SidebarMenuSubButton
+                    render={
                       <Link
                         to={subItem.url}
                         className="w-full hover:underline data-[status='active']:font-bold"
-                      >
-                        {subItem.icon && <subItem.icon />}
-                        <span>{subItem.title}</span>
-                      </Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-                ))}
-              </SidebarMenuSub>
-            </CollapsibleContent>
-          </SidebarMenuItem>
+                      />
+                    }
+                  >
+                    {subItem.icon && <subItem.icon />}
+                    <span>{subItem.title}</span>
+                  </SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+              ))}
+            </SidebarMenuSub>
+          </CollapsibleContent>
         </Collapsible>
       </SidebarMenu>
     </SidebarGroup>

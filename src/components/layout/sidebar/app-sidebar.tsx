@@ -34,23 +34,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               className="data-[slot=sidebar-menu-button]:!px-0 hover:bg-transparent h-full py-1"
-              asChild
+              render={<Link to="/" />}
             >
-              <Link to="/">
-                <img
-                  src={"/logo.png"}
-                  alt="logo"
-                  className="flex aspect-square size-9 items-center object-cover justify-center rounded-lg"
-                />
-                <div className="grid flex-1 text-left leading-tight">
-                  <span className="font-heading text-2xl leading-none font-extrabold tracking-wide text-white">
-                    SIMP
-                  </span>
-                  <span className="font-mono text-[10px] tracking-widest text-sidebar-foreground/55 uppercase">
-                    Sistema de Manutenção Predial
-                  </span>
-                </div>
-              </Link>
+              <img
+                src={"/logo.png"}
+                alt="logo"
+                className="flex aspect-square size-9 items-center object-cover justify-center rounded-lg"
+              />
+              <div className="grid flex-1 text-left leading-tight">
+                <span className="font-heading text-2xl leading-none font-extrabold tracking-wide text-white">
+                  SIMP
+                </span>
+                <span className="font-mono text-[10px] tracking-widest text-sidebar-foreground/55 uppercase">
+                  Sistema de Manutenção Predial
+                </span>
+              </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
