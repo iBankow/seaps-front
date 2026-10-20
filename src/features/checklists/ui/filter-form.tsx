@@ -272,19 +272,21 @@ export function DataFilterForm({
         />
         <div className="flex items-center justify-between gap-2 w-full">
           <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-            <DialogTrigger asChild>
-              <Button
-                variant="outline"
-                className="gap-2 h-10 bg-card font-heading uppercase text-xs leading-0"
-              >
-                <Filter className="h-4 w-4" />
-                Filtros
-                {activeFilters.length > 0 && (
-                  <Badge variant="secondary" className="ml-1">
-                    {activeFilters.length}
-                  </Badge>
-                )}
-              </Button>
+            <DialogTrigger
+              render={
+                <Button
+                  variant="outline"
+                  className="gap-2 h-10 bg-card font-heading uppercase text-xs leading-0"
+                />
+              }
+            >
+              <Filter className="h-4 w-4" />
+              Filtros
+              {activeFilters.length > 0 && (
+                <Badge variant="secondary" className="ml-1">
+                  {activeFilters.length}
+                </Badge>
+              )}
             </DialogTrigger>
 
             <DialogContent className="sm:min-w-4xl max-h-[80vh] overflow-y-auto">

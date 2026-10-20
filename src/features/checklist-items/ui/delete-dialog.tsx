@@ -33,11 +33,11 @@ export const DeleteDialog = ({ image }: { image: ChecklistItemImage }) => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button variant="destructive" className="flex-1">
-          <Trash2 className="mr-2 h-4 w-4" />
-          Remover
-        </Button>
+      <AlertDialogTrigger
+        render={<Button variant="destructive" className="flex-1" />}
+      >
+        <Trash2 className="mr-2 h-4 w-4" />
+        Remover
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

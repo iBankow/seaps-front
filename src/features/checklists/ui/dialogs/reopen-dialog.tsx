@@ -1,4 +1,3 @@
-import type { DialogProps } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,7 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-interface ReOpenDialogProps extends DialogProps {
+interface ReOpenDialogProps extends React.ComponentProps<typeof Dialog> {
   loading?: boolean;
   onSubmit: () => Promise<void> | void;
 }
@@ -31,15 +30,19 @@ export function ReOpenDialog({
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <DialogClose asChild>
-            <Button disabled={loading} type="button" variant="outline">
-              Cancelar
-            </Button>
+          <DialogClose
+            render={
+              <Button disabled={loading} type="button" variant="outline" />
+            }
+          >
+            Cancelar
           </DialogClose>
-          <DialogClose asChild>
-            <Button type="submit" onClick={onSubmit} disabled={loading}>
-              Confimar
-            </Button>
+          <DialogClose
+            render={
+              <Button type="submit" onClick={onSubmit} disabled={loading} />
+            }
+          >
+            Confimar
           </DialogClose>
         </DialogFooter>
       </DialogContent>

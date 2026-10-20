@@ -128,13 +128,9 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
       case "user":
         return item.user?.name ? getFirstAndLastName(item.user.name) : "--";
       case "finished_at":
-        return item.finished_at
-          ? formatDate(item.finished_at)
-          : "--";
+        return item.finished_at ? formatDate(item.finished_at) : "--";
       case "created_at":
-        return item.created_at
-          ? formatDate(item.created_at)
-          : "--";
+        return item.created_at ? formatDate(item.created_at) : "--";
       default:
         return "--";
     }
@@ -199,11 +195,16 @@ export function ExportModal({ data, totalRecords }: ExportModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" className="gap-2 h-10 bg-card font-heading uppercase text-xs leading-0">
-          <Sheet className="h-4 w-4" />
-          Exportar Dados
-        </Button>
+      <DialogTrigger
+        render={
+          <Button
+            variant="outline"
+            className="gap-2 h-10 bg-card font-heading uppercase text-xs leading-0"
+          />
+        }
+      >
+        <Sheet className="h-4 w-4" />
+        Exportar Dados
       </DialogTrigger>
 
       <DialogContent className="!max-w-[90%] overflow-y-auto h-5/6 flex flex-col">

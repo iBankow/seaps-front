@@ -384,10 +384,8 @@ export function DrawerDialogFilter({
   if (!isMobile) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button variant="outline" size="icon">
-            <Filter />
-          </Button>
+        <DialogTrigger render={<Button variant="outline" size="icon" />}>
+          <Filter />
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
@@ -404,10 +402,8 @@ export function DrawerDialogFilter({
   }
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Filter />
-        </Button>
+      <DrawerTrigger render={<Button variant="outline" size="icon" />}>
+        <Filter />
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">

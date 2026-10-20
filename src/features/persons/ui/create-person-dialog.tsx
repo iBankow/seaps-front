@@ -99,9 +99,7 @@ export const CreatePersonDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        <Button>Criar Responsável</Button>
-      </DialogTrigger>
+      <DialogTrigger render={<Button />}>Criar Responsável</DialogTrigger>
       <DialogContent>
         <form
           id="create-person-form"
@@ -236,10 +234,8 @@ export const CreatePersonDialog = ({
             )}
           />
           <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="destructive" tabIndex={1}>
-                Cancelar
-              </Button>
+            <DialogClose render={<Button variant="destructive" tabIndex={1} />}>
+              Cancelar
             </DialogClose>
             <Button type="submit" form="create-person-form" tabIndex={0}>
               Salvar
