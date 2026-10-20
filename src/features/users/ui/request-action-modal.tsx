@@ -145,7 +145,9 @@ export function RequestActionModal({
                     maxLength={500}
                   />
                   <div className="flex justify-between items-center">
-                    {error && <p className="text-xs text-destructive">{error}</p>}
+                    {error && (
+                      <p className="text-xs text-destructive">{error}</p>
+                    )}
                     <p
                       className={`text-xs text-muted-foreground ${error ? "ml-auto" : ""}`}
                     >
@@ -211,7 +213,7 @@ export function RequestActionModal({
                                     }
                                     field.onChange(newPermissions);
                                   }}
-                                  className="data-[state=checked]:bg-primary"
+                                  className="data-checked:bg-primary"
                                 />
                               </FormControl>
                             </div>
@@ -258,7 +260,7 @@ export function RequestActionModal({
                                     }
                                     field.onChange(newPermissions);
                                   }}
-                                  className="data-[state=checked]:bg-primary"
+                                  className="data-checked:bg-primary"
                                 />
                               </FormControl>
                             </div>

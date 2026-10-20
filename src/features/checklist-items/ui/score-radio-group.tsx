@@ -1,4 +1,5 @@
-import { RadioGroup as RadioGroupPrimitive } from "radix-ui";
+import { Radio as RadioPrimitive } from "@base-ui/react/radio";
+import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group";
 import { cn } from "@/lib/utils";
 
 /** Score values as stored by the API. */
@@ -66,26 +67,26 @@ export function ScoreRadioGroup({
   className,
 }: ScoreRadioGroupProps) {
   return (
-    <RadioGroupPrimitive.Root
+    <RadioGroupPrimitive
       data-slot="radio-group"
       className={cn(
         "grid w-full grid-cols-1 gap-2.5 sm:grid-cols-4",
         className,
       )}
       disabled={disabled}
-      // String vazia, nunca `undefined`: `undefined` faz o Radix tratar o grupo
+      // String vazia, nunca `undefined`: `undefined` faz o grupo ser tratado
       // como não-controlado e guardar a escolha internamente, então ao navegar
       // para um item sem pontuação ele reexibia a pontuação do item anterior.
       // Nenhuma opção usa "", então o grupo continua controlado e sem seleção.
       value={value === null || value === undefined ? "" : String(value)}
-      onValueChange={onValueChange}
+      onValueChange={(next) => onValueChange(String(next))}
     >
       {OPTIONS.map((option) => (
-        <RadioGroupPrimitive.Item
+        <RadioPrimitive.Root
           key={option.value}
           value={option.value}
           className={cn(
-            "font-heading flex cursor-pointer items-center justify-between gap-2 rounded-[9px] border-[1.5px] px-3.5 py-3.5 text-left text-xs font-bold tracking-[0.08em] uppercase outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50",
+            "font-heading flex cursor-pointer items-center justify-between gap-2 rounded-[9px] border-[1.5px] px-3.5 py-3.5 text-left text-xs font-bold tracking-[0.08em] uppercase outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/50 data-disabled:cursor-not-allowed data-disabled:opacity-50",
             option.className,
           )}
         >
@@ -94,10 +95,10 @@ export function ScoreRadioGroup({
             aria-hidden
             className="flex size-[19px] shrink-0 items-center justify-center rounded-full border-2 border-current"
           >
-            <RadioGroupPrimitive.Indicator className="size-[9px] rounded-full bg-current" />
+            <RadioPrimitive.Indicator className="size-[9px] rounded-full bg-current" />
           </span>
-        </RadioGroupPrimitive.Item>
+        </RadioPrimitive.Root>
       ))}
-    </RadioGroupPrimitive.Root>
+    </RadioGroupPrimitive>
   );
 }

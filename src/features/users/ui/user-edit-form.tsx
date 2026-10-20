@@ -285,7 +285,7 @@ export function UserEditForm() {
                       </div>
                       <FormControl>
                         <Switch
-                          className="data-[state=checked]:bg-success data-[state=unchecked]:bg-destructive"
+                          className="data-checked:bg-success data-unchecked:bg-destructive"
                           checked={field.value}
                           onCheckedChange={field.onChange}
                         />
@@ -382,7 +382,7 @@ export function UserEditForm() {
                               }
                               field.onChange(newPermissions);
                             }}
-                            className="data-[state=checked]:bg-primary"
+                            className="data-checked:bg-primary"
                           />
                         </FormControl>
                       </div>
@@ -428,7 +428,7 @@ export function UserEditForm() {
                               }
                               field.onChange(newPermissions);
                             }}
-                            className="data-[state=checked]:bg-primary"
+                            className="data-checked:bg-primary"
                           />
                         </FormControl>
                       </div>
