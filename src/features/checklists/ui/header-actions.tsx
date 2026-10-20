@@ -58,57 +58,64 @@ export function ChecklistHeaderActions() {
           Ver Itens
         </Button>
         <DropdownMenu modal={false}>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="w-full justify-between">
-              Ações
-              <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="start"
-            className="w-(--radix-dropdown-menu-trigger-width)"
+          <DropdownMenuTrigger
+            render={
+              <Button variant="outline" className="w-full justify-between" />
+            }
           >
-            <DropdownMenuItem asChild>
-              <Link
-                to="/checklists/$checklistId/items"
-                params={{ checklistId: checklist.id }}
-              >
-                <List size={16} />
-                Ver Itens
-              </Link>
+            Ações
+            <ChevronDown />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="w-(--anchor-width)">
+            <DropdownMenuItem
+              render={
+                <Link
+                  to="/checklists/$checklistId/items"
+                  params={{ checklistId: checklist.id }}
+                />
+              }
+            >
+              <List size={16} />
+              Ver Itens
             </DropdownMenuItem>
 
             {isOpen && (
-              <DropdownMenuItem asChild>
-                <Link
-                  to="/checklists/$checklistId/edit"
-                  params={{ checklistId: checklist.id }}
-                >
-                  <Edit size={16} />
-                  Editar
-                </Link>
+              <DropdownMenuItem
+                render={
+                  <Link
+                    to="/checklists/$checklistId/edit"
+                    params={{ checklistId: checklist.id }}
+                  />
+                }
+              >
+                <Edit size={16} />
+                Editar
               </DropdownMenuItem>
             )}
 
-            <DropdownMenuItem asChild>
-              <Link
-                to="/checklists/$checklistId/history"
-                params={{ checklistId: checklist.id }}
-              >
-                <History size={16} />
-                Histórico
-              </Link>
+            <DropdownMenuItem
+              render={
+                <Link
+                  to="/checklists/$checklistId/history"
+                  params={{ checklistId: checklist.id }}
+                />
+              }
+            >
+              <History size={16} />
+              Histórico
             </DropdownMenuItem>
 
             {!isOpen && checklist.classification !== 2 && (
-              <DropdownMenuItem asChild>
-                <Link
-                  to="/checklists/$checklistId/notification"
-                  params={{ checklistId: checklist.id }}
-                >
-                  <FileText size={16} />
-                  Notificação
-                </Link>
+              <DropdownMenuItem
+                render={
+                  <Link
+                    to="/checklists/$checklistId/notification"
+                    params={{ checklistId: checklist.id }}
+                  />
+                }
+              >
+                <FileText size={16} />
+                Notificação
               </DropdownMenuItem>
             )}
 

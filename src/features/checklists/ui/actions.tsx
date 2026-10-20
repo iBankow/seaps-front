@@ -126,36 +126,42 @@ export const Actions = ({ row }: { row: Row<Column> }) => {
       />
 
       <DropdownMenu modal={false}>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size={"icon"} className="h-7 flex-1">
-            <Ellipsis />
-          </Button>
+        <DropdownMenuTrigger
+          render={
+            <Button variant="ghost" size={"icon"} className="h-7 flex-1" />
+          }
+        >
+          <Ellipsis />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
-          <DropdownMenuLabel>ID: {row.original.sid}</DropdownMenuLabel>
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>ID: {row.original.sid}</DropdownMenuLabel>
+          </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem asChild>
-              <Link
-                preload={false}
-                to="/checklists/$checklistId"
-                params={{ checklistId: row.original.id }}
-              >
-                <ChevronRight size={16} />
-                Visualizar
-              </Link>
+            <DropdownMenuItem
+              render={
+                <Link
+                  preload={false}
+                  to="/checklists/$checklistId"
+                  params={{ checklistId: row.original.id }}
+                />
+              }
+            >
+              <ChevronRight size={16} />
+              Visualizar
             </DropdownMenuItem>
             <DropdownMenuItem
               disabled={row.original.status === "CLOSED"}
-              asChild
+              render={
+                <Link
+                  preload={false}
+                  to={"/checklists/" + row.original.id + "/edit"}
+                />
+              }
             >
-              <Link
-                preload={false}
-                to={"/checklists/" + row.original.id + "/edit"}
-              >
-                <Pen size={16} />
-                Editar
-              </Link>
+              <Pen size={16} />
+              Editar
             </DropdownMenuItem>
 
             <DropdownMenuItem

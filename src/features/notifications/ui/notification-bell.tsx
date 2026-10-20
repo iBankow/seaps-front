@@ -5,6 +5,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -57,24 +58,28 @@ export function NotificationBell() {
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="relative"
-          aria-label="Notificações"
-        >
-          <Bell />
-          {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-medium leading-none text-destructive-foreground">
-              {unreadCount > 99 ? "99+" : unreadCount}
-            </span>
-          )}
-        </Button>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative"
+            aria-label="Notificações"
+          />
+        }
+      >
+        <Bell />
+        {unreadCount > 0 && (
+          <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-medium leading-none text-destructive-foreground">
+            {unreadCount > 99 ? "99+" : unreadCount}
+          </span>
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-80">
         <div className="flex items-center justify-between px-2 py-1.5">
-          <DropdownMenuLabel className="p-0">Notificações</DropdownMenuLabel>
+          <DropdownMenuGroup>
+            <DropdownMenuLabel className="p-0">Notificações</DropdownMenuLabel>
+          </DropdownMenuGroup>
           {unreadCount > 0 && (
             <Button
               variant="link"
@@ -112,7 +117,9 @@ export function NotificationBell() {
                 onClick={() => handleSelect(notification)}
               >
                 <div className="flex w-full items-center gap-2">
-                  <LevelIcon className={cn("size-3.5 shrink-0", levelClassName)} />
+                  <LevelIcon
+                    className={cn("size-3.5 shrink-0", levelClassName)}
+                  />
                   <span className="truncate text-sm font-medium">
                     {notification.title}
                   </span>

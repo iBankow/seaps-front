@@ -72,29 +72,38 @@ export const Actions = ({ row }: { row: Row<User> }) => {
       </AlertDialog>
 
       <DropdownMenu modal={false}>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size={"icon"} className="h-7 flex-1">
-            <Ellipsis />
-          </Button>
+        <DropdownMenuTrigger
+          render={
+            <Button variant="ghost" size={"icon"} className="h-7 flex-1" />
+          }
+        >
+          <Ellipsis />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
-          <DropdownMenuLabel>
-            ID: {row.original.id.slice(0, 8)}...
-          </DropdownMenuLabel>
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>
+              ID: {row.original.id.slice(0, 8)}...
+            </DropdownMenuLabel>
+          </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem asChild>
-              <Link to="/users/$userId" params={{ userId: row.original.id }}>
-                <ChevronRight size={16} />
-                Visualizar
-              </Link>
+            <DropdownMenuItem
+              render={
+                <Link
+                  to="/users/$userId"
+                  params={{ userId: row.original.id }}
+                />
+              }
+            >
+              <ChevronRight size={16} />
+              Visualizar
             </DropdownMenuItem>
             <PermissionGate permissions="users:edit">
-              <DropdownMenuItem asChild>
-                <Link to={"/users/" + row.original.id + "/edit"}>
-                  <Pen size={16} />
-                  Editar
-                </Link>
+              <DropdownMenuItem
+                render={<Link to={"/users/" + row.original.id + "/edit"} />}
+              >
+                <Pen size={16} />
+                Editar
               </DropdownMenuItem>
               <DropdownMenuItem
                 disabled={loading}
